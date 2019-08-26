@@ -1,0 +1,30 @@
+@import "./styles/summary.scss";
+@import "./styles/current-incidents.scss";
+@import "./styles/toolbar.scss";
+
+.minor {
+    color: #e3e400;
+}
+
+.major {
+    color: #fdc238;
+}
+.critical {
+    color: #bd071f;
+}
+
+.AAB0AC-wnd-OuterModal-card {
+    width: 71%;
+    max-width: 71%;
+}
+
+.status-page-container {
+    padding-bottom: 10px;
+    font-family: Open Sans,Segoe UI,Tahoma,sans-serif;
+    color:#616161;
+}
+
+.status-container {
+    padding-top: 10px;
+    padding-left: 5px;
+}
