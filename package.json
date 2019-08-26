@@ -1,0 +1,25 @@
+{
+    "private": true,
+    "name": "status-page-io",
+    "description": "Nerdpack status-page-io",
+    "version": "0.1.0",
+    "scripts": {
+        "start": "nr1 nerdpack:serve",
+        "test": "exit 0"
+    },
+    "nr1": {
+        "uuid": "8fa8868a-b354-4d8a-aed8-8b757ea3d5f2",
+        "sdkVersion": 2
+    },
+    "dependencies": {
+        "axios": "^0.19.0",
+        "prop-types": "^15.6.2",
+        "react": "^16.6.3",
+        "react-dom": "^16.6.3"
+    },
+    "browserslist": [
+        "last 2 versions",
+        "not ie < 11",
+        "not dead"
+    ]
+}

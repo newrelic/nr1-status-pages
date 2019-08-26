@@ -1,0 +1,35 @@
+.btn-white, .btn-white:hover, .btn-white:active {
+    opacity: 0.6;
+    background-color: white !important;
+    border: none !important;
+}
+
+.summary-container {
+    width: 100%;
+    height: 100%
+}
+
+.summary-header {
+    background-color: #f7f7f8;
+    color: black;
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+}
+
+.summary-content {
+    display: inline-block;
+    font-size: 1em;
+    line-height: 1em;
+}
+
+.summary-current-status {
+    display: inline-block;
+    font-size: 2.5em;
+    line-height: 2em;
+    min-height: 50px;
+    text-align: center;
+    width: 100%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
