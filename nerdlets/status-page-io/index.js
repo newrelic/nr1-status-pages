@@ -21,7 +21,7 @@ export default class StatusPageIoMainPage extends React.Component {
             hostNames: [],
             refreshRate: 15
         }
-        this.accountNerdletStorage = new AccountNerdletStorage(this.state.selectedAccountId, 1 * 60 * 30);
+        this.accountNerdletStorage = new AccountNerdletStorage(this.state.selectedAccountId);
         this.onAccountSelected = this.onAccountSelected.bind(this);
         this.onRefreshRateSelected = this.onRefreshRateSelected.bind(this);
         this.setHostNames = this.setHostNames.bind(this);
@@ -33,8 +33,7 @@ export default class StatusPageIoMainPage extends React.Component {
 
     async onAccountSelected(accountId) {
         this.setState({'selectedAccountId': accountId});
-        this.accountNerdletStorage.accountId = accountId;
-        const hostNames = await this.accountNerdletStorage.getStatusPageIoHostNames();
+        const hostNames = await this.accountNerdletStorage.getStatusPageIoHostNames(accountId);
         this.setHostNames(hostNames);
     }
 
@@ -59,10 +58,17 @@ export default class StatusPageIoMainPage extends React.Component {
     }
 
     render() {
-        const {refreshRate, selectedAccountId} = this.state;
+        const {hostNames, refreshRate, selectedAccountId} = this.state;
         return (
             <div>
-                <Toolbar refreshRateCallback={this.onRefreshRateSelected} refreshRate={refreshRate} onAccountSelected={this.onAccountSelected} selectedAccountId={selectedAccountId}/>
+                <Toolbar
+                    refreshRateCallback={this.onRefreshRateSelected}
+                    refreshRate={refreshRate}
+                    onAccountSelected={this.onAccountSelected}
+                    selectedAccountId={selectedAccountId}
+                    hostNames={hostNames}
+                    hostNameCallBack={this.setHostNames}
+                    />
                 {selectedAccountId &&
                     <Grid className="status-container">
                         { this.getGridItems()}

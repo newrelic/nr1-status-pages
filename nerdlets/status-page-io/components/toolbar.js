@@ -26,43 +26,24 @@ export default class Toolbar extends React.Component {
     }
 
     addHostName() {
-        const {hostNames, addHostName} = this.state;
+        const { addHostName} = this.state;
+        const {hostNames} = this.props;
         hostNames.push(addHostName);
-        this.setState({'hostNames': hostNames});
+        this.props.hostNameCallBack(hostNames);
     }
 
     deleteHost(hostname) {
-        const {hostNames} = this.state;
+        const {hostNames} = this.props;
         hostNames.splice(hostNames.findIndex(val => val === hostname), 1);
-        this.setState({'hostNames': hostNames});
+        this.props.hostNameCallBack(hostNames);
     }
 
     // TODO: Move to nerd store
     generateListHostNames() {
-        if (!this.state.hostNames) return <div></div>
-        return this.state.hostNames.map(hostname => <li key={hostname} className="modal-list-item">
+        if (!this.props.hostNames) return <div></div>
+        return this.props.hostNames.map(hostname => <li key={hostname} className="modal-list-item">
             <div className="modal-list-item-name"> {hostname} </div><Button className="btn-white modal-list-item-delete" iconType={Button.ICON_TYPE.INTERFACE__SIGN__TIMES} onClick={this.deleteHost.bind(this, hostname)}></Button>
         </li>);
-    }
-
-    async getHostNames(accountId) {
-        const queryProp = {
-            accountId: accountId,
-            collection: HOST_NAMES_COLLECTION_KEY,
-            documentId: HOST_NAMES_DOCUMENT_ID
-        }
-        try {
-            const docQueryRresults = await AccountStorageQuery.query(queryProp);
-            if (docQueryRresults.data) {
-                let hostNames = docQueryRresults.data.actor.account.nerdStorage.document;
-                if (!hostNames) {
-                    hostNames = [];
-                }
-                this.setState({'hostNames': hostNames})
-            }
-        } catch(err) {
-            console.log(err);
-        }
     }
 
     async save() {
@@ -70,7 +51,7 @@ export default class Toolbar extends React.Component {
             accountId: this.props.selectedAccountId,
             actionType: AccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
             collection: HOST_NAMES_COLLECTION_KEY,
-            document: this.state.hostNames,
+            document: this.props.hostNames,
             documentId: HOST_NAMES_DOCUMENT_ID
         }
         console.log(mutationProp);
@@ -85,7 +66,6 @@ export default class Toolbar extends React.Component {
 
     async onEditStatusPageClick() {
         this.setState({'hidden': false, 'mounted': true, 'showSaved': false});
-        await this.getHostNames(this.props.selectedAccountId);
     }
 
     // TODO: Revert any unsaved changes
