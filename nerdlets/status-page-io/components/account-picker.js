@@ -63,12 +63,11 @@ export default class AccountPicker extends React.Component {
     async _accountChanged(accountId){
         const {accountChangedCallback} = this.props;
         accountId = parseInt(accountId);
-        this.setState({'selectedAccount': accountId});
         this.saveOffLastChosenAccountId(accountId);
-        // TODO: Save this value off to user storage so when they refresh this is the one that will show up
         if (accountChangedCallback) {
             await accountChangedCallback(accountId);
         }
+        this.setState({'selectedAccount': accountId});
     }
 
     async onAccountChange(event) {
