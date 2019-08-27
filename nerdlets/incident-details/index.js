@@ -35,8 +35,10 @@ export default class IncidentDetails extends React.Component {
         if (!incidents) return <Spinner />
         const details = incidents.map(incident => <IndIncident key={incident.id} incident={incident}/>)
         return (
-            <div className="incident-container">
-                {details}
+            <div>
+                 <div className="incident-container">
+                    {details}
+                </div>
             </div>
         );
     }

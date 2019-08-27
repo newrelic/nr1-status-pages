@@ -1,21 +1,18 @@
+
+@import "./styles/variables.scss";
 @import "./styles/summary.scss";
 @import "./styles/current-incidents.scss";
 @import "./styles/toolbar.scss";
 
 .minor {
-    color: #e3e400;
+    color: $minorColor;
 }
 
 .major {
-    color: #fdc238;
+    color: $majorColor
 }
 .critical {
-    color: #bd071f;
-}
-
-.AAB0AC-wnd-OuterModal-card {
-    width: 71%;
-    max-width: 71%;
+    color: $criticalColor;
 }
 
 .status-page-container {

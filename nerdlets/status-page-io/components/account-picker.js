@@ -1,0 +1,88 @@
+
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import {AccountsQuery, UserStorageMutation, UserStorageQuery} from 'nr1';
+
+const USER_ACCOUNT_COLLECTION = 'user_account_collection_v0';
+const USER_SELECTED_ACCOUNT_ID = 'user_account_id'
+
+export default class AccountPicker extends React.Component {
+    static propTypes = {
+        hostname: PropTypes.string,
+        refreshRate: PropTypes.number
+    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedAccount: '',
+            accounts: []
+        }
+        this.onAccountChange = this.onAccountChange.bind(this);
+    }
+
+    async componentDidMount() {
+        const accountsResults = await AccountsQuery.query();
+        if (accountsResults.data && accountsResults.data.actor && accountsResults.data.actor.accounts) {
+            this.setState({'accounts': accountsResults.data.actor.accounts});
+            let accountId = await this.getLastChoseAccountId();
+            if (!accountId) accountId = accountsResults.data.actor.accounts[0].id;
+            this._accountChanged(accountId);
+        }
+    }
+
+
+    generateAccountDropDownItems() {
+        return this.state.accounts.map( account =>
+                (<option key={account.id} value={account.id}>
+                    {account.name}
+                </option>));
+    }
+
+    async getLastChoseAccountId() {
+        const userStorageQuery = {
+            collection: USER_ACCOUNT_COLLECTION,
+            documentId: USER_SELECTED_ACCOUNT_ID
+        }
+        // TODO: Add error handling
+        const queryResults = await UserStorageQuery.query(userStorageQuery);
+        return queryResults.data.actor.nerdStorage.document
+    }
+
+    async saveOffLastChosenAccountId(accountId) {
+        const userMutation = {
+            actionType: UserStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
+            collection: USER_ACCOUNT_COLLECTION,
+            document: accountId,
+            documentId: USER_SELECTED_ACCOUNT_ID
+        }
+        UserStorageMutation.mutate(userMutation);
+    }
+
+    _accountChanged(accountId){
+        const {accountChangedCallback} = this.props;
+        accountId = parseInt(accountId);
+        this.setState({'selectedAccount': accountId});
+        this.saveOffLastChosenAccountId(accountId);
+        // TODO: Save this value off to user storage so when they refresh this is the one that will show up
+        if (accountChangedCallback) {
+            accountChangedCallback(accountId);
+        }
+    }
+
+    onAccountChange(event) {
+        this._accountChanged(event.target.value);
+    }
+
+    render() {
+        const {selectedAccount} = this.state;
+        return (
+            <select value={selectedAccount} onChange={this.onAccountChange}>
+                {this.generateAccountDropDownItems()}
+            </select>
+        );
+    }
+}
+
+

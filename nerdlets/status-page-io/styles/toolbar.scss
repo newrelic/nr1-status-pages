@@ -1,9 +1,134 @@
+
+
+.text-field-flex {
+    flex: 3;
+}
+
 .toolbar-container {
     width: 100%;
-    background-color: #f7f7f8;
+    background-color: $headerBackgroundColor;
     display: inline-block;
 }
 
 .toolbar-dropdown {
     float: left;
+    padding-right: 10px;
+}
+
+.btn-toolbar, .btn-toolbar:hover, .btn-toolbar:active, .btn-toolbar:focus {
+    background-color: $headerBackgroundColor !important;
+    border-width: 0 !important;
+    box-shadow: none;
+    padding: 0px 16px 8px 16px;
+}
+
+.modal-container {
+    display: inline;
+    font-family: Open Sans,Segoe UI,Tahoma,sans-serif;
+    color: #616161;
+}
+
+.modal-text-add-container{
+    display: flex;
+}
+
+
+// Modal list
+.modal-button {
+    margin: 0px 3px 0px 0px;
+}
+.modal-list {
+    list-style: none;
+    max-width: 100%;
+}
+
+.modal-list-title {
+    padding-bottom: 36px;
+}
+
+.modal-list-container {
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+.modal-list-item {
+    padding-top: 1px;
+    padding-bottom: 5px;
+    display: flex;
+}
+
+.modal-list-item-name {
+    flex: 16;
+    word-wrap: break-word;
+}
+
+.modal-list-item-delete {
+    flex: 1;
+    float: right;
+    opacity: .7;
+    min-width: 16px;
+    min-height: 16px;
+    font-size: 16px;
+    padding: 0;
+}
+
+.modal-saved {
+    border-radius: 29px;
+    border: 2px solid $saveGreen;
+    background: $saveGreen;
+    color: $textColorInvert;
+    font-size: large;
+    text-align: center;
+    margin-bottom: 20px;
+    .ic-Icon {
+        padding-bottom: 4px;
+        padding-left: 4px;
+    }
+}
+
+.modal-saved-hide {
+    transition: opacity .3s ease-in-out;
+    opacity: 0;
+}
+
+.modal-saved-show {
+    transition: opacity .3s ease-in-out;
+    opacity: 1;
+}
+
+
+// Dot Css for key
+.dot {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-header {
+    float: right;
+    padding-top: 4px;
+}
+
+.dot-name {
+    display: inline-block;
+    padding-left: 4px;
+}
+
+.dot-container {
+    display: inline-block;
+    padding: 3px;
+}
+
+.dot.minor {
+    background-color: $minorColor;
+}
+
+.dot.major {
+    background-color: $majorColor;
+}
+
+.dot.critical {
+    background-color: $criticalColor;
 }
