@@ -1,7 +1,8 @@
-.btn-white, .btn-white:hover, .btn-white:active {
+.btn-white, .btn-white:hover, .btn-white:active, .btn-white:focus {
     opacity: 0.6;
     background-color: white !important;
-    border: none !important;
+    border-width: 0 !important;
+    box-shadow: none;
 }
 
 .summary-container {
@@ -10,7 +11,7 @@
 }
 
 .summary-header {
-    background-color: #f7f7f8;
+    background-color: $headerBackgroundColor;
     color: black;
     width: 100%;
     display: inline-block;

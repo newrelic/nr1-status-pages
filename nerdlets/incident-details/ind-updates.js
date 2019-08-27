@@ -10,9 +10,10 @@ export default class IndUpdates extends React.Component {
 
     render() {
       const {update} = this.props;
+      const updateDate = new Date(update.created_at);
       return (
           <li className="ind-update-container">
-              <HeadingText type={HeadingText.TYPE.HEADING4}> {update.status} @  {new Date(update.created_at).toDateString()} </HeadingText>
+              <HeadingText type={HeadingText.TYPE.HEADING4}> {update.status} @ {updateDate.toLocaleDateString()} {updateDate.toLocaleTimeString()} </HeadingText>
               <div>
                   {update.body}
               </div>
