@@ -27,11 +27,6 @@ export default class StatusPageIoMainPage extends React.Component {
         this.setHostNames = this.setHostNames.bind(this);
     }
 
-    componentDidMount() {
-        // Refresh the grid every 30 min
-        this.accountNerdletStorage.pollStatusPageIoHostNames(this.setHostNames);
-    }
-
     setHostNames(hostNames) {
         this.setState({'hostNames': hostNames});
     }
@@ -48,6 +43,9 @@ export default class StatusPageIoMainPage extends React.Component {
     }
 
     getGridItems() {
+        if (!this.state.hostNames || !this.state.selectedAccountId) {
+            return <Spinner />;
+        }
         if (this.state.hostNames.length === 0) {
             return <div>
                 No StatusPageIo urls are configured

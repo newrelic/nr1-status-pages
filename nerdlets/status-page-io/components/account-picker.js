@@ -60,19 +60,19 @@ export default class AccountPicker extends React.Component {
         UserStorageMutation.mutate(userMutation);
     }
 
-    _accountChanged(accountId){
+    async _accountChanged(accountId){
         const {accountChangedCallback} = this.props;
         accountId = parseInt(accountId);
         this.setState({'selectedAccount': accountId});
         this.saveOffLastChosenAccountId(accountId);
         // TODO: Save this value off to user storage so when they refresh this is the one that will show up
         if (accountChangedCallback) {
-            accountChangedCallback(accountId);
+            await accountChangedCallback(accountId);
         }
     }
 
-    onAccountChange(event) {
-        this._accountChanged(event.target.value);
+    async onAccountChange(event) {
+        await this._accountChanged(event.target.value);
     }
 
     render() {
