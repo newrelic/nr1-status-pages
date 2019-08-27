@@ -145,6 +145,9 @@ export default class Toolbar extends React.Component {
                                             tagType={Button.TAG_TYPE.BUTTON}>Add</Button>
                                     </div>
                                     <Button className="modal-button"
+                                            iconType={Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__CLOUD}
+                                            onClick={this.save}>Sync All Accounts</Button>
+                                    <Button className="modal-button"
                                             iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EDIT}
                                             onClick={this.save}>Save</Button>
                                     <Button className="modal-button" onClick={this.onModalClose}>Close</Button>

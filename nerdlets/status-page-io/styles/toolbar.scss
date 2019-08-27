@@ -121,6 +121,10 @@
     padding: 3px;
 }
 
+.dot.none {
+    background-color: $noneColor;
+}
+
 .dot.minor {
     background-color: $minorColor;
 }

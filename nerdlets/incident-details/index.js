@@ -6,6 +6,7 @@ import {Spinner} from 'nr1';
 
 // TODO: This seems real bad since we are requiring a lib from other nerdlet
 import StatusPageNetwork from '../status-page-io/utilities/status-page-io-network';
+import IncidentTimeline from './incident-timline';
 
 const REFRESH_RATE = 15;
 
@@ -33,13 +34,6 @@ export default class IncidentDetails extends React.Component {
     render() {
         const {incidents} = this.state;
         if (!incidents) return <Spinner />
-        const details = incidents.map(incident => <IndIncident key={incident.id} incident={incident}/>)
-        return (
-            <div>
-                 <div className="incident-container">
-                    {details}
-                </div>
-            </div>
-        );
+        return <IncidentTimeline incidents={incidents}></IncidentTimeline>
     }
 }
