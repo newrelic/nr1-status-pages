@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import { AccountStorageMutation, AccountStorageQuery, Button, Dropdown, DropdownItem, HeadingText, Icon, Modal, TextField } from 'nr1';
 
+import EditModal from './modal-edit';
+
 import AccountPicker from './account-picker';
 
 const HOST_NAMES_COLLECTION_KEY = 'host_names_v0'
@@ -16,13 +18,9 @@ export default class Toolbar extends React.Component {
             mounted: false,
             hostNames: []
         }
-        this.addHostName = this.addHostName.bind(this);
         this.onEditStatusPageClick = this.onEditStatusPageClick.bind(this);
         this.onModalClose = this.onModalClose.bind(this);
         this.onModalHideEnd = this.onModalHideEnd.bind(this);
-        this.onTextInputChange = this.onTextInputChange.bind(this);
-        this.save = this.save.bind(this);
-        this.deleteHost = this.deleteHost.bind(this);
     }
 
     addHostName() {
@@ -32,44 +30,11 @@ export default class Toolbar extends React.Component {
         this.props.hostNameCallBack(hostNames);
     }
 
-    deleteHost(hostname) {
-        const {hostNames} = this.props;
-        hostNames.splice(hostNames.findIndex(val => val === hostname), 1);
-        this.props.hostNameCallBack(hostNames);
-    }
-
-    // TODO: Move to nerd store
-    generateListHostNames() {
-        if (!this.props.hostNames) return <div></div>
-        return this.props.hostNames.map(hostname => <li key={hostname} className="modal-list-item">
-            <div className="modal-list-item-name"> {hostname} </div><Button className="btn-white modal-list-item-delete" iconType={Button.ICON_TYPE.INTERFACE__SIGN__TIMES} onClick={this.deleteHost.bind(this, hostname)}></Button>
-        </li>);
-    }
-
-    async save() {
-        const mutationProp = {
-            accountId: this.props.selectedAccountId,
-            actionType: AccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
-            collection: HOST_NAMES_COLLECTION_KEY,
-            document: this.props.hostNames,
-            documentId: HOST_NAMES_DOCUMENT_ID
-        }
-        console.log(mutationProp);
-        const saveResults = await AccountStorageMutation.mutate(mutationProp);
-        this.setState({'showSaved': true});
-        setTimeout(()=> this.setState({'showSaved': false}), 2 * 1000);
-    }
-
-    onTextInputChange(event) {
-        this.setState({'addHostName': event.target.value});
-    }
-
     async onEditStatusPageClick() {
         this.setState({'hidden': false, 'mounted': true, 'showSaved': false});
     }
 
-    // TODO: Revert any unsaved changes
-    async onModalClose() {
+    onModalClose() {
         this.setState({'hidden': true});
     }
 
@@ -78,9 +43,8 @@ export default class Toolbar extends React.Component {
     }
 
     render() {
-        const {onAccountSelected, refreshRateCallback, refreshRate} = this.props;
-        const {hidden, mounted, showSaved} = this.state;
-        const hostnames = this.generateListHostNames();
+        const {hostNameCallBack, onAccountSelected, refreshRateCallback, refreshRate, selectedAccountId} = this.props;
+        const {hidden, hostNames, mounted} = this.state;
         return (
             <div className="toolbar-container">
                    <Dropdown className="toolbar-dropdown" title={`Refresh Rate: ${refreshRate}`}>
@@ -102,37 +66,7 @@ export default class Toolbar extends React.Component {
                         onClick={this.onEditStatusPageClick}
                         tagType={Button.TAG_TYPE.BUTTON}>Edit StatusPages</Button>
                     {mounted &&
-                        <Modal
-                            hidden={hidden}
-                            onClose={this.onModalClose}
-                            onHideEnd={this.onModalHideEnd}>
-                                <div className={`modal-saved ${showSaved ? 'modal-saved-show': 'modal-saved-hide'}`}>
-                                    Saved <Icon type={Icon.TYPE.PROFILES__EVENTS__LIKE} />
-                                </div>
-                                <div className="modal-container">
-                                    <div className="modal-list-container">
-                                        <HeadingText className="modal-list-title" type={HeadingText.TYPE.HEADING3}> Status Pages</HeadingText>
-                                        <ul className="modal-list">
-                                            {hostnames}
-                                        </ul>
-                                    </div>
-                                    <div className="modal-text-add-container">
-                                        <TextField onChange={this.onTextInputChange} className="text-field-flex" label='Add new hostname' placeholder='e.g. https://status.newrelic.com/'/>
-                                        <Button
-                                            className="btn-white"
-                                            onClick={this.addHostName}
-                                            iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-                                            tagType={Button.TAG_TYPE.BUTTON}>Add</Button>
-                                    </div>
-                                    <Button className="modal-button"
-                                            iconType={Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__CLOUD}
-                                            onClick={this.save}>Sync All Accounts</Button>
-                                    <Button className="modal-button"
-                                            iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EDIT}
-                                            onClick={this.save}>Save</Button>
-                                    <Button className="modal-button" onClick={this.onModalClose}>Close</Button>
-                                </div>
-                        </Modal>
+                        <EditModal hostNameCallBack={hostNameCallBack} accountId={selectedAccountId} hostNames={hostNames} hidden={hidden} onModalClose={this.onModalClose} onModalHideEnd={this.onModalHideEnd}/>
                     }
             </div>
         );
