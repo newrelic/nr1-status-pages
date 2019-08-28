@@ -65,7 +65,7 @@ export default class AccountPicker extends React.Component {
         accountId = parseInt(accountId);
         this.saveOffLastChosenAccountId(accountId);
         if (accountChangedCallback) {
-            await accountChangedCallback(accountId);
+            await accountChangedCallback(accountId, this.state.accounts);
         }
         this.setState({'selectedAccount': accountId});
     }

@@ -9,7 +9,7 @@ export default class StatusPageNetwork {
 
     async _fetchAndPopulateData(url, callbackSetterFunction) {
         const networkResponse = await axios.get(url);
-        callbackSetterFunction(networkResponse.data);
+        callbackSetterFunction(networkResponse);
         return networkResponse;
     }
 
@@ -42,6 +42,12 @@ export default class StatusPageNetwork {
 
     async pollMaintenances(callbackSetterFunction) {
         const url = `${this.statusPageUrl}/api/v2/scheduled-maintenances/active.json`;
+        await this._fetchAndPopulateData(url, callbackSetterFunction);
+        this._pollData(url, callbackSetterFunction)
+    }
+
+    async pollGoogleCloud(callbackSetterFunction) {
+        const url = 'https://status.cloud.google.com/incidents.json';
         await this._fetchAndPopulateData(url, callbackSetterFunction);
         this._pollData(url, callbackSetterFunction)
     }

@@ -16,6 +16,7 @@
         "prop-types": "^15.6.2",
         "react": "^16.6.3",
         "react-dom": "^16.6.3",
+        "react-markdown": "^4.1.0",
         "react-vertical-timeline-component": "^2.4.0",
         "vertical-timeline-component-for-react": "^1.0.6"
     },

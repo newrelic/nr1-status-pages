@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 
 import {HeadingText} from 'nr1';
 
+const ReactMarkdown = require('react-markdown')
+
+
 export default class IndUpdates extends React.Component {
     static propTypes = {
         update: PropTypes.any
@@ -11,11 +14,13 @@ export default class IndUpdates extends React.Component {
     render() {
       const {update} = this.props;
       const updateDate = new Date(update.created_at);
+      const statusString = update.status ? `${update.status} @` : '';
+
       return (
           <li className="ind-update-container">
-              <HeadingText type={HeadingText.TYPE.HEADING4}> {update.status} @ {updateDate.toLocaleDateString()} {updateDate.toLocaleTimeString()} </HeadingText>
+              <HeadingText type={HeadingText.TYPE.HEADING4}> {statusString}  {updateDate.toLocaleDateString()} {updateDate.toLocaleTimeString()} </HeadingText>
               <div>
-                  {update.body}
+                    <ReactMarkdown source={update.body} />
               </div>
           </li>
       )
