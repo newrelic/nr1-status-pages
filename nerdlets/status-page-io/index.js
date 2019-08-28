@@ -78,9 +78,6 @@ export default class StatusPageIoMainPage extends React.Component {
                     {selectedAccountId &&
                         <Grid className="status-container">
                             { this.getGridItems()}
-                            <GridItem key="https://status.cloud.google.com/incidents.json" columnSpan={6}>
-                                <StatusPage refreshRate={this.state.refreshRate} hostname="https://status.cloud.google.com/incidents.json" provider="google"/>
-                            </GridItem>
                         </Grid>
                     }
                     {!selectedAccountId &&

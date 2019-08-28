@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import StatusPageNetwork from '../utilities/status-page-io-network';
+import Network from '../utilities/network';
 
 import { navigation, Button, HeadingText } from 'nr1';
 import FormatService from '../utilities/format-service';
@@ -17,7 +17,7 @@ export default class CurrentIncidents extends React.Component {
             currentIncidents: undefined
         }
         this.FormatService = new FormatService(this.props.provider);
-        this.statusPageNetwork = new StatusPageNetwork(this.props.hostname, this.props.refreshRate);
+        this.statusPageNetwork = new Network(this.props.hostname, this.props.refreshRate, this.props.provider);
         this.seeMore = this.seeMore.bind(this);
     }
 
@@ -33,11 +33,7 @@ export default class CurrentIncidents extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.provider === 'google') {
-            this.statusPageNetwork.pollGoogleCloud(this.setIncidentData.bind(this));
-        } else {
-            this.statusPageNetwork.pollCurrentIncidents(this.setIncidentData.bind(this));
-        }
+        this.statusPageNetwork.pollCurrentIncidents(this.setIncidentData.bind(this));
     }
 
     setIncidentData(data) {

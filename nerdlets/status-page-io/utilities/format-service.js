@@ -63,17 +63,17 @@ export default class FormatService {
 
     googleIncidentFormatter(data) {
         return data.map(incident => {
-
-            incident.impact = GoogleSeverityToKnown[incident.severity];
-            incident.name = incident.external_desc;
-            incident.created_at = incident.created;
-            incident.incident_updates = incident.updates.map(update => {
-               return {
-                    created_at: update.created,
-                    body: update.text
-               } 
-            });
-            return incident;
+            return {
+                name: incident.external_desc,
+                created_at: incident.created,
+                impact: GoogleSeverityToKnown[incident.severity],
+                incident_updates: incident.updates.map(update => {
+                    return {
+                         created_at: update.created,
+                         body: update.text
+                    }
+                 })
+            }
         })
     }
 

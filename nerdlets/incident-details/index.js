@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {Spinner} from 'nr1';
 
 // TODO: This seems real bad since we are requiring a lib from other nerdlet
-import StatusPageNetwork from '../status-page-io/utilities/status-page-io-network';
+import Network from '../status-page-io/utilities/network';
 import IncidentTimeline from './incident-timline';
 import FormatService from '../status-page-io/utilities/format-service';
 
@@ -25,11 +25,7 @@ export default class IncidentDetails extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.nerdletUrlState.provider === 'google') {
-            new StatusPageNetwork(this.props.nerdletUrlState.hostname, REFRESH_RATE).pollGoogleCloud(this.setIncidents.bind(this));
-        } else {
-            new StatusPageNetwork(this.props.nerdletUrlState.hostname, REFRESH_RATE).pollCurrentIncidents(this.setIncidents.bind(this));
-        }
+        new Network(this.props.nerdletUrlState.hostname, REFRESH_RATE, this.props.nerdletUrlState.provider).pollCurrentIncidents(this.setIncidents.bind(this));
     }
 
     setIncidents(data) {
