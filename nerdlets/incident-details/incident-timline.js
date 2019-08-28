@@ -21,7 +21,6 @@ export default class IncidentTimeline extends React.Component {
     }
 
     getTimeLineItems() {
-        console.log(this)
       return this.props.incidents.map( (incident, index) =>  {
           const date = new Date(incident.created_at)
           return (

@@ -17,9 +17,7 @@ export default class AccountNerdletStorage {
             documentId: HOST_NAMES_DOCUMENT_ID
         }
         try {
-            console.log(queryProp);
             return AccountStorageQuery.query(queryProp).then(docQueryRresults => {
-                console.log(docQueryRresults);
                 if (docQueryRresults.data) {
                     let hostNames = docQueryRresults.data.actor.account.nerdStorage.document;
                     if (!hostNames) {
