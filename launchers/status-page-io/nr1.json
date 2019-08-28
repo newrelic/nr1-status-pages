@@ -3,6 +3,6 @@
     "id": "status-page-io-launcher",
     "description": "Describe me",
     "displayName": "StatusPageIo",
-    "icon": "interface_placeholders_icon-show",
-    "rootNerdletId": "8fa8868a-b354-4d8a-aed8-8b757ea3d5f2.status-page-io"
+    "icon": "interface_placeholders_icon-placeholder",
+    "rootNerdletId": "8fa8868a-b354-4d8a-aed8-8b757ea3d5f2.status-page-io-demo"
 }

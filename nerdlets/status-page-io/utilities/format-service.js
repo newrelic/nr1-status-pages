@@ -60,6 +60,36 @@ export default class FormatService {
         return formattedData;
     }
 
+    awsFormatter(data){
+        const incidents = data.successfulSet;
+        const formattedData = {};
+        formattedData.name = 'AWS';
+        const openIncident = incidents.find(incident => incident.event.statusCode === 'open');
+        if (openIncident) {
+            formattedData.description = openIncident.eventDescription.description;
+            formattedData.indicator = 'critical'
+        } else {
+            formattedData.description = 'All Systems Operational'
+            formattedData.indicator = '';
+        }
+        return formattedData;
+    }
+
+    awsIncidentFormatter(data) {
+        return data.successfulSet.map(incident => {
+            return {
+                name: incident.event.eventTypeCode,
+                created_at: incident.event.startTime,
+                impact: 'critical',
+                incident_updates: [{
+                    created_at: incident.event.lastUpdatedTime,
+                    body: incident.eventDescription.latestDescription
+                }
+                ]
+            };
+        })
+    }
+
 
     googleIncidentFormatter(data) {
         return data.map(incident => {
@@ -89,7 +119,10 @@ export default class FormatService {
         const responseData = data.data;
         if (this.provider === 'google') {
             return this.googleFormatter(responseData);
-        } else {
+        }else  if (this.provider === 'aws') {
+            return this.awsFormatter(responseData);
+        }
+        else {
             return this.statusPageIoFormatter(responseData)
         }
     }
@@ -98,6 +131,8 @@ export default class FormatService {
         const responseData = data.data;
         if (this.provider === 'google') {
             return this.googleIncidentFormatter(responseData);
+        }else if (this.provider === 'aws') {
+            return this.awsIncidentFormatter(responseData);
         } else {
             return responseData.incidents;
         }
