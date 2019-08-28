@@ -1,10 +1,13 @@
+import { getProvider } from './provider-services';
+
 const axios = require('axios');
 
-export default class StatusPageNetwork {
+export default class Network {
 
-    constructor(statusPageUrl, refreshRateInSeconds) {
+    constructor(statusPageUrl, refreshRateInSeconds, provider) {
         this.statusPageUrl = statusPageUrl;
         this.refreshRateInSeconds = refreshRateInSeconds;
+        this.provider = provider;
     }
 
     async _fetchAndPopulateData(url, callbackSetterFunction) {
@@ -27,29 +30,14 @@ export default class StatusPageNetwork {
 
     async pollSummaryData(callbackSetterFunction) {
         // Populate initial data before we start polling
-        const url = `${this.statusPageUrl}/api/v2/summary.json`;
+        const url = `${this.statusPageUrl}${getProvider(this.provider).summaryUrl}`;
         await this._fetchAndPopulateData(url, callbackSetterFunction);
         this._pollData(url, callbackSetterFunction)
     }
 
     async pollCurrentIncidents(callbackSetterFunction) {
-        // Populate initial data before we start polling
-        // const url = `${this.statusPageUrl}/api/v2/incidents/unresolved.json`;
-        const url = `${this.statusPageUrl}/api/v2/incidents.json`;
+        const url = `${this.statusPageUrl}${getProvider(this.provider).incidentUrl}`;
         await this._fetchAndPopulateData(url, callbackSetterFunction);
         this._pollData(url, callbackSetterFunction)
     }
-
-    async pollMaintenances(callbackSetterFunction) {
-        const url = `${this.statusPageUrl}/api/v2/scheduled-maintenances/active.json`;
-        await this._fetchAndPopulateData(url, callbackSetterFunction);
-        this._pollData(url, callbackSetterFunction)
-    }
-
-    async pollGoogleCloud(callbackSetterFunction) {
-        const url = 'https://status.cloud.google.com/incidents.json';
-        await this._fetchAndPopulateData(url, callbackSetterFunction);
-        this._pollData(url, callbackSetterFunction)
-    }
-
 }

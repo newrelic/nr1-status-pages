@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import StatusPageNetwork from '../utilities/status-page-io-network';
+import Network from '../utilities/network';
 
 import { HeadingText, Spinner } from 'nr1';
 import FormatService from '../utilities/format-service';
@@ -13,7 +13,7 @@ export default class Summary extends React.Component {
 
     constructor(props) {
         super(props);
-        this.StatusPageNetwork = new StatusPageNetwork(this.props.hostname, this.props.refreshRate);
+        this.StatusPageNetwork = new Network(this.props.hostname, this.props.refreshRate, this.props.provider);
         this.FormatService = new FormatService(this.props.provider);
         this.state = {
             statusPageIoSummaryData: undefined
@@ -21,11 +21,7 @@ export default class Summary extends React.Component {
     }
 
     async componentDidMount() {
-        if (this.props.provider  === 'google') {
-            this.StatusPageNetwork.pollGoogleCloud(this.setSummaryData.bind(this));
-        } else {
-            this.StatusPageNetwork.pollSummaryData(this.setSummaryData.bind(this));
-        }
+        this.StatusPageNetwork.pollSummaryData(this.setSummaryData.bind(this));
     }
 
     setSummaryData(data) {

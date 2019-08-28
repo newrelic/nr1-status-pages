@@ -127,6 +127,9 @@ export default class EditModal extends React.Component {
                                     <option value="statusPageIo">
                                         Status Page Io
                                     </option>
+                                    <option value="aws">
+                                        Aws
+                                    </option>
                                     <option value="google">
                                         Google
                                     </option>
