@@ -14,10 +14,11 @@ export default class StatusPage extends React.Component {
     };
 
     render() {
+        const {provider} = this.props;
         return (
             <div className="status-page-container">
-                <Summary refreshRate={this.props.refreshRate} hostname={this.props.hostname}/>
-                <CurrentIncidents refreshRate={this.props.refreshRate} hostname={this.props.hostname}/>
+                <Summary refreshRate={this.props.refreshRate} hostname={this.props.hostname} provider={provider}/>
+                <CurrentIncidents refreshRate={this.props.refreshRate} hostname={this.props.hostname} provider={provider}/>
             </div>
         )
     }

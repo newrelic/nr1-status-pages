@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { AccountStorageMutation, AccountStorageQuery, Button, Dropdown, DropdownItem, HeadingText, Icon, Modal, TextField } from 'nr1';
+import {  Button, Dropdown, DropdownItem } from 'nr1';
 
 import EditModal from './modal-edit';
 
 import AccountPicker from './account-picker';
-
-const HOST_NAMES_COLLECTION_KEY = 'host_names_v0'
-const HOST_NAMES_DOCUMENT_ID = 'host_names'
 export default class Toolbar extends React.Component {
 
     constructor(props) {
@@ -43,7 +40,7 @@ export default class Toolbar extends React.Component {
     }
 
     render() {
-        const {hostNameCallBack, onAccountSelected, refreshRateCallback, refreshRate, selectedAccountId} = this.props;
+        const {accounts, hostNameCallBack, onAccountSelected, refreshRateCallback, refreshRate, selectedAccountId} = this.props;
         const {hidden, hostNames, mounted} = this.state;
         return (
             <div className="toolbar-container">
@@ -66,7 +63,7 @@ export default class Toolbar extends React.Component {
                         onClick={this.onEditStatusPageClick}
                         tagType={Button.TAG_TYPE.BUTTON}>Edit StatusPages</Button>
                     {mounted &&
-                        <EditModal hostNameCallBack={hostNameCallBack} accountId={selectedAccountId} hostNames={hostNames} hidden={hidden} onModalClose={this.onModalClose} onModalHideEnd={this.onModalHideEnd}/>
+                        <EditModal accounts={accounts} hostNameCallBack={hostNameCallBack} accountId={selectedAccountId} hostNames={hostNames} hidden={hidden} onModalClose={this.onModalClose} onModalHideEnd={this.onModalHideEnd}/>
                     }
             </div>
         );

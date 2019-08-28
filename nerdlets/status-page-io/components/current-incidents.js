@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import StatusPageNetwork from '../utilities/status-page-io-network';
 
 import { navigation, Button, HeadingText } from 'nr1';
+import FormatService from '../utilities/format-service';
 
 export default class CurrentIncidents extends React.Component {
     static propTypes = {
@@ -15,7 +16,8 @@ export default class CurrentIncidents extends React.Component {
         this.state = {
             currentIncidents: undefined
         }
-        this.statusPageNetwork = new StatusPageNetwork(this.props.hostname);
+        this.FormatService = new FormatService(this.props.provider);
+        this.statusPageNetwork = new StatusPageNetwork(this.props.hostname, this.props.refreshRate);
         this.seeMore = this.seeMore.bind(this);
     }
 
@@ -23,18 +25,23 @@ export default class CurrentIncidents extends React.Component {
         const nerdletWithState = {
             id: '8fa8868a-b354-4d8a-aed8-8b757ea3d5f2.incident-details',
             urlState: {
-                hostname: this.props.hostname
+                hostname: this.props.hostname,
+                provider: this.props.provider
             }
        };
         navigation.openStackedNerdlet(nerdletWithState);
     }
 
     componentDidMount() {
-        this.statusPageNetwork.pollCurrentIncidents(this.setIncidentData.bind(this));
+        if (this.props.provider === 'google') {
+            this.statusPageNetwork.pollGoogleCloud(this.setIncidentData.bind(this));
+        } else {
+            this.statusPageNetwork.pollCurrentIncidents(this.setIncidentData.bind(this));
+        }
     }
 
     setIncidentData(data) {
-        this.setState({'currentIncidents': data.incidents});
+        this.setState({'currentIncidents':   this.FormatService.uniformIncidentData(data)});
     }
 
 
