@@ -1,6 +1,11 @@
 
 
 .text-field-flex {
+    display:flex;
+    flex: 3;
+}
+
+.add-host-name {
     flex: 3;
 }
 

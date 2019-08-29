@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {AccountsQuery, Button, HeadingText, Grid, GridItem, Spinner, Tabs, TabsItem} from 'nr1';
+import {AccountsQuery, Button, HeadingText, Grid, GridItem, Spinner, Tabs, TabsItem, TextField} from 'nr1';
 
 import { getHostNamesFromNerdStorage, saveHostNamesToNerdStorage } from '../status-page-io/utilities/nerdlet-storage';
 import StatusPage from '../status-page-io/status-page';
@@ -24,6 +24,7 @@ export default class SuggestedStatusPages extends React.Component {
         }
         this.checkAddToDashBoard = this.checkAddToDashBoard.bind(this);
         this.searchForDependencyTags = this.searchForDependencyTags.bind(this);
+        this.toggleAddRelationShip = this.toggleAddRelationShip.bind(this);
     }
 
     async componentDidMount() {
@@ -64,15 +65,22 @@ export default class SuggestedStatusPages extends React.Component {
     }
 
     searchForDependencyTags(relationship) {
-        return this.state.hostNames.find(hostNameObject => hostNameObject.tags && hostNameObject.tags.includes(relationship.toLowerCase()))
+        return this.state.hostNames.find(hostNameObject => hostNameObject.tags && hostNameObject.tags.includes(relationship.name.toLowerCase()))
+    }
+
+    toggleAddRelationShip(relationship) {
+        relationship.isSelected = !relationship.isSelected;
+        console.log(relationship);
+        // TODO: BAD
+        this.forceUpdate();
     }
 
     generateDepli() {
         return this.props.nerdletUrlState.relationships.map(relationship => {
             const foundMatch = this.searchForDependencyTags(relationship);
             return (
-                <li key={relationship} className="modal-list-item">
-                    <div className="modal-list-item-name"> {relationship} </div>
+                <li key={relationship.name} className="modal-list-item">
+                    <div className="modal-list-item-name"> {relationship.name} </div>
                     <div className="button-bar">
                         {foundMatch &&
                             <Button
@@ -82,11 +90,12 @@ export default class SuggestedStatusPages extends React.Component {
                                 tagType={Button.TAG_TYPE.BUTTON}>
                                     Found Matching Status Page
                             </Button>}
-                            <Button
-                                className="btn-white"
-                                onClick={this.addHostName}
-                                iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-                                tagType={Button.TAG_TYPE.BUTTON}></Button>
+                            {!foundMatch &&
+                                <Button
+                                    className={`btn-white ${relationship.isSelected ? 'selected': ''}`}
+                                    onClick={this.toggleAddRelationShip.bind(this, relationship)}
+                                    iconType={relationship.isSelected ? Button.ICON_TYPE.INTERFACE__SIGN__CHECKMARK: Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+                            tagType={Button.TAG_TYPE.BUTTON}></Button> }
                     </div>
                 </li>
         );})

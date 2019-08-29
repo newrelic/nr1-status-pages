@@ -122,9 +122,10 @@ export default class ConfigureStatusPages extends React.Component {
                                     {hostnames}
                                 </ul>
                             </div>
+                            {/* TODO: Make component */}
                             <div className="modal-text-add-container">
                                 <div className="text-field-flex">
-                                    <TextField onChange={this.onTextInputChange} label='Add new hostname' placeholder='e.g. https://status.newrelic.com/'/>
+                                    <TextField className="add-host-name" onChange={this.onTextInputChange} label='Add new hostname' placeholder='e.g. https://status.newrelic.com/'/>
                                     <div className="add-status-page-config">
                                         <select className="btn-white"  onChange={this.onProviderChange} value={selectedProvider}>
                                             <option value="statusPageIo">
@@ -137,15 +138,11 @@ export default class ConfigureStatusPages extends React.Component {
                                                 Google
                                             </option>
                                         </select>
-                                        <Button
-                                            className="btn-white btn-add-dep-type"
-                                            onClick={this.addDepType}
-                                            tagType={Button.TAG_TYPE.BUTTON}>Add Dependency Types</Button>
-                                            <TagsModal
-                                                addDepTypeCallback={this.addDepTypeCallback}
-                                                hostName={selectedEditHost}
-                                                hidden={tagHidden}
-                                                onClose={this.onTagModalClose}/>
+                                        <TagsModal
+                                            addDepTypeCallback={this.addDepTypeCallback}
+                                            hostName={selectedEditHost}
+                                            hidden={tagHidden}
+                                            onClose={this.onTagModalClose}/>
                                     </div>
                                 </div>
                                 <Button
