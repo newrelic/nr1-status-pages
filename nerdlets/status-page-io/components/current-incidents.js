@@ -58,7 +58,7 @@ export default class CurrentIncidents extends React.Component {
                 </div>
                 <div className="current-incident-see-more">
                     <Button
-                        className="btn-white"
+                        className="btn-white see-more "
                         onClick={this.seeMore}
                         iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
                         tagType={Button.TAG_TYPE.BUTTON}>See More</Button>

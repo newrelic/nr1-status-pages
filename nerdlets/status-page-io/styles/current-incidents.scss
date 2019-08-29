@@ -1,5 +1,6 @@
 .current-incident-row {
     display: flex;
+    padding: 0px 0px 0px 8px;
 }
 
 .current-incident-name {
@@ -9,4 +10,8 @@
 
 .current-incidnet-text {
     padding-left: 10px;
+}
+
+.see-more {
+    border-radius: 0px 0px $summaryBorderRadius 0px;
 }
