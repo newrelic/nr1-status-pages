@@ -8,7 +8,7 @@ export default class TagsModal extends React.Component {
         this.state = {
             addTagName: '',
             tagHidden: props.tagHidden,
-            tags: []
+            tags: props.hostName ? props.hostName.tags : []
         }
         this.addTag = this.addTag.bind(this);
         this.deleteTag = this.deleteTag.bind(this);
@@ -18,18 +18,21 @@ export default class TagsModal extends React.Component {
     addTag() {
         const {addTagName, tags} = this.state;
         tags.push(addTagName.toLowerCase());
+        if (!this.props.hostName.tags) this.props.hostName.tags = [];
+        this.props.hostName.tags.push(addTagName)
         this.setState({'tags': tags});
     }
 
     deleteTag(tagName) {
         const {tags} = this.state;
+        this.props.hostName.tags.splice(this.props.hostName.tags.findIndex(tag => tag === tagName), 1);
         tags.splice(tags.findIndex(tag => tag === tagName), 1);
         this.setState({'tags': tags});
     }
 
     generateListHostNames() {
-        if (!this.state.tags) return <div></div>
-        return this.state.tags.map(tag => <li key={tag} className="modal-list-item">
+        if (!this.props.hostName || !this.props.hostName.tags) return <div></div>
+        return this.props.hostName.tags.map(tag => <li key={tag} className="modal-list-item">
             <div className="modal-list-item-name"> {tag} </div><Button className="btn-white modal-list-item-delete" iconType={Button.ICON_TYPE.INTERFACE__SIGN__TIMES} onClick={this.deleteTag.bind(this, tag)}></Button>
         </li>);
     }
@@ -45,21 +48,23 @@ export default class TagsModal extends React.Component {
                 <Modal
                     hidden={hidden}
                     onClose={onClose}>
-                    <HeadingText className="modal-list-title" type={HeadingText.TYPE.HEADING3}> Add External Dependency Tags</HeadingText>
-                    <ul className="modal-list">
-                        {this.generateListHostNames()}
-                    </ul>
-                    <div className="modal-text-add-container">
-                        <div className="text-field-flex">
-                            <TextField onChange={this.onTextInputChange} label='Add Dependency Tag' placeholder='dyanmodb'/>
+                        <div className="tag-container">
+                            <HeadingText type={HeadingText.TYPE.HEADING3}> Add External Dependency Tags</HeadingText>
+                            <ul className="modal-list">
+                                {this.generateListHostNames()}
+                            </ul>
+                            <div className="modal-text-add-container">
+                                <div className="text-field-flex">
+                                    <TextField onChange={this.onTextInputChange} label='Add Dependency Tag' placeholder='dyanmodb'/>
+                                </div>
+                                <Button
+                                    className="btn-white"
+                                    onClick={this.addTag}
+                                    iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+                                    tagType={Button.TAG_TYPE.BUTTON}>Add</Button>
+                            </div>
+                            <Button className="modal-button" onClick={onClose.bind(this, tags)}>Close</Button>
                         </div>
-                        <Button
-                            className="btn-white"
-                            onClick={this.addTag}
-                            iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-                            tagType={Button.TAG_TYPE.BUTTON}>Add</Button>
-                    </div>
-                    <Button className="modal-button" onClick={onClose.bind(this, tags)}>Close</Button>
                 </Modal>
         );
     }

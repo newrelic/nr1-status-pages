@@ -71,22 +71,24 @@ export default class SuggestedStatusPages extends React.Component {
         return this.props.nerdletUrlState.relationships.map(relationship => {
             const foundMatch = this.searchForDependencyTags(relationship);
             return (
-            <li key={relationship} className="relationship-item">
-                <div className="relationship-text">{relationship}</div>
-                {foundMatch &&
-                    <Button
-                        className={`${foundMatch.isSelected ? 'selected': ''}`}
-                        onClick={this.checkAddToDashBoard.bind(this, foundMatch)}
-                        Type={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-                        tagType={Button.TAG_TYPE.BUTTON}>
-                            Found Matching Status Page
-                </Button>}
-                <Button
-                    className="btn-white"
-                    onClick={this.addHostName}
-                    iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-                    tagType={Button.TAG_TYPE.BUTTON}>Add</Button>
-            </li>
+                <li key={relationship} className="modal-list-item">
+                    <div className="modal-list-item-name"> {relationship} </div>
+                    <div className="button-bar">
+                        {foundMatch &&
+                            <Button
+                                className={`${foundMatch.isSelected ? 'selected': ''}`}
+                                onClick={this.checkAddToDashBoard.bind(this, foundMatch)}
+                                Type={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+                                tagType={Button.TAG_TYPE.BUTTON}>
+                                    Found Matching Status Page
+                            </Button>}
+                            <Button
+                                className="btn-white"
+                                onClick={this.addHostName}
+                                iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+                                tagType={Button.TAG_TYPE.BUTTON}></Button>
+                    </div>
+                </li>
         );})
     }
 

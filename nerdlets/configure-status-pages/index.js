@@ -17,17 +17,17 @@ export default class ConfigureStatusPages extends React.Component {
             unSavedChanges: [],
             selectedProvider: 'statusPageIo',
             tags: [],
-            keyObject: {key: props.nerdletUrlState.entityGuid ? props.nerdletUrlState.entityGuid : props.nerdletUrlState.accountId, type: props.nerdletUrlState.entityGuid ? 'entity' : 'account'}
+            keyObject: {key: props.nerdletUrlState.entityGuid ? props.nerdletUrlState.entityGuid : props.nerdletUrlState.accountId, type: props.nerdletUrlState.entityGuid ? 'entity' : 'account'},
+            selectedEditHost: undefined
         }
-        this.addDepType = this.addDepType.bind(this);
         this.addHostName = this.addHostName.bind(this);
-        this.onEditStatusPageClick = this.onEditStatusPageClick.bind(this);
         this.onTextInputChange = this.onTextInputChange.bind(this);
         this.save = this.save.bind(this);
         this.saveAll = this.saveAll.bind(this);
         this.deleteHost = this.deleteHost.bind(this);
         this.onProviderChange = this.onProviderChange.bind(this);
         this.onTagModalClose = this.onTagModalClose.bind(this);
+        this.addDepTypeCallback = this.addDepTypeCallback.bind(this);
     }
 
     async componentDidMount() {
@@ -37,8 +37,12 @@ export default class ConfigureStatusPages extends React.Component {
         this.setState({'unSavedChanges': unSavedChanges});
     }
 
-    addDepType() {
+    addDepTypeCallback() {
         this.setState({'tagHidden': false});
+    }
+
+    editTags(hostNameObject) {
+        this.setState({'tagHidden': false, 'selectedEditHost': hostNameObject})
     }
 
     addHostName() {
@@ -62,8 +66,8 @@ export default class ConfigureStatusPages extends React.Component {
         if (!this.state.unSavedChanges) return <div></div>
         return this.state.unSavedChanges.map(hostNameObject => <li key={hostNameObject.hostName} className="modal-list-item">
             <div className="modal-list-item-name"> {hostNameObject.hostName} </div>
-            <div className="configure-status-pages-button-bar">
-                <Button className="btn-white" iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EDIT} onClick={this.deleteHost.bind(this, hostNameObject.hostName)}></Button>
+            <div className="button-bar">
+                <Button className="btn-white" iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EDIT} onClick={this.editTags.bind(this, hostNameObject)}></Button>
                 <Button className="btn-white" iconType={Button.ICON_TYPE.INTERFACE__SIGN__TIMES} onClick={this.deleteHost.bind(this, hostNameObject.hostName)}></Button>
             </div>
         </li>);
@@ -92,10 +96,6 @@ export default class ConfigureStatusPages extends React.Component {
         this.setState({'addHostName': event.target.value});
     }
 
-    async onEditStatusPageClick() {
-        this.setState({'hidden': false, 'mounted': true, 'showSaved': false});
-    }
-
     onProviderChange(event) {
         this.setState({'selectedProvider': event.target.value})
     }
@@ -108,7 +108,7 @@ export default class ConfigureStatusPages extends React.Component {
 
 
     render() {
-        const {keyObject, tagHidden, showSaved, selectedProvider} = this.state;
+        const {keyObject, tagHidden, selectedEditHost, showSaved, selectedProvider} = this.state;
         const hostnames = this.generateListHostNames();
         return (
                 <div className="configure-status-page-container">
@@ -126,7 +126,6 @@ export default class ConfigureStatusPages extends React.Component {
                                 <div className="text-field-flex">
                                     <TextField onChange={this.onTextInputChange} label='Add new hostname' placeholder='e.g. https://status.newrelic.com/'/>
                                     <div className="add-status-page-config">
-                                        {/* <label>Provider:</label> */}
                                         <select className="btn-white"  onChange={this.onProviderChange} value={selectedProvider}>
                                             <option value="statusPageIo">
                                                 Status Page Io
@@ -143,6 +142,8 @@ export default class ConfigureStatusPages extends React.Component {
                                             onClick={this.addDepType}
                                             tagType={Button.TAG_TYPE.BUTTON}>Add Dependency Types</Button>
                                             <TagsModal
+                                                addDepTypeCallback={this.addDepTypeCallback}
+                                                hostName={selectedEditHost}
                                                 hidden={tagHidden}
                                                 onClose={this.onTagModalClose}/>
                                     </div>
