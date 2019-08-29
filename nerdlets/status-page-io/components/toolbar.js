@@ -40,8 +40,9 @@ export default class Toolbar extends React.Component {
     }
 
     render() {
-        const {accounts, hostNameCallBack, onAccountSelected, refreshRateCallback, refreshRate, selectedAccountId} = this.props;
+        const {accounts, entityGuid,  hostNameCallBack, onAccountSelected, refreshRateCallback, refreshRate, selectedAccountId} = this.props;
         const {hidden, hostNames, mounted} = this.state;
+        const keyObject = entityGuid ? {key: entityGuid, type: 'entity'} : {key: selectedAccountId, type: 'account'}
         return (
             <div className="toolbar-container">
                    <Dropdown className="toolbar-dropdown" title={`Refresh Rate: ${refreshRate}`}>
@@ -52,7 +53,7 @@ export default class Toolbar extends React.Component {
                         <DropdownItem onClick={refreshRateCallback}>20</DropdownItem>
                         <DropdownItem onClick={refreshRateCallback}>25</DropdownItem>
                     </Dropdown>
-                    <AccountPicker accountChangedCallback={onAccountSelected}/>
+                    {!entityGuid && <AccountPicker accountChangedCallback={onAccountSelected}/>}
                     <div className="dot-header">
                         <div className="dot-container"> <div className="dot minor"></div><div className="dot-name">Minor Incident</div></div>
                         <div className="dot-container"> <div className="dot major"></div><div className="dot-name">Major Incident</div></div>
@@ -63,7 +64,14 @@ export default class Toolbar extends React.Component {
                         onClick={this.onEditStatusPageClick}
                         tagType={Button.TAG_TYPE.BUTTON}>Edit StatusPages</Button>
                     {mounted &&
-                        <EditModal accounts={accounts} hostNameCallBack={hostNameCallBack} accountId={selectedAccountId} hostNames={hostNames} hidden={hidden} onModalClose={this.onModalClose} onModalHideEnd={this.onModalHideEnd}/>
+                        <EditModal
+                            accounts={accounts}
+                            keyObject={keyObject}
+                            hostNames={hostNames}
+                            hostNameCallBack={hostNameCallBack}
+                            hidden={hidden}
+                            onModalClose={this.onModalClose}
+                            onModalHideEnd={this.onModalHideEnd}/>
                     }
             </div>
         );

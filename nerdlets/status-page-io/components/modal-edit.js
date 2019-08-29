@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { AccountStorageMutation, AccountStorageQuery, Button, Dropdown, DropdownItem, HeadingText, Icon, Modal, TextField } from 'nr1';
+import { Button, HeadingText, Icon, Modal, TextField } from 'nr1';
 
-import AccountNerdletStorage from '../utilities/nerdlet-storage';
+import { getHostNamesFromNerdStorage, saveHostNamesToNerdStorage } from '../utilities/nerdlet-storage';
 
-const HOST_NAMES_COLLECTION_KEY = 'host_names_v0'
-const HOST_NAMES_DOCUMENT_ID = 'host_names'
 export default class EditModal extends React.Component {
 
     constructor(props) {
@@ -27,8 +25,9 @@ export default class EditModal extends React.Component {
     }
 
     async componentDidMount() {
-        console.debug(this.props);
-        const unSavedChanges = await new AccountNerdletStorage().getStatusPageIoHostNames(this.props.accountId);
+        const {keyObject} = this.props;
+
+        const unSavedChanges = await getHostNamesFromNerdStorage(keyObject);
         this.setState({'unSavedChanges': unSavedChanges});
     }
 
@@ -57,17 +56,6 @@ export default class EditModal extends React.Component {
         </li>);
     }
 
-    async _save(accountId) {
-        const mutationProp = {
-            accountId: accountId,
-            actionType: AccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
-            collection: HOST_NAMES_COLLECTION_KEY,
-            document: this.state.unSavedChanges,
-            documentId: HOST_NAMES_DOCUMENT_ID
-        }
-        return AccountStorageMutation.mutate(mutationProp);
-    }
-
     _displaySaveMessage() {
         this.setState({'showSaved': true});
         this.props.hostNameCallBack(this.state.unSavedChanges)
@@ -75,13 +63,13 @@ export default class EditModal extends React.Component {
     }
 
     async save() {
-        await this._save(this.props.accountId);
+        await saveHostNamesToNerdStorage(this.props.keyObject, this.state.unSavedChanges);
         this._displaySaveMessage();
     }
 
     async saveAll() {
         try {
-            this.props.accounts.forEach(async account=> await this._save(account.id));
+            this.props.accounts.forEach(async account=> await saveHostNamesToNerdStorage({key: account.id, type: 'account'}, this.state.unSavedChanges) );
             this._displaySaveMessage();
         } catch(err) {
             console.log(err);
@@ -103,7 +91,7 @@ export default class EditModal extends React.Component {
 
 
     render() {
-        const {hidden, onModalClose, onModalHideEnd} = this.props;
+        const {keyObject, hidden, onModalClose, onModalHideEnd} = this.props;
         const {showSaved, selectedProvider} = this.state;
         const hostnames = this.generateListHostNames();
         return (
@@ -140,9 +128,10 @@ export default class EditModal extends React.Component {
                                     iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
                                     tagType={Button.TAG_TYPE.BUTTON}>Add</Button>
                             </div>
-                            <Button className="modal-button"
+                            {keyObject.type === 'account' &&
+                                <Button className="modal-button"
                                     iconType={Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__CLOUD}
-                                    onClick={this.saveAll}>Sync All Accounts</Button>
+                                    onClick={this.saveAll}>Sync All Accounts</Button> }
                             <Button className="modal-button"
                                     iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EDIT}
                                     onClick={this.save}>Save</Button>

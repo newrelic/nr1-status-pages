@@ -16,7 +16,6 @@
 }
 
 .status-page-container {
-    padding-bottom: 10px;
     font-family: Open Sans,Segoe UI,Tahoma,sans-serif;
     color:#616161;
 }
@@ -24,4 +23,24 @@
 .status-container {
     padding-top: 10px;
     padding-left: 5px;
+}
+
+.status-page-grid-item {
+    padding: 5px 0px;
+}
+
+.no-status-pages {
+    padding-top: 50%
+}
+
+.status-page-wrapper {
+    border-radius: $summaryBorderRadius;
+    background: $headerBackgroundColor;
+
+    .status-page-container {
+        background: white;
+        border-radius: $summaryBorderRadius;
+        border: 1px solid $statusPageBorder;
+        padding: 10px;
+    }
 }

@@ -2,5 +2,7 @@
     "schemaType": "NERDLET",
     "id": "status-page-io-demo",
     "description": "Describe me",
-    "displayName": "Statuspage.Io"
+    "displayName": "Statuspage.Io",
+    "entities": [{ "domain": "APM",  "type": "APPLICATION" }],
+    "actionCategory": "monitor"
 }

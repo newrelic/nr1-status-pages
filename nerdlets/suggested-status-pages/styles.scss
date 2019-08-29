@@ -1,0 +1,24 @@
+.suggested-status-page-title {
+    text-align: center;
+    padding-top: 45px;
+}
+
+.suggested-status-grid-container {
+    padding: 3%;
+    .selected {
+        background: lightblue !important;
+    }
+    .status-page-wrapper {
+        padding: 30px;
+        cursor: pointer;
+        border-radius: $summaryBorderRadius $summaryBorderRadius $summaryBorderRadius $summaryBorderRadius;
+        background: $headerBackgroundColor;
+
+        .use-check-box {
+            position: relative;
+            top: -5px;
+            left: -11px;
+        }
+    }
+
+}

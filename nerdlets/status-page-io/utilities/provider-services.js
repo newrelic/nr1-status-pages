@@ -1,4 +1,8 @@
 
+import { googleIncidentFormatter, googleFormatter } from "./formatters/google";
+import { awsFormatter, awsIncidentFormatter } from "./formatters/aws";
+import { statusPageIncidentFormatter, statusPageIoFormatter } from "./formatters/status-page-io";
+
 const providers = {
     aws: {
         summaryUrl: '',
@@ -9,7 +13,8 @@ const providers = {
             high: 'critical'
         },
         name: "Amazon Web Services",
-        currentImpact: {}
+        incidentFormatter: awsIncidentFormatter,
+        summaryFormatter: awsFormatter
     },
     google: {
         summaryUrl: '/incidents.json',
@@ -20,7 +25,8 @@ const providers = {
             high: 'critical'
         },
         name: "Google Cloud Provider",
-        currentImpact: {}
+        incidentFormatter: googleIncidentFormatter,
+        summaryFormatter: googleFormatter
     },
     statusPageIo: {
             summaryUrl: '/api/v2/summary.json',
@@ -31,7 +37,8 @@ const providers = {
                 critical: 'critical'
             },
             name: "Google Cloud Provider",
-            currentImpact: {}
+            summaryFormatter: statusPageIoFormatter,
+            incidentFormatter: statusPageIncidentFormatter
     }
 }
 

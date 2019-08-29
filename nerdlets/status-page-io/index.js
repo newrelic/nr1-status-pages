@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import StatusPage from './status-page';
 
-import {Grid, GridItem, Spinner} from 'nr1';
+import {HeadingText, navigation, NerdGraphQuery, Grid, GridItem, Spinner} from 'nr1';
 import Toolbar from './components/toolbar';
-import AccountNerdletStorage from './utilities/nerdlet-storage';
 
 import AccountsContext from './accounts-context';
+import { getHostNamesFromNerdStorage } from './utilities/nerdlet-storage';
 
 export default class StatusPageIoMainPage extends React.Component {
     static propTypes = {
@@ -19,25 +19,78 @@ export default class StatusPageIoMainPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            entityGuid: props.nerdletUrlState.entityGuid,
+            suggestedDependencies: [],
             selectedAccountId: undefined,
             hostNames: [],
             refreshRate: 15
         }
-        this.accountNerdletStorage = new AccountNerdletStorage(this.state.selectedAccountId);
         this.onAccountSelected = this.onAccountSelected.bind(this);
         this.onRefreshRateSelected = this.onRefreshRateSelected.bind(this);
         this.setHostNames = this.setHostNames.bind(this);
+    }
+
+    async componentDidMount() {
+        if (this.state.entityGuid) {
+            const hostNames = await getHostNamesFromNerdStorage({key: this.state.entityGuid, type: 'entity'});
+            this.setHostNames(hostNames);
+            if (hostNames.length === 0) {
+                const graphQlResponse = await this.getEntitityRelationShipsAndAccountId();
+                const nerdletWithState = {
+                    id: '8fa8868a-b354-4d8a-aed8-8b757ea3d5f2.suggested-status-pages',
+                    urlState: {
+                        accountId: graphQlResponse.accountId,
+                        entityGuid: this.state.entityGuid,
+                        relationships: graphQlResponse.relationships
+                    }
+               };
+                navigation.openStackedNerdlet(nerdletWithState);
+            }
+        }
+    }
+
+    async getEntitityRelationShipsAndAccountId() {
+        const {entityGuid}  = this.state;
+        const query = {
+            query: `
+              {
+                actor {
+                  entity(guid: "${entityGuid}") {
+                    accountId
+                    relationships {
+                      target {
+                        entity {
+                            name
+                            entityType
+                        }
+                      }
+                    }
+                  }
+                }
+              }`
+            }
+        try {
+            const relationshipsResults = await NerdGraphQuery.query(query);
+            const relationships = relationshipsResults.data.actor.entity.relationships;
+            const accountId = relationshipsResults.data.actor.entity.accountId;
+            const external_relationships = relationships.filter(relationship =>
+                relationship.target.entity.entityType !== 'APM_APPLICATION_ENTITY')
+                    .map(filteredResults => filteredResults.target.entity.name);
+            return  {accountId, relationships:  [...new Set(external_relationships)]};
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     setHostNames(hostNames) {
         this.setState({'hostNames': hostNames});
     }
 
-    // TODO: This is bad we should move accounts to context
     async onAccountSelected(accountId, accounts) {
         this.setState({'selectedAccountId': accountId});
-        this.setState({'accounts': accounts})
-        const hostNames = await this.accountNerdletStorage.getStatusPageIoHostNames(accountId);
+        this.setState({'accounts': accounts});
+
+        const hostNames = await getHostNamesFromNerdStorage({key: accountId, type: 'account'});
         this.setHostNames(hostNames);
     }
 
@@ -46,28 +99,33 @@ export default class StatusPageIoMainPage extends React.Component {
     }
 
     getGridItems() {
-        if (!this.state.hostNames || !this.state.selectedAccountId) {
+        if (!this.state.hostNames || (!this.state.selectedAccountId && !this.state.entityGuid)) {
             return <Spinner />;
         }
         if (this.state.hostNames.length === 0) {
-            return <div>
-                No StatusPageIo urls are configured
-            </div>
+            return <GridItem  className="no-status-pages" columnStart={3} columnEnd={8}>
+                    <HeadingText className="suggested-status-page-title" type={HeadingText.TYPE.HEADING1}>
+                        No Status Pages are configured
+                    </HeadingText>
+                </GridItem>
         }
         return this.state.hostNames.map(hostname => (
-            <GridItem key={hostname.hostName} columnSpan={6}>
-                <StatusPage refreshRate={this.state.refreshRate} hostname={hostname.hostName} provider={hostname.provider}/>
+            <GridItem className="status-page-grid-item" key={hostname.hostName} columnSpan={6}>
+                <div className="status-page-wrapper">
+                    <StatusPage refreshRate={this.state.refreshRate} hostname={hostname.hostName} provider={hostname.provider}/>
+                </div>
             </GridItem>
         ));
     }
 
     render() {
-        const {accounts, hostNames, refreshRate, selectedAccountId} = this.state;
+        const {accounts, entityGuid, hostNames, refreshRate, selectedAccountId} = this.state;
         return (
             // <AccountsContext.Provider value={this.state}>
                 <div>
                     <Toolbar
                         accounts={accounts}
+                        entityGuid={entityGuid}
                         refreshRateCallback={this.onRefreshRateSelected}
                         refreshRate={refreshRate}
                         onAccountSelected={this.onAccountSelected}
@@ -75,14 +133,9 @@ export default class StatusPageIoMainPage extends React.Component {
                         hostNames={hostNames}
                         hostNameCallBack={this.setHostNames}
                         />
-                    {selectedAccountId &&
                         <Grid className="status-container">
                             { this.getGridItems()}
                         </Grid>
-                    }
-                    {!selectedAccountId &&
-                        <Spinner/>
-                    }
                 </div>
             // </AccountsContext.Provider>
         )
