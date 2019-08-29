@@ -10,10 +10,66 @@
     display: flex;
 }
 
-.configure-status-page-container {
-    padding: 15%;
+.AAB0AC-wnd-InnerModal {
+    padding: 10px;
+    .tag-container {
+        max-width: 93%;
+        width: 93%;
+    }
+    .modal-list-item {
+        max-width: 78%;
+    }
+}
 
-    .configure-status-pages-button-bar {
+.modal-text-add-container {
+    max-width: 78%;
+}
+
+.modal-list {
+    list-style: none;
+    max-width: 100%;
+}
+
+.modal-list-title {
+    padding-bottom: 36px;
+    text-align: center;
+}
+
+.modal-list-container {
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 8px;
+}
+
+.modal-list-item {
+    display: flex;
+    border-bottom: 1px $headerBackgroundColor solid;
+    .selected {
+        background-color: #A2E572;
+    }
+}
+
+.modal-list-item-name {
+    flex: 16;
+    padding-top: 10px;
+    word-wrap: break-word;
+}
+
+.modal-list-item-delete {
+    flex: 1;
+    float: right;
+    opacity: .7;
+    min-width: $summaryBorderRadius;
+    min-height: $summaryBorderRadius;
+    font-size: $summaryBorderRadius;
+    padding: 0;
+}
+
+
+
+.configure-status-page-container,.suggested-status-dependencies-container {
+    padding: 15%;
+    .button-bar {
         background-color: $headerBackgroundColor;
         border-radius: 4px;
         .btn-white {
@@ -25,42 +81,7 @@
     .modal-button {
         margin: 0px 3px 0px 0px;
     }
-    .modal-list {
-        list-style: none;
-        max-width: 100%;
-    }
 
-    .modal-list-title {
-        padding-bottom: 36px;
-        text-align: center;
-    }
-
-    .modal-list-container {
-        display: inline-block;
-        width: 100%;
-        padding-bottom: 8px;
-    }
-
-    .modal-list-item {
-        display: flex;
-        border-bottom: 1px $headerBackgroundColor solid;
-    }
-
-    .modal-list-item-name {
-        flex: 16;
-        padding-top: 10px;
-        word-wrap: break-word;
-    }
-
-    .modal-list-item-delete {
-        flex: 1;
-        float: right;
-        opacity: .7;
-        min-width: $summaryBorderRadius;
-        min-height: $summaryBorderRadius;
-        font-size: $summaryBorderRadius;
-        padding: 0;
-    }
 
     .modal-saved {
         border-radius: 29px;
