@@ -20,11 +20,6 @@
         max-width: 78%;
     }
 }
-
-.modal-text-add-container {
-    max-width: 78%;
-}
-
 .modal-list {
     list-style: none;
     max-width: 100%;
@@ -45,7 +40,7 @@
     display: flex;
     border-bottom: 1px $headerBackgroundColor solid;
     .selected {
-        background-color: #A2E572;
+        background-color: #A2E572 !important;
     }
 }
 
@@ -108,7 +103,7 @@
     }
 
     .add-status-page-config {
-        padding-bottom: 15px;
+        padding-top: 26px;
     }
     .btn-add-dep-type {
         padding: 0px 16px 8px 16px;

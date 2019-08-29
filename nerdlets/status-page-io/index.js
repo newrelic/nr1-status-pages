@@ -75,8 +75,9 @@ export default class StatusPageIoMainPage extends React.Component {
             const accountId = relationshipsResults.data.actor.entity.accountId;
             const external_relationships = relationships.filter(relationship =>
                 relationship.target.entity.entityType !== 'APM_APPLICATION_ENTITY')
-                    .map(filteredResults => filteredResults.target.entity.name);
-            return  {accountId, relationships:  [...new Set(external_relationships)]};
+                    .map(filteredResults => {return filteredResults.target.entity.name });
+            const distinct_external_rel = [...new Set(external_relationships)];
+            return  {accountId, relationships: distinct_external_rel.map(rel =>  { return {name: rel, isSelected: false} } )};
         } catch (err) {
             console.log(err);
         }
