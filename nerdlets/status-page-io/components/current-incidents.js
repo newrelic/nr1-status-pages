@@ -43,7 +43,7 @@ export default class CurrentIncidents extends React.Component {
 
     render() {
         const {currentIncidents} = this.state;
-        if (!currentIncidents || currentIncidents.length === 0) return <div></div>;
+        if (!currentIncidents) return <div></div>;
         this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
         const latestIncident = currentIncidents[0];
         // Show first current incident and then add a see more button
@@ -51,8 +51,8 @@ export default class CurrentIncidents extends React.Component {
             <div className="current-incident-row">
                 <div className="current-incident-name">
                     <HeadingText type={HeadingText.TYPE.HEADING3}>Latest Incident:
-                        <span className={`current-incidnet-text ${latestIncident.impact}`}>
-                            {latestIncident.name}
+                        <span className={`current-incidnet-text ${latestIncident ? latestIncident.impact:''}`}>
+                            {latestIncident ? latestIncident.name : 'None'}
                         </span>
                     </HeadingText>
                 </div>
