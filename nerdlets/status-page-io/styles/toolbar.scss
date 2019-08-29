@@ -19,84 +19,8 @@
     background-color: $headerBackgroundColor !important;
     border-width: 0 !important;
     box-shadow: none;
-    padding: 0px $summaryBorderRadius 8px $summaryBorderRadius;
+    padding: 0px 16px 8px 16px;
 }
-
-.modal-container {
-    display: inline;
-    font-family: Open Sans,Segoe UI,Tahoma,sans-serif;
-    color: #616161;
-}
-
-.modal-text-add-container{
-    display: flex;
-}
-
-
-// Modal list
-.modal-button {
-    margin: 0px 3px 0px 0px;
-}
-.modal-list {
-    list-style: none;
-    max-width: 100%;
-}
-
-.modal-list-title {
-    padding-bottom: 36px;
-}
-
-.modal-list-container {
-    display: inline-block;
-    width: 100%;
-    padding-bottom: 10px;
-}
-
-.modal-list-item {
-    padding-top: 1px;
-    padding-bottom: 5px;
-    display: flex;
-}
-
-.modal-list-item-name {
-    flex: 16;
-    word-wrap: break-word;
-}
-
-.modal-list-item-delete {
-    flex: 1;
-    float: right;
-    opacity: .7;
-    min-width: $summaryBorderRadius;
-    min-height: $summaryBorderRadius;
-    font-size: $summaryBorderRadius;
-    padding: 0;
-}
-
-.modal-saved {
-    border-radius: 29px;
-    border: 2px solid $saveGreen;
-    background: $saveGreen;
-    color: $textColorInvert;
-    font-size: large;
-    text-align: center;
-    margin-bottom: 20px;
-    .ic-Icon {
-        padding-bottom: 4px;
-        padding-left: 4px;
-    }
-}
-
-.modal-saved-hide {
-    transition: opacity .3s ease-in-out;
-    opacity: 0;
-}
-
-.modal-saved-show {
-    transition: opacity .3s ease-in-out;
-    opacity: 1;
-}
-
 
 // Dot Css for key
 .dot {

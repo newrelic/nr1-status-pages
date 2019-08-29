@@ -31,7 +31,7 @@ export default class Summary extends React.Component {
     render() {
         const { statusPageIoSummaryData } = this.state;
         this.StatusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
-        if (!statusPageIoSummaryData) return <Spinner />
+        if (!statusPageIoSummaryData) return <Spinner fillContainer/>
         return (
             <div className="summary-container">
                 <div className="summary-header">

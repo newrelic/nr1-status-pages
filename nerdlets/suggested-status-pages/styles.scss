@@ -3,6 +3,22 @@
     padding-top: 45px;
 }
 
+.suggested-status-dependencies-container {
+    padding: 5%;
+    .relationships {
+        padding: 4% 25%;
+    }
+    .relationship-text {
+        flex: 3;
+    }
+    .relationship-item {
+        display: flex;
+        .selected {
+            background-color: #A2E572;
+        }
+    }
+}
+
 .suggested-status-grid-container {
     padding: 3%;
     .selected {

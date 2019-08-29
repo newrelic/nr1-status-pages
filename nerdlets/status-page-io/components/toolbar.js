@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {  Button, Dropdown, DropdownItem } from 'nr1';
+import {  Button, Dropdown, DropdownItem , navigation} from 'nr1';
 
-import EditModal from './modal-edit';
 
 import AccountPicker from './account-picker';
 export default class Toolbar extends React.Component {
@@ -20,15 +19,16 @@ export default class Toolbar extends React.Component {
         this.onModalHideEnd = this.onModalHideEnd.bind(this);
     }
 
-    addHostName() {
-        const { addHostName} = this.state;
-        const {hostNames} = this.props;
-        hostNames.push(addHostName);
-        this.props.hostNameCallBack(hostNames);
-    }
-
     async onEditStatusPageClick() {
-        this.setState({'hidden': false, 'mounted': true, 'showSaved': false});
+        const nerdletWithState = {
+            id: '8fa8868a-b354-4d8a-aed8-8b757ea3d5f2.configure-status-pages',
+            urlState: {
+                accounts: this.props.accounts,
+                accountId: this.props.selectedAccountId,
+                entityGuid: this.props.entityGuid
+            }
+        };
+        navigation.openStackedNerdlet(nerdletWithState);
     }
 
     onModalClose() {
@@ -40,9 +40,7 @@ export default class Toolbar extends React.Component {
     }
 
     render() {
-        const {accounts, entityGuid,  hostNameCallBack, onAccountSelected, refreshRateCallback, refreshRate, selectedAccountId} = this.props;
-        const {hidden, hostNames, mounted} = this.state;
-        const keyObject = entityGuid ? {key: entityGuid, type: 'entity'} : {key: selectedAccountId, type: 'account'}
+        const {entityGuid, onAccountSelected, refreshRateCallback, refreshRate, selectedAccountId} = this.props;
         return (
             <div className="toolbar-container">
                    <Dropdown className="toolbar-dropdown" title={`Refresh Rate: ${refreshRate}`}>
@@ -63,16 +61,6 @@ export default class Toolbar extends React.Component {
                         className="btn-toolbar"
                         onClick={this.onEditStatusPageClick}
                         tagType={Button.TAG_TYPE.BUTTON}>Edit StatusPages</Button>
-                    {mounted &&
-                        <EditModal
-                            accounts={accounts}
-                            keyObject={keyObject}
-                            hostNames={hostNames}
-                            hostNameCallBack={hostNameCallBack}
-                            hidden={hidden}
-                            onModalClose={this.onModalClose}
-                            onModalHideEnd={this.onModalHideEnd}/>
-                    }
             </div>
         );
     }

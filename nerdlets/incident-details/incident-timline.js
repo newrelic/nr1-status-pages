@@ -34,6 +34,15 @@ export default class IncidentTimeline extends React.Component {
     });
     }
 
+    getTimeLine() {
+        if (this.props.incidents.length === 0) {
+            return <div> No reported outages </div>
+        }
+        return (<Timeline lineColor={'black'}>
+            {this.getTimeLineItems()}
+        </Timeline>);
+    }
+
     render() {
         return (
             <div className="timelineContainer">
@@ -45,9 +54,7 @@ export default class IncidentTimeline extends React.Component {
                         <div className="dot-container"> <div className="dot critical"></div><div className="dot-name">Critcal Impact</div></div>
                     </div>
                 </div>
-                <Timeline lineColor={'black'}>
-                    {this.getTimeLineItems()}
-                </Timeline>
+               { this.getTimeLine() }
             </div>
 
         )
