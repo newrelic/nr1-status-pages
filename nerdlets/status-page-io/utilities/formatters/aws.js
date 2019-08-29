@@ -1,7 +1,7 @@
 export const awsFormatter = (data) => {
     const incidents = data.successfulSet;
     const formattedData = {};
-    formattedData.name = 'AWS';
+    formattedData.name = data.name || 'AWS';
     const openIncident = incidents.find(incident => incident.event.statusCode === 'open');
     if (openIncident) {
         formattedData.description = openIncident.eventDescription.description;
