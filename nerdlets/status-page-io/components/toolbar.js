@@ -40,7 +40,7 @@ export default class Toolbar extends React.Component {
     }
 
     render() {
-        const {entityGuid, onAccountSelected, refreshRateCallback, refreshRate, selectedAccountId} = this.props;
+        const {entityGuid, onAccountSelected, refreshRateCallback, refreshRate} = this.props;
         return (
             <div className="toolbar-container">
                    <Dropdown className="toolbar-dropdown" title={`Refresh Rate: ${refreshRate}`}>
