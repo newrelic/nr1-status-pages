@@ -4,8 +4,6 @@ import StatusPage from './status-page';
 
 import {HeadingText, navigation, NerdGraphQuery, Grid, GridItem, Spinner} from 'nr1';
 import Toolbar from './components/toolbar';
-
-import AccountsContext from './accounts-context';
 import { getHostNamesFromNerdStorage } from './utilities/nerdlet-storage';
 
 export default class StatusPageIoMainPage extends React.Component {
