@@ -11,6 +11,8 @@ import {flatten, uniqBy} from 'lodash';
 const HOST_NAMES_COLLECTION_KEY = 'host_names_v0'
 const HOST_NAMES_DOCUMENT_ID = 'host_names'
 
+const MAX_ACCOUNT_DOC_FIELD_COUNT = 37; // Max size is 200 fields so to be safe we aim for 150
+
 export default class SuggestedStatusPages extends React.Component {
     static propTypes = {
         nerdletUrlState: PropTypes.object,
@@ -37,18 +39,27 @@ export default class SuggestedStatusPages extends React.Component {
         if (accountsResults.data && accountsResults.data.actor && accountsResults.data.actor.accounts) {
             const accounts = accountsResults.data.actor.accounts;
             let allHostNames = [];
-            let queryString = accounts.map((account, index) => ` ${'a'.repeat(index+1)}: account(id: ${account.id}) { nerdStorage { document(collection: "${HOST_NAMES_COLLECTION_KEY}", documentId: "${HOST_NAMES_DOCUMENT_ID}") } } `).join(' ');
-            queryString = `{ actor { ${queryString} } }`;
-            const graphqlQuery = { query: queryString}
+
+            const chuckedAccounts = [];
+            while(accounts && accounts.length > 0) {
+                chuckedAccounts.push(accounts.splice(0, MAX_ACCOUNT_DOC_FIELD_COUNT))
+            }
+
+            for(var i = 0; i < chuckedAccounts.length; i++) {
+                let queryString = chuckedAccounts[i].map((account, index) => ` ${'a'.repeat(index+1)}: account(id: ${account.id}) { nerdStorage { document(collection: "${HOST_NAMES_COLLECTION_KEY}", documentId: "${HOST_NAMES_DOCUMENT_ID}") } } `).join(' ');
+                queryString = `{ actor { ${queryString} } }`;
+                const graphqlQuery = { query: queryString}
 
 
-            const relationshipsResults = await NerdGraphQuery.query(graphqlQuery);
-            Object.keys(relationshipsResults.data.actor).forEach(key => {
-                const nerdStorage = relationshipsResults.data.actor[key].nerdStorage;
-                if (nerdStorage && nerdStorage.document) {
-                    allHostNames.push(nerdStorage);
-                }
-            });
+                const relationshipsResults = await NerdGraphQuery.query(graphqlQuery);
+                Object.keys(relationshipsResults.data.actor).forEach(key => {
+                    const nerdStorage = relationshipsResults.data.actor[key].nerdStorage;
+                    if (nerdStorage && nerdStorage.document) {
+                        allHostNames.push(nerdStorage.document);
+                    }
+                });
+            }
+
             allHostNames = uniqBy(flatten(allHostNames), 'hostName');
             this.setState({'hostNames': allHostNames});
             this.setState({'loading': false});
