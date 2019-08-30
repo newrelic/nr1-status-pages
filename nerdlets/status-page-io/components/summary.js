@@ -37,7 +37,7 @@ export default class Summary extends React.Component {
                 <div className="summary-header">
                     <HeadingText type={HeadingText.TYPE.HEADING2}>{statusPageIoSummaryData.name}</HeadingText>
                 </div>
-                <div className={`summary-current-status`}>
+                <div className={`summary-current-status ${statusPageIoSummaryData.indicator}`}>
                     {statusPageIoSummaryData.description}
                 </div>
             </div>
