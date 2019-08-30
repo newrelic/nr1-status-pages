@@ -1,10 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {AccountsQuery, Button, HeadingText, Grid, GridItem, Spinner, Tabs, TabsItem, TextField} from 'nr1';
+import {AccountsQuery, Button, HeadingText, Grid, GridItem, Spinner, Tabs, TabsItem, TextField, NerdGraphQuery} from 'nr1';
 
-import { getHostNamesFromNerdStorage, saveHostNamesToNerdStorage } from '../status-page-io/utilities/nerdlet-storage';
+import { saveHostNamesToNerdStorage } from '../status-page-io/utilities/nerdlet-storage';
 import StatusPage from '../status-page-io/status-page';
+
+import {flatten, uniqBy} from 'lodash';
+
+const HOST_NAMES_COLLECTION_KEY = 'host_names_v0'
+const HOST_NAMES_DOCUMENT_ID = 'host_names'
 
 export default class SuggestedStatusPages extends React.Component {
     static propTypes = {
@@ -31,15 +36,19 @@ export default class SuggestedStatusPages extends React.Component {
         const accountsResults = await AccountsQuery.query();
         if (accountsResults.data && accountsResults.data.actor && accountsResults.data.actor.accounts) {
             const accounts = accountsResults.data.actor.accounts;
-            const allHostNames = [];
-            for (let i = 0; i < accounts.length; i++) {
-                const storedHostNames = await getHostNamesFromNerdStorage({key: accounts[i].id, type: 'account'});
-                storedHostNames.forEach(hostName => {
-                    if (!allHostNames.find(host => host.hostName === hostName.hostName)) {
-                        allHostNames.push(hostName)
-                    }
-                });
-            }
+            let allHostNames = [];
+            let queryString = accounts.map((account, index) => ` ${'a'.repeat(index+1)}: account(id: ${account.id}) { nerdStorage { document(collection: "${HOST_NAMES_COLLECTION_KEY}", documentId: "${HOST_NAMES_DOCUMENT_ID}") } } `).join(' ');
+            queryString = `{ actor { ${queryString} } }`;
+            const graphqlQuery = { query: queryString}
+
+
+            const relationshipsResults = await NerdGraphQuery.query(graphqlQuery);
+            Object.keys(relationshipsResults.data.actor).forEach(key => {
+                if (relationshipsResults.data.actor[key].nerdStorage) {
+                    allHostNames.push(relationshipsResults.data.actor[key].nerdStorage.document);
+                }
+            });
+            allHostNames = uniqBy(flatten(allHostNames), 'hostName');
             this.setState({'hostNames': allHostNames});
             this.setState({'loading': false});
         }
@@ -70,7 +79,6 @@ export default class SuggestedStatusPages extends React.Component {
 
     toggleAddRelationShip(relationship) {
         relationship.isSelected = !relationship.isSelected;
-        console.log(relationship);
         // TODO: BAD
         this.forceUpdate();
     }
