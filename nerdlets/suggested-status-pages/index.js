@@ -140,7 +140,6 @@ export default class SuggestedStatusPages extends React.Component {
 
         )
     }
-
     render() {
         return (
             <div>
