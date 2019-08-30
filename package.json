@@ -3,6 +3,9 @@
     "name": "status-page-io",
     "description": "Nerdpack status-page-io",
     "version": "0.1.0",
+    "bugs": {
+        "email": "opensource@newrelic.com"
+    },
     "scripts": {
         "start": "nr1 nerdpack:serve",
         "test": "exit 0"
