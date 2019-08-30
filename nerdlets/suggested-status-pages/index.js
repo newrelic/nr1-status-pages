@@ -44,8 +44,9 @@ export default class SuggestedStatusPages extends React.Component {
 
             const relationshipsResults = await NerdGraphQuery.query(graphqlQuery);
             Object.keys(relationshipsResults.data.actor).forEach(key => {
-                if (relationshipsResults.data.actor[key].nerdStorage) {
-                    allHostNames.push(relationshipsResults.data.actor[key].nerdStorage.document);
+                const nerdStorage = relationshipsResults.data.actor[key].nerdStorage;
+                if (nerdStorage && nerdStorage.document) {
+                    allHostNames.push(nerdStorage);
                 }
             });
             allHostNames = uniqBy(flatten(allHostNames), 'hostName');
