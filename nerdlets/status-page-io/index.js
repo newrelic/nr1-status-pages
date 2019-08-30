@@ -28,6 +28,8 @@ export default class StatusPageIoMainPage extends React.Component {
         this.onAccountSelected = this.onAccountSelected.bind(this);
         this.onRefreshRateSelected = this.onRefreshRateSelected.bind(this);
         this.setHostNames = this.setHostNames.bind(this);
+        //! Bad hack
+        this.pollHosts();
     }
 
     async componentDidMount() {
@@ -95,6 +97,23 @@ export default class StatusPageIoMainPage extends React.Component {
         this.setHostNames(hostNames);
     }
 
+    //! This is a hack until there is an message bus between stacked nerdlets
+    async pollHosts() {
+        setTimeout(async () => {
+            try {
+                const hostNames = await getHostNamesFromNerdStorage( {key: this.state.entityGuid ? this.state.entityGuid : this.state.selectedAccountId, type: this.state.entityGuid ? 'entity' : 'account'});
+                if (JSON.stringify(hostNames) !== JSON.stringify(this.state.hostNames)) {
+                    this.setHostNames(hostNames);
+                }
+            } catch (err) {
+                console.log(err);
+            } finally {
+                this.pollHosts();
+            }
+        }, 5 * 1000)
+    }
+
+
     onRefreshRateSelected(event) {
         this.setState({'refreshRate': parseInt(event.currentTarget.text)});
     }
@@ -133,6 +152,7 @@ export default class StatusPageIoMainPage extends React.Component {
                         selectedAccountId={selectedAccountId}
                         hostNames={hostNames}
                         hostNameCallBack={this.setHostNames}
+                        pollHostCallBack={this.pollHosts}
                         />
                         <Grid className="status-container">
                             { this.getGridItems()}
