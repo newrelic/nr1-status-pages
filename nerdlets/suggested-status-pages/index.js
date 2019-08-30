@@ -146,12 +146,12 @@ export default class SuggestedStatusPages extends React.Component {
             <div>
                 <HeadingText className="suggested-status-page-title" type={HeadingText.TYPE.HEADING1}>Suggested Status Pages</HeadingText>
                 <Tabs>
-                    <TabsItem itemKey="accounts" label="Account Options">
+                    <TabsItem itemKey="accounts" label="Suggested Status Pages">
                         <div className="suggested-status-grid-container">
                             {this.getStatusGrid()}
                         </div>
                     </TabsItem>
-                    <TabsItem itemKey="dep" label="Dependencies">
+                    <TabsItem itemKey="dep" label="Entity Dependencies">
                         <div className="suggested-status-dependencies-container">
                         <HeadingText className="suggested-status-page-title" type={HeadingText.TYPE.HEADING3}>Detected the following external Dependencies you may want to watch</HeadingText>
                             <ul className="relationships">
