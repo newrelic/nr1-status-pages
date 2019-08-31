@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import {Spinner} from 'nr1';
 
 // TODO: This seems real bad since we are requiring a lib from other nerdlet
-import Network from '../status-page-io/utilities/network';
-import IncidentTimeline from './incident-timline';
-import FormatService from '../status-page-io/utilities/format-service';
+import Network from '../../utilities/network';
+import IncidentTimeline from '../../components/incidents/incident-timline';
+import FormatService from '../../utilities/format-service';
 
 const REFRESH_RATE = 15;
 
