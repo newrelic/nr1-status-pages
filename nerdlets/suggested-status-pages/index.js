@@ -6,10 +6,14 @@ import {AccountsQuery, Button, HeadingText, Grid, GridItem, Spinner, Tabs, TabsI
 import { saveHostNamesToNerdStorage } from '../status-page-io/utilities/nerdlet-storage';
 import StatusPage from '../status-page-io/status-page';
 
+import { popularSites } from '../../popular-status-pages';
+
 import {flatten, uniqBy} from 'lodash';
 
 const HOST_NAMES_COLLECTION_KEY = 'host_names_v0'
 const HOST_NAMES_DOCUMENT_ID = 'host_names'
+
+const MAX_ACCOUNT_DOC_FIELD_COUNT = 37; // Max size is 200 fields so to be safe we aim for 150
 
 export default class SuggestedStatusPages extends React.Component {
     static propTypes = {
@@ -37,18 +41,27 @@ export default class SuggestedStatusPages extends React.Component {
         if (accountsResults.data && accountsResults.data.actor && accountsResults.data.actor.accounts) {
             const accounts = accountsResults.data.actor.accounts;
             let allHostNames = [];
-            let queryString = accounts.map((account, index) => ` ${'a'.repeat(index+1)}: account(id: ${account.id}) { nerdStorage { document(collection: "${HOST_NAMES_COLLECTION_KEY}", documentId: "${HOST_NAMES_DOCUMENT_ID}") } } `).join(' ');
-            queryString = `{ actor { ${queryString} } }`;
-            const graphqlQuery = { query: queryString}
+
+            const chuckedAccounts = [];
+            while(accounts && accounts.length > 0) {
+                chuckedAccounts.push(accounts.splice(0, MAX_ACCOUNT_DOC_FIELD_COUNT))
+            }
+
+            for(var i = 0; i < chuckedAccounts.length; i++) {
+                let queryString = chuckedAccounts[i].map((account, index) => ` ${'a'.repeat(index+1)}: account(id: ${account.id}) { nerdStorage { document(collection: "${HOST_NAMES_COLLECTION_KEY}", documentId: "${HOST_NAMES_DOCUMENT_ID}") } } `).join(' ');
+                queryString = `{ actor { ${queryString} } }`;
+                const graphqlQuery = { query: queryString}
 
 
-            const relationshipsResults = await NerdGraphQuery.query(graphqlQuery);
-            Object.keys(relationshipsResults.data.actor).forEach(key => {
-                const nerdStorage = relationshipsResults.data.actor[key].nerdStorage;
-                if (nerdStorage && nerdStorage.document) {
-                    allHostNames.push(nerdStorage);
-                }
-            });
+                const relationshipsResults = await NerdGraphQuery.query(graphqlQuery);
+                Object.keys(relationshipsResults.data.actor).forEach(key => {
+                    const nerdStorage = relationshipsResults.data.actor[key].nerdStorage;
+                    if (nerdStorage && nerdStorage.document) {
+                        allHostNames.push(nerdStorage.document);
+                    }
+                });
+            }
+
             allHostNames = uniqBy(flatten(allHostNames), 'hostName');
             this.setState({'hostNames': allHostNames});
             this.setState({'loading': false});
@@ -110,8 +123,8 @@ export default class SuggestedStatusPages extends React.Component {
         );})
     }
 
-    generateStatusPages() {
-        return this.state.hostNames.map(hostname => (
+    generateStatusPages(hostNames) {
+        return hostNames.map(hostname => (
             <GridItem className="status-page-grid-item" key={hostname.hostName} columnSpan={6}>
                 <div onClick={this.checkAddToDashBoard.bind(this, hostname)} className={`status-page-wrapper ${hostname.isSelected ? 'selected': ''}`}>
                     <StatusPage refreshRate={15} hostname={hostname.hostName} provider={hostname.provider}/>
@@ -120,32 +133,49 @@ export default class SuggestedStatusPages extends React.Component {
         ));
     }
 
-    getStatusGrid() {
+    getPopularStatusGrid() {
         if (this.state.loading) return <Spinner fillContainer/>
         return(
         <Grid>
-            {this.generateStatusPages()}
+            {this.generateStatusPages(popularSites.sites)}
         </Grid>
 
         )
     }
+
+
+    getStatusGrid() {
+        if (this.state.loading) return <Spinner fillContainer/>
+        return(
+        <Grid>
+            {this.generateStatusPages(this.state.hostNames)}
+        </Grid>
+
+        )
+    }
+
 
     render() {
         return (
             <div>
                 <HeadingText className="suggested-status-page-title" type={HeadingText.TYPE.HEADING1}>Suggested Status Pages</HeadingText>
                 <Tabs>
-                    <TabsItem itemKey="dep" label="Dependencies">
+                    <TabsItem itemKey="accounts" label="Suggested Status Pages">
+                        <div className="suggested-status-grid-container">
+                            {this.getStatusGrid()}
+                        </div>
+                    </TabsItem>
+                    <TabsItem itemKey="popular-sites" label="Popular Status Pages">
+                        <div className="suggested-status-grid-container">
+                            {this.getPopularStatusGrid()}
+                        </div>
+                    </TabsItem>
+                    <TabsItem itemKey="dep" label="Entity Dependencies">
                         <div className="suggested-status-dependencies-container">
                         <HeadingText className="suggested-status-page-title" type={HeadingText.TYPE.HEADING3}>Detected the following external Dependencies you may want to watch</HeadingText>
                             <ul className="relationships">
                                 {this.generateDepli()}
                             </ul>
-                        </div>
-                    </TabsItem>
-                    <TabsItem itemKey="accounts" label="Account Options">
-                        <div className="suggested-status-grid-container">
-                            {this.getStatusGrid()}
                         </div>
                     </TabsItem>
                 </Tabs>
