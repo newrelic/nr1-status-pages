@@ -1,8 +1,8 @@
 {
     "schemaType": "NERDLET",
-    "id": "status-page-io-demo",
+    "id": "status-page",
     "description": "Describe me",
-    "displayName": "Statuspage.Io",
+    "displayName": "Status Page",
     "entities": [{ "domain": "APM",  "type": "APPLICATION" }],
     "actionCategory": "monitor"
 }

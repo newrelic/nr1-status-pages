@@ -6,7 +6,7 @@ const uuid = require('uuid/v4');
 import {AccountsQuery, Button, HeadingText, Grid, GridItem, Spinner, Tabs, TabsItem, NerdGraphQuery} from 'nr1';
 
 import { getHostNamesFromNerdStorage, saveHostNamesToNerdStorage } from '../../utilities/nerdlet-storage';
-import StatusPage from '../status-page-io/status-page';
+import StatusPage from '../status-page/status-page';
 
 import { popularSites } from '../../popular-status-pages';
 
@@ -228,14 +228,14 @@ export default class ConfigureStatusPages extends React.Component {
                             accountId={accountId}
                             entityGuid={entityGuid} />
                     </TabsItem>
-                    <TabsItem itemKey="accounts" label="Suggested Account Status Pages">
-                        <div className="suggested-status-grid-container">
-                            {this.getStatusGridItems(allAccountHostNames)}
-                        </div>
-                    </TabsItem>
                     <TabsItem itemKey="popular-sites" label="Popular Status Pages">
                         <div className="suggested-status-grid-container">
                             {this.getStatusGridItems(popularSites.sites)}
+                        </div>
+                    </TabsItem>
+                    <TabsItem itemKey="accounts" label="Suggested Account Status Pages">
+                        <div className="suggested-status-grid-container">
+                            {this.getStatusGridItems(allAccountHostNames)}
                         </div>
                     </TabsItem>
                     {entityGuid && <TabsItem itemKey="dep" label="Entity Dependencies">

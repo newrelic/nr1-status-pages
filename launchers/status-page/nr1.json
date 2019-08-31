@@ -1,0 +1,8 @@
+{
+    "schemaType": "LAUNCHER",
+    "id": "status-page-launcher",
+    "description": "Status Page Dashbaord",
+    "displayName": "Status Page",
+    "icon": "interface_placeholders_icon-placeholder",
+    "rootNerdletId": "8fa8868a-b354-4d8a-aed8-8b757ea3d5f2.status-page"
+}
