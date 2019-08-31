@@ -3,18 +3,6 @@ import { googleIncidentFormatter, googleFormatter } from "./formatters/google";
 import { statusPageIncidentFormatter, statusPageIoFormatter } from "./formatters/status-page-io";
 
 const providers = {
-    aws: {
-        summaryUrl: '',
-        incidentUrl: '',
-        impactMap: {
-            low: 'minor',
-            medium: 'major',
-            high: 'critical'
-        },
-        name: "Amazon Web Services",
-        incidentFormatter: awsIncidentFormatter,
-        summaryFormatter: awsFormatter
-    },
     google: {
         summaryUrl: '/incidents.json',
         incidentUrl: '/incidents.json',
