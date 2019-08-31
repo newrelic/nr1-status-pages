@@ -2,17 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 const uuid = require('uuid/v4');
 
-
+import {flatten, uniqBy} from 'lodash';
 import {AccountsQuery, Button, HeadingText, Grid, GridItem, Spinner, Tabs, TabsItem, NerdGraphQuery} from 'nr1';
-
 import { getHostNamesFromNerdStorage, saveHostNamesToNerdStorage } from '../../utilities/nerdlet-storage';
-import StatusPage from '../status-page-io/status-page';
-
 import { popularSites } from '../../popular-status-pages';
 
-import {flatten, uniqBy} from 'lodash';
+import StatusPage from '../../components/status-page';
 import CustomHostNames from '../../components/configure/custom-hostnames';
-
 const HOST_NAMES_COLLECTION_KEY = 'host_names_v0'
 const HOST_NAMES_DOCUMENT_ID = 'host_names'
 
@@ -32,10 +28,9 @@ export default class ConfigureStatusPages extends React.Component {
         this.state = {
             allAccountHostNames: [],
             hostNames: [],
-            selectedHostNames: [],
-            loading: true,
             tags: [],
             relationships: [],
+            loading: true,
             keyObject: {key: entityGuid ? entityGuid : accountId, type: entityGuid ? 'entity' : 'account'},
         }
         this.addHostName = this.addHostName.bind(this);

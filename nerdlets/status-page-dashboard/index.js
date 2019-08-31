@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import StatusPage from './status-page';
+import StatusPage from '../../components/status-page';
 
 import {HeadingText, navigation, NerdGraphQuery, Grid, GridItem, Spinner} from 'nr1';
 import Toolbar from '../../components/toolbar';

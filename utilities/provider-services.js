@@ -1,6 +1,5 @@
 
 import { googleIncidentFormatter, googleFormatter } from "./formatters/google";
-import { awsFormatter, awsIncidentFormatter } from "./formatters/aws";
 import { statusPageIncidentFormatter, statusPageIoFormatter } from "./formatters/status-page-io";
 
 const providers = {

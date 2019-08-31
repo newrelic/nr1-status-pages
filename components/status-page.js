@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Summary from '../../components/summary';
+import Summary from './summary';
 
-import CurrentIncidents from '../../components/current-incidents';
+import CurrentIncidents from './current-incidents';
 
 export default class StatusPage extends React.Component {
     static propTypes = {
