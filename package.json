@@ -1,7 +1,7 @@
 {
     "private": true,
-    "name": "status-page-io",
-    "description": "Nerdpack status-page-io",
+    "name": "status-page",
+    "description": "Nerdpack status-page",
     "version": "0.1.0",
     "bugs": {
         "email": "opensource@newrelic.com"
