@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import StatusPage from './status-page';
 
 import {HeadingText, navigation, NerdGraphQuery, Grid, GridItem, Spinner} from 'nr1';
-import Toolbar from './components/toolbar';
-import { getHostNamesFromNerdStorage } from './utilities/nerdlet-storage';
+import Toolbar from '../../components/toolbar';
+import { getHostNamesFromNerdStorage } from '../../utilities/nerdlet-storage';
 
 export default class StatusPageIoMainPage extends React.Component {
     static propTypes = {
@@ -34,52 +34,6 @@ export default class StatusPageIoMainPage extends React.Component {
         if (this.state.entityGuid) {
             const hostNames = await getHostNamesFromNerdStorage({key: this.state.entityGuid, type: 'entity'});
             this.setHostNames(hostNames);
-            if (hostNames.length === 0) {
-                const graphQlResponse = await this.getEntitityRelationShipsAndAccountId();
-                const nerdletWithState = {
-                    id: '8fa8868a-b354-4d8a-aed8-8b757ea3d5f2.suggested-status-pages',
-                    urlState: {
-                        accountId: graphQlResponse.accountId,
-                        entityGuid: this.state.entityGuid,
-                        relationships: graphQlResponse.relationships
-                    }
-               };
-                navigation.openStackedNerdlet(nerdletWithState);
-            }
-        }
-    }
-
-    async getEntitityRelationShipsAndAccountId() {
-        const {entityGuid}  = this.state;
-        const query = {
-            query: `
-              {
-                actor {
-                  entity(guid: "${entityGuid}") {
-                    accountId
-                    relationships {
-                      target {
-                        entity {
-                            name
-                            entityType
-                        }
-                      }
-                    }
-                  }
-                }
-              }`
-            }
-        try {
-            const relationshipsResults = await NerdGraphQuery.query(query);
-            const relationships = relationshipsResults.data.actor.entity.relationships;
-            const accountId = relationshipsResults.data.actor.entity.accountId;
-            const external_relationships = relationships.filter(relationship =>
-                relationship.target.entity.entityType !== 'APM_APPLICATION_ENTITY')
-                    .map(filteredResults => {return filteredResults.target.entity.name });
-            const distinct_external_rel = [...new Set(external_relationships)];
-            return  {accountId, relationships: distinct_external_rel.map(rel =>  { return {name: rel, isSelected: false} } )};
-        } catch (err) {
-            console.log(err);
         }
     }
 
@@ -128,7 +82,7 @@ export default class StatusPageIoMainPage extends React.Component {
                 </GridItem>
         }
         return this.state.hostNames.map(hostname => (
-            <GridItem className="status-page-grid-item" key={hostname.hostName} columnSpan={6}>
+            <GridItem className="status-page-grid-item" key={hostname.id} columnSpan={6}>
                 <div className="status-page-wrapper">
                     <StatusPage refreshRate={this.state.refreshRate} hostname={hostname.hostName} provider={hostname.provider}/>
                 </div>
