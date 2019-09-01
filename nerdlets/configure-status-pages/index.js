@@ -34,6 +34,7 @@ export default class ConfigureStatusPages extends React.Component {
             keyObject: {key: entityGuid ? entityGuid : accountId, type: entityGuid ? 'entity' : 'account'},
         }
         this.addHostName = this.addHostName.bind(this);
+        this.generateStatusPages = this.generateStatusPages.bind(this);
         this.deleteHostName = this.deleteHostName.bind(this);
         this.checkAddToDashBoard = this.checkAddToDashBoard.bind(this);
         this.searchForDependencyTags = this.searchForDependencyTags.bind(this);
@@ -189,22 +190,24 @@ export default class ConfigureStatusPages extends React.Component {
     }
 
     generateStatusPages(hostNames) {
-        return hostNames.map((hostname, index) => (
-            <GridItem className="status-page-grid-item" key={`${hostname.id}`} columnSpan={6}>
-                <div onClick={this.checkAddToDashBoard.bind(this, hostname)} className={`status-page-wrapper ${hostname.isSelected ? 'selected': ''}`}>
-                    <StatusPage refreshRate={15} hostname={hostname.hostName} provider={hostname.provider}/>
-                </div>
-            </GridItem>
-        ));
-    }
+        return hostNames.map(hostname => {
+            hostname.isSelected = !!this.state.hostNames.find(val => val.hostName === hostname.hostName);
+            return (
+                <GridItem className="status-page-grid-item" key={`${hostname.id}`} columnSpan={6}>
+                    <div onClick={this.checkAddToDashBoard.bind(this, hostname)} className={`status-page-wrapper ${hostname.isSelected ? 'selected': ''}`}>
+                        <StatusPage refreshRate={15} hostname={hostname.hostName} provider={hostname.provider}/>
+                    </div>
+                </GridItem>
+            )});
+        };
+
 
     getStatusGridItems(hostNames) {
         if (this.state.loading) return <Spinner fillContainer/>
         return(
-        <Grid>
-            {this.generateStatusPages(hostNames)}
-        </Grid>
-
+            <Grid>
+                {this.generateStatusPages(hostNames)}
+            </Grid>
         )
     }
 
@@ -223,14 +226,14 @@ export default class ConfigureStatusPages extends React.Component {
                             accountId={accountId}
                             entityGuid={entityGuid} />
                     </TabsItem>
-                    <TabsItem itemKey="accounts" label="Suggested Account Status Pages">
-                        <div className="suggested-status-grid-container">
-                            {this.getStatusGridItems(allAccountHostNames)}
-                        </div>
-                    </TabsItem>
                     <TabsItem itemKey="popular-sites" label="Popular Status Pages">
                         <div className="suggested-status-grid-container">
                             {this.getStatusGridItems(popularSites.sites)}
+                        </div>
+                    </TabsItem>
+                    <TabsItem itemKey="accounts" label="Suggested Account Status Pages">
+                        <div className="suggested-status-grid-container">
+                            {this.getStatusGridItems(allAccountHostNames)}
                         </div>
                     </TabsItem>
                     {entityGuid && <TabsItem itemKey="dep" label="Entity Dependencies">
