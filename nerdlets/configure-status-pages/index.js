@@ -175,7 +175,7 @@ export default class ConfigureStatusPages extends React.Component {
                                 className={`${foundMatch.isSelected ? 'selected': ''}`}
                                 onClick={this.checkAddToDashBoard.bind(this, foundMatch)}
                                 Type={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-                                tagType={Button.TAG_TYPE.BUTTON}>
+                                >
                                     Found Matching Status Page
                             </Button>}
                             {!foundMatch &&
@@ -183,7 +183,7 @@ export default class ConfigureStatusPages extends React.Component {
                                     className={`btn-white ${relationship.isSelected ? 'selected': ''}`}
                                     onClick={this.toggleAddRelationShip.bind(this, relationship)}
                                     iconType={relationship.isSelected ? Button.ICON_TYPE.INTERFACE__SIGN__CHECKMARK: Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-                            tagType={Button.TAG_TYPE.BUTTON}></Button> }
+                                ></Button> }
                     </div>
                 </li>
         );})

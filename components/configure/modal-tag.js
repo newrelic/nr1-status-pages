@@ -61,7 +61,7 @@ export default class TagsModal extends React.Component {
                                     className="btn-white"
                                     onClick={this.addTag}
                                     iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-                                    tagType={Button.TAG_TYPE.BUTTON}>Add</Button>
+                                    >Add</Button>
                             </div>
                             <Button className="modal-button" onClick={onClose.bind(this, tags)}>Close</Button>
                         </div>

@@ -23,7 +23,7 @@ export default class CurrentIncidents extends React.Component {
 
     seeMore() {
         const nerdletWithState = {
-            id: '8fa8868a-b354-4d8a-aed8-8b757ea3d5f2.incident-details',
+            id: '1a1659b2-96c0-4e13-9334-fba5438fa6e3.incident-details',
             urlState: {
                 hostname: this.props.hostname,
                 provider: this.props.provider
@@ -51,7 +51,7 @@ export default class CurrentIncidents extends React.Component {
             <div className="current-incident-row">
                 <div className="current-incident-name">
                     <HeadingText type={HeadingText.TYPE.HEADING3}>Latest Incident:
-                        <span className={`current-incidnet-text ${latestIncident ? latestIncident.impact:''}`}>
+                        <span className={`current-incident-text ${latestIncident ? latestIncident.impact:''}`}>
                             {latestIncident ? latestIncident.name : 'None'}
                         </span>
                     </HeadingText>
@@ -61,7 +61,7 @@ export default class CurrentIncidents extends React.Component {
                         className="btn-white see-more "
                         onClick={this.seeMore}
                         iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-                        tagType={Button.TAG_TYPE.BUTTON}>See More</Button>
+                        >See More</Button>
                 </div>
             </div>
         )

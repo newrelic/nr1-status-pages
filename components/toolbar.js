@@ -21,7 +21,7 @@ export default class Toolbar extends React.Component {
 
     async onEditStatusPageClick() {
         const nerdletWithState = {
-            id: '8fa8868a-b354-4d8a-aed8-8b757ea3d5f2.configure-status-pages',
+            id: '1a1659b2-96c0-4e13-9334-fba5438fa6e3.configure-status-pages',
             urlState: {
                 accounts: this.props.accounts,
                 accountId: this.props.selectedAccountId,
@@ -55,12 +55,12 @@ export default class Toolbar extends React.Component {
                     <div className="dot-header">
                         <div className="dot-container"> <div className="dot minor"></div><div className="dot-name">Minor Incident</div></div>
                         <div className="dot-container"> <div className="dot major"></div><div className="dot-name">Major Incident</div></div>
-                        <div className="dot-container"> <div className="dot critical"></div><div className="dot-name">Critcal Incident</div></div>
+                        <div className="dot-container"> <div className="dot critical"></div><div className="dot-name">Critical Incident</div></div>
                     </div>
                     <Button
                         className="btn-toolbar"
                         onClick={this.onEditStatusPageClick}
-                        tagType={Button.TAG_TYPE.BUTTON}>Edit StatusPages</Button>
+                        >Edit StatusPages</Button>
             </div>
         );
     }

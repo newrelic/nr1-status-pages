@@ -51,7 +51,7 @@ export default class IncidentTimeline extends React.Component {
                         <div className="dot-container"> <div className="dot none"></div><div className="dot-name">No Impact</div></div>
                         <div className="dot-container"> <div className="dot minor"></div><div className="dot-name">Minor Impact</div></div>
                         <div className="dot-container"> <div className="dot major"></div><div className="dot-name">Major Impact</div></div>
-                        <div className="dot-container"> <div className="dot critical"></div><div className="dot-name">Critcal Impact</div></div>
+                        <div className="dot-container"> <div className="dot critical"></div><div className="dot-name">Critical Impact</div></div>
                     </div>
                 </div>
                { this.getTimeLine() }

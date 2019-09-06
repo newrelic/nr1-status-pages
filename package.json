@@ -1,44 +1,44 @@
 {
-    "private": true,
-    "name": "status-page",
-    "description": "Nerdpack status-page",
-    "version": "0.1.0",
-    "bugs": {
-        "email": "opensource@newrelic.com"
-    },
-    "scripts": {
-        "start": "nr1 nerdpack:serve",
-        "test": "exit 0",
-        "eslint-check": "eslint nerdlets/",
-        "eslint-fix": "eslint nerdlets/ --fix"
-    },
-    "nr1": {
-        "uuid": "8fa8868a-b354-4d8a-aed8-8b757ea3d5f2",
-        "sdkVersion": 2
-    },
-    "dependencies": {
-        "axios": "^0.19.0",
-        "generate-schema": "^2.6.0",
-        "lodash": "^4.17.15",
-        "prop-types": "^15.6.2",
-        "react": "^16.6.3",
-        "react-dom": "^16.6.3",
-        "react-markdown": "^4.1.0",
-        "react-vertical-timeline-component": "^2.4.0",
-        "uuid": "^3.3.3",
-        "vertical-timeline-component-for-react": "^1.0.6"
-    },
-    "browserslist": [
-        "last 2 versions",
-        "not ie < 11",
-        "not dead"
-    ],
-    "devDependencies": {
-        "babel-eslint": "^10.0.3",
-        "eslint": "^6.3.0",
-        "eslint-config-prettier": "^6.2.0",
-        "eslint-plugin-prettier": "^3.1.0",
-        "eslint-plugin-react": "^7.14.3",
-        "prettier": "^1.18.2"
-    }
+  "private": true,
+  "name": "status-page",
+  "description": "Nerdpack status-page",
+  "version": "0.1.0",
+  "bugs": {
+    "email": "opensource@newrelic.com"
+  },
+  "scripts": {
+    "start": "nr1 nerdpack:serve",
+    "test": "exit 0",
+    "eslint-check": "eslint nerdlets/",
+    "eslint-fix": "eslint nerdlets/ --fix"
+  },
+  "nr1": {
+    "uuid": "1a1659b2-96c0-4e13-9334-fba5438fa6e3",
+    "sdkVersion": 2
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "generate-schema": "^2.6.0",
+    "lodash": "^4.17.15",
+    "prop-types": "^15.6.2",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-markdown": "^4.1.0",
+    "react-vertical-timeline-component": "^2.4.0",
+    "uuid": "^3.3.3",
+    "vertical-timeline-component-for-react": "^1.0.6"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "not ie < 11",
+    "not dead"
+  ],
+  "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.2.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
+    "prettier": "^1.18.2"
+  }
 }

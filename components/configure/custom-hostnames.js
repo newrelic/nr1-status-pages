@@ -132,7 +132,7 @@ export default class CustomHostNames extends React.Component {
                                     className="btn-white"
                                     onClick={this.addHostName}
                                     iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-                                    tagType={Button.TAG_TYPE.BUTTON}>Add</Button>
+                                    >Add</Button>
                             </div>
                             {keyObject.type === 'account' &&
                                 <Button className="modal-button"
