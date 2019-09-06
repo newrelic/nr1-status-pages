@@ -8,7 +8,9 @@
     },
     "scripts": {
         "start": "nr1 nerdpack:serve",
-        "test": "exit 0"
+        "test": "exit 0",
+        "eslint-check": "eslint nerdlets/",
+        "eslint-fix": "eslint nerdlets/ --fix"
     },
     "nr1": {
         "uuid": "8fa8868a-b354-4d8a-aed8-8b757ea3d5f2",
