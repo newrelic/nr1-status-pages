@@ -30,5 +30,13 @@
         "last 2 versions",
         "not ie < 11",
         "not dead"
-    ]
+    ],
+    "devDependencies": {
+        "babel-eslint": "^10.0.3",
+        "eslint": "^6.3.0",
+        "eslint-config-prettier": "^6.2.0",
+        "eslint-plugin-prettier": "^3.1.0",
+        "eslint-plugin-react": "^7.14.3",
+        "prettier": "^1.18.2"
+    }
 }
