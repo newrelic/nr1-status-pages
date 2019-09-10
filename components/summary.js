@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Network from '../utilities/network';
 
-import { HeadingText, Spinner } from 'nr1';
+import { HeadingText, Spinner, Stack, StackItem } from 'nr1';
 import FormatService from '../utilities/format-service';
 
 export default class Summary extends React.Component {
@@ -33,14 +33,21 @@ export default class Summary extends React.Component {
         this.StatusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
         if (!statusPageIoSummaryData) return <Spinner fillContainer/>
         return (
-            <div className="summary-container">
-                <div className="summary-header">
-                    <HeadingText type={HeadingText.TYPE.HEADING2}>{statusPageIoSummaryData.name}</HeadingText>
-                </div>
-                <div className={`summary-current-status ${statusPageIoSummaryData.indicator}`}>
-                    {statusPageIoSummaryData.description}
-                </div>
-            </div>
+            <Stack
+                className="summary-container"
+                distributionType={Stack.DISTRIBUTION_TYPE.FILL}
+                alignmentType={Stack.ALIGNMENT_TYPE.CENTER}
+                gapType={Stack.GAP_TYPE.NONE}
+            >
+                <StackItem className="summary-header">
+                    <HeadingText type={HeadingText.TYPE.HEADING3} className="status-page-name">{statusPageIoSummaryData.name}</HeadingText>
+                </StackItem>
+                <StackItem className="summary-current-status-stack-item">
+                    <h5 className={`summary-current-status ${statusPageIoSummaryData.indicator}`}>
+                        {statusPageIoSummaryData.description}
+                    </h5>
+                </StackItem>
+            </Stack>
         );
     }
 }

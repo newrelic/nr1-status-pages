@@ -5,33 +5,23 @@
     box-shadow: none;
 }
 
-.summary-container {
-    width: 100%;
-    height: 100%
-}
-
-.summary-header {
-    background-color: $headerBackgroundColor;
-    color: black;
-    width: 100%;
-    display: inline-block;
-    text-align: center;
-    border-radius: $summaryBorderRadius;
-}
-
 .summary-content {
     display: inline-block;
     font-size: 1em;
     line-height: 1em;
 }
 
+.summary-container {
+    box-sizing: border-box;
+    min-height: 48px;
+    padding: 8px 16px;
+    background-color: #f4f5f5;
+    border-radius: 3px 3px 0 0;
+    border-bottom: 1px solid #d5d7d7;
+}
+
 .summary-current-status {
-    display: inline-block;
     font-size: 2.5em;
-    line-height: 2em;
-    min-height: 50px;
-    text-align: center;
-    width: 100%;
-    padding-top: 2%;
-    padding-bottom: 2%;
+    text-align: right;
+    font-weight: 600;
 }
