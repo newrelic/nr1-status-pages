@@ -52,6 +52,7 @@ export default class CurrentIncidents extends React.Component {
                 className="current-incident-row"
                 gapType={Stack.GAP_TYPE.NONE}
                 alignmentType={Stack.ALIGNMENT_TYPE.CENTER}
+                distributionType={Stack.DISTRIBUTION_TYPE.FILL}
             >
                 <StackItem className="current-incident-name-stack-item">
                     <p className="current-incident-name">Latest Incident:
@@ -61,12 +62,16 @@ export default class CurrentIncidents extends React.Component {
                     </p>
                 </StackItem>
                 <StackItem className="current-incident-see-more">
-                    <Button
-                        onClick={this.seeMore}
-                        type={Button.TYPE.NORMAL}
-                        sizeType={Button.SIZE_TYPE.SMALL}
-                        iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-                        >See More</Button>
+                    <Stack distributionType={Stack.DISTRIBUTION_TYPE.TRAILING}>
+                        <StackItem>
+                            <Button
+                                onClick={this.seeMore}
+                                type={Button.TYPE.NORMAL}
+                                sizeType={Button.SIZE_TYPE.SMALL}
+                                iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+                                >See More</Button>
+                        </StackItem>
+                    </Stack>
                 </StackItem>
             </Stack>
         )

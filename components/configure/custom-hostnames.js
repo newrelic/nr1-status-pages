@@ -112,7 +112,7 @@ export default class CustomHostNames extends React.Component {
                 <div className="configure-status-page-container">
                         <div className={`modal-saved ${showSaved ? 'modal-saved-show': 'modal-saved-hide'}`}> Saved <Icon type={Icon.TYPE.PROFILES__EVENTS__LIKE} />
                         </div>
-                        <HeadingText className="modal-list-title" type={HeadingText.TYPE.HEADING1}> Custom Host Names</HeadingText>
+                        <HeadingText className="modal-list-title" type={HeadingText.TYPE.HEADING2}> Custom Host Names</HeadingText>
                         <div className="modal-container">
                             <div className="modal-text-add-container">
                                 <div className="text-field-flex">

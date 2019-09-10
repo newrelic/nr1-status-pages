@@ -1,6 +1,3 @@
-.current-incident-name-stack-item {
-    flex-grow: 1;
-}
 
 p.current-incident-name {
     max-width: none;
@@ -13,8 +10,8 @@ p.current-incident-name {
 }
 
 .current-incident-see-more {
-    flex-grow: 0;
-    flex-shrink: 1;
+    flex-shrink: 0;
+    min-width: 90px;
 }
 
 .current-incident-text {
