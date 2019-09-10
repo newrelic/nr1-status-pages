@@ -5,6 +5,10 @@
 @import "./styles/toolbar.scss";
 @import "./styles/suggested.scss";
 
+#root {
+    background-color: #fff;
+}
+
 .minor {
     color: $minorColor;
 }
@@ -23,10 +27,7 @@
 
 .status-container {
     padding: 14px;
-}
-
-.status-page-grid-item {
-    padding: 5px 0px;
+    grid-row-gap: 16px;
 }
 
 .no-status-pages {
@@ -41,8 +42,17 @@
         background: white;
         border-radius: $summaryBorderRadius;
         border: 1px solid $statusPageBorder;
-        padding: 10px;
     }
+}
+
+.status-page-name {
+    color: #464e4e;
+    font-weight: 600;
+}
+
+.summary-current-status {
+    color: #2a3434;
+    font-size: 14px;
 }
 
 
@@ -54,10 +64,15 @@
 
 .modal-text-add-container{
     display: flex;
+
+    button {
+        align-self: flex-end;
+    }
 }
 
-.AAB0AC-wnd-InnerModal {
-    padding: 10px;
+[class*=wnd-InnerModal] {
+    box-sizing: border-box;
+    
     .tag-container {
         max-width: 93%;
         width: 93%;
@@ -68,6 +83,10 @@
     .text-field-flex {
         flex: none;
     }
+
+    .add-dependancy-heading {
+        margin-bottom: 16px;
+    }
 }
 .modal-list {
     list-style: none;
@@ -75,7 +94,7 @@
 }
 
 .modal-list-title {
-    padding-bottom: 36px;
+    padding-bottom: 16px;
     text-align: center;
 }
 
@@ -109,8 +128,6 @@
     padding: 0;
 }
 
-
-
 .configure-status-page-container,.suggested-status-dependencies-container {
     padding: 15%;
     .button-bar {
@@ -134,7 +151,7 @@
         color: $textColorInvert;
         font-size: large;
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 8px;
         .ic-Icon {
             padding-bottom: 4px;
             padding-left: 4px;
@@ -157,4 +174,131 @@
     .btn-add-dep-type {
         padding: 0px 16px 8px 16px;
     }
+}
+
+.configure-status-page-container {
+    padding: 0 32px;
+}
+
+.status-page-container.status-none {
+    border-color: #77D375;
+
+    .summary-container {
+        border-color: #77D375;
+        background-color: #F2FCF3;
+    }
+
+    .status-page-name {
+        color: #1B7B19;
+    }
+
+    .summary-current-status {
+        color: #1B7B19;
+    }
+}
+
+.status-page-container.status-minor {
+    border-color: #E0CDA4;
+
+    .summary-container {
+        border-color: #E0CDA4;
+        background-color: #FFF4D1;
+    }
+
+    .status-page-name {
+        color: #7E500B;
+    }
+
+    .summary-current-status {
+        color: #7E500B;
+    }
+}
+
+.status-page-container.status-major {
+    border-color: #C84857;
+
+    .summary-container {
+        border-color: #C84857;
+        background-color: #FCF2F3;
+    }
+
+    .status-page-name {
+        color: #BF0016;
+    }
+
+    .summary-current-status {
+        color: #BF0016;
+    }
+}
+
+.status-page-container.status-critical {
+    border-color: #bf0015;
+
+    .summary-container {
+        border-color: #bf0015;
+        background-color: #bf0015;
+    }
+
+    .status-page-name {
+        color: #fff;
+    }
+
+    .summary-current-status {
+        color: #fff;
+    }
+}
+
+[class*=Tabs-navigation] {
+    margin-top: 40px;
+    padding-top: 2px;
+    justify-content: center;
+    border-top: 1px solid #edeeee;
+}
+
+.configure-status-page-container {
+    max-width: 640px;
+    margin: 0 auto;
+
+    .modal-list {
+        border: 1px solid #D5D7D7;
+        border-radius: 3px;
+    }
+
+    .modal-list-item-name {
+     padding-top:0;
+    }
+
+    li.modal-list-item {
+        align-items: center;
+        padding: 10px 16px 8px;
+        border-color:#D5D7D7;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &:hover {
+            background-color: #fafbfb;
+        }
+    }
+
+    .button-bar {
+        background-color: #fff;
+    }
+}
+
+.modal-list-container {
+    margin: 32px 0 32px;
+}
+
+.button-bar button {
+    margin-left: 8px;
+}
+
+.status-page-grid {
+    grid-row-gap: 16px;
+}
+
+.modal-text-add-container {
+    margin-top: 16px;
 }

@@ -106,7 +106,7 @@ export default class StatusPageIoMainPage extends React.Component {
                         hostNameCallBack={this.setHostNames}
                         pollHostCallBack={this.pollHosts}
                         />
-                        <Grid className="status-container">
+                        <Grid className="status-container" spacingType={[Grid.SPACING_TYPE.LOOSE, Grid.SPACING_TYPE.EXTRA_LOOSE]}>
                             { this.getGridItems()}
                         </Grid>
                 </div>

@@ -49,7 +49,7 @@ export default class TagsModal extends React.Component {
                     hidden={hidden}
                     onClose={onClose}>
                         <div className="tag-container">
-                            <HeadingText type={HeadingText.TYPE.HEADING3}> Add External Dependency Tags</HeadingText>
+                            <HeadingText type={HeadingText.TYPE.HEADING4} className="add-dependancy-heading"> Add External Dependency Tags</HeadingText>
                             <ul className="modal-list">
                                 {this.generateListHostNames()}
                             </ul>
@@ -58,7 +58,7 @@ export default class TagsModal extends React.Component {
                                     <TextField onChange={this.onTextInputChange} label='Add Dependency Tag' placeholder='dyanmodb'/>
                                 </div>
                                 <Button
-                                    className="btn-white"
+                                    type={Button.TYPE.PRIMARY}
                                     onClick={this.addTag}
                                     iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
                                     >Add</Button>

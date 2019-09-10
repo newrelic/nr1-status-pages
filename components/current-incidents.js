@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Network from '../utilities/network';
 
-import { navigation, Button, HeadingText } from 'nr1';
+import { navigation, Button, Stack, StackItem } from 'nr1';
 import FormatService from '../utilities/format-service';
 
 export default class CurrentIncidents extends React.Component {
@@ -23,7 +23,7 @@ export default class CurrentIncidents extends React.Component {
 
     seeMore() {
         const nerdletWithState = {
-            id: '1a1659b2-96c0-4e13-9334-fba5438fa6e3.incident-details',
+            id: '9f752be3-41b1-4cc2-b29e-db246108748a.incident-details',
             urlState: {
                 hostname: this.props.hostname,
                 provider: this.props.provider
@@ -48,22 +48,32 @@ export default class CurrentIncidents extends React.Component {
         const latestIncident = currentIncidents[0];
         // Show first current incident and then add a see more button
         return (
-            <div className="current-incident-row">
-                <div className="current-incident-name">
-                    <HeadingText type={HeadingText.TYPE.HEADING3}>Latest Incident:
-                        <span className={`current-incident-text ${latestIncident ? latestIncident.impact:''}`}>
+            <Stack
+                className="current-incident-row"
+                gapType={Stack.GAP_TYPE.NONE}
+                alignmentType={Stack.ALIGNMENT_TYPE.CENTER}
+                distributionType={Stack.DISTRIBUTION_TYPE.FILL}
+            >
+                <StackItem className="current-incident-name-stack-item">
+                    <p className="current-incident-name">Latest Incident:
+                        <span className={`current-incident-text`}>
                             {latestIncident ? latestIncident.name : 'None'}
                         </span>
-                    </HeadingText>
-                </div>
-                <div className="current-incident-see-more">
-                    <Button
-                        className="btn-white see-more "
-                        onClick={this.seeMore}
-                        iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-                        >See More</Button>
-                </div>
-            </div>
+                    </p>
+                </StackItem>
+                <StackItem className="current-incident-see-more">
+                    <Stack distributionType={Stack.DISTRIBUTION_TYPE.TRAILING}>
+                        <StackItem>
+                            <Button
+                                onClick={this.seeMore}
+                                type={Button.TYPE.NORMAL}
+                                sizeType={Button.SIZE_TYPE.SMALL}
+                                iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+                                >See More</Button>
+                        </StackItem>
+                    </Stack>
+                </StackItem>
+            </Stack>
         )
     }
 }

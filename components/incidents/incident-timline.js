@@ -14,7 +14,7 @@ export default class IncidentTimeline extends React.Component {
     }
 
     backgroundColors = {
-        none:  '#000000',
+        none:  '#F2FCF3',
         minor: '#e3e400',
         major: '#fdc238',
         critical: '#bd071f'

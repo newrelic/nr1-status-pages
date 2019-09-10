@@ -205,7 +205,7 @@ export default class ConfigureStatusPages extends React.Component {
     getStatusGridItems(hostNames) {
         if (this.state.loading) return <Spinner fillContainer/>
         return(
-            <Grid>
+            <Grid className="status-page-grid">
                 {this.generateStatusPages(hostNames)}
             </Grid>
         )
