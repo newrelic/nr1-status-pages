@@ -64,6 +64,10 @@
 
 .modal-text-add-container{
     display: flex;
+
+    button {
+        align-self: flex-end;
+    }
 }
 
 .AAB0AC-wnd-InnerModal {
@@ -119,8 +123,6 @@
     padding: 0;
 }
 
-
-
 .configure-status-page-container,.suggested-status-dependencies-container {
     padding: 15%;
     .button-bar {
@@ -167,6 +169,10 @@
     .btn-add-dep-type {
         padding: 0px 16px 8px 16px;
     }
+}
+
+.configure-status-page-container {
+    padding: 0 32px;
 }
 
 .status-page-container.status-none {
@@ -235,4 +241,51 @@
     .summary-current-status {
         color: #fff;
     }
+}
+
+[class*=Tabs-navigation] {
+    margin-top: 40px;
+    padding-top: 2px;
+    justify-content: center;
+    border-top: 1px solid #edeeee;
+}
+
+.configure-status-page-container {
+    max-width: 640px;
+    margin: 0 auto;
+
+    .modal-list {
+        border: 1px solid #D5D7D7;
+        border-radius: 3px;
+    }
+
+    .modal-list-item-name {
+     padding-top:0;
+    }
+
+    li.modal-list-item {
+        align-items: center;
+        padding: 10px 16px 8px;
+        border-color:#D5D7D7;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &:hover {
+            background-color: #fafbfb;
+        }
+    }
+
+    .button-bar {
+        background-color: #fff;
+    }
+}
+
+.modal-list-container {
+    margin: 32px 0 32px;
+}
+
+.button-bar button {
+    margin-left: 8px;
 }

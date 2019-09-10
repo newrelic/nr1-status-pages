@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 const uuid = require('uuid/v4');
 
-import { AccountsQuery, Button, HeadingText, Icon, TextField } from 'nr1';
+import { AccountsQuery, Button, HeadingText, Icon, TextField, Stack, StackItem } from 'nr1';
 
 import { saveHostNamesToNerdStorage } from '../../utilities/nerdlet-storage';
 import TagsModal from './modal-tag';
@@ -58,8 +58,18 @@ export default class CustomHostNames extends React.Component {
         return hostNames.map(hostNameObject => <li key={hostNameObject.id} className="modal-list-item">
             <div className="modal-list-item-name"> {hostNameObject.hostName} </div>
             <div className="button-bar">
-                <Button className="btn-white" iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EDIT} onClick={this.editTags.bind(this, hostNameObject)}></Button>
-                <Button className="btn-white" iconType={Button.ICON_TYPE.INTERFACE__SIGN__TIMES} onClick={deleteHostNameCallback.bind(this, hostNameObject.hostName)}></Button>
+                <Button
+                type={Button.TYPE.DESTRUCTIVE}
+                sizeType={Button.SIZE_TYPE.SMALL}
+                iconType={Button.ICON_TYPE.INTERFACE__SIGN__TIMES}
+                onClick={deleteHostNameCallback.bind(this, hostNameObject.hostName)}
+                >Delete</Button>
+                <Button
+                type={Button.TYPE.NORMAL}
+                sizeType={Button.SIZE_TYPE.SMALL}
+                iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EDIT}
+                onClick={this.editTags.bind(this, hostNameObject)}
+                >Edit</Button>
             </div>
         </li>);
     }
@@ -104,11 +114,6 @@ export default class CustomHostNames extends React.Component {
                         </div>
                         <HeadingText className="modal-list-title" type={HeadingText.TYPE.HEADING1}> Custom Host Names</HeadingText>
                         <div className="modal-container">
-                            <div className="modal-list-container">
-                                <ul className="modal-list">
-                                    {hostnames}
-                                </ul>
-                            </div>
                             <div className="modal-text-add-container">
                                 <div className="text-field-flex">
                                     <TextField className="add-host-name" onChange={this.onTextInputChange} label='Add new hostname' placeholder='e.g. https://status.newrelic.com/'/>
@@ -129,15 +134,28 @@ export default class CustomHostNames extends React.Component {
                                     </div>
                                 </div>
                                 <Button
-                                    className="btn-white"
+                                    className="add-button"
+                                    type={Button.TYPE.PRIMARY}
                                     onClick={this.addHostName}
+                                    sizeType={Button.SIZE_TYPE.NORMAL}
                                     iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
                                     >Add</Button>
                             </div>
+                            <div className="modal-list-container">
+                                <ul className="modal-list">
+                                    {hostnames}
+                                </ul>
+                            </div>
                             {keyObject.type === 'account' &&
-                                <Button className="modal-button"
-                                    iconType={Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__CLOUD}
-                                    onClick={this.saveAll}>Sync All Accounts</Button> }
+                            <Stack distributionType={Stack.DISTRIBUTION_TYPE.CENTER}>
+                                <StackItem dus>
+                                    <Button
+                                        iconType={Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__CLOUD}
+                                        onClick={this.saveAll}
+                                        type={Button.TYPE.NORMAL}
+                                    >Sync All Accounts</Button>
+                                </StackItem>
+                            </Stack> }
                         </div>
                 </div>
         );
