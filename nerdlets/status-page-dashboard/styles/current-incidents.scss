@@ -1,15 +1,22 @@
-.current-incident-row {
-    display: flex;
-    padding: 0px 0px 0px 8px;
+
+p.current-incident-name {
+    max-width: none;
+    font-weight: 600;
 }
 
-.current-incident-name {
-    display: flex;
-    flex: 1;
+.current-incident-row {
+    // min-height: 56px;
+    padding: 8px 16px;
+}
+
+.current-incident-see-more {
+    flex-shrink: 0;
+    min-width: 90px;
 }
 
 .current-incident-text {
-    padding-left: 10px;
+    padding-left: 4px;
+    font-weight: 400;
 }
 
 .see-more {

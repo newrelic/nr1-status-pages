@@ -25,6 +25,7 @@ Clone this repository and run the following scripts:
 ```bash
 git clone https://github.com/newrelic/nr1-statuspageio.git
 cd nr1-statuspageio
+nr1 nerdpack:uuid -gf
 npm install
 npm start
 ```

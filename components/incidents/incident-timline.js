@@ -14,9 +14,9 @@ export default class IncidentTimeline extends React.Component {
     }
 
     backgroundColors = {
-        none:  '#000000',
-        minor: '#e3e400',
-        major: '#fdc238',
+        none:  '#10a600',
+        minor: '#ffda00',
+        major: '#ea7c00',
         critical: '#bd071f'
     }
 
@@ -25,6 +25,7 @@ export default class IncidentTimeline extends React.Component {
           const date = new Date(incident.created_at)
           return (
             <TimelineItem
+                className={`incident-impact-${incident.impact}`}
                 dateInnerStyle={{ background: this.backgroundColors[incident.impact] }}
                 key={`${index}`}
                 dateText={`${date.toDateString()}`}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, HeadingText,  Modal, TextField } from 'nr1';
+import { Button, HeadingText,  Modal, TextField, Stack, StackItem } from 'nr1';
 
 export default class TagsModal extends React.Component {
 
@@ -49,21 +49,23 @@ export default class TagsModal extends React.Component {
                     hidden={hidden}
                     onClose={onClose}>
                         <div className="tag-container">
-                            <HeadingText type={HeadingText.TYPE.HEADING3}> Add External Dependency Tags</HeadingText>
+                            <HeadingText type={HeadingText.TYPE.HEADING4}  className="add-dependancy-heading"> Add External Dependency Tags</HeadingText>
                             <ul className="modal-list">
                                 {this.generateListHostNames()}
                             </ul>
-                            <div className="modal-text-add-container">
-                                <div className="text-field-flex">
-                                    <TextField onChange={this.onTextInputChange} label='Add Dependency Tag' placeholder='dyanmodb'/>
-                                </div>
-                                <Button
-                                    className="btn-white"
-                                    onClick={this.addTag}
-                                    iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-                                    >Add</Button>
-                            </div>
-                            <Button className="modal-button" onClick={onClose.bind(this, tags)}>Close</Button>
+                            <TextField onChange={this.onTextInputChange} label='Add Dependency Tag' placeholder='dyanmodb'/>
+                            <Stack className="modal-text-add-container" distributionType={Stack.DISTRIBUTION_TYPE.TRAILING} alignmentType={Stack.ALIGNMENT_TYPE.TRAILING}>
+                                <StackItem>
+                                    <Button type={Button.TYPE.NORMAL} onClick={onClose.bind(this, tags)}>Close</Button>
+                                </StackItem>
+                                <StackItem>
+                                    <Button
+                                        onClick={this.addTag}
+                                        type={Button.TYPE.PRIMARY}
+                                        iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+                                        >Add</Button>
+                                </StackItem>
+                            </Stack>
                         </div>
                 </Modal>
         );
