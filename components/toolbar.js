@@ -21,7 +21,7 @@ export default class Toolbar extends React.Component {
 
     async onEditStatusPageClick() {
         const nerdletWithState = {
-            id: '1a1659b2-96c0-4e13-9334-fba5438fa6e3.configure-status-pages',
+            id: '61ddcfdb-b112-4ae6-976e-c657bc81ad63.configure-status-pages',
             urlState: {
                 accounts: this.props.accounts,
                 accountId: this.props.selectedAccountId,

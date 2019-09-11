@@ -23,7 +23,7 @@ export default class CurrentIncidents extends React.Component {
 
     seeMore() {
         const nerdletWithState = {
-            id: '1a1659b2-96c0-4e13-9334-fba5438fa6e3.incident-details',
+            id: '61ddcfdb-b112-4ae6-976e-c657bc81ad63.incident-details',
             urlState: {
                 hostname: this.props.hostname,
                 provider: this.props.provider
