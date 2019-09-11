@@ -10,8 +10,8 @@ export const googleFormatter = (data) => {
     formattedData.name = 'Google Cloud Provider';
     const openIncident = data.find(incident => !incident.end || incident.end === '');
     if (openIncident) {
-        formattedData.description = openIncident['most-recent-update'].text;
-        formattedData.indicator = data.severity
+        formattedData.description = 'Ongoing Issues';
+        formattedData.indicator = GoogleSeverityToKnown[openIncident.severity]
     } else {
         formattedData.description = 'All Systems Operational'
         formattedData.indicator = '';
