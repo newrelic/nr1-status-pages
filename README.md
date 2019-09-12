@@ -14,7 +14,7 @@ This project is distributed under the [Apache 2 license](LICENSE).
 
 ## What do you need to make this work?
 
-1. [New Relic Infrastructure Agent(s) installed](https://newrelic.com/products/infrastructure) and the related access to [New Relic One](https://newrelic.com/platform).
+1. [New Relic Infrastructure Agent(s) installed](https://docs.newrelic.com/docs/infrastructure/new-relic-infrastructure/get-started/introduction-new-relic-infrastructure#install) and the related access to [New Relic One](https://newrelic.com/platform).
 2. (Recommended) Add the customer-defined `locationId` to the `newrelic_infra.yml`. See an example [here](examples/example_newrelic_infra.yml).
 3. (Currently) Updating (or replacing) the [geoopsConfig.js](geoopsConfig.js) file.
 
