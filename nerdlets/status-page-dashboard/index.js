@@ -87,7 +87,7 @@ export default class StatusPageIoMainPage extends React.Component {
       !this.state.hostNames ||
       (!this.state.selectedAccountId && !this.state.entityGuid)
     ) {
-      return <Spinner fillContainer />;
+      return <Spinner/>;
     }
     if (this.state.hostNames.length === 0) {
       return (

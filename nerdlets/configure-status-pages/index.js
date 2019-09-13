@@ -273,7 +273,7 @@ export default class ConfigureStatusPages extends React.Component {
   }
 
   getStatusGridItems(hostNames) {
-    if (this.state.loading) return <Spinner fillContainer />;
+    if (this.state.loading) return <Spinner/>;
     return (
       <Grid className="status-page-grid">
         {this.generateStatusPages(hostNames)}
@@ -293,7 +293,7 @@ export default class ConfigureStatusPages extends React.Component {
           Configure Status Pages
         </HeadingText>
         <Tabs>
-          <TabsItem itemKey="custom" label="Custom HostNames">
+          <TabsItem value="custom" label="Custom HostNames">
             <CustomHostNames
               hostNames={hostNames}
               addHostNameCallback={this.addHostName}
@@ -302,18 +302,18 @@ export default class ConfigureStatusPages extends React.Component {
               entityGuid={entityGuid}
             />
           </TabsItem>
-          <TabsItem itemKey="popular-sites" label="Popular Status Pages">
+          <TabsItem value="popular-sites" label="Popular Status Pages">
             <div className="suggested-status-grid-container">
               {this.getStatusGridItems(popularSites.sites)}
             </div>
           </TabsItem>
-          <TabsItem itemKey="accounts" label="Suggested Account Status Pages">
+          <TabsItem value="accounts" label="Suggested Account Status Pages">
             <div className="suggested-status-grid-container">
               {this.getStatusGridItems(allAccountHostNames)}
             </div>
           </TabsItem>
           {entityGuid && (
-            <TabsItem itemKey="dep" label="Entity Dependencies">
+            <TabsItem value="dep" label="Entity Dependencies">
               <div className="suggested-status-dependencies-container">
                 <HeadingText
                   className="suggested-status-page-title"

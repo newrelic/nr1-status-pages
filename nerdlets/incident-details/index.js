@@ -38,7 +38,7 @@ export default class IncidentDetails extends React.Component {
 
   render() {
     const { incidents } = this.state;
-    if (!incidents) return <Spinner fillContainer />;
+    if (!incidents) return <Spinner/>;
     return <IncidentTimeline incidents={incidents}></IncidentTimeline>;
   }
 }
