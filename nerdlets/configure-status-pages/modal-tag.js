@@ -57,7 +57,7 @@ export default class TagsModal extends React.Component {
       <Modal hidden={hidden} onClose={onClose}>
         <div className="tag-container">
           <HeadingText
-            type={HeadingText.TYPE.HEADING4}
+            type={HeadingText.TYPE.HEADING_4}
             className="add-dependancy-heading"
           >
             {' '}

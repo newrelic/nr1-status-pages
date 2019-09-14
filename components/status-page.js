@@ -35,7 +35,7 @@ export default class StatusPage extends React.Component {
 
     render() {
         const { statusPageIoSummaryData } = this.state;
-        if (!statusPageIoSummaryData) return <Spinner fillContainer/>
+        if (!statusPageIoSummaryData) return <Spinner/>
 
         const {provider} = this.props;
         return (

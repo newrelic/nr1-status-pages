@@ -14,7 +14,7 @@ export const googleFormatter = (data) => {
         formattedData.indicator = GoogleSeverityToKnown[openIncident.severity]
     } else {
         formattedData.description = 'All Systems Operational'
-        formattedData.indicator = '';
+        formattedData.indicator = 'none';
     }
     return formattedData;
 }

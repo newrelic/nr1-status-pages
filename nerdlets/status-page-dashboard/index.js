@@ -87,14 +87,14 @@ export default class StatusPageIoMainPage extends React.Component {
       !this.state.hostNames ||
       (!this.state.selectedAccountId && !this.state.entityGuid)
     ) {
-      return <Spinner fillContainer />;
+      return <Spinner/>;
     }
     if (this.state.hostNames.length === 0) {
       return (
         <GridItem className="no-status-pages" columnStart={1} columnEnd={12}>
           <HeadingText
             className="suggested-status-page-title"
-            type={HeadingText.TYPE.HEADING1}
+            type={HeadingText.TYPE.HEADING_1}
           >
             No Status Pages are configured
           </HeadingText>

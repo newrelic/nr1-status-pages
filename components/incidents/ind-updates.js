@@ -18,7 +18,7 @@ export default class IndUpdates extends React.Component {
 
       return (
           <li className="ind-update-container">
-              <HeadingText type={HeadingText.TYPE.HEADING4}> {statusString}  {updateDate.toLocaleDateString()} {updateDate.toLocaleTimeString()} </HeadingText>
+              <HeadingText type={HeadingText.TYPE.HEADING_4}> {statusString}  {updateDate.toLocaleDateString()} {updateDate.toLocaleTimeString()} </HeadingText>
               <div>
                     <ReactMarkdown source={update.body} />
               </div>

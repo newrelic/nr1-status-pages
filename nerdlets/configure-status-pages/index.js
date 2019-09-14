@@ -4,7 +4,6 @@ const uuid = require('uuid/v4');
 
 import { flatten, uniqBy } from 'lodash';
 import {
-  AccountsQuery,
   Button,
   HeadingText,
   Grid,
@@ -60,7 +59,7 @@ export default class ConfigureStatusPages extends React.Component {
   async componentDidMount() {
     const { keyObject } = this.state;
 
-    const accountsResults = await AccountsQuery.query();
+    const accountsResults = await NerdGraphQuery.query({query: "{ actor { accounts { id name } }}"});
     this.setState({ hostNames: await getHostNamesFromNerdStorage(keyObject) });
     if (
       accountsResults.data &&
@@ -138,17 +137,21 @@ export default class ConfigureStatusPages extends React.Component {
         1
       );
     }
-    await saveHostNamesToNerdStorage(
-      keyObject,
-      hostNames.map(hostName => {
-        return {
-          id: uuid(),
-          hostName: hostName.hostName,
-          provider: hostName.provider,
-          tags: hostName.tags,
-        };
-      })
-    );
+    try {
+      await saveHostNamesToNerdStorage(
+        keyObject,
+        hostNames.map(hostName => {
+          return {
+            id: uuid(),
+            hostName: hostName.hostName,
+            provider: hostName.provider,
+            tags: hostName.tags,
+          };
+        })
+      );
+    } catch(e) {
+      console.error(e);
+    }
     this.setState({ hostNames: hostNames });
   }
 
@@ -273,7 +276,7 @@ export default class ConfigureStatusPages extends React.Component {
   }
 
   getStatusGridItems(hostNames) {
-    if (this.state.loading) return <Spinner fillContainer />;
+    if (this.state.loading) return <Spinner />;
     return (
       <Grid className="status-page-grid">
         {this.generateStatusPages(hostNames)}
@@ -288,12 +291,12 @@ export default class ConfigureStatusPages extends React.Component {
       <div>
         <HeadingText
           className="suggested-status-page-title"
-          type={HeadingText.TYPE.HEADING1}
+          type={HeadingText.TYPE.HEADING_1}
         >
           Configure Status Pages
         </HeadingText>
         <Tabs>
-          <TabsItem itemKey="custom" label="Custom HostNames">
+          <TabsItem value="custom" label="Custom HostNames">
             <CustomHostNames
               hostNames={hostNames}
               addHostNameCallback={this.addHostName}
@@ -302,22 +305,22 @@ export default class ConfigureStatusPages extends React.Component {
               entityGuid={entityGuid}
             />
           </TabsItem>
-          <TabsItem itemKey="popular-sites" label="Popular Status Pages">
+          <TabsItem value="popular-sites" label="Popular Status Pages">
             <div className="suggested-status-grid-container">
               {this.getStatusGridItems(popularSites.sites)}
             </div>
           </TabsItem>
-          <TabsItem itemKey="accounts" label="Suggested Account Status Pages">
+          <TabsItem value="accounts" label="Suggested Account Status Pages">
             <div className="suggested-status-grid-container">
               {this.getStatusGridItems(allAccountHostNames)}
             </div>
           </TabsItem>
           {entityGuid && (
-            <TabsItem itemKey="dep" label="Entity Dependencies">
+            <TabsItem value="dep" label="Entity Dependencies">
               <div className="suggested-status-dependencies-container">
                 <HeadingText
                   className="suggested-status-page-title"
-                  type={HeadingText.TYPE.HEADING3}
+                  type={HeadingText.TYPE.HEADING_3}
                 >
                   Detected the following external Dependencies you may want to
                   watch

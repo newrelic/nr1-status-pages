@@ -18,7 +18,7 @@ export default class IndIncident extends React.Component {
         const updates = this.generateIncidentUpdates();
         return (
             <div key={incident.id} className="ind-incident-container">
-                <HeadingText type={HeadingText.TYPE.HEADING2}>{incident.name}</HeadingText>
+                <HeadingText type={HeadingText.TYPE.HEADING_2}>{incident.name}</HeadingText>
                 <hr/>
                 <ul>
                     {updates}

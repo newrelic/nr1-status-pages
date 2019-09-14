@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {AccountsQuery, UserStorageMutation, UserStorageQuery} from 'nr1';
+import {NerdGraphQuery, UserStorageMutation, UserStorageQuery} from 'nr1';
 
 const USER_ACCOUNT_COLLECTION = 'user_account_collection_v0';
 const USER_SELECTED_ACCOUNT_ID = 'user_account_id'
@@ -23,12 +23,17 @@ export default class AccountPicker extends React.Component {
     }
 
     async componentDidMount() {
-        const accountsResults = await AccountsQuery.query();
-        if (accountsResults.data && accountsResults.data.actor && accountsResults.data.actor.accounts) {
-            this.setState({'accounts': accountsResults.data.actor.accounts});
-            let accountId = await this.getLastChoseAccountId();
-            if (!accountId) accountId = accountsResults.data.actor.accounts[0].id;
-            this._accountChanged(accountId);
+        try {
+            // const accountsResults = await AccountsQuery.query();
+            const accountsResults = await NerdGraphQuery.query({query: "{ actor { accounts { id name } }}"});
+            if (accountsResults.data && accountsResults.data.actor && accountsResults.data.actor.accounts) {
+                this.setState({'accounts': accountsResults.data.actor.accounts});
+                let accountId = await this.getLastChoseAccountId();
+                if (!accountId) accountId = accountsResults.data.actor.accounts[0].id;
+                this._accountChanged(accountId);
+            }
+        } catch(err) {
+            console.debug(err);
         }
     }
 
@@ -47,7 +52,7 @@ export default class AccountPicker extends React.Component {
         }
         // TODO: Add error handling
         const queryResults = await UserStorageQuery.query(userStorageQuery);
-        return queryResults.data.actor.nerdStorage.document
+        return queryResults.data
     }
 
     async saveOffLastChosenAccountId(accountId) {

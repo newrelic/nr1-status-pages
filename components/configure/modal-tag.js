@@ -49,7 +49,7 @@ export default class TagsModal extends React.Component {
                     hidden={hidden}
                     onClose={onClose}>
                         <div className="tag-container">
-                            <HeadingText type={HeadingText.TYPE.HEADING4}  className="add-dependancy-heading"> Add External Dependency Tags</HeadingText>
+                            <HeadingText type={HeadingText.TYPE.HEADING_4}  className="add-dependancy-heading"> Add External Dependency Tags</HeadingText>
                             <ul className="modal-list">
                                 {this.generateListHostNames()}
                             </ul>

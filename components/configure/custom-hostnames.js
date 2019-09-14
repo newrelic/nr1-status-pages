@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 const uuid = require('uuid/v4');
 
-import { AccountsQuery, Button, HeadingText, Icon, TextField, Stack, StackItem } from 'nr1';
+import { NerdGraphQuery, Button, HeadingText, Icon, TextField, Stack, StackItem } from 'nr1';
 
 import { saveHostNamesToNerdStorage } from '../../utilities/nerdlet-storage';
 import TagsModal from './modal-tag';
@@ -82,7 +82,8 @@ export default class CustomHostNames extends React.Component {
     async saveAll() {
         const {hostNames} = this.props;
         try {
-            const accountsResults = await AccountsQuery.query();
+            // const accountsResults = await AccountsQuery.query();
+            const accountsResults = await NerdGraphQuery.query({query: "{ actor { accounts { id name } }}"});
             if (accountsResults.data && accountsResults.data.actor && accountsResults.data.actor.accounts) {
                 accountsResults.data.actor.accounts.forEach(async account=> await saveHostNamesToNerdStorage({key: account.id, type: 'account'}, hostNames) );
                 this._displaySaveMessage();
@@ -112,7 +113,7 @@ export default class CustomHostNames extends React.Component {
                 <div className="configure-status-page-container">
                         <div className={`modal-saved ${showSaved ? 'modal-saved-show': 'modal-saved-hide'}`}> Saved <Icon type={Icon.TYPE.PROFILES__EVENTS__LIKE} />
                         </div>
-                        <HeadingText className="modal-list-title" type={HeadingText.TYPE.HEADING2}> Custom Host Names</HeadingText>
+                        <HeadingText className="modal-list-title" type={HeadingText.TYPE.HEADING_2}> Custom Host Names</HeadingText>
                         <div className="modal-container">
                             <div className="modal-text-add-container">
                                 <div className="text-field-flex">

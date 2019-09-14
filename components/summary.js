@@ -31,7 +31,7 @@ export default class Summary extends React.Component {
     render() {
         const { statusPageIoSummaryData } = this.state;
         this.StatusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
-        if (!statusPageIoSummaryData) return <Spinner fillContainer/>
+        if (!statusPageIoSummaryData) return <Spinner/>
         return (
             <Stack
                 className="summary-container"
@@ -40,7 +40,7 @@ export default class Summary extends React.Component {
                 gapType={Stack.GAP_TYPE.NONE}
             >
                 <StackItem className="summary-header">
-                    <HeadingText type={HeadingText.TYPE.HEADING3} className="status-page-name">{statusPageIoSummaryData.name}</HeadingText>
+                    <HeadingText type={HeadingText.TYPE.HEADING_3} className="status-page-name">{statusPageIoSummaryData.name}</HeadingText>
                 </StackItem>
                 <StackItem className="summary-current-status-stack-item">
                     <h5 className={`summary-current-status ${statusPageIoSummaryData.indicator}`}>

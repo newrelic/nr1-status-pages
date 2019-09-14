@@ -4,9 +4,9 @@ const HOST_NAMES_DOCUMENT_ID = 'host_names'
 
 import { AccountStorageMutation, AccountStorageQuery, EntityStorageMutation, EntityStorageQuery } from 'nr1';
 
-const _getHostNameFromQueryResults = (queryResults, type) => {
+const _getHostNameFromQueryResults = (queryResults) => {
     if (queryResults.data) {
-        let hostNames = queryResults.data.actor[type].nerdStorage.document;
+        let hostNames = queryResults.data;
         if (!hostNames) {
             hostNames = [];
         }
@@ -18,7 +18,7 @@ const _getHostNameFromQueryResults = (queryResults, type) => {
 const getHostNameFromAccountStorage = async (accountId, queryProp) => {
     queryProp.accountId = accountId;
     try {
-       return _getHostNameFromQueryResults(await AccountStorageQuery.query(queryProp), 'account');
+       return _getHostNameFromQueryResults(await AccountStorageQuery.query(queryProp));
     } catch(err) {
         console.log(err);
     }
@@ -27,7 +27,7 @@ const getHostNameFromAccountStorage = async (accountId, queryProp) => {
 const getHostNameFromEntityStorage = async (entityGuid, queryProp) => {
     queryProp.entityGuid = entityGuid;
     try {
-        return _getHostNameFromQueryResults(await EntityStorageQuery.query(queryProp), 'entity');
+        return _getHostNameFromQueryResults(await EntityStorageQuery.query(queryProp));
     } catch(err) {
         console.log(err);
     }
