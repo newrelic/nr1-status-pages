@@ -52,6 +52,7 @@ export default class AccountPicker extends React.Component {
         }
         // TODO: Add error handling
         const queryResults = await UserStorageQuery.query(userStorageQuery);
+        console.debug("getLastChoseAccountId", queryResults);
         return queryResults.data
     }
 

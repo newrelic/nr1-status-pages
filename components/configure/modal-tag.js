@@ -54,7 +54,7 @@ export default class TagsModal extends React.Component {
                                 {this.generateListHostNames()}
                             </ul>
                             <TextField onChange={this.onTextInputChange} label='Add Dependency Tag' placeholder='dyanmodb'/>
-                            <Stack className="modal-text-add-container" distributionType={Stack.DISTRIBUTION_TYPE.TRAILING} alignmentType={Stack.ALIGNMENT_TYPE.TRAILING}>
+                            <Stack className="modal-text-add-container" verticalType={Stack.VERTICAL_TYPE.TRAILING} horizontalType={Stack.HORIZONTAL_TYPE.TRAILING}>
                                 <StackItem>
                                     <Button type={Button.TYPE.NORMAL} onClick={onClose.bind(this, tags)}>Close</Button>
                                 </StackItem>
