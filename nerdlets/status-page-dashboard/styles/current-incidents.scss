@@ -2,6 +2,7 @@
 p.current-incident-name {
     max-width: none;
     font-weight: 600;
+    padding-top: 3px;
 }
 
 .current-incident-row {
@@ -17,6 +18,13 @@ p.current-incident-name {
 .current-incident-text {
     padding-left: 4px;
     font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 78%;
+    display: inline-block;
+    vertical-align: middle;
+    padding-bottom: 1px;
 }
 
 .see-more {
