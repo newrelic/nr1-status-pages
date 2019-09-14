@@ -21,7 +21,7 @@ export default class Toolbar extends React.Component {
 
     async onEditStatusPageClick() {
         const nerdletWithState = {
-            id: '61ddcfdb-b112-4ae6-976e-c657bc81ad63.configure-status-pages',
+            id: 'configure-status-pages',
             urlState: {
                 accounts: this.props.accounts,
                 accountId: this.props.selectedAccountId,
@@ -44,8 +44,8 @@ export default class Toolbar extends React.Component {
         return (
             <Stack
                 className="toolbar-container"
-                alignmentType={Stack.ALIGNMENT_TYPE.CENTER}
-                distributionType={Stack.DISTRIBUTION_TYPE.FILL}
+                horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
+                verticalType={Stack.VERTICAL_TYPE.FILL}
                 gapType={Stack.GAP_TYPE.NONE}
             >
                 <StackItem>

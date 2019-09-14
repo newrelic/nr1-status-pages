@@ -148,7 +148,7 @@ export default class CustomHostNames extends React.Component {
                                 </ul>
                             </div>
                             {keyObject.type === 'account' &&
-                            <Stack distributionType={Stack.DISTRIBUTION_TYPE.CENTER}>
+                            <Stack horizontalType={Stack.HORIZONTAL_TYPE.CENTER}>
                                 <StackItem dus>
                                     <Button
                                         iconType={Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__CLOUD}

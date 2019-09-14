@@ -23,7 +23,7 @@ export default class CurrentIncidents extends React.Component {
 
     seeMore() {
         const nerdletWithState = {
-            id: '61ddcfdb-b112-4ae6-976e-c657bc81ad63.incident-details',
+            id: 'incident-details',
             urlState: {
                 hostname: this.props.hostname,
                 provider: this.props.provider
@@ -51,8 +51,8 @@ export default class CurrentIncidents extends React.Component {
             <Stack
                 className="current-incident-row"
                 gapType={Stack.GAP_TYPE.NONE}
-                alignmentType={Stack.ALIGNMENT_TYPE.CENTER}
-                distributionType={Stack.DISTRIBUTION_TYPE.FILL}
+                horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
+                verticalType={Stack.VERTICAL_TYPE.FILL}
             >
                 <StackItem className="current-incident-name-stack-item">
                     <p className="current-incident-name">Latest Incident:
@@ -62,7 +62,7 @@ export default class CurrentIncidents extends React.Component {
                     </p>
                 </StackItem>
                 <StackItem className="current-incident-see-more">
-                    <Stack distributionType={Stack.DISTRIBUTION_TYPE.TRAILING}>
+                    <Stack verticalType={Stack.VERTICAL_TYPE.TRAILING}>
                         <StackItem>
                             <Button
                                 onClick={this.seeMore}

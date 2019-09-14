@@ -1,8 +1,8 @@
 {
     "schemaType": "LAUNCHER",
     "id": "status-page-launcher",
-    "description": "Describe me",
-    "displayName": "StatusPageIo",
-    "icon": "interface_placeholders_icon-placeholder",
-    "rootNerdletId": "61ddcfdb-b112-4ae6-976e-c657bc81ad63.status-page"
+    "description": "Review all the relevant status pages in your world as track through the incident reports.",
+    "displayName": "Status Pages",
+    "icon": "interface_operations_alert_s-on",
+    "rootNerdletId": "status-page"
 }
