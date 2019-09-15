@@ -50,9 +50,10 @@ export default class CurrentIncidents extends React.Component {
         return (
             <Stack
                 className="current-incident-row"
+                fullWidth
                 gapType={Stack.GAP_TYPE.NONE}
-                horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
-                verticalType={Stack.VERTICAL_TYPE.FILL}
+                horizontalType={Stack.HORIZONTAL_TYPE.FILL}
+                verticalType={Stack.VERTICAL_TYPE.CENTER}
             >
                 <StackItem className="current-incident-name-stack-item">
                     <p className="current-incident-name">Latest Incident:

@@ -35,8 +35,9 @@ export default class Summary extends React.Component {
         return (
             <Stack
                 className="summary-container"
-                verticalType={Stack.VERTICAL_TYPE.FILL}
-                horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
+                fullWidth
+                verticalType={Stack.VERTICAL_TYPE.CENTER}
+                horizontalType={Stack.HORIZONTAL_TYPE.FILL }
                 gapType={Stack.GAP_TYPE.NONE}
             >
                 <StackItem className="summary-header">

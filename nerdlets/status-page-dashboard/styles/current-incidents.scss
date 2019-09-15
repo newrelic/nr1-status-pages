@@ -5,14 +5,17 @@ p.current-incident-name {
 }
 
 .current-incident-row {
+    box-sizing: border-box;
     // min-height: 56px;
     padding: 8px 16px;
+    
+    [class*=wnd-StackItem].current-incident-see-more {
+        flex-shrink: 0;
+        flex-grow: 0;
+        min-width: 90px;
+    }
 }
 
-.current-incident-see-more {
-    flex-shrink: 0;
-    min-width: 90px;
-}
 
 .current-incident-text {
     padding-left: 4px;

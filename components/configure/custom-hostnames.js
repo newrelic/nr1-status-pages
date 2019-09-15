@@ -148,8 +148,8 @@ export default class CustomHostNames extends React.Component {
                                 </ul>
                             </div>
                             {keyObject.type === 'account' &&
-                            <Stack horizontalType={Stack.HORIZONTAL_TYPE.CENTER}>
-                                <StackItem dus>
+                            <Stack horizontalType={Stack.HORIZONTAL_TYPE.CENTER} fullWidth>
+                                <StackItem>
                                     <Button
                                         iconType={Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__CLOUD}
                                         onClick={this.saveAll}
