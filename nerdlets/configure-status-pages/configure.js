@@ -315,7 +315,8 @@ export default class ConfigureStatusPages extends React.Component {
               {this.getStatusGridItems(allAccountHostNames)}
             </div>
           </TabsItem>
-          {entityGuid && (
+          {/* TODO: Disable relationships till this gets fleshed out */}
+          {/* {entityGuid && (
             <TabsItem value="dep" label="Entity Dependencies">
               <div className="suggested-status-dependencies-container">
                 <HeadingText
@@ -328,7 +329,7 @@ export default class ConfigureStatusPages extends React.Component {
                 <ul className="relationships">{this.generateDepli()}</ul>
               </div>
             </TabsItem>
-          )}
+          )} */}
         </Tabs>
       </div>
     );
