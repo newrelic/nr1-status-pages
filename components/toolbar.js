@@ -24,10 +24,13 @@ export default class Toolbar extends React.Component {
             id: 'configure-status-pages',
             urlState: {
                 accounts: this.props.accounts,
-                accountId: this.props.selectedAccountId,
-                entityGuid: this.props.entityGuid
+                accountId: this.props.selectedAccountId
             }
         };
+
+        if (this.props.entityGuid) {
+            nerdletWithState.urlState.entityGuid = this.props.entityGuid;
+        }
         navigation.openStackedNerdlet(nerdletWithState);
     }
 
