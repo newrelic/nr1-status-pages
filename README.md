@@ -4,7 +4,7 @@
 
 ## Usage
 
-nr1-statuspageio provides a single dashboard for all your status pages
+nr1-statuspageio collects multiple [Statuspage.io](https://www.statuspage.io) in one dashboard, so you can check the status of your key dependencies in one place.
 
 ![Screenshot #1](screenshots/dashboard-view.png)
 
