@@ -142,7 +142,7 @@ export default class StatusPageIoMainPage extends React.Component {
         />
         <Grid
           className="status-container"
-          spacingType={[Grid.SPACING_TYPE.LOOSE, Grid.SPACING_TYPE.EXTRA_LOOSE]}
+          spacingType={[Grid.SPACING_TYPE.SMALL, Grid.SPACING_TYPE.EXTRA_LARGE]}
         >
           {this.getGridItems()}
         </Grid>

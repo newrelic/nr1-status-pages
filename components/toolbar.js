@@ -44,8 +44,9 @@ export default class Toolbar extends React.Component {
         return (
             <Stack
                 className="toolbar-container"
-                horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
-                verticalType={Stack.VERTICAL_TYPE.FILL}
+                fullWidth
+                horizontalType={Stack.HORIZONTAL_TYPE.FILL}
+                verticalType={Stack.VERTICAL_TYPE.CENTER}
                 gapType={Stack.GAP_TYPE.NONE}
             >
                 <StackItem>
