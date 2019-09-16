@@ -1,11 +1,10 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {NerdGraphQuery, UserStorageMutation, UserStorageQuery} from 'nr1';
+import { AccountsQuery, Dropdown, DropdownItem, UserStorageMutation, UserStorageQuery } from 'nr1';
 
 const USER_ACCOUNT_COLLECTION = 'user_account_collection_v0';
-const USER_SELECTED_ACCOUNT_ID = 'user_account_id'
+const USER_SELECTED_ACCOUNT_ID = 'user_account_id';
 
 export default class AccountPicker extends React.Component {
     static propTypes = {
@@ -16,33 +15,31 @@ export default class AccountPicker extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedAccount: '',
-            accounts: []
+            selectedAccount: { name: '' },
+            accounts: [],
+            filter: ''
         }
         this.onAccountChange = this.onAccountChange.bind(this);
     }
 
     async componentDidMount() {
-        try {
-            // const accountsResults = await AccountsQuery.query();
-            const accountsResults = await NerdGraphQuery.query({query: "{ actor { accounts { id name } }}"});
-            if (accountsResults.data && accountsResults.data.actor && accountsResults.data.actor.accounts) {
-                this.setState({'accounts': accountsResults.data.actor.accounts});
-                let accountId = await this.getLastChoseAccountId();
-                if (!accountId) accountId = accountsResults.data.actor.accounts[0].id;
-                this._accountChanged(accountId);
+        const accountsResults = await AccountsQuery.query({});
+
+        if (accountsResults.data && accountsResults.data) {
+            const accounts = accountsResults.data;
+            this.setState({ accounts });
+
+            let accountId = await this.getLastChoseAccountId();
+            if (!accountId) {
+                accountId = accounts[0].id;
             }
-        } catch(err) {
-            console.debug(err);
+
+            const account = accounts.find(a => a.id === accountId);
+
+            if (account) {
+                this._accountChanged(account);
+            }
         }
-    }
-
-
-    generateAccountDropDownItems() {
-        return this.state.accounts.map( account =>
-                (<option key={account.id} value={account.id}>
-                    {account.name}
-                </option>));
     }
 
     async getLastChoseAccountId() {
@@ -52,7 +49,6 @@ export default class AccountPicker extends React.Component {
         }
         // TODO: Add error handling
         const queryResults = await UserStorageQuery.query(userStorageQuery);
-        console.debug("getLastChoseAccountId", queryResults);
         return queryResults.data
     }
 
@@ -66,26 +62,43 @@ export default class AccountPicker extends React.Component {
         UserStorageMutation.mutate(userMutation);
     }
 
-    async _accountChanged(accountId){
-        const {accountChangedCallback} = this.props;
-        accountId = parseInt(accountId);
+    async _accountChanged(account){
+        const accountId = account.id;
+        const { accountChangedCallback } = this.props;
         this.saveOffLastChosenAccountId(accountId);
         if (accountChangedCallback) {
             await accountChangedCallback(accountId, this.state.accounts);
         }
-        this.setState({'selectedAccount': accountId});
+        this.setState({ selectedAccount: account });
     }
 
-    async onAccountChange(event) {
-        await this._accountChanged(event.target.value);
+    async onAccountChange(account) {
+        await this._accountChanged(account);
     }
 
     render() {
-        const {selectedAccount} = this.state;
+        const { accounts, filter, selectedAccount } = this.state;
+
+        let filteredAccounts = [...accounts];
+        if (filter && filter.length > 0) {
+            const re = new RegExp(filter, 'i');
+            filteredAccounts = accounts.filter(a => {
+              return a.name.match(re);
+            });
+        }
+
         return (
-            <select value={selectedAccount} onChange={this.onAccountChange}>
-                {this.generateAccountDropDownItems()}
-            </select>
+            <Dropdown
+                title={selectedAccount.name}
+                search={filter}
+                onSearch={event => { this.setState({ filter: event.target.value })}}
+            >
+                {filteredAccounts.map(a => 
+                    <DropdownItem key={a.id} onClick={() => this.onAccountChange(a)}>
+                        {a.name}
+                    </DropdownItem>
+                )}
+            </Dropdown>
         );
     }
 }
