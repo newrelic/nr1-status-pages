@@ -12,7 +12,7 @@ const REFRESH_RATE = 15;
 
 export default class IncidentDetails extends React.Component {
   static propTypes = {
-    nerdletUrlState: PropTypes.object
+    nerdletUrlState: PropTypes.object,
   };
 
   constructor(props) {

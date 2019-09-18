@@ -26,8 +26,6 @@ export default class StatusPageIoMainPage extends React.Component {
     this.onAccountSelected = this.onAccountSelected.bind(this);
     this.onRefreshRateSelected = this.onRefreshRateSelected.bind(this);
     this.setHostNames = this.setHostNames.bind(this);
-    //! Bad hack
-    this.pollHosts();
   }
 
   async componentDidMount() {
@@ -38,6 +36,12 @@ export default class StatusPageIoMainPage extends React.Component {
       });
       this.setHostNames(hostNames);
     }
+
+    this._interval = setInterval(this.pollHosts.bind(this), 15000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._interval);
   }
 
   setHostNames(hostNames) {
@@ -57,25 +61,19 @@ export default class StatusPageIoMainPage extends React.Component {
 
   //! This is a hack until there is an message bus between stacked nerdlets
   async pollHosts() {
-    setTimeout(async () => {
-      try {
-        const hostNames = await getHostNamesFromNerdStorage({
-          key: this.state.entityGuid
-            ? this.state.entityGuid
-            : this.state.selectedAccountId,
-          type: this.state.entityGuid ? 'entity' : 'account',
-        });
-        if (
-          JSON.stringify(hostNames) !== JSON.stringify(this.state.hostNames)
-        ) {
-          this.setHostNames(hostNames);
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
-        this.pollHosts();
+    try {
+      const hostNames = await getHostNamesFromNerdStorage({
+        key: this.state.entityGuid
+          ? this.state.entityGuid
+          : this.state.selectedAccountId,
+        type: this.state.entityGuid ? 'entity' : 'account',
+      });
+      if (JSON.stringify(hostNames) !== JSON.stringify(this.state.hostNames)) {
+        this.setHostNames(hostNames);
       }
-    }, 5 * 1000);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   onRefreshRateSelected(event) {
@@ -87,7 +85,7 @@ export default class StatusPageIoMainPage extends React.Component {
       !this.state.hostNames ||
       (!this.state.selectedAccountId && !this.state.entityGuid)
     ) {
-      return <Spinner/>;
+      return <Spinner />;
     }
     if (this.state.hostNames.length === 0) {
       return (

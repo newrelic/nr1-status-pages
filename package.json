@@ -7,7 +7,7 @@
     "email": "opensource@newrelic.com"
   },
   "scripts": {
-    "start": "nr1 nerdpack:serve",
+    "start": "nr1-dev nerdpack:serve",
     "test": "exit 0",
     "eslint-check": "eslint nerdlets/",
     "eslint-fix": "eslint nerdlets/ --fix"

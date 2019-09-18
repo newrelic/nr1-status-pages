@@ -3,6 +3,5 @@
     "id": "status-page-launcher",
     "description": "Review all the relevant status pages in your world as track through the incident reports.",
     "displayName": "Status Pages",
-    "icon": "interface_operations_alert_s-on",
     "rootNerdletId": "status-page"
 }
