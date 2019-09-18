@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-const uuid = require('uuid/v4');
-
+import uuid from 'uuid/v4';
 import { flatten, uniqBy } from 'lodash';
 import {
   Button,
@@ -18,10 +17,10 @@ import {
   saveHostNamesToNerdStorage,
 } from '../../utilities/nerdlet-storage';
 import { popularSites } from '../../popular-status-pages';
-
 import StatusPage from '../../components/status-page';
 import CustomHostNames from '../../components/configure/custom-hostnames';
-const HOST_NAMES_COLLECTION_KEY = 'host_names_v0';
+
+const HOST_NAMES_COLLECTION_KEY = 'host_names_v1';
 const HOST_NAMES_DOCUMENT_ID = 'host_names';
 
 const MAX_ACCOUNT_DOC_FIELD_COUNT = 37; // Max size is 200 fields so to be safe we aim for 150
@@ -59,7 +58,9 @@ export default class ConfigureStatusPages extends React.Component {
   async componentDidMount() {
     const { keyObject } = this.state;
 
-    const accountsResults = await NerdGraphQuery.query({query: "{ actor { accounts { id name } }}"});
+    const accountsResults = await NerdGraphQuery.query({
+      query: '{ actor { accounts { id name } }}',
+    });
     this.setState({ hostNames: await getHostNamesFromNerdStorage(keyObject) });
     if (
       accountsResults.data &&
@@ -149,7 +150,7 @@ export default class ConfigureStatusPages extends React.Component {
           };
         })
       );
-    } catch(e) {
+    } catch (e) {
       console.error(e);
     }
     this.setState({ hostNames: hostNames });
