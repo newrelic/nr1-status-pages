@@ -1,10 +1,10 @@
-# nr1-statuspageio-nerdpack
+# nr1-status-pages-nerdpack
 
-![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr1-statuspageio?include_prereleases&sort=semver) ![AppVeyor](https://img.shields.io/appveyor/ci/newrelic/nr1-statuspageio) [![Snyk](https://snyk.io/test/github/newrelic/nr1-statuspageio/badge.svg)](https://snyk.io/test/github/newrelic/nr1-statuspageio)
+![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr1-status-pages?include_prereleases&sort=semver) ![AppVeyor](https://img.shields.io/appveyor/ci/newrelic/nr1-status-pages) [![Snyk](https://snyk.io/test/github/newrelic/nr1-status-pages/badge.svg)](https://snyk.io/test/github/newrelic/nr1-status-pages)
 
 ## Usage
 
-nr1-statuspageio collects multiple [Statuspage.io](https://www.statuspage.io) in one dashboard, so you can check the status of your key dependencies in one place.
+nr1-status-pages collects multiple [Statuspage.io](https://www.statuspage.io) in one dashboard, so you can check the status of your key dependencies in one place.
 
 ![Screenshot #1](screenshots/dashboard-view.png)
 
@@ -29,8 +29,8 @@ Nothing is required to get up and running but it is helpful if you have some sta
 Clone this repository and run the following scripts:
 
 ```bash
-git clone https://github.com/newrelic/nr1-statuspageio.git
-cd nr1-statuspageio
+git clone https://github.com/newrelic/nr1-status-pages.git
+cd nr1-status-pages
 nr1 nerdpack:uuid -gf
 npm install
 npm start
