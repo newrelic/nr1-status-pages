@@ -29,7 +29,7 @@ Nothing is required to get up and running but it is helpful if you have some sta
 Clone this repository and run the following scripts:
 
 ```bash
-git clone https://github.com/newrelic/nr1-status-pages.git
+nr1 nerdpack:clone -r https://github.com/newrelic/nr1-status-pages.git
 cd nr1-status-pages
 nr1 nerdpack:uuid -gf
 npm install
