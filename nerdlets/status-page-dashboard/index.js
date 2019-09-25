@@ -1,5 +1,5 @@
 import React from 'react';
-import IncidentDetails from './main-page';
+import StatusPageIoMainPage from './main-page';
 import { PlatformStateContext, NerdletStateContext, AutoSizer } from 'nr1';
 
 export default class Wrapper extends React.PureComponent {
@@ -9,16 +9,10 @@ export default class Wrapper extends React.PureComponent {
         {platformUrlState => (
           <NerdletStateContext.Consumer>
             {nerdletUrlState => (
-              <AutoSizer>
-                {({ width, height }) => (
-                  <IncidentDetails
-                    launcherUrlState={platformUrlState}
-                    nerdletUrlState={nerdletUrlState}
-                    width={width}
-                    height={height}
-                  />
-                )}
-              </AutoSizer>
+              <StatusPageIoMainPage
+                launcherUrlState={platformUrlState}
+                nerdletUrlState={nerdletUrlState}
+              />
             )}
           </NerdletStateContext.Consumer>
         )}

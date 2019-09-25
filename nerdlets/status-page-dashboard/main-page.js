@@ -9,9 +9,7 @@ import { getHostNamesFromNerdStorage } from '../../utilities/nerdlet-storage';
 export default class StatusPageIoMainPage extends React.Component {
   static propTypes = {
     nerdletUrlState: PropTypes.object,
-    launcherUrlState: PropTypes.object,
-    width: PropTypes.number,
-    height: PropTypes.number,
+    launcherUrlState: PropTypes.object
   };
 
   constructor(props) {
@@ -85,7 +83,9 @@ export default class StatusPageIoMainPage extends React.Component {
       !this.state.hostNames ||
       (!this.state.selectedAccountId && !this.state.entityGuid)
     ) {
-      return <Spinner />;
+      return <GridItem className="no-status-pages" columnStart={1} columnEnd={12}>
+        <Spinner fillContainer />
+      </GridItem>;
     }
     if (this.state.hostNames.length === 0) {
       return (
