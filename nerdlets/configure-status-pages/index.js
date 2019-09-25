@@ -1,6 +1,6 @@
 import React from 'react';
 import ConfigureStatusPages from './configure';
-import { PlatformStateContext, NerdletStateContext, AutoSizer } from 'nr1';
+import { PlatformStateContext, NerdletStateContext } from 'nr1';
 
 export default class Wrapper extends React.PureComponent {
   render() {
@@ -9,16 +9,10 @@ export default class Wrapper extends React.PureComponent {
         {platformUrlState => (
           <NerdletStateContext.Consumer>
             {nerdletUrlState => (
-              <AutoSizer>
-                {({ width, height }) => (
-                  <ConfigureStatusPages
-                    launcherUrlState={platformUrlState}
-                    nerdletUrlState={nerdletUrlState}
-                    width={width}
-                    height={height}
-                  />
-                )}
-              </AutoSizer>
+                <ConfigureStatusPages
+                  launcherUrlState={platformUrlState}
+                  nerdletUrlState={nerdletUrlState}
+                />
             )}
           </NerdletStateContext.Consumer>
         )}
