@@ -1,7 +1,7 @@
 {
   "lastUpdated": "Tue Sep 17 2019 10:32:21 GMT-0400 (Eastern Daylight Time)",
-  "projectName": "nr1-statuspageio",
-  "projectUrl": "https://github.com/newrelic/nr1-statuspageio",
+  "projectName": "nr1-status-pages",
+  "projectUrl": "https://github.com/newrelic/nr1-status-pages",
   "includeDev": true,
   "dependencies": {
     "axios@0.19.0": {
