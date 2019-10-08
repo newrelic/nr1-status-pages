@@ -1,6 +1,6 @@
 # nr1-status-pages
 
-![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr1-status-pages?include_prereleases&sort=semver) ![AppVeyor](https://img.shields.io/appveyor/ci/newrelic/nr1-status-pages) [![Snyk](https://snyk.io/test/github/newrelic/nr1-status-pages/badge.svg)](https://snyk.io/test/github/newrelic/nr1-status-pages)
+![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr1-status-pages?include_prereleases&sort=semver) [![Snyk](https://snyk.io/test/github/newrelic/nr1-status-pages/badge.svg)](https://snyk.io/test/github/newrelic/nr1-status-pages)
 
 ## Usage
 
@@ -22,7 +22,6 @@ Nothing is required to get up and running but it is helpful if you have some sta
 - [Google Cloud Platform](https://status.cloud.google.com/)
 - [Litmus](https://status.litmus.com/)
 - [Invision](https://status.invisionapp.com/)
-
 
 ## Getting started
 
