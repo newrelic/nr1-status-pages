@@ -1,28 +1,20 @@
 import React from 'react';
-import IncidentDetails from './main-page';
-import { PlatformStateContext, NerdletStateContext, AutoSizer } from 'nr1';
+import StatusPagesDashboard from './main-page';
+import { NerdletStateContext, EntityByGuidQuery, Spinner, HeadingText, BlockText } from 'nr1';
 
 export default class Wrapper extends React.PureComponent {
   render() {
     return (
-      <PlatformStateContext.Consumer>
-        {platformUrlState => (
-          <NerdletStateContext.Consumer>
-            {nerdletUrlState => (
-              <AutoSizer>
-                {({ width, height }) => (
-                  <IncidentDetails
-                    launcherUrlState={platformUrlState}
-                    nerdletUrlState={nerdletUrlState}
-                    width={width}
-                    height={height}
-                  />
-                )}
-              </AutoSizer>
-            )}
-          </NerdletStateContext.Consumer>
-        )}
-      </PlatformStateContext.Consumer>
-    );
+      <NerdletStateContext.Consumer>
+        {nerdletUrlState => {
+          const { entityGuid } = nerdletUrlState;
+          const type = entityGuid ? 'entity' : 'account';
+          if (type == 'entity') {
+            return <StatusPagesDashboard entityGuid={entityGuid} />
+          } else {
+            return <StatusPagesDashboard />
+          }
+        }}
+      </NerdletStateContext.Consumer>);
   }
 }

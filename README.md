@@ -1,10 +1,10 @@
-# nr1-status-pages-nerdpack
+# nr1-status-pages
 
 ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr1-status-pages?include_prereleases&sort=semver) ![AppVeyor](https://img.shields.io/appveyor/ci/newrelic/nr1-status-pages) [![Snyk](https://snyk.io/test/github/newrelic/nr1-status-pages/badge.svg)](https://snyk.io/test/github/newrelic/nr1-status-pages)
 
 ## Usage
 
-nr1-status-pages collects multiple [Statuspage.io](https://www.statuspage.io) in one dashboard, so you can check the status of your key dependencies in one place.
+nr1-status-pages collects multiple status pages [Statuspage.io style](https://www.statuspage.io) in one dashboard, so you can check the status of your key dependencies in one place.
 
 ![Screenshot #1](screenshots/dashboard-view.png)
 
@@ -44,7 +44,7 @@ Open a command prompt in the nerdpack's directory and run the following commands
 
 ```bash
 # this is to create a new uuid for the nerdpack so that you can deploy it to your account
-nr1 nerdpack:uuid -g [--profile=your_profile_name]
+nr1 nerdpack:uuid -gf [--profile=your_profile_name]
 # to see a list of APIkeys / profiles available in your development environment, run nr1 credentials:list
 nr1 nerdpack:publish [--profile=your_profile_name]
 nr1 nerdpack:deploy [-c [DEV|BETA|STABLE]] [--profile=your_profile_name]

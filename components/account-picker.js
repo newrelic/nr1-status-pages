@@ -33,7 +33,6 @@ export default class AccountPicker extends React.Component {
 
     if (accountsResults.data && accountsResults.data) {
       const accounts = accountsResults.data;
-      this.setState({ accounts });
 
       let accountId = await this.getLastChoseAccountId();
       if (!accountId) {
@@ -43,7 +42,9 @@ export default class AccountPicker extends React.Component {
       const account = accounts.find(a => a.id === accountId);
 
       if (account) {
-        this._accountChanged(account);
+        this._accountChanged(account, accounts);
+      } else {
+        this.setState({ accounts });
       }
     }
   }
@@ -68,18 +69,19 @@ export default class AccountPicker extends React.Component {
     UserStorageMutation.mutate(userMutation);
   }
 
-  async _accountChanged(account) {
+  async _accountChanged(account, accounts) {
     const accountId = account.id;
     const { accountChangedCallback } = this.props;
     this.saveOffLastChosenAccountId(accountId);
     if (accountChangedCallback) {
       await accountChangedCallback(accountId, this.state.accounts);
     }
-    this.setState({ selectedAccount: account });
+    this.setState({ selectedAccount: account, accounts });
   }
 
   async onAccountChange(account) {
-    await this._accountChanged(account);
+    const { accounts } = this.state;
+    await this._accountChanged(account, accounts);
   }
 
   render() {

@@ -29,8 +29,6 @@ export default class ConfigureStatusPages extends React.Component {
   static propTypes = {
     nerdletUrlState: PropTypes.object,
     launcherUrlState: PropTypes.object,
-    width: PropTypes.number,
-    height: PropTypes.number,
   };
 
   constructor(props) {
@@ -113,7 +111,7 @@ export default class ConfigureStatusPages extends React.Component {
   async addHostName(hostNameObject) {
     const { hostNames } = this.state;
     hostNames.push(hostNameObject);
-    this.setState({ hostNames: this.state.hostNames });
+    this.setState({ hostNames });
     await this.save();
   }
 

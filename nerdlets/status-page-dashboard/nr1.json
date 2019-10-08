@@ -1,6 +1,6 @@
 {
     "schemaType": "NERDLET",
-    "id": "status-page",
+    "id": "status-pages",
     "description": "Describe me",
     "displayName": "Status Pages",
     "entities": [{ "domain": "APM",  "type": "APPLICATION" }],
