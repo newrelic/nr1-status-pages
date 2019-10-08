@@ -9,15 +9,14 @@ import { Spinner } from 'nr1';
 
 export default class StatusPage extends React.Component {
   static propTypes = {
-    nerdletUrlState: PropTypes.object,
-    launcherUrlState: PropTypes.object,
-    width: PropTypes.number,
-    height: PropTypes.number,
+    hostname: PropTypes.string.isRequired,
+    provider: PropTypes.string.isRequired,
     refreshRate: PropTypes.number,
   };
 
   constructor(props) {
     super(props);
+
     this.StatusPageNetwork = new Network(
       this.props.hostname,
       this.props.refreshRate,
@@ -41,21 +40,19 @@ export default class StatusPage extends React.Component {
 
   render() {
     const { statusPageIoSummaryData } = this.state;
-    if (!statusPageIoSummaryData) return <Spinner />;
+    if (!statusPageIoSummaryData) return <Spinner fillContainer />;
 
-    const { provider } = this.props;
+    const { provider, refreshRate, hostname } = this.props;
     return (
       <div
         className={`status-page-container status-${statusPageIoSummaryData.indicator}`}
       >
         <Summary
-          refreshRate={this.props.refreshRate}
-          hostname={this.props.hostname}
-          provider={provider}
+          statusPageIoSummaryData={statusPageIoSummaryData}
         />
         <CurrentIncidents
-          refreshRate={this.props.refreshRate}
-          hostname={this.props.hostname}
+          refreshRate={refreshRate}
+          hostname={hostname}
           provider={provider}
         />
       </div>

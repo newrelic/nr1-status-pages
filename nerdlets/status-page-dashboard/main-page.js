@@ -6,16 +6,15 @@ import { HeadingText, Grid, GridItem, Spinner } from 'nr1';
 import Toolbar from '../../components/toolbar';
 import { getHostNamesFromNerdStorage } from '../../utilities/nerdlet-storage';
 
-export default class StatusPageIoMainPage extends React.Component {
+export default class StatusPagesDashboard extends React.Component {
   static propTypes = {
-    nerdletUrlState: PropTypes.object,
-    launcherUrlState: PropTypes.object
+    entityGuid: PropTypes.any
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      entityGuid: props.nerdletUrlState.entityGuid,
+      entityGuid: props.entityGuid ? props.entityGuid : null,
       suggestedDependencies: [],
       selectedAccountId: undefined,
       hostNames: [],
@@ -27,14 +26,14 @@ export default class StatusPageIoMainPage extends React.Component {
   }
 
   async componentDidMount() {
-    if (this.state.entityGuid) {
+    const { entityGuid } = this.state;
+    if (entityGuid) {
       const hostNames = await getHostNamesFromNerdStorage({
-        key: this.state.entityGuid,
+        key: entityGuid,
         type: 'entity',
       });
       this.setHostNames(hostNames);
     }
-
     this._interval = setInterval(this.pollHosts.bind(this), 15000);
   }
 
@@ -43,12 +42,11 @@ export default class StatusPageIoMainPage extends React.Component {
   }
 
   setHostNames(hostNames) {
-    this.setState({ hostNames: hostNames });
+    this.setState({ hostNames });
   }
 
   async onAccountSelected(accountId, accounts) {
-    this.setState({ selectedAccountId: accountId });
-    this.setState({ accounts: accounts });
+    this.setState({ selectedAccountId: accountId, accounts });
 
     const hostNames = await getHostNamesFromNerdStorage({
       key: accountId,

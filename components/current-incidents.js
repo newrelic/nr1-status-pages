@@ -7,7 +7,8 @@ import FormatService from '../utilities/format-service';
 
 export default class CurrentIncidents extends React.Component {
   static propTypes = {
-    hostname: PropTypes.string,
+    hostname: PropTypes.string.isRequired,
+    provider: PropTypes.string.isRequired,
     refreshRate: PropTypes.number,
   };
 
