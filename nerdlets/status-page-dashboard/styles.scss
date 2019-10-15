@@ -85,6 +85,10 @@
   }
 }
 
+[class*='Dropdown-trigger'] {
+  padding-right: 23px;
+}
+
 [class*='TextField-input'] {
   &:disabled {
     border: none;
