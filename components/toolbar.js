@@ -8,6 +8,7 @@ import {
   navigation,
   Stack,
   StackItem,
+  TextField,
 } from 'nr1';
 
 import AccountPicker from './account-picker';
@@ -62,10 +63,11 @@ export default class Toolbar extends React.Component {
         verticalType={Stack.VERTICAL_TYPE.CENTER}
         gapType={Stack.GAP_TYPE.NONE}
       >
-        <StackItem>
+        <StackItem className="toolbar-left-side">
           <Dropdown
             className="toolbar-dropdown"
-            title={`Refresh Rate: ${refreshRate}`}
+            label="Refresh rate"
+            title={refreshRate}
           >
             <DropdownItem onClick={refreshRateCallback}>2</DropdownItem>
             <DropdownItem onClick={refreshRateCallback}>5</DropdownItem>
@@ -74,35 +76,44 @@ export default class Toolbar extends React.Component {
             <DropdownItem onClick={refreshRateCallback}>20</DropdownItem>
             <DropdownItem onClick={refreshRateCallback}>25</DropdownItem>
           </Dropdown>
+
+          <hr />
+
           {!entityGuid && (
-            <AccountPicker accountChangedCallback={onAccountSelected} />
+            <>
+              <AccountPicker accountChangedCallback={onAccountSelected} />
+              <hr />
+            </>
           )}
-          <Button
-            type={Button.TYPE.NORMAL}
-            sizeType={Button.SIZE_TYPE.SMALL}
-            onClick={this.onEditStatusPageClick}
-          >
-            Edit StatusPages
-          </Button>
+
+          <TextField
+            label="Search"
+            placeholder="Search for a service"
+          ></TextField>
+
+          <hr />
         </StackItem>
         <StackItem>
-          <div className="dot-header">
-            <div className="dot-container">
-              {' '}
-              <div className="dot minor"></div>
-              <div className="dot-name">Minor Incident</div>
-            </div>
-            <div className="dot-container">
-              {' '}
-              <div className="dot major"></div>
-              <div className="dot-name">Major Incident</div>
-            </div>
-            <div className="dot-container">
-              {' '}
-              <div className="dot critical"></div>
-              <div className="dot-name">Critical Incident</div>
-            </div>
-          </div>
+          <Stack
+            className="toolbar-right-side"
+            fullWidth
+            horizontalType={Stack.HORIZONTAL_TYPE.RIGHT}
+          >
+            <Button
+              type={Button.TYPE.SECONDARY}
+              iconType={Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__CLOUD}
+              sizeType={Button.SIZE_TYPE.MEDIUM}
+            >
+              Sync all accounts
+            </Button>
+            <Button
+              type={Button.TYPE.PRIMARY}
+              iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+              sizeType={Button.SIZE_TYPE.MEDIUM}
+            >
+              Add new service
+            </Button>
+          </Stack>
         </StackItem>
       </Stack>
     );

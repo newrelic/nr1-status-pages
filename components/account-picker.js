@@ -98,6 +98,7 @@ export default class AccountPicker extends React.Component {
     return (
       <Dropdown
         title={selectedAccount.name}
+        label="Account"
         search={filter}
         onSearch={event => {
           this.setState({ filter: event.target.value });
