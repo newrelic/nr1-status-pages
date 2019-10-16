@@ -8,7 +8,7 @@ import { getHostNamesFromNerdStorage } from '../../utilities/nerdlet-storage';
 
 export default class StatusPagesDashboard extends React.Component {
   static propTypes = {
-    entityGuid: PropTypes.any
+    entityGuid: PropTypes.any,
   };
 
   constructor(props) {
@@ -81,9 +81,11 @@ export default class StatusPagesDashboard extends React.Component {
       !this.state.hostNames ||
       (!this.state.selectedAccountId && !this.state.entityGuid)
     ) {
-      return <GridItem className="no-status-pages" columnStart={1} columnEnd={12}>
-        <Spinner fillContainer />
-      </GridItem>;
+      return (
+        <GridItem className="no-status-pages" columnStart={1} columnEnd={12}>
+          <Spinner fillContainer />
+        </GridItem>
+      );
     }
     if (this.state.hostNames.length === 0) {
       return (
