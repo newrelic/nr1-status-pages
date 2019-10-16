@@ -56,7 +56,11 @@ export default class StatusPage extends React.Component {
             type={Button.TYPE.NORMAL}
             iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__MORE}
           />
-          <img src={GitHubLogo} className="GitHubLogo" alt="GitHub" />
+          {statusPageIoSummaryData.name === 'GitHub' ? (
+            <img src={GitHubLogo} className="GitHubLogo" alt="GitHub" />
+          ) : (
+            <h2 className="service-name">{statusPageIoSummaryData.name}</h2>
+          )}
         </div>
         <div className="service-current-status">
           <h5 className="service-current-status-heading">

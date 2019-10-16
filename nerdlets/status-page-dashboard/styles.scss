@@ -196,6 +196,8 @@
 }
 
 .status-container {
+  margin: 16px;
+  grid-gap: 16px;
   position: relative;
   grid-template-rows: 330px 330px;
   align-items: stretch;
@@ -205,6 +207,18 @@
   text-align: center;
   height: 110px;
   line-height: 134px;
+}
+
+.service-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 110px;
+  padding: 0 16px;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 42px;
+  color: #2a3434;
 }
 
 .service-settings-button {
