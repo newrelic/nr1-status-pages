@@ -64,7 +64,7 @@ export default class CurrentIncidents extends React.Component {
               {dayjs(incident.created_at).format('MM/DD/YYYY')}
             </span>
             <span className="timeline-timestamp-time">
-              {dayjs(incident.created_at).format('h:mm:ss a')}
+              {dayjs(incident.created_at).format('h:mm a')}
             </span>
           </div>
           <div className="timeline-item-dot"></div>
@@ -74,14 +74,6 @@ export default class CurrentIncidents extends React.Component {
               <div className="timeline-item-title">
                 {incident ? incident.name : 'None'}
               </div>
-              <Button
-                className="timeline-item-dropdown-arrow"
-                type={Button.TYPE.PLAIN_NEUTRAL}
-                iconType={
-                  Button.ICON_TYPE
-                    .INTERFACE__CHEVRON__CHEVRON_BOTTOM__V_ALTERNATE
-                }
-              ></Button>
             </div>
           </div>
         </div>
@@ -89,6 +81,6 @@ export default class CurrentIncidents extends React.Component {
     });
 
     // Show first current incident and then add a see more button
-    return first3TimelineItems;
+    return <div className="timeline-container">{first3TimelineItems}</div>;
   }
 }
