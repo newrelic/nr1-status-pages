@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import SearchIcon from '../assets/icon-search.svg';
 
 import {
   Button,
@@ -86,10 +87,13 @@ export default class Toolbar extends React.Component {
             </>
           )}
 
-          <TextField
-            label="Search"
-            placeholder="Search for a service"
-          ></TextField>
+          <div>
+            <TextField
+              label="Search"
+              placeholder="Search for a service"
+              className="toolbar-search"
+            ></TextField>
+          </div>
 
           <hr />
         </StackItem>
@@ -99,6 +103,13 @@ export default class Toolbar extends React.Component {
             fullWidth
             horizontalType={Stack.HORIZONTAL_TYPE.RIGHT}
           >
+            <Button
+              type={Button.TYPE.NORMAL}
+              sizeType={Button.SIZE_TYPE.MEDIUM}
+              onClick={this.onEditStatusPageClick}
+            >
+              Edit StatusPages
+            </Button>
             <Button
               type={Button.TYPE.SECONDARY}
               iconType={Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__CLOUD}

@@ -103,15 +103,13 @@ export default class StatusPagesDashboard extends React.Component {
       <GridItem
         className="status-page-grid-item"
         key={hostname.id}
-        columnSpan={6}
+        columnSpan={3}
       >
-        <div className="status-page-wrapper">
-          <StatusPage
-            refreshRate={this.state.refreshRate}
-            hostname={hostname.hostName}
-            provider={hostname.provider}
-          />
-        </div>
+        <StatusPage
+          refreshRate={this.state.refreshRate}
+          hostname={hostname.hostName}
+          provider={hostname.provider}
+        />
       </GridItem>
     ));
   }

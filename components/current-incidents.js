@@ -54,38 +54,40 @@ export default class CurrentIncidents extends React.Component {
     if (!currentIncidents) return <div></div>;
     this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
     const latestIncident = currentIncidents[0];
-    // Show first current incident and then add a see more button
-    return (
-      <Stack
-        className="current-incident-row"
-        fullWidth
-        gapType={Stack.GAP_TYPE.NONE}
-        horizontalType={Stack.HORIZONTAL_TYPE.FILL}
-        verticalType={Stack.VERTICAL_TYPE.CENTER}
-      >
-        <StackItem className="current-incident-name-stack-item">
-          <p className="current-incident-name">
-            Latest Incident:
-            <span className={`current-incident-text`}>
-              {latestIncident ? latestIncident.name : 'None'}
+    const first3Incicdents = currentIncidents.slice(0, 3);
+    const first3TimelineItems = first3Incicdents.map(incident => {
+      return (
+        <div className="timeline-item" key={incident.created_at}>
+          <div className="timeline-item-timestamp">
+            <span className="timeline-timestamp-date">
+              {incident.created_at}
             </span>
-          </p>
-        </StackItem>
-        <StackItem className="current-incident-see-more">
-          <Stack verticalType={Stack.VERTICAL_TYPE.TRAILING}>
-            <StackItem>
+            <span className="timeline-timestamp-time">
+              {incident.created_at}
+            </span>
+          </div>
+          <div className="timeline-item-dot"></div>
+          <div className="timeline-item-body">
+            <div className="timeline-item-body-header">
+              <div className="timeline-item-symbol"></div>
+              <div className="timeline-item-title">
+                {incident ? incident.name : 'None'}
+              </div>
               <Button
-                onClick={this.seeMore}
-                type={Button.TYPE.NORMAL}
-                sizeType={Button.SIZE_TYPE.SMALL}
-                iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-              >
-                See More
-              </Button>
-            </StackItem>
-          </Stack>
-        </StackItem>
-      </Stack>
-    );
+                className="timeline-item-dropdown-arrow"
+                type={Button.TYPE.PLAIN_NEUTRAL}
+                iconType={
+                  Button.ICON_TYPE
+                    .INTERFACE__CHEVRON__CHEVRON_BOTTOM__V_ALTERNATE
+                }
+              ></Button>
+            </div>
+          </div>
+        </div>
+      );
+    });
+
+    // Show first current incident and then add a see more button
+    return first3TimelineItems;
   }
 }

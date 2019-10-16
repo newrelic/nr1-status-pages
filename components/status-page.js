@@ -5,7 +5,9 @@ import Summary from './summary';
 import Network from '../utilities/network';
 import CurrentIncidents from './current-incidents';
 import FormatService from '../utilities/format-service';
-import { Spinner } from 'nr1';
+import { Spinner, Button, Icon } from 'nr1';
+
+import GitHubLogo from '../assets/logo-github.svg';
 
 export default class StatusPage extends React.Component {
   static propTypes = {
@@ -47,9 +49,21 @@ export default class StatusPage extends React.Component {
       <div
         className={`status-page-container status-${statusPageIoSummaryData.indicator}`}
       >
-        <Summary
-          statusPageIoSummaryData={statusPageIoSummaryData}
-        />
+        <div className="logo-container">
+          <Button
+            sizeType={Button.SIZE_TYPE.SMALL}
+            className="service-settings-button"
+            type={Button.TYPE.NORMAL}
+            iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__MORE}
+          />
+          <img src={GitHubLogo} className="GitHubLogo" alt="GitHub" />
+        </div>
+        <div className="service-current-status">
+          <h5 className="service-current-status-heading">
+            <Icon type={Icon.TYPE.INTERFACE__SIGN__CHECKMARK} />
+            {statusPageIoSummaryData.description}
+          </h5>
+        </div>
         <CurrentIncidents
           refreshRate={refreshRate}
           hostname={hostname}
