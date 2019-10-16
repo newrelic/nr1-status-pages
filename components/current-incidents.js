@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Network from '../utilities/network';
+import dayjs from 'dayjs';
 
 import { navigation, Button, Stack, StackItem } from 'nr1';
 import FormatService from '../utilities/format-service';
@@ -60,10 +61,10 @@ export default class CurrentIncidents extends React.Component {
         <div className="timeline-item" key={incident.created_at}>
           <div className="timeline-item-timestamp">
             <span className="timeline-timestamp-date">
-              {incident.created_at}
+              {dayjs(incident.created_at).format('MM/DD/YYYY')}
             </span>
             <span className="timeline-timestamp-time">
-              {incident.created_at}
+              {dayjs(incident.created_at).format('h:mm:ss a')}
             </span>
           </div>
           <div className="timeline-item-dot"></div>
