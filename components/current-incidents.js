@@ -50,16 +50,16 @@ export default class CurrentIncidents extends React.Component {
         return (
           <Icon
             color="#464e4e"
-            type={
-              Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_WARNING
-            }
+            type={Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_OK}
           />
         );
       case 'minor':
         return (
           <Icon
             color="#9C5400"
-            type={Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_OK}
+            type={
+              Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_WARNING
+            }
           />
         );
       case 'major':
@@ -111,7 +111,10 @@ export default class CurrentIncidents extends React.Component {
           <div className="timeline-item-dot"></div>
           <div className="timeline-item-body">
             <div className="timeline-item-body-header">
-              <div className="timeline-item-symbol">
+              <div
+                className="timeline-item-symbol"
+                title={`Impact: ${incident.impact}`}
+              >
                 {this.setTimelineSymbol(incident.impact)}
               </div>
               <div className="timeline-item-title">

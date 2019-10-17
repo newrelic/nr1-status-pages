@@ -57,7 +57,7 @@ export default class StatusPage extends React.Component {
             src={NewRelicLogo}
             className="service-logo"
             alt="New Relic"
-            width="253"
+            width="235"
             height="41"
           />
         );
