@@ -8,6 +8,9 @@ import FormatService from '../utilities/format-service';
 import { Spinner, Button, Icon } from 'nr1';
 
 import GitHubLogo from '../assets/logo-github.svg';
+import NewRelicLogo from '../assets/logo-new-relic.png';
+import JiraLogo from '../assets/logo-jira.png';
+import GoogleCloudProviderLogo from '../assets/logo-google-cloud.svg';
 
 export default class StatusPage extends React.Component {
   static propTypes = {
@@ -34,6 +37,43 @@ export default class StatusPage extends React.Component {
     this.StatusPageNetwork.pollSummaryData(this.setSummaryData.bind(this));
   }
 
+  autoSetLogo(serviceName) {
+    switch (serviceName) {
+      case 'GitHub':
+        return <img src={GitHubLogo} className="service-logo" alt="GitHub" />;
+      case 'Jira Software':
+        return (
+          <img
+            src={JiraLogo}
+            className="service-logo"
+            alt="Jira"
+            width="258"
+            height="33"
+          />
+        );
+      case 'New Relic':
+        return (
+          <img
+            src={NewRelicLogo}
+            className="service-logo"
+            alt="New Relic"
+            width="253"
+            height="41"
+          />
+        );
+      case 'Google Cloud Provider':
+        return (
+          <img
+            src={GoogleCloudProviderLogo}
+            className="service-logo"
+            alt="GitHub"
+          />
+        );
+      default:
+        return <h2 className="service-name">{serviceName}</h2>;
+    }
+  }
+
   setSummaryData(data) {
     this.setState({
       statusPageIoSummaryData: this.FormatService.uniformSummaryData(data),
@@ -56,11 +96,8 @@ export default class StatusPage extends React.Component {
             type={Button.TYPE.NORMAL}
             iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__MORE}
           />
-          {statusPageIoSummaryData.name === 'GitHub' ? (
-            <img src={GitHubLogo} className="GitHubLogo" alt="GitHub" />
-          ) : (
-            <h2 className="service-name">{statusPageIoSummaryData.name}</h2>
-          )}
+
+          {this.autoSetLogo(statusPageIoSummaryData.name)}
         </div>
         <div className="service-current-status">
           <h5 className="service-current-status-heading">
