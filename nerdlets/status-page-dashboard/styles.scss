@@ -32,7 +32,7 @@
   position: relative;
   line-height: 19px;
   border: none;
-  box-shadow: inset 0 0 0 1px #d5d7d7, 0 1px 0 0 #f4f5f5;
+  box-shadow: inset 0 0 0 1px #d5d7d7;
   background-position: right 8px top 56%;
   border-radius: 2px;
   background-color: #ffffff;
@@ -529,4 +529,117 @@
 
 .timeline-item-expanded .timeline-item-dropdown-arrow {
   transform: rotate(180deg);
+}
+
+.status-page-settings-container {
+  height: 100%;
+  display: none;
+  // display: flex;
+  flex-direction: column;
+}
+
+.status-page-settings-content {
+  box-sizing: border-box;
+  overflow: scroll;
+  padding: 24px 24px 32px;
+
+  [class*='Dropdown-trigger'] {
+    width: 100%;
+  }
+}
+
+.status-page-settings-cta-container {
+  min-height: 64px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 24px;
+  border-top: 3px solid #edeeee;
+
+  button {
+    margin-left: 8px;
+  }
+}
+
+/*-- React Select styling overrides --*/
+
+.react-select__control {
+  border-color: #d5d7d7;
+  min-height: 32px;
+  border-radius: 2px;
+
+  &:hover {
+    border-color: #8e9494;
+  }
+
+  &--is-focused {
+    box-shadow: none;
+    border-color: #8e9494;
+  }
+}
+
+.react-select__placeholder {
+  color: #b9bdbd;
+  font-size: 14px;
+}
+
+.react-select__input {
+  font-size: 14px;
+
+  body html div.status-page-settings-container .input-group & input,
+  input:not(.u-unstyledInput):not([class*='TextField-input']):not([type='button']):not([type='submit']):not([type='checkbox']):not([type='radio']) {
+    box-shadow: none;
+    color: #000d0d;
+  }
+}
+
+.react-select__value-container--has-value {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.react-select__multi-value {
+  height: 24px;
+  position: relative;
+  right: 6px;
+}
+
+.react-select__multi-value__label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 8px;
+  background-color: #f0fcfc;
+  color: #005054;
+  border: 1px solid #70ccd3;
+  border-radius: 3px 0 0 3px;
+  margin-right: -1px;
+}
+
+.react-select__multi-value__remove {
+  background-color: #f0fcfc;
+  color: #005054;
+  border: 1px solid #70ccd3;
+  border-radius: 0 3px 3px 0;
+
+  svg {
+    transform: scale(0.8);
+  }
+}
+
+.react-select__clear-indicator {
+  padding: 6px;
+
+  svg {
+    transform: scale(0.8);
+  }
+}
+
+.input-group .TextField-label {
+  display: inline-block;
+}
+
+.status-page-setting {
+  width: 100%;
+  margin-bottom: 16px;
 }
