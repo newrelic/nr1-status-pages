@@ -204,9 +204,11 @@
 }
 
 .logo-container {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 110px;
-  line-height: 134px;
+  text-align: center;
 }
 
 .service-name {
@@ -366,7 +368,7 @@
 
 .timeline-item-timestamp {
   text-align: right;
-  min-width: 75px;
+  min-width: 65px;
   color: #b9bdbd;
   font-size: 10px;
 }
@@ -458,12 +460,35 @@
   &:after {
     content: '';
     display: block;
-    width: 19px;
-    height: 19px;
+    width: 20px;
+    height: 20px;
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 3px;
     position: absolute;
     z-index: 0;
+
+    .impact-none & {
+      background-color: #edeeee;
+    }
+
+    .impact-minor & {
+      background-color: #fff4d1;
+    }
+
+    .impact-major & {
+      background-color: #ffe3ce;
+    }
+
+    .impact-critical & {
+      background-color: #fcf2f3;
+    }
+  }
+
+  .ic-Icon {
+    position: relative;
+    top: 0.5px;
+    left: 0.5px;
+    z-index: 10;
   }
 }
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Network from '../utilities/network';
 import dayjs from 'dayjs';
 
-import { navigation, Button, Stack, StackItem } from 'nr1';
+import { navigation, Button, Stack, StackItem, Icon } from 'nr1';
 import FormatService from '../utilities/format-service';
 
 export default class CurrentIncidents extends React.Component {
@@ -44,6 +44,45 @@ export default class CurrentIncidents extends React.Component {
     );
   }
 
+  setTimelineSymbol(incidentImpact) {
+    switch (incidentImpact) {
+      case 'none':
+        return (
+          <Icon
+            color="#464e4e"
+            type={
+              Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_WARNING
+            }
+          />
+        );
+      case 'minor':
+        return (
+          <Icon
+            color="#9C5400"
+            type={Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_OK}
+          />
+        );
+      case 'major':
+        return (
+          <Icon
+            color="#8e3500"
+            type={
+              Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_ERROR
+            }
+          />
+        );
+      case 'critical':
+        return (
+          <Icon
+            color="#bf0015"
+            type={
+              Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_DISABLED
+            }
+          />
+        );
+    }
+  }
+
   setIncidentData(data) {
     this.setState({
       currentIncidents: this.FormatService.uniformIncidentData(data),
@@ -54,11 +93,13 @@ export default class CurrentIncidents extends React.Component {
     const { currentIncidents } = this.state;
     if (!currentIncidents) return <div></div>;
     this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
-    const latestIncident = currentIncidents[0];
     const first3Incicdents = currentIncidents.slice(0, 3);
     const first3TimelineItems = first3Incicdents.map(incident => {
       return (
-        <div className="timeline-item" key={incident.created_at}>
+        <div
+          className={`timeline-item impact-${incident.impact}`}
+          key={incident.created_at}
+        >
           <div className="timeline-item-timestamp">
             <span className="timeline-timestamp-date">
               {dayjs(incident.created_at).format('MM/DD/YYYY')}
@@ -70,7 +111,9 @@ export default class CurrentIncidents extends React.Component {
           <div className="timeline-item-dot"></div>
           <div className="timeline-item-body">
             <div className="timeline-item-body-header">
-              <div className="timeline-item-symbol"></div>
+              <div className="timeline-item-symbol">
+                {this.setTimelineSymbol(incident.impact)}
+              </div>
               <div className="timeline-item-title">
                 {incident ? incident.name : 'None'}
               </div>
