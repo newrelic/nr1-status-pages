@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Summary from './summary';
+import 'web-animations-js';
 
 import Network from '../utilities/network';
 import CurrentIncidents from './current-incidents';
@@ -37,7 +38,17 @@ export default class StatusPage extends React.Component {
       statusPageIoSummaryData: undefined,
       inputValue: '',
       value: [],
+      settingsViewActive: false,
+      settingsPopoverActive: false,
     };
+
+    this.handleTileSettingsAnimation = this.handleTileSettingsAnimation.bind(
+      this
+    );
+    this.handleSettingsPopover = this.handleSettingsPopover.bind(this);
+
+    this.serviceTilePrimaryContent = React.createRef();
+    this.serviceTileSettingsContent = React.createRef();
   }
 
   async componentDidMount() {
@@ -115,24 +126,140 @@ export default class StatusPage extends React.Component {
     });
   }
 
+  handleTileSettingsAnimation() {
+    const { settingsViewActive } = this.state;
+    const primaryContent = this.serviceTilePrimaryContent.current;
+    const settingsContent = this.serviceTileSettingsContent.current;
+
+    if (settingsViewActive) {
+      const animateSettingsOut = settingsContent.animate(
+        {
+          opacity: [1, 0],
+          transform: [
+            'translateX(0) rotateY(0)',
+            'translateX(30px) rotateY(25deg)',
+          ],
+        },
+        {
+          duration: 400,
+          fill: 'forwards',
+          easing: 'cubic-bezier(.23, 1, .32, 1)',
+        }
+      );
+
+      const animatePrimaryContentIn = primaryContent.animate(
+        {
+          opacity: [0, 1],
+          transform: [
+            'translateX(-30px) rotateY(-15deg)',
+            'translateX(0) rotateY(0deg)',
+          ],
+        },
+        {
+          duration: 400,
+          fill: 'forwards',
+          easing: 'cubic-bezier(.25, .46, .45, .94)',
+          delay: 200,
+        }
+      );
+      this.setState({ settingsViewActive: false });
+    } else {
+      const animateSettingsIn = settingsContent.animate(
+        {
+          opacity: [0, 1],
+          transform: [
+            'translateX(30px) rotateY(15deg)',
+            'translateX(0) rotateY(0deg)',
+          ],
+        },
+        {
+          duration: 400,
+          fill: 'forwards',
+          easing: 'cubic-bezier(.25, .46, .45, .94)',
+          delay: 200,
+        }
+      );
+
+      const animatePrimaryContentOut = primaryContent.animate(
+        {
+          opacity: [1, 0],
+          transform: [
+            'translateX(0) rotateY(0)',
+            'translateX(-30px) rotateY(-25deg)',
+          ],
+        },
+        {
+          duration: 400,
+          fill: 'forwards',
+          easing: 'cubic-bezier(.23, 1, .32, 1)',
+        }
+      );
+
+      animatePrimaryContentOut.onfinish = () => {
+        this.setState({ settingsViewActive: true });
+      };
+    }
+  }
+
+  handleSettingsPopover() {
+    this.setState({ settingsPopoverActive: !this.state.settingsPopoverActive });
+  }
+
   render() {
     const { statusPageIoSummaryData, inputValue, value } = this.state;
     if (!statusPageIoSummaryData) return <Spinner fillContainer />;
 
     const { provider, refreshRate, hostname } = this.props;
+    const { settingsViewActive } = this.state;
 
     return (
       <div
-        className={`status-page-container status-${statusPageIoSummaryData.indicator}`}
+        className={`status-page-container status-${
+          statusPageIoSummaryData.indicator
+        } ${
+          settingsViewActive ? 'settings-view-active' : 'settings-view-inactive'
+        }`}
       >
-        <div className="primary-status-page-content">
+        <div
+          className="primary-status-page-content"
+          ref={this.serviceTilePrimaryContent}
+        >
           <div className="logo-container">
-            <Button
-              sizeType={Button.SIZE_TYPE.SMALL}
-              className="service-settings-button"
-              type={Button.TYPE.NORMAL}
-              iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__MORE}
-            />
+            <div
+              className={`service-settings-button-container ${
+                this.state.settingsPopoverActive
+                  ? 'settings-popover-active'
+                  : 'settings-popover-inactive'
+              }`}
+            >
+              <Button
+                sizeType={Button.SIZE_TYPE.SMALL}
+                className="service-settings-button"
+                type={Button.TYPE.NORMAL}
+                iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__MORE}
+                onClick={this.handleSettingsPopover}
+              />
+              <ul className="service-settings-dropdown">
+                <li className="service-settings-dropdown-item">
+                  <Icon type={Icon.TYPE.INTERFACE__INFO__INFO} />
+                  View details
+                </li>
+                <li
+                  className="service-settings-dropdown-item"
+                  onClick={this.handleTileSettingsAnimation}
+                >
+                  <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__EDIT} />
+                  Edit
+                </li>
+                <li className="service-settings-dropdown-item destructive">
+                  <Icon
+                    type={Icon.TYPE.INTERFACE__OPERATIONS__TRASH}
+                    color="#BF0016"
+                  />
+                  Delete
+                </li>
+              </ul>
+            </div>
 
             {this.autoSetLogo(statusPageIoSummaryData.name)}
           </div>
@@ -148,7 +275,10 @@ export default class StatusPage extends React.Component {
             provider={provider}
           />
         </div>
-        <div className="status-page-settings-container">
+        <div
+          className="status-page-settings-container"
+          ref={this.serviceTileSettingsContent}
+        >
           <div className="status-page-settings-content">
             <TextField
               label="Service name"
@@ -187,8 +317,18 @@ export default class StatusPage extends React.Component {
             ></TextField>
           </div>
           <div className="status-page-settings-cta-container">
-            <Button type={Button.TYPE.PRIMARY}>Done</Button>
-            <Button type={Button.TYPE.DESTRUCTIVE}>Delete</Button>
+            <Button
+              type={Button.TYPE.PRIMARY}
+              onClick={this.handleTileSettingsAnimation}
+            >
+              Done
+            </Button>
+            <Button
+              type={Button.TYPE.DESTRUCTIVE}
+              onClick={this.handleTileSettingsAnimation}
+            >
+              Delete
+            </Button>
           </div>
         </div>
       </div>

@@ -28,7 +28,8 @@
     "react-select": "^3.0.8",
     "react-vertical-timeline-component": "^2.4.0",
     "uuid": "^3.3.3",
-    "vertical-timeline-component-for-react": "^1.0.6"
+    "vertical-timeline-component-for-react": "^1.0.6",
+    "web-animations-js": "^2.3.2"
   },
   "browserslist": [
     "last 2 versions",

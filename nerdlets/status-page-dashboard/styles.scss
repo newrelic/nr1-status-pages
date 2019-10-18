@@ -193,6 +193,14 @@
     0px 3px 0px rgba(0, 49, 54, 0.04), 0px 1px 3px rgba(0, 134, 148, 0.03),
     0px 8px 7px rgba(70, 107, 111, 0.05);
   border-radius: 2px;
+  perspective: 2000px;
+
+  &.settings-view-active {
+    .primary-status-page-content {
+      display: none;
+      z-index: 0;
+    }
+  }
 }
 
 .status-container {
@@ -227,6 +235,10 @@
   position: absolute;
   top: 8px;
   right: 8px;
+
+  span {
+    pointer-events: none;
+  }
 }
 
 .service-current-status {
@@ -533,8 +545,8 @@
 
 .status-page-settings-container {
   height: 100%;
-  display: none;
-  // display: flex;
+  opacity: 0;
+  display: flex;
   flex-direction: column;
 }
 
@@ -642,4 +654,56 @@
 .status-page-setting {
   width: 100%;
   margin-bottom: 16px;
+}
+
+.primary-status-page-content {
+  height: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.service-settings-dropdown {
+  display: none;
+  width: 150px;
+  position: absolute;
+  top: 37px;
+  right: 8px;
+  background: #ffffff;
+  border: 1px solid #e3e4e4;
+  box-sizing: border-box;
+  box-shadow: 0px 16px 32px rgba(0, 13, 13, 0.2),
+    0px 16px 32px rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+  list-style-type: none;
+  text-align: left;
+
+  .settings-popover-active & {
+    display: block;
+  }
+}
+
+.service-settings-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: #000d0d;
+  height: 32px;
+  padding: 0 8px;
+  border-bottom: 1px solid #e3e4e4;
+
+  &:last-child {
+    border: none;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .ic-Icon {
+    margin-right: 8px;
+  }
+
+  &.destructive {
+    color: #bf0016;
+  }
 }
