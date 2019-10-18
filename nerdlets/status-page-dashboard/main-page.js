@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import StatusPage from '../../components/status-page';
 
-import { HeadingText, Grid, GridItem, Spinner } from 'nr1';
+import { HeadingText, Grid, GridItem, Spinner, Modal, Button } from 'nr1';
 import Toolbar from '../../components/toolbar';
 import { getHostNamesFromNerdStorage } from '../../utilities/nerdlet-storage';
 
@@ -19,10 +19,12 @@ export default class StatusPagesDashboard extends React.Component {
       selectedAccountId: undefined,
       hostNames: [],
       refreshRate: 15,
+      deleteTileModalActive: false,
     };
     this.onAccountSelected = this.onAccountSelected.bind(this);
     this.onRefreshRateSelected = this.onRefreshRateSelected.bind(this);
     this.setHostNames = this.setHostNames.bind(this);
+    this.handleDeleteTileModal = this.handleDeleteTileModal.bind(this);
   }
 
   async componentDidMount() {
@@ -109,9 +111,14 @@ export default class StatusPagesDashboard extends React.Component {
           refreshRate={this.state.refreshRate}
           hostname={hostname.hostName}
           provider={hostname.provider}
+          handleDeleteTileModal={() => this.handleDeleteTileModal}
         />
       </GridItem>
     ));
+  }
+
+  handleDeleteTileModal() {
+    this.setState({ deleteTileModalActive: !this.state.deleteTileModalActive });
   }
 
   render() {
@@ -121,7 +128,9 @@ export default class StatusPagesDashboard extends React.Component {
       hostNames,
       refreshRate,
       selectedAccountId,
+      deleteTileModalActive,
     } = this.state;
+
     return (
       // <AccountsContext.Provider value={this.state}>
       <div>
@@ -142,6 +151,32 @@ export default class StatusPagesDashboard extends React.Component {
         >
           {this.getGridItems()}
         </Grid>
+        <Modal
+          hidden={!deleteTileModalActive}
+          onClose={() => this.setState({ deleteTileModalActive: false })}
+        >
+          <HeadingText type={HeadingText.TYPE.HEADING_2}>
+            Are you sure you want to delete this service?
+          </HeadingText>
+          <p>
+            This cannot be undone. Please confirm whether or not you want to
+            delete this service from your status pages.
+          </p>
+
+          <Button
+            type={Button.TYPE.PRIMARY}
+            onClick={() => this.setState({ deleteTileModalActive: false })}
+          >
+            Cancel
+          </Button>
+          <Button
+            type={Button.TYPE.DESTRUCTIVE}
+            onClick={this.handleTileSettingsAnimation}
+            iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
+          >
+            Delete
+          </Button>
+        </Modal>
       </div>
       // </AccountsContext.Provider>
     );

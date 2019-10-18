@@ -46,6 +46,7 @@ export default class StatusPage extends React.Component {
       this
     );
     this.handleSettingsPopover = this.handleSettingsPopover.bind(this);
+    this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
 
     this.serviceTilePrimaryContent = React.createRef();
     this.serviceTileSettingsContent = React.createRef();
@@ -205,11 +206,26 @@ export default class StatusPage extends React.Component {
     this.setState({ settingsPopoverActive: !this.state.settingsPopoverActive });
   }
 
+  handleEditButtonClick() {
+    this.handleTileSettingsAnimation();
+    this.handleSettingsPopover();
+  }
+
+  handleDeleteButtonClick() {
+    this.props.handleDeleteTileModal()();
+    this.handleSettingsPopover();
+  }
+
   render() {
     const { statusPageIoSummaryData, inputValue, value } = this.state;
     if (!statusPageIoSummaryData) return <Spinner fillContainer />;
 
-    const { provider, refreshRate, hostname } = this.props;
+    const {
+      provider,
+      refreshRate,
+      hostname,
+      handleDeleteTileModal,
+    } = this.props;
     const { settingsViewActive } = this.state;
 
     return (
@@ -246,12 +262,15 @@ export default class StatusPage extends React.Component {
                 </li>
                 <li
                   className="service-settings-dropdown-item"
-                  onClick={this.handleTileSettingsAnimation}
+                  onClick={this.handleEditButtonClick}
                 >
                   <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__EDIT} />
                   Edit
                 </li>
-                <li className="service-settings-dropdown-item destructive">
+                <li
+                  className="service-settings-dropdown-item destructive"
+                  onClick={() => this.handleDeleteButtonClick()}
+                >
                   <Icon
                     type={Icon.TYPE.INTERFACE__OPERATIONS__TRASH}
                     color="#BF0016"
@@ -325,7 +344,8 @@ export default class StatusPage extends React.Component {
             </Button>
             <Button
               type={Button.TYPE.DESTRUCTIVE}
-              onClick={this.handleTileSettingsAnimation}
+              onClick={() => this.handleDeleteButtonClick()}
+              iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
             >
               Delete
             </Button>

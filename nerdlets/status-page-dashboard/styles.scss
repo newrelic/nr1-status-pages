@@ -707,3 +707,21 @@
     color: #bf0016;
   }
 }
+
+[class*='InnerModal-content'] {
+  [class*='Text--type-heading'] {
+    margin-bottom: 16px;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    color: #000d0d;
+  }
+
+  p {
+    margin-bottom: 16px;
+  }
+
+  button {
+    margin-right: 8px;
+  }
+}
