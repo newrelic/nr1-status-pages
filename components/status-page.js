@@ -6,7 +6,15 @@ import 'web-animations-js';
 import Network from '../utilities/network';
 import CurrentIncidents from './current-incidents';
 import FormatService from '../utilities/format-service';
-import { Spinner, Button, Icon, TextField, Dropdown, DropdownItem } from 'nr1';
+import {
+  Spinner,
+  Button,
+  Icon,
+  TextField,
+  Dropdown,
+  DropdownItem,
+  navigation,
+} from 'nr1';
 import CreatableSelect from 'react-select/creatable';
 
 import GitHubLogo from '../assets/logo-github.svg';
@@ -202,17 +210,32 @@ export default class StatusPage extends React.Component {
     }
   }
 
-  handleSettingsPopover() {
-    this.setState({ settingsPopoverActive: !this.state.settingsPopoverActive });
+  handleTileClick(statusPageIoSummaryData, refreshRate, hostname, provider) {
+    navigation.openStackedNerdlet({
+      id: 'service-details',
+      urlState: {
+        statusPageIoSummaryData: statusPageIoSummaryData,
+        refreshRate: refreshRate,
+        hostname: hostname,
+        provider: provider,
+      },
+    });
   }
 
-  handleEditButtonClick() {
+  handleSettingsPopover(e) {
+    this.setState({ settingsPopoverActive: !this.state.settingsPopoverActive });
+    e.stopPropagation();
+  }
+
+  handleEditButtonClick(e) {
+    e.stopPropagation();
     this.handleTileSettingsAnimation();
     this.handleSettingsPopover();
   }
 
-  handleDeleteButtonClick() {
+  handleDeleteButtonClick(e) {
     this.props.handleDeleteTileModal()();
+    e.stopPropagation();
     this.handleSettingsPopover();
   }
 
@@ -239,6 +262,14 @@ export default class StatusPage extends React.Component {
         <div
           className="primary-status-page-content"
           ref={this.serviceTilePrimaryContent}
+          onClick={() =>
+            this.handleTileClick(
+              statusPageIoSummaryData,
+              refreshRate,
+              hostname,
+              provider
+            )
+          }
         >
           <div className="logo-container">
             <div
@@ -344,7 +375,7 @@ export default class StatusPage extends React.Component {
             </Button>
             <Button
               type={Button.TYPE.DESTRUCTIVE}
-              onClick={() => this.handleDeleteButtonClick()}
+              onClick={() => this.handleDeleteButtonClick(e)}
               iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
             >
               Delete
