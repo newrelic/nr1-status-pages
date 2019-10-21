@@ -65,7 +65,7 @@ export default class CurrentIncidents extends React.Component {
       case 'major':
         return (
           <Icon
-            color="#8e3500"
+            color="#BF0016"
             type={
               Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_ERROR
             }
@@ -74,7 +74,7 @@ export default class CurrentIncidents extends React.Component {
       case 'critical':
         return (
           <Icon
-            color="#bf0015"
+            color="#ffffff"
             type={
               Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_DISABLED
             }
