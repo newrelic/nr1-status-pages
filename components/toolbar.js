@@ -68,7 +68,7 @@ export default class Toolbar extends React.Component {
           <Dropdown
             className="toolbar-dropdown"
             label="Refresh rate"
-            title={refreshRate}
+            title="refreshRate"
           >
             <DropdownItem onClick={refreshRateCallback}>2</DropdownItem>
             <DropdownItem onClick={refreshRateCallback}>5</DropdownItem>
