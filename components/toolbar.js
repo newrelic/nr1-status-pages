@@ -121,6 +121,7 @@ export default class Toolbar extends React.Component {
               type={Button.TYPE.PRIMARY}
               iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
               sizeType={Button.SIZE_TYPE.MEDIUM}
+              onClick={this.props.handleCreateTileModal}
             >
               Add new service
             </Button>

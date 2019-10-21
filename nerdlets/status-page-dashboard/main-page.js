@@ -2,10 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import StatusPage from '../../components/status-page';
 
-import { HeadingText, Grid, GridItem, Spinner, Modal, Button } from 'nr1';
+import {
+  HeadingText,
+  Grid,
+  GridItem,
+  Spinner,
+  Modal,
+  Button,
+  TextField,
+  Dropdown,
+  DropdownItem,
+} from 'nr1';
+import CreatableSelect from 'react-select/creatable';
 import Toolbar from '../../components/toolbar';
 import { getHostNamesFromNerdStorage } from '../../utilities/nerdlet-storage';
 
+const createOption = label => ({
+  label,
+  value: label,
+});
 export default class StatusPagesDashboard extends React.Component {
   static propTypes = {
     entityGuid: PropTypes.any,
@@ -20,11 +35,15 @@ export default class StatusPagesDashboard extends React.Component {
       hostNames: [],
       refreshRate: 15,
       deleteTileModalActive: false,
+      createTileModalActive: false,
+      inputValue: '',
+      value: [],
     };
     this.onAccountSelected = this.onAccountSelected.bind(this);
     this.onRefreshRateSelected = this.onRefreshRateSelected.bind(this);
     this.setHostNames = this.setHostNames.bind(this);
     this.handleDeleteTileModal = this.handleDeleteTileModal.bind(this);
+    this.handleCreateTileModal = this.handleCreateTileModal.bind(this);
   }
 
   async componentDidMount() {
@@ -46,6 +65,27 @@ export default class StatusPagesDashboard extends React.Component {
   setHostNames(hostNames) {
     this.setState({ hostNames });
   }
+
+  handleSelectInputChange = inputValue => {
+    this.setState({ inputValue });
+  };
+
+  handleSelectKeyDown = event => {
+    const { inputValue, value } = this.state;
+    if (!inputValue) return;
+    switch (event.key) {
+      case 'Enter':
+      case 'Tab':
+        console.group('Value Added');
+        console.log(value);
+        console.groupEnd();
+        this.setState({
+          inputValue: '',
+          value: [...value, createOption(inputValue)],
+        });
+        event.preventDefault();
+    }
+  };
 
   async onAccountSelected(accountId, accounts) {
     this.setState({ selectedAccountId: accountId, accounts });
@@ -121,6 +161,10 @@ export default class StatusPagesDashboard extends React.Component {
     this.setState({ deleteTileModalActive: !this.state.deleteTileModalActive });
   }
 
+  handleCreateTileModal() {
+    this.setState({ createTileModalActive: !this.state.createTileModalActive });
+  }
+
   render() {
     const {
       accounts,
@@ -129,6 +173,9 @@ export default class StatusPagesDashboard extends React.Component {
       refreshRate,
       selectedAccountId,
       deleteTileModalActive,
+      createTileModalActive,
+      inputValue,
+      value,
     } = this.state;
 
     return (
@@ -144,6 +191,7 @@ export default class StatusPagesDashboard extends React.Component {
           hostNames={hostNames}
           hostNameCallBack={this.setHostNames}
           pollHostCallBack={this.pollHosts}
+          handleCreateTileModal={this.handleCreateTileModal}
         />
         <Grid
           className="status-container"
@@ -175,6 +223,55 @@ export default class StatusPagesDashboard extends React.Component {
             iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
           >
             Delete
+          </Button>
+        </Modal>
+
+        <Modal
+          hidden={!createTileModalActive}
+          onClose={() => this.setState({ createTileModalActive: false })}
+        >
+          <HeadingText type={HeadingText.TYPE.HEADING_2}>
+            Add new service
+          </HeadingText>
+          <p>
+            Provide the information needed to determine the status of this
+            service. You will be able to edit this information in the future.
+          </p>
+
+          <TextField
+            label="Service name"
+            className="status-page-setting"
+          ></TextField>
+          <TextField
+            label="Hostname"
+            placeholder="https://status.myservice.com/"
+            className="status-page-setting"
+          ></TextField>
+          <Dropdown
+            title="Choose a provider"
+            label="Provider"
+            className="status-page-setting"
+          >
+            <DropdownItem selected>Status Page</DropdownItem>
+            <DropdownItem>Google</DropdownItem>
+          </Dropdown>
+
+          <TextField
+            label="Service logo"
+            className="status-page-setting"
+          ></TextField>
+
+          <Button
+            type={Button.TYPE.Secondary}
+            onClick={() => this.setState({ createTileModalActive: false })}
+          >
+            Cancel
+          </Button>
+          <Button
+            type={Button.TYPE.PRIMARY}
+            onClick={() => this.setState({ createTileModalActive: false })}
+          >
+            Add new serivce
           </Button>
         </Modal>
       </div>
