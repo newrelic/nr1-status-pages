@@ -34,12 +34,10 @@ export default class AccountPicker extends React.Component {
     if (accountsResults.data && accountsResults.data) {
       const accounts = accountsResults.data;
 
-      let accountId = await this.getLastChoseAccountId();
-      if (!accountId) {
-        accountId = accounts[0].id;
+      let account = await this.getLastChoseAccountId();
+      if (!account.id) {
+        account = accounts[0];
       }
-
-      const account = accounts.find(a => a.id === accountId);
 
       if (account) {
         this._accountChanged(account, accounts);

@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Network from '../utilities/network';
+import Network from '../../utilities/network';
+import FormatService from '../../utilities/format-service';
 import dayjs from 'dayjs';
 
-import { navigation, Icon } from 'nr1';
-import FormatService from '../utilities/format-service';
+import { Icon } from 'nr1';
 
-export default class CurrentIncidents extends React.Component {
+export default class ServiceDetails extends React.Component {
   static propTypes = {
     hostname: PropTypes.string.isRequired,
     provider: PropTypes.string.isRequired,
@@ -24,24 +24,18 @@ export default class CurrentIncidents extends React.Component {
       this.props.refreshRate,
       this.props.provider
     );
-    this.seeMore = this.seeMore.bind(this);
-  }
-
-  seeMore() {
-    const nerdletWithState = {
-      id: 'incident-details',
-      urlState: {
-        hostname: this.props.hostname,
-        provider: this.props.provider,
-      },
-    };
-    navigation.openStackedNerdlet(nerdletWithState);
   }
 
   componentDidMount() {
     this.statusPageNetwork.pollCurrentIncidents(
       this.setIncidentData.bind(this)
     );
+  }
+
+  setIncidentData(data) {
+    this.setState({
+      currentIncidents: this.FormatService.uniformIncidentData(data),
+    });
   }
 
   setTimelineSymbol(incidentImpact) {
@@ -83,18 +77,13 @@ export default class CurrentIncidents extends React.Component {
     }
   }
 
-  setIncidentData(data) {
-    this.setState({
-      currentIncidents: this.FormatService.uniformIncidentData(data),
-    });
-  }
-
   render() {
     const { currentIncidents } = this.state;
     if (!currentIncidents) return <div></div>;
     this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
-    const first3Incicdents = currentIncidents.slice(0, 3);
-    const first3TimelineItems = first3Incicdents.map(incident => {
+    console.debug(currentIncidents);
+
+    const items = currentIncidents.map(incident => {
       return (
         <div
           className={`timeline-item impact-${incident.impact}`}
@@ -125,8 +114,6 @@ export default class CurrentIncidents extends React.Component {
         </div>
       );
     });
-
-    // Show first current incident and then add a see more button
-    return <div className="timeline-container">{first3TimelineItems}</div>;
+    return <div className="service-details-modal-container">{items}</div>;
   }
 }

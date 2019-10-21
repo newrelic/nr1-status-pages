@@ -1,18 +1,29 @@
 import React from 'react';
 import { PlatformStateContext, NerdletStateContext } from 'nr1';
+import ServiceDetails from './service-details';
 
-// https://docs.newrelic.com/docs/new-relic-programmable-platform-introduction
-
-export default class ServiceDetails extends React.Component {
+export default class ServiceDetailsWrapper extends React.Component {
   render() {
     return (
       <div className="service-details-modal-container">
         <NerdletStateContext.Consumer>
-          {nerdletUrlState => (
-            <h1 className="service-details-modal-heading">
-              {nerdletUrlState.statusPageIoSummaryData.name} incident history
-            </h1>
-          )}
+          {nerdletUrlState => {
+            const serviceName = nerdletUrlState.statusPageIoSummaryData.name;
+            const { provider, refreshRate, hostname } = nerdletUrlState;
+
+            return (
+              <React.Fragment>
+                <h1 className="service-details-modal-heading">
+                  {serviceName} incident history
+                </h1>
+                <ServiceDetails
+                  refreshRate={refreshRate}
+                  hostname={hostname}
+                  provider={provider}
+                ></ServiceDetails>
+              </React.Fragment>
+            );
+          }}
         </NerdletStateContext.Consumer>
       </div>
     );
