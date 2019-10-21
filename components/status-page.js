@@ -339,7 +339,11 @@ export default class StatusPage extends React.Component {
               placeholder="https://status.myservice.com/"
               className="status-page-setting"
             ></TextField>
-            <Dropdown label="Provider" className="status-page-setting">
+            <Dropdown
+              title="Choose a provider"
+              label="Provider"
+              className="status-page-setting"
+            >
               <DropdownItem selected>Status Page</DropdownItem>
               <DropdownItem>Google</DropdownItem>
             </Dropdown>
@@ -375,7 +379,7 @@ export default class StatusPage extends React.Component {
             </Button>
             <Button
               type={Button.TYPE.DESTRUCTIVE}
-              onClick={() => this.handleDeleteButtonClick(e)}
+              onClick={e => this.handleDeleteButtonClick(e)}
               iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
             >
               Delete
