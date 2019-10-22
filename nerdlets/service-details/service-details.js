@@ -4,7 +4,7 @@ import Network from '../../utilities/network';
 import FormatService from '../../utilities/format-service';
 import dayjs from 'dayjs';
 
-import { Icon } from 'nr1';
+import { Icon, Button } from 'nr1';
 
 export default class ServiceDetails extends React.Component {
   static propTypes = {
@@ -17,6 +17,7 @@ export default class ServiceDetails extends React.Component {
     super(props);
     this.state = {
       currentIncidents: undefined,
+      expandedTimelineItem: null,
     };
     this.FormatService = new FormatService(this.props.provider);
     this.statusPageNetwork = new Network(
@@ -24,6 +25,8 @@ export default class ServiceDetails extends React.Component {
       this.props.refreshRate,
       this.props.provider
     );
+
+    this.handleTimelineItemClick = this.handleTimelineItemClick.bind(this);
   }
 
   componentDidMount() {
@@ -43,6 +46,7 @@ export default class ServiceDetails extends React.Component {
       case 'none':
         return (
           <Icon
+            className="timeline-item-symbol-icon"
             color="#464e4e"
             type={Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_OK}
           />
@@ -50,6 +54,7 @@ export default class ServiceDetails extends React.Component {
       case 'minor':
         return (
           <Icon
+            className="timeline-item-symbol-icon"
             color="#9C5400"
             type={
               Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_WARNING
@@ -59,6 +64,7 @@ export default class ServiceDetails extends React.Component {
       case 'major':
         return (
           <Icon
+            className="timeline-item-symbol-icon"
             color="#BF0016"
             type={
               Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_ERROR
@@ -68,6 +74,7 @@ export default class ServiceDetails extends React.Component {
       case 'critical':
         return (
           <Icon
+            className="timeline-item-symbol-icon"
             color="#ffffff"
             type={
               Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_DISABLED
@@ -77,16 +84,49 @@ export default class ServiceDetails extends React.Component {
     }
   }
 
+  buildTimelineItemDetails(incident) {
+    let incident_updates = incident.incident_updates.map(incident_update => {
+      return (
+        <li key={incident_update.id} className="timeline-item-contents-item">
+          <span className="key">
+            {dayjs(incident_update.display_at).format('h:mm a')}:
+          </span>
+          <span className="value">{incident_update.body}</span>
+        </li>
+      );
+    });
+
+    return incident_updates;
+  }
+
+  handleTimelineItemClick(e) {
+    let timelineItemId = e.currentTarget.getAttribute('data-timeline-item-id');
+    e.preventDefault();
+    if (timelineItemId == this.state.expandedTimelineItem) {
+      this.setState({
+        expandedTimelineItem: null,
+      });
+    } else {
+      this.setState({
+        expandedTimelineItem: timelineItemId,
+      });
+    }
+  }
+
   render() {
-    const { currentIncidents } = this.state;
+    const { currentIncidents, expandedTimelineItem } = this.state;
     if (!currentIncidents) return <div></div>;
     this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
     console.debug(currentIncidents);
 
-    const items = currentIncidents.map(incident => {
+    const items = currentIncidents.map((incident, i) => {
       return (
         <div
-          className={`timeline-item impact-${incident.impact}`}
+          data-timeline-item-id={i}
+          onClick={this.handleTimelineItemClick}
+          className={`timeline-item impact-${incident.impact} ${
+            expandedTimelineItem == i ? 'timeline-item-expanded' : ''
+          }`}
           key={incident.created_at}
         >
           <div className="timeline-item-timestamp">
@@ -109,6 +149,19 @@ export default class ServiceDetails extends React.Component {
               <div className="timeline-item-title">
                 {incident ? incident.name : 'None'}
               </div>
+              <Button
+                className="timeline-item-dropdown-arrow"
+                type={Button.TYPE.PLAIN_NEUTRAL}
+                iconType={
+                  Button.ICON_TYPE
+                    .INTERFACE__CHEVRON__CHEVRON_BOTTOM__V_ALTERNATE
+                }
+              ></Button>
+            </div>
+            <div className="timeline-item-contents-container">
+              <ul className="timeline-item-contents">
+                {this.buildTimelineItemDetails(incident)}
+              </ul>
             </div>
           </div>
         </div>

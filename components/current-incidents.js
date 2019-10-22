@@ -49,6 +49,7 @@ export default class CurrentIncidents extends React.Component {
       case 'none':
         return (
           <Icon
+            className="timeline-item-symbol-icon"
             color="#464e4e"
             type={Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_OK}
           />
@@ -56,6 +57,7 @@ export default class CurrentIncidents extends React.Component {
       case 'minor':
         return (
           <Icon
+            className="timeline-item-symbol-icon"
             color="#9C5400"
             type={
               Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_WARNING
@@ -65,6 +67,7 @@ export default class CurrentIncidents extends React.Component {
       case 'major':
         return (
           <Icon
+            className="timeline-item-symbol-icon"
             color="#BF0016"
             type={
               Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_ERROR
@@ -74,6 +77,7 @@ export default class CurrentIncidents extends React.Component {
       case 'critical':
         return (
           <Icon
+            className="timeline-item-symbol-icon"
             color="#ffffff"
             type={
               Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_DISABLED
@@ -127,6 +131,10 @@ export default class CurrentIncidents extends React.Component {
     });
 
     // Show first current incident and then add a see more button
-    return <div className="timeline-container">{first3TimelineItems}</div>;
+    return (
+      <div className="timeline-container mini-timeline">
+        {first3TimelineItems}
+      </div>
+    );
   }
 }
