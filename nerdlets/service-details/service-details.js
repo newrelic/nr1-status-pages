@@ -30,9 +30,19 @@ export default class ServiceDetails extends React.Component {
   }
 
   componentDidMount() {
+    const { timelineItemIndex } = this.props;
+    const { expandedTimelineItem } = this.state;
+
     this.statusPageNetwork.pollCurrentIncidents(
       this.setIncidentData.bind(this)
     );
+
+    if (
+      timelineItemIndex !== undefined &&
+      this.state.expandedTimelineItem === null
+    ) {
+      this.setState({ expandedTimelineItem: timelineItemIndex });
+    }
   }
 
   setIncidentData(data) {
@@ -115,9 +125,11 @@ export default class ServiceDetails extends React.Component {
 
   render() {
     const { currentIncidents, expandedTimelineItem } = this.state;
+    const { timelineItemIndex } = this.props;
     if (!currentIncidents) return <div></div>;
     this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
     console.debug(currentIncidents);
+    debugger;
 
     const items = currentIncidents.map((incident, i) => {
       return (

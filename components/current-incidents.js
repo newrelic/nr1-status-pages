@@ -94,15 +94,20 @@ export default class CurrentIncidents extends React.Component {
   }
 
   render() {
+    const { handleTileClick } = this.props;
     const { currentIncidents } = this.state;
     if (!currentIncidents) return <div></div>;
     this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
     const first3Incicdents = currentIncidents.slice(0, 3);
-    const first3TimelineItems = first3Incicdents.map(incident => {
+    const first3TimelineItems = first3Incicdents.map((incident, i) => {
       return (
         <div
           className={`timeline-item impact-${incident.impact}`}
           key={incident.created_at}
+          onClick={e => {
+            handleTileClick(i);
+            e.stopPropagation();
+          }}
         >
           <div className="timeline-item-timestamp">
             <span className="timeline-timestamp-date">

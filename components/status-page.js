@@ -210,16 +210,30 @@ export default class StatusPage extends React.Component {
     }
   }
 
-  handleTileClick(statusPageIoSummaryData, refreshRate, hostname, provider) {
-    navigation.openStackedNerdlet({
-      id: 'service-details',
-      urlState: {
-        statusPageIoSummaryData: statusPageIoSummaryData,
-        refreshRate: refreshRate,
-        hostname: hostname,
-        provider: provider,
-      },
-    });
+  handleTileClick(statusPageIoSummaryData, refreshRate, hostname, provider, i) {
+    if (i !== undefined) {
+      navigation.openStackedNerdlet({
+        id: 'service-details',
+        urlState: {
+          statusPageIoSummaryData: statusPageIoSummaryData,
+          refreshRate: refreshRate,
+          hostname: hostname,
+          provider: provider,
+          timelineItemIndex: i,
+        },
+      });
+      event.stopPropagation();
+    } else {
+      navigation.openStackedNerdlet({
+        id: 'service-details',
+        urlState: {
+          statusPageIoSummaryData: statusPageIoSummaryData,
+          refreshRate: refreshRate,
+          hostname: hostname,
+          provider: provider,
+        },
+      });
+    }
   }
 
   handleSettingsPopover(e) {
@@ -323,6 +337,15 @@ export default class StatusPage extends React.Component {
             refreshRate={refreshRate}
             hostname={hostname}
             provider={provider}
+            handleTileClick={i => {
+              this.handleTileClick(
+                statusPageIoSummaryData,
+                refreshRate,
+                hostname,
+                provider,
+                i
+              );
+            }}
           />
         </div>
         <div
