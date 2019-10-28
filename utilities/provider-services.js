@@ -32,5 +32,8 @@ const providers = {
 };
 
 export const getProvider = providerKey => {
-  return providers[providerKey];
+  providerKey = providerKey === 'Status Page' ? 'statusPageIo' : providerKey;
+  const provider = providers[providerKey];
+  // console.debug(provider);
+  return provider;
 };
