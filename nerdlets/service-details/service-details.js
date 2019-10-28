@@ -129,7 +129,6 @@ export default class ServiceDetails extends React.Component {
     if (!currentIncidents) return <div></div>;
     this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
     console.debug(currentIncidents);
-    debugger;
 
     const items = currentIncidents.map((incident, i) => {
       return (
