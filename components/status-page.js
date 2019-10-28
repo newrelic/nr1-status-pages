@@ -253,9 +253,63 @@ export default class StatusPage extends React.Component {
     this.handleSettingsPopover();
   }
 
+  renderSettings() {
+    return (
+      <div
+        className={`service-settings-button-container ${
+          this.state.settingsPopoverActive
+            ? 'settings-popover-active'
+            : 'settings-popover-inactive'
+        }`}
+      >
+        <Button
+          sizeType={Button.SIZE_TYPE.SMALL}
+          className="service-settings-button"
+          type={Button.TYPE.NORMAL}
+          iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__MORE}
+          onClick={this.handleSettingsPopover}
+        />
+        <ul className="service-settings-dropdown">
+          <li className="service-settings-dropdown-item">
+            <Icon type={Icon.TYPE.INTERFACE__INFO__INFO} />
+            View details
+          </li>
+          <li
+            className="service-settings-dropdown-item"
+            onClick={this.handleEditButtonClick}
+          >
+            <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__EDIT} />
+            Edit
+          </li>
+          <li
+            className="service-settings-dropdown-item destructive"
+            onClick={() => this.handleDeleteButtonClick()}
+          >
+            <Icon
+              type={Icon.TYPE.INTERFACE__OPERATIONS__TRASH}
+              color="#BF0016"
+            />
+            Delete
+          </li>
+        </ul>
+      </div>
+    );
+  }
+
+  renderLoadingState() {
+    return (
+      <React.Fragment>
+        {this.renderSettings()}
+        <Spinner fillContainer />
+      </React.Fragment>
+    );
+  }
+
   render() {
     const { statusPageIoSummaryData, inputValue, value } = this.state;
-    if (!statusPageIoSummaryData) return <Spinner fillContainer />;
+    if (!statusPageIoSummaryData) {
+      return this.renderLoadingState();
+    }
 
     const {
       provider,
@@ -286,44 +340,7 @@ export default class StatusPage extends React.Component {
           }
         >
           <div className="logo-container">
-            <div
-              className={`service-settings-button-container ${
-                this.state.settingsPopoverActive
-                  ? 'settings-popover-active'
-                  : 'settings-popover-inactive'
-              }`}
-            >
-              <Button
-                sizeType={Button.SIZE_TYPE.SMALL}
-                className="service-settings-button"
-                type={Button.TYPE.NORMAL}
-                iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__MORE}
-                onClick={this.handleSettingsPopover}
-              />
-              <ul className="service-settings-dropdown">
-                <li className="service-settings-dropdown-item">
-                  <Icon type={Icon.TYPE.INTERFACE__INFO__INFO} />
-                  View details
-                </li>
-                <li
-                  className="service-settings-dropdown-item"
-                  onClick={this.handleEditButtonClick}
-                >
-                  <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__EDIT} />
-                  Edit
-                </li>
-                <li
-                  className="service-settings-dropdown-item destructive"
-                  onClick={() => this.handleDeleteButtonClick()}
-                >
-                  <Icon
-                    type={Icon.TYPE.INTERFACE__OPERATIONS__TRASH}
-                    color="#BF0016"
-                  />
-                  Delete
-                </li>
-              </ul>
-            </div>
+            {this.renderSettings()}
 
             {this.autoSetLogo(statusPageIoSummaryData.name)}
           </div>
