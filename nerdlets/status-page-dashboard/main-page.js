@@ -144,7 +144,15 @@ export default class StatusPagesDashboard extends React.Component {
   };
 
   async onAccountSelected(accountId, accounts) {
-    this.setState({ selectedAccountId: accountId, accounts });
+    const keyObject = Object.assign({}, this.state.keyObject, {
+      key: accountId,
+    });
+
+    this.setState({
+      selectedAccountId: accountId,
+      accounts,
+      keyObject,
+    });
 
     const hostNames = await getHostNamesFromNerdStorage({
       key: accountId,
