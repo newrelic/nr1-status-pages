@@ -247,13 +247,13 @@ export default class StatusPage extends React.Component {
     this.handleSettingsPopover();
   }
 
-  handleDeleteButtonClick(e) {
-    this.props.handleDeleteTileModal()();
+  handleDeleteButtonClick(hostname, e) {
+    this.props.handleDeleteTileModal()(hostname);
     e.stopPropagation();
     this.handleSettingsPopover();
   }
 
-  renderSettings() {
+  renderSettings(hostname) {
     return (
       <div
         className={`service-settings-button-container ${
@@ -283,7 +283,7 @@ export default class StatusPage extends React.Component {
           </li>
           <li
             className="service-settings-dropdown-item destructive"
-            onClick={() => this.handleDeleteButtonClick()}
+            onClick={() => this.handleDeleteButtonClick(hostname, event)}
           >
             <Icon
               type={Icon.TYPE.INTERFACE__OPERATIONS__TRASH}
@@ -340,7 +340,7 @@ export default class StatusPage extends React.Component {
           }
         >
           <div className="logo-container">
-            {this.renderSettings()}
+            {this.renderSettings(hostname)}
 
             {this.autoSetLogo(statusPageIoSummaryData.name)}
           </div>

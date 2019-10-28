@@ -85,7 +85,6 @@ export default class StatusPagesDashboard extends React.Component {
   }
 
   handleAddNewService() {
-    debugger;
     const hostNameObject = {
       id: uuid(),
       serviceName: this.state.newServiceName,
@@ -98,7 +97,6 @@ export default class StatusPagesDashboard extends React.Component {
   }
 
   async addHostName(hostNameObject) {
-    debugger;
     const { hostNames } = this.state;
     hostNames.push(hostNameObject);
     this.setState({ hostNames }, async () => {
@@ -108,7 +106,8 @@ export default class StatusPagesDashboard extends React.Component {
     this.setState({ createTileModalActive: false });
   }
 
-  async deleteHostName(hostNameText) {
+  async deleteHostName() {
+    const hostNameText = this.state.tileToBeDeleted;
     const { hostNames } = this.state;
     hostNames.splice(
       hostNames.findIndex(val => val.hostName === hostNameText),
@@ -221,8 +220,11 @@ export default class StatusPagesDashboard extends React.Component {
     ));
   }
 
-  handleDeleteTileModal() {
-    this.setState({ deleteTileModalActive: !this.state.deleteTileModalActive });
+  handleDeleteTileModal(hostname) {
+    this.setState({
+      deleteTileModalActive: !this.state.deleteTileModalActive,
+      tileToBeDeleted: hostname,
+    });
   }
 
   handleCreateTileModal() {
@@ -283,7 +285,7 @@ export default class StatusPagesDashboard extends React.Component {
           </Button>
           <Button
             type={Button.TYPE.DESTRUCTIVE}
-            onClick={this.handleTileSettingsAnimation}
+            onClick={this.deleteHostName}
             iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
           >
             Delete
