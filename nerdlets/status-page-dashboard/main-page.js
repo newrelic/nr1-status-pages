@@ -13,9 +13,12 @@ import {
   Dropdown,
   DropdownItem,
 } from 'nr1';
-import CreatableSelect from 'react-select/creatable';
+const uuid = require('uuid/v4');
 import Toolbar from '../../components/toolbar';
-import { getHostNamesFromNerdStorage } from '../../utilities/nerdlet-storage';
+import {
+  getHostNamesFromNerdStorage,
+  saveHostNamesToNerdStorage,
+} from '../../utilities/nerdlet-storage';
 
 const createOption = label => ({
   label,
@@ -38,12 +41,26 @@ export default class StatusPagesDashboard extends React.Component {
       createTileModalActive: false,
       inputValue: '',
       value: [],
+      newServiceName: '',
+      newHostName: '',
+      newHostProvider: '',
+      newHostLogo: '',
+      keyObject: {
+        key: props.entityGuid,
+        type: props.entityGuid ? 'entity' : 'account',
+      },
     };
+
+    this.newHostNameInput = React.createRef();
+
     this.onAccountSelected = this.onAccountSelected.bind(this);
     this.onRefreshRateSelected = this.onRefreshRateSelected.bind(this);
     this.setHostNames = this.setHostNames.bind(this);
     this.handleDeleteTileModal = this.handleDeleteTileModal.bind(this);
     this.handleCreateTileModal = this.handleCreateTileModal.bind(this);
+    this.addHostName = this.addHostName.bind(this);
+    this.handleAddNewService = this.handleAddNewService.bind(this);
+    this.deleteHostName = this.deleteHostName.bind(this);
   }
 
   async componentDidMount() {
@@ -60,6 +77,45 @@ export default class StatusPagesDashboard extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this._interval);
+  }
+
+  async save() {
+    const { keyObject, hostNames } = this.state;
+    await saveHostNamesToNerdStorage(keyObject, hostNames);
+  }
+
+  handleAddNewService() {
+    debugger;
+    const hostNameObject = {
+      id: uuid(),
+      serviceName: this.state.newServiceName,
+      hostName: this.state.newHostName,
+      provider: this.state.newHostProvider,
+      hostLogo: this.state.newHostLogo,
+    };
+
+    this.addHostName(hostNameObject);
+  }
+
+  async addHostName(hostNameObject) {
+    debugger;
+    const { hostNames } = this.state;
+    hostNames.push(hostNameObject);
+    this.setState({ hostNames }, async () => {
+      await this.save();
+    });
+
+    this.setState({ createTileModalActive: false });
+  }
+
+  async deleteHostName(hostNameText) {
+    const { hostNames } = this.state;
+    hostNames.splice(
+      hostNames.findIndex(val => val.hostName === hostNameText),
+      1
+    );
+    this.setState({ hostNames: hostNames });
+    await this.save();
   }
 
   setHostNames(hostNames) {
@@ -241,24 +297,65 @@ export default class StatusPagesDashboard extends React.Component {
           <TextField
             label="Service name"
             className="status-page-setting"
+            onChange={() =>
+              this.setState(previousState => ({
+                ...previousState,
+                newServiceName: event.target.value,
+              }))
+            }
           ></TextField>
           <TextField
             label="Hostname"
             placeholder="https://status.myservice.com/"
             className="status-page-setting"
+            onChange={() =>
+              this.setState(previousState => ({
+                ...previousState,
+                newHostName: event.target.value,
+              }))
+            }
           ></TextField>
           <Dropdown
-            title="Choose a provider"
+            title={
+              this.state.newHostProvider === ''
+                ? 'Choose a provider'
+                : this.state.newHostProvider
+            }
             label="Provider"
             className="status-page-setting"
           >
-            <DropdownItem selected>Status Page</DropdownItem>
-            <DropdownItem>Google</DropdownItem>
+            <DropdownItem
+              selected
+              onClick={() =>
+                this.setState(previousState => ({
+                  ...previousState,
+                  newHostProvider: event.target.innerHTML,
+                }))
+              }
+            >
+              Status Page
+            </DropdownItem>
+            <DropdownItem
+              onClick={() =>
+                this.setState(previousState => ({
+                  ...previousState,
+                  newHostProvider: event.target.innerHTML,
+                }))
+              }
+            >
+              Google
+            </DropdownItem>
           </Dropdown>
 
           <TextField
             label="Service logo"
             className="status-page-setting"
+            onChange={() =>
+              this.setState(previousState => ({
+                ...previousState,
+                newHostLogo: event.target.value,
+              }))
+            }
           ></TextField>
 
           <Button
@@ -267,10 +364,7 @@ export default class StatusPagesDashboard extends React.Component {
           >
             Cancel
           </Button>
-          <Button
-            type={Button.TYPE.PRIMARY}
-            onClick={() => this.setState({ createTileModalActive: false })}
-          >
+          <Button type={Button.TYPE.PRIMARY} onClick={this.handleAddNewService}>
             Add new serivce
           </Button>
         </Modal>
