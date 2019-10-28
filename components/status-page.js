@@ -372,7 +372,7 @@ export default class StatusPage extends React.Component {
             </Dropdown>
             <div className="input-group status-page-setting">
               <label className="TextField-label">
-                External dependancy tags
+                External dependency tags
               </label>
               <CreatableSelect
                 components={{ DropdownIndicator: null }}
