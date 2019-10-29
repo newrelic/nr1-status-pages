@@ -104,20 +104,6 @@ export default class Toolbar extends React.Component {
             horizontalType={Stack.HORIZONTAL_TYPE.RIGHT}
           >
             <Button
-              type={Button.TYPE.NORMAL}
-              sizeType={Button.SIZE_TYPE.MEDIUM}
-              onClick={this.onEditStatusPageClick}
-            >
-              Edit StatusPages
-            </Button>
-            <Button
-              type={Button.TYPE.SECONDARY}
-              iconType={Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__CLOUD}
-              sizeType={Button.SIZE_TYPE.MEDIUM}
-            >
-              Sync all accounts
-            </Button>
-            <Button
               type={Button.TYPE.PRIMARY}
               iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
               sizeType={Button.SIZE_TYPE.MEDIUM}
