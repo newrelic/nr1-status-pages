@@ -72,6 +72,7 @@ export default class Toolbar extends React.Component {
               label="Search"
               placeholder="Search for a service"
               className="toolbar-search"
+              onChange={this.props.setSearchQuery(event)}
             ></TextField>
           </div>
 

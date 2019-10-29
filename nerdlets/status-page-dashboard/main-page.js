@@ -45,6 +45,7 @@ export default class StatusPagesDashboard extends React.Component {
       newHostName: '',
       newHostProvider: '',
       newHostLogo: '',
+      searchQuery: '',
       keyObject: {
         key: props.entityGuid,
         type: props.entityGuid ? 'entity' : 'account',
@@ -61,6 +62,7 @@ export default class StatusPagesDashboard extends React.Component {
     this.handleAddNewService = this.handleAddNewService.bind(this);
     this.deleteHostName = this.deleteHostName.bind(this);
     this.editHostName = this.editHostName.bind(this);
+    this.setSearchQuery = this.setSearchQuery.bind(this);
   }
 
   async componentDidMount() {
@@ -202,9 +204,15 @@ export default class StatusPagesDashboard extends React.Component {
     }
   }
 
+  setSearchQuery(e) {
+    this.setState({ searchQuery: event.target.value });
+  }
+
   getGridItems() {
+    let { searchQuery, hostNames } = this.state;
+
     if (
-      !this.state.hostNames ||
+      !hostNames ||
       (!this.state.selectedAccountId && !this.state.entityGuid)
     ) {
       return (
@@ -213,7 +221,7 @@ export default class StatusPagesDashboard extends React.Component {
         </GridItem>
       );
     }
-    if (this.state.hostNames.length === 0) {
+    if (hostNames.length === 0) {
       return (
         <GridItem className="no-status-pages" columnStart={1} columnEnd={12}>
           <HeadingText
@@ -225,7 +233,23 @@ export default class StatusPagesDashboard extends React.Component {
         </GridItem>
       );
     }
-    return this.state.hostNames.map(hostname => (
+
+    let currentHostnames = hostNames;
+
+    if (searchQuery !== '' && searchQuery !== undefined) {
+      currentHostnames = hostNames.filter(hostname => {
+        if (!hostname.serviceName) {
+          return hostname.hostName
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase());
+        }
+        return hostname.serviceName
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
+      });
+    }
+
+    return currentHostnames.map(hostname => (
       <GridItem
         className="status-page-grid-item"
         key={hostname.id}
@@ -236,6 +260,7 @@ export default class StatusPagesDashboard extends React.Component {
           hostname={hostname}
           handleDeleteTileModal={() => this.handleDeleteTileModal}
           editHostName={() => this.editHostName}
+          setSearchQuery={() => this.setSearchQuery}
         />
       </GridItem>
     ));
@@ -277,6 +302,7 @@ export default class StatusPagesDashboard extends React.Component {
           hostNameCallBack={this.setHostNames}
           pollHostCallBack={this.pollHosts}
           handleCreateTileModal={this.handleCreateTileModal}
+          setSearchQuery={() => this.setSearchQuery}
         />
         <Grid
           className="status-container"
