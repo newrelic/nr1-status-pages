@@ -2,7 +2,7 @@
   "private": true,
   "name": "nr1-status-pages",
   "description": "Nerdpack nr1-status-pages",
-  "version": "0.1.6",
+  "version": "0.9.0",
   "bugs": {
     "email": "opensource@newrelic.com"
   },
