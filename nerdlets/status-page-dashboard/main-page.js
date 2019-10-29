@@ -239,7 +239,7 @@ export default class StatusPagesDashboard extends React.Component {
   handleDeleteTileModal(hostname) {
     this.setState({
       deleteTileModalActive: !this.state.deleteTileModalActive,
-      tileToBeDeleted: hostname,
+      tileToBeDeleted: hostname.hostName,
     });
   }
 
@@ -395,7 +395,6 @@ export default class StatusPagesDashboard extends React.Component {
           </Button>
         </Modal>
       </div>
-      // </AccountsContext.Provider>
     );
   }
 }
