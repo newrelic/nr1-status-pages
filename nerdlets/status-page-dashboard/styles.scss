@@ -226,6 +226,11 @@ button[class*='Dropdown-trigger'],
   text-align: center;
 }
 
+.service-logo {
+  max-width: 270px;
+  max-height: 50px;
+}
+
 .service-name {
   display: flex;
   align-items: center;

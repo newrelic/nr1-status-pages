@@ -127,6 +127,14 @@ export default class StatusPage extends React.Component {
           alt="GitHub"
         />
       );
+    } else if (hostLogo !== undefined && hostLogo !== '') {
+      return (
+        <img
+          src={hostLogo}
+          className="service-logo"
+          alt={`${serviceName} logo`}
+        />
+      );
     } else {
       return <h2 className="service-name">{serviceName}</h2>;
     }
