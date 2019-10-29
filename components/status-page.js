@@ -380,22 +380,6 @@ export default class StatusPage extends React.Component {
               Google
             </DropdownItem>
           </Dropdown>
-          <div className="input-group status-page-setting">
-            <label className="TextField-label">External dependency tags</label>
-            <CreatableSelect
-              components={{ DropdownIndicator: null }}
-              inputValue={inputValue}
-              isClearable
-              isMulti
-              menuIsOpen={false}
-              onChange={this.handleSelectChange}
-              onInputChange={this.handleSelectInputChange}
-              onKeyDown={this.handleSelectKeyDown}
-              placeholder="Enter a tag and press enter..."
-              value={value}
-              classNamePrefix="react-select"
-            />
-          </div>
           <TextField
             label="Service logo"
             className="status-page-setting"
