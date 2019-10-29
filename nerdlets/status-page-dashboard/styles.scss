@@ -214,7 +214,7 @@ button[class*='Dropdown-trigger'],
   margin: 16px;
   grid-gap: 16px;
   position: relative;
-  grid-template-rows: 330px 330px;
+  grid-auto-rows: 330px;
   align-items: stretch;
 }
 

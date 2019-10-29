@@ -95,6 +95,13 @@ export default class StatusPagesDashboard extends React.Component {
     };
 
     this.addHostName(hostNameObject);
+
+    this.setState({
+      newServiceName: '',
+      newHostName: '',
+      newHostProvider: '',
+      newHostLogo: '',
+    });
   }
 
   async addHostName(hostNameObject) {
@@ -332,6 +339,7 @@ export default class StatusPagesDashboard extends React.Component {
                 newServiceName: event.target.value,
               }))
             }
+            value={this.state.newServiceName}
           ></TextField>
           <TextField
             label="Hostname"
@@ -343,6 +351,7 @@ export default class StatusPagesDashboard extends React.Component {
                 newHostName: event.target.value,
               }))
             }
+            value={this.state.newHostName}
           ></TextField>
           <Dropdown
             title={
@@ -385,6 +394,7 @@ export default class StatusPagesDashboard extends React.Component {
                 newHostLogo: event.target.value,
               }))
             }
+            value={this.state.newHostLogo}
           ></TextField>
 
           <Button
