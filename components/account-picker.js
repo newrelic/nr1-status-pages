@@ -34,6 +34,11 @@ export default class AccountPicker extends React.Component {
       const accounts = accountsResults.data;
 
       let account = await this.getLastChoseAccountId();
+
+      if (account === null) {
+        account = accountsResults.data;
+      }
+
       if (!account.id) {
         account = accounts[0];
       }
