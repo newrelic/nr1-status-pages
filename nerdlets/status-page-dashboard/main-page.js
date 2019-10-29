@@ -386,7 +386,7 @@ export default class StatusPagesDashboard extends React.Component {
           </Dropdown>
 
           <TextField
-            label="Service logo"
+            label="Service logo (url)"
             className="status-page-setting"
             onChange={() =>
               this.setState(previousState => ({
@@ -395,6 +395,7 @@ export default class StatusPagesDashboard extends React.Component {
               }))
             }
             value={this.state.newHostLogo}
+            placeholder="https://myservice.com/logo.png"
           ></TextField>
 
           <Button

@@ -390,6 +390,7 @@ export default class StatusPage extends React.Component {
               }))
             }
             defaultValue={hostname.hostLogo}
+            placeholder="https://website.com/logo.png"
           ></TextField>
         </div>
         <div className="status-page-settings-cta-container">
