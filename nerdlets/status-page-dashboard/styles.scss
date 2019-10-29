@@ -888,6 +888,7 @@ button[class*='Dropdown-trigger'],
   border-radius: 4px;
   list-style-type: none;
   text-align: left;
+  z-index: 10;
 
   .settings-popover-active & {
     display: block;
@@ -940,4 +941,13 @@ button[class*='Dropdown-trigger'],
 
 [class*='InnerModal'] {
   background-color: #fff;
+}
+
+[class*='Spinner--fillContainer'] {
+  width: 80%;
+  margin: 0 auto;
+
+  .settings-view-active & {
+    display: none;
+  }
 }

@@ -269,7 +269,8 @@ export default class StatusPage extends React.Component {
     this.handleTileSettingsAnimation();
   }
 
-  renderSettings() {
+  renderSettingsButton() {
+    const hostname = this.props.hostname;
     return (
       <div
         className={`service-settings-button-container ${
@@ -312,12 +313,125 @@ export default class StatusPage extends React.Component {
     );
   }
 
-  renderLoadingState() {
+  renderSettings() {
+    const hostname = this.props.hostname;
+    const { statusPageIoSummaryData, inputValue, value } = this.state;
     return (
-      <React.Fragment>
-        {this.renderSettings()}
+      <div
+        className="status-page-settings-container"
+        ref={this.serviceTileSettingsContent}
+      >
+        <div className="status-page-settings-content">
+          <TextField
+            label="Service name"
+            className="status-page-setting"
+            onChange={() =>
+              this.setState(previousState => ({
+                ...previousState,
+                editedServiceName: event.target.value,
+              }))
+            }
+            defaultValue={hostname.serviceName}
+          ></TextField>
+          <TextField
+            label="Hostname"
+            placeholder="https://status.myservice.com/"
+            className="status-page-setting"
+            onChange={() =>
+              this.setState(previousState => ({
+                ...previousState,
+                editedHostName: event.target.value,
+              }))
+            }
+            defaultValue={hostname.hostName}
+          ></TextField>
+          <Dropdown
+            title="Choose a provider"
+            label="Provider"
+            className="status-page-setting"
+          >
+            <DropdownItem
+              selected
+              onClick={() =>
+                this.setState(previousState => ({
+                  ...previousState,
+                  editedHostProvider: event.target.innerHTML,
+                }))
+              }
+            >
+              Status Page
+            </DropdownItem>
+            <DropdownItem
+              onClick={() =>
+                this.setState(previousState => ({
+                  ...previousState,
+                  editedHostProvider: event.target.innerHTML,
+                }))
+              }
+            >
+              Google
+            </DropdownItem>
+          </Dropdown>
+          <div className="input-group status-page-setting">
+            <label className="TextField-label">External dependency tags</label>
+            <CreatableSelect
+              components={{ DropdownIndicator: null }}
+              inputValue={inputValue}
+              isClearable
+              isMulti
+              menuIsOpen={false}
+              onChange={this.handleSelectChange}
+              onInputChange={this.handleSelectInputChange}
+              onKeyDown={this.handleSelectKeyDown}
+              placeholder="Enter a tag and press enter..."
+              value={value}
+              classNamePrefix="react-select"
+            />
+          </div>
+          <TextField
+            label="Service logo"
+            className="status-page-setting"
+            onChange={() =>
+              this.setState(previousState => ({
+                ...previousState,
+                editedHostLogo: event.target.value,
+              }))
+            }
+            defaultValue={hostname.hostLogo}
+          ></TextField>
+        </div>
+        <div className="status-page-settings-cta-container">
+          <Button
+            type={Button.TYPE.DESTRUCTIVE}
+            onClick={e => this.handleDeleteButtonClick(e)}
+            iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
+          >
+            Delete
+          </Button>
+          <Button
+            type={Button.TYPE.PRIMARY}
+            onClick={e => this.handleSaveButtonClick(e, hostname.hostName)}
+          >
+            Save
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  renderLoadingState() {
+    const { settingsViewActive } = this.state;
+    return (
+      <div
+        className={`status-page-container ${
+          settingsViewActive ? 'settings-view-active' : 'settings-view-inactive'
+        }`}
+      >
+        {this.renderSettingsButton()}
         <Spinner fillContainer />
-      </React.Fragment>
+        <div ref={this.serviceTilePrimaryContent}></div>
+        {this.renderSettings()}
+      </div>
     );
   }
 
@@ -360,7 +474,7 @@ export default class StatusPage extends React.Component {
           }
         >
           <div className="logo-container">
-            {this.renderSettings(hostname)}
+            {this.renderSettingsButton(hostname)}
 
             {this.autoSetLogo(hostname)}
           </div>
@@ -431,107 +545,7 @@ export default class StatusPage extends React.Component {
             }}
           />
         </div>
-        <div
-          className="status-page-settings-container"
-          ref={this.serviceTileSettingsContent}
-        >
-          <div className="status-page-settings-content">
-            <TextField
-              label="Service name"
-              className="status-page-setting"
-              onChange={() =>
-                this.setState(previousState => ({
-                  ...previousState,
-                  editedServiceName: event.target.value,
-                }))
-              }
-              defaultValue={hostname.serviceName}
-            ></TextField>
-            <TextField
-              label="Hostname"
-              placeholder="https://status.myservice.com/"
-              className="status-page-setting"
-              onChange={() =>
-                this.setState(previousState => ({
-                  ...previousState,
-                  editedHostName: event.target.value,
-                }))
-              }
-              defaultValue={hostname.hostName}
-            ></TextField>
-            <Dropdown
-              title="Choose a provider"
-              label="Provider"
-              className="status-page-setting"
-            >
-              <DropdownItem
-                selected
-                onClick={() =>
-                  this.setState(previousState => ({
-                    ...previousState,
-                    editedHostProvider: event.target.innerHTML,
-                  }))
-                }
-              >
-                Status Page
-              </DropdownItem>
-              <DropdownItem
-                onClick={() =>
-                  this.setState(previousState => ({
-                    ...previousState,
-                    editedHostProvider: event.target.innerHTML,
-                  }))
-                }
-              >
-                Google
-              </DropdownItem>
-            </Dropdown>
-            <div className="input-group status-page-setting">
-              <label className="TextField-label">
-                External dependency tags
-              </label>
-              <CreatableSelect
-                components={{ DropdownIndicator: null }}
-                inputValue={inputValue}
-                isClearable
-                isMulti
-                menuIsOpen={false}
-                onChange={this.handleSelectChange}
-                onInputChange={this.handleSelectInputChange}
-                onKeyDown={this.handleSelectKeyDown}
-                placeholder="Enter a tag and press enter..."
-                value={value}
-                classNamePrefix="react-select"
-              />
-            </div>
-            <TextField
-              label="Service logo"
-              className="status-page-setting"
-              onChange={() =>
-                this.setState(previousState => ({
-                  ...previousState,
-                  editedHostLogo: event.target.value,
-                }))
-              }
-              defaultValue={hostname.hostLogo}
-            ></TextField>
-          </div>
-          <div className="status-page-settings-cta-container">
-            <Button
-              type={Button.TYPE.DESTRUCTIVE}
-              onClick={e => this.handleDeleteButtonClick(e)}
-              iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
-            >
-              Delete
-            </Button>
-            <Button
-              type={Button.TYPE.PRIMARY}
-              onClick={e => this.handleSaveButtonClick(e, hostname.hostName)}
-            >
-              Save
-            </Button>
-          </div>
-        </div>
+        {this.renderSettings()}
       </div>
     );
   }
