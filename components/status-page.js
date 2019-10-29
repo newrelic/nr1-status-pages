@@ -323,7 +323,6 @@ export default class StatusPage extends React.Component {
 
   renderSettings() {
     const hostname = this.props.hostname;
-    const { statusPageIoSummaryData, inputValue, value } = this.state;
     return (
       <div
         className="status-page-settings-container"
