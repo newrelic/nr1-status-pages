@@ -222,28 +222,30 @@ export default class StatusPage extends React.Component {
   }
 
   handleTileClick(statusPageIoSummaryData, refreshRate, hostname, provider, i) {
-    if (i !== undefined) {
-      navigation.openStackedNerdlet({
-        id: 'service-details',
-        urlState: {
-          statusPageIoSummaryData: statusPageIoSummaryData,
-          refreshRate: refreshRate,
-          hostname: hostname,
-          provider: provider,
-          timelineItemIndex: i,
-        },
-      });
-      event.stopPropagation();
-    } else {
-      navigation.openStackedNerdlet({
-        id: 'service-details',
-        urlState: {
-          statusPageIoSummaryData: statusPageIoSummaryData,
-          refreshRate: refreshRate,
-          hostname: hostname,
-          provider: provider,
-        },
-      });
+    if (!event.target.closest('.destructive')) {
+      if (i !== undefined) {
+        navigation.openStackedNerdlet({
+          id: 'service-details',
+          urlState: {
+            statusPageIoSummaryData: statusPageIoSummaryData,
+            refreshRate: refreshRate,
+            hostname: hostname,
+            provider: provider,
+            timelineItemIndex: i,
+          },
+        });
+        event.stopPropagation();
+      } else {
+        navigation.openStackedNerdlet({
+          id: 'service-details',
+          urlState: {
+            statusPageIoSummaryData: statusPageIoSummaryData,
+            refreshRate: refreshRate,
+            hostname: hostname,
+            provider: provider,
+          },
+        });
+      }
     }
   }
 
@@ -395,7 +397,7 @@ export default class StatusPage extends React.Component {
         <div className="status-page-settings-cta-container">
           <Button
             type={Button.TYPE.DESTRUCTIVE}
-            onClick={e => this.handleDeleteButtonClick(e)}
+            onClick={e => this.handleDeleteButtonClick(hostname, e)}
             iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
           >
             Delete
