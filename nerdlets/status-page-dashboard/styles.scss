@@ -201,12 +201,28 @@ button[class*='Dropdown-trigger'],
     0px 8px 7px rgba(70, 107, 111, 0.05);
   border-radius: 2px;
   perspective: 2000px;
+  transition: all 100ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
 
   &.settings-view-active {
     .primary-status-page-content {
       display: none;
       z-index: 0;
     }
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 1px 0px rgba(0, 75, 82, 0.11),
+      0px 3px 0px rgba(0, 49, 54, 0.04), 0px 1px 3px rgba(0, 134, 148, 0.03),
+      0px 8px 7px rgba(70, 107, 111, 0.05),
+      0 16px 32px -8px rgba(70, 107, 111, 0.125);
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0px 1px 0px rgba(0, 75, 82, 0.11),
+      0px 3px 0px rgba(0, 49, 54, 0.04), 0px 1px 3px rgba(0, 134, 148, 0.03),
+      0px 8px 7px rgba(70, 107, 111, 0.05), 0 1px 4px rgba(70, 107, 111, 0.1);
   }
 }
 
