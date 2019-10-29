@@ -54,7 +54,6 @@ export default class StatusPagesDashboard extends React.Component {
     this.newHostNameInput = React.createRef();
 
     this.onAccountSelected = this.onAccountSelected.bind(this);
-    this.onRefreshRateSelected = this.onRefreshRateSelected.bind(this);
     this.setHostNames = this.setHostNames.bind(this);
     this.handleDeleteTileModal = this.handleDeleteTileModal.bind(this);
     this.handleCreateTileModal = this.handleCreateTileModal.bind(this);
@@ -203,10 +202,6 @@ export default class StatusPagesDashboard extends React.Component {
     }
   }
 
-  onRefreshRateSelected(event) {
-    this.setState({ refreshRate: parseInt(event.currentTarget.text) });
-  }
-
   getGridItems() {
     if (
       !this.state.hostNames ||
@@ -276,8 +271,6 @@ export default class StatusPagesDashboard extends React.Component {
         <Toolbar
           accounts={accounts}
           entityGuid={entityGuid}
-          refreshRateCallback={this.onRefreshRateSelected}
-          refreshRate={refreshRate}
           onAccountSelected={this.onAccountSelected}
           selectedAccountId={selectedAccountId}
           hostNames={hostNames}

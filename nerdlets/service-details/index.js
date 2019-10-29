@@ -9,12 +9,7 @@ export default class ServiceDetailsWrapper extends React.Component {
         <NerdletStateContext.Consumer>
           {nerdletUrlState => {
             const serviceName = nerdletUrlState.statusPageIoSummaryData.name;
-            const {
-              provider,
-              refreshRate,
-              hostname,
-              timelineItemIndex,
-            } = nerdletUrlState;
+            const { provider, hostname, timelineItemIndex } = nerdletUrlState;
 
             return (
               <React.Fragment>
@@ -22,7 +17,6 @@ export default class ServiceDetailsWrapper extends React.Component {
                   {serviceName} incident history
                 </h1>
                 <ServiceDetails
-                  refreshRate={refreshRate}
                   hostname={hostname}
                   provider={provider}
                   timelineItemIndex={timelineItemIndex}

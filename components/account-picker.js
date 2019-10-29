@@ -15,7 +15,6 @@ const USER_SELECTED_ACCOUNT_ID = 'user_account_id';
 export default class AccountPicker extends React.Component {
   static propTypes = {
     hostname: PropTypes.string,
-    refreshRate: PropTypes.number,
   };
 
   constructor(props) {

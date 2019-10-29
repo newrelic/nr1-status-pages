@@ -222,7 +222,7 @@ export default class StatusPage extends React.Component {
   }
 
   handleTileClick(statusPageIoSummaryData, refreshRate, hostname, provider, i) {
-    if (!event.target.closest('.destructive')) {
+    if (!event.target.classList.contains('service-settings-dropdown-item')) {
       if (i !== undefined) {
         navigation.openStackedNerdlet({
           id: 'service-details',
@@ -406,7 +406,7 @@ export default class StatusPage extends React.Component {
             type={Button.TYPE.PRIMARY}
             onClick={e => this.handleSaveButtonClick(e, hostname.hostName)}
           >
-            Save
+            Done
           </Button>
         </div>
       </div>

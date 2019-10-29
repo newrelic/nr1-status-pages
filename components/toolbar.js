@@ -50,12 +50,7 @@ export default class Toolbar extends React.Component {
   }
 
   render() {
-    const {
-      entityGuid,
-      onAccountSelected,
-      refreshRateCallback,
-      refreshRate,
-    } = this.props;
+    const { entityGuid, onAccountSelected } = this.props;
     return (
       <Stack
         className="toolbar-container"
@@ -65,21 +60,6 @@ export default class Toolbar extends React.Component {
         gapType={Stack.GAP_TYPE.NONE}
       >
         <StackItem className="toolbar-left-side">
-          <Dropdown
-            className="toolbar-dropdown"
-            label="Refresh rate"
-            title="refreshRate"
-          >
-            <DropdownItem onClick={refreshRateCallback}>2</DropdownItem>
-            <DropdownItem onClick={refreshRateCallback}>5</DropdownItem>
-            <DropdownItem onClick={refreshRateCallback}>10</DropdownItem>
-            <DropdownItem onClick={refreshRateCallback}>15</DropdownItem>
-            <DropdownItem onClick={refreshRateCallback}>20</DropdownItem>
-            <DropdownItem onClick={refreshRateCallback}>25</DropdownItem>
-          </Dropdown>
-
-          <hr />
-
           {!entityGuid && (
             <>
               <AccountPicker accountChangedCallback={onAccountSelected} />
