@@ -114,7 +114,10 @@ export default class StatusPagesDashboard extends React.Component {
       hostNames.findIndex(val => val.hostName === hostNameText),
       1
     );
-    this.setState({ hostNames: hostNames });
+    this.setState({
+      hostNames: hostNames,
+      deleteTileModalActive: !this.state.deleteTileModalActive,
+    });
     await this.save();
   }
 
