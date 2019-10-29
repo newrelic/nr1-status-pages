@@ -61,6 +61,7 @@ export default class StatusPagesDashboard extends React.Component {
     this.addHostName = this.addHostName.bind(this);
     this.handleAddNewService = this.handleAddNewService.bind(this);
     this.deleteHostName = this.deleteHostName.bind(this);
+    this.editHostName = this.editHostName.bind(this);
   }
 
   async componentDidMount() {
@@ -113,6 +114,21 @@ export default class StatusPagesDashboard extends React.Component {
       hostNames.findIndex(val => val.hostName === hostNameText),
       1
     );
+    this.setState({ hostNames: hostNames });
+    await this.save();
+  }
+
+  async editHostName(hostnameObject) {
+    const { hostNames } = this.state;
+    const { serviceName, hostName, provider, hostLogo } = hostnameObject;
+    const indexOfEditedHostname = hostNames.findIndex(
+      val => val.hostName === hostName
+    );
+
+    let newHostnameObject = hostnameObject;
+    newHostnameObject.id = hostNames[indexOfEditedHostname].id;
+    hostNames[indexOfEditedHostname] = newHostnameObject;
+
     this.setState({ hostNames: hostNames });
     await this.save();
   }
@@ -212,9 +228,9 @@ export default class StatusPagesDashboard extends React.Component {
       >
         <StatusPage
           refreshRate={this.state.refreshRate}
-          hostname={hostname.hostName}
-          provider={hostname.provider}
+          hostname={hostname}
           handleDeleteTileModal={() => this.handleDeleteTileModal}
+          editHostName={() => this.editHostName}
         />
       </GridItem>
     ));

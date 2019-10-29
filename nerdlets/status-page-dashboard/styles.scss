@@ -255,6 +255,13 @@ button[class*='Dropdown-trigger'],
   padding: 16px;
 }
 
+.status-minor .service-current-status svg {
+  position: relative;
+  top: 3px;
+  margin-right: 4px;
+  height: 16px;
+}
+
 .service-current-status-heading {
   border-radius: 4px;
   background-color: #8e9494;
@@ -265,14 +272,14 @@ button[class*='Dropdown-trigger'],
   padding: 8px;
   max-height: 35px;
 
-  .ic-Icon {
-    position: relative;
-    bottom: 1px;
-    margin-right: 6px;
-  }
-
   .status-none & {
     background-color: #3ca653;
+
+    .ic-Icon {
+      position: relative;
+      bottom: 1px;
+      margin-right: 6px;
+    }
 
     .ic-Icon svg path {
       stroke: #fff;
@@ -286,10 +293,32 @@ button[class*='Dropdown-trigger'],
   }
 
   .status-major & {
+    .ic-Icon {
+      position: relative;
+      bottom: 3px;
+      margin-right: 6px;
+    }
+
+    .ic-Icon svg path {
+      stroke: #fff;
+      stroke-width: 1px;
+    }
+
     background-color: #ff8014;
   }
 
   .status-critical & {
+    .ic-Icon {
+      position: relative;
+      bottom: 3px;
+      margin-right: 6px;
+    }
+
+    .ic-Icon svg path {
+      stroke: #fff;
+      stroke-width: 1px;
+    }
+
     background-color: #bf0016;
   }
 }

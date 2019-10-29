@@ -28,8 +28,7 @@ const createOption = label => ({
 });
 export default class StatusPage extends React.Component {
   static propTypes = {
-    hostname: PropTypes.string.isRequired,
-    provider: PropTypes.string.isRequired,
+    hostname: PropTypes.object.isRequired,
     refreshRate: PropTypes.number,
   };
 
@@ -37,17 +36,21 @@ export default class StatusPage extends React.Component {
     super(props);
 
     this.StatusPageNetwork = new Network(
-      this.props.hostname,
+      this.props.hostname.hostName,
       this.props.refreshRate,
-      this.props.provider
+      this.props.hostname.provider
     );
-    this.FormatService = new FormatService(this.props.provider);
+    this.FormatService = new FormatService(this.props.hostname.provider);
     this.state = {
       statusPageIoSummaryData: undefined,
       inputValue: '',
       value: [],
       settingsViewActive: false,
       settingsPopoverActive: false,
+      editedServiceName: this.props.hostname.serviceName,
+      editedHostName: this.props.hostname.hostName,
+      editedHostProvider: this.props.hostname.provider,
+      editedHostLogo: this.props.hostname.hostLogo,
     };
 
     this.handleTileSettingsAnimation = this.handleTileSettingsAnimation.bind(
@@ -92,40 +95,40 @@ export default class StatusPage extends React.Component {
     }
   };
 
-  autoSetLogo(serviceName) {
-    switch (serviceName) {
-      case 'GitHub':
-        return <img src={GitHubLogo} className="service-logo" alt="GitHub" />;
-      case 'Jira Software':
-        return (
-          <img
-            src={JiraLogo}
-            className="service-logo"
-            alt="Jira"
-            width="258"
-            height="33"
-          />
-        );
-      case 'New Relic':
-        return (
-          <img
-            src={NewRelicLogo}
-            className="service-logo"
-            alt="New Relic"
-            width="235"
-            height="41"
-          />
-        );
-      case 'Google Cloud Provider':
-        return (
-          <img
-            src={GoogleCloudProviderLogo}
-            className="service-logo"
-            alt="GitHub"
-          />
-        );
-      default:
-        return <h2 className="service-name">{serviceName}</h2>;
+  autoSetLogo(hostname) {
+    const { serviceName, hostName, provider, hostLogo } = hostname;
+    if (hostName.includes('githubstatus')) {
+      return <img src={GitHubLogo} className="service-logo" alt="GitHub" />;
+    } else if (hostName.includes('jira-software')) {
+      return (
+        <img
+          src={JiraLogo}
+          className="service-logo"
+          alt="Jira"
+          width="258"
+          height="33"
+        />
+      );
+    } else if (hostName.includes('newrelic')) {
+      return (
+        <img
+          src={NewRelicLogo}
+          className="service-logo"
+          alt="New Relic"
+          width="235"
+          height="41"
+        />
+      );
+    } else if (hostName.includes('cloud.google')) {
+      return (
+        <img
+          src={GoogleCloudProviderLogo}
+          className="service-logo"
+          alt="GitHub"
+        />
+      );
+    } else {
+      return <h2 className="service-name">{serviceName}</h2>;
     }
   }
 
@@ -253,7 +256,20 @@ export default class StatusPage extends React.Component {
     this.handleSettingsPopover();
   }
 
-  renderSettings(hostname) {
+  handleSaveButtonClick(e, hostname) {
+    const hostNameObject = {
+      serviceName: this.state.editedServiceName,
+      hostName: this.state.editedHostName,
+      provider: this.state.editedHostProvider,
+      hostLogo: this.state.editedHostLogo,
+    };
+
+    this.props.editHostName()(hostNameObject);
+    e.stopPropagation();
+    this.handleTileSettingsAnimation();
+  }
+
+  renderSettings() {
     return (
       <div
         className={`service-settings-button-container ${
@@ -312,11 +328,15 @@ export default class StatusPage extends React.Component {
     }
 
     const {
-      provider,
       refreshRate,
       hostname,
       handleDeleteTileModal,
+      editHostName,
+      hostnameGeneric,
     } = this.props;
+
+    console.log(hostnameGeneric);
+
     const { settingsViewActive } = this.state;
 
     return (
@@ -334,32 +354,78 @@ export default class StatusPage extends React.Component {
             this.handleTileClick(
               statusPageIoSummaryData,
               refreshRate,
-              hostname,
-              provider
+              hostname.hostName,
+              hostname.provider
             )
           }
         >
           <div className="logo-container">
             {this.renderSettings(hostname)}
 
-            {this.autoSetLogo(statusPageIoSummaryData.name)}
+            {this.autoSetLogo(hostname)}
           </div>
           <div className="service-current-status">
             <h5 className="service-current-status-heading">
-              <Icon type={Icon.TYPE.INTERFACE__SIGN__CHECKMARK} />
+              {statusPageIoSummaryData.indicator === 'none' && (
+                <Icon type={Icon.TYPE.INTERFACE__SIGN__CHECKMARK} />
+              )}
+              {statusPageIoSummaryData.indicator === 'minor' && (
+                <svg
+                  width="19"
+                  height="19"
+                  viewBox="0 0 19 19"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g clip-path="url(#clip0)">
+                    <path
+                      d="M8.14625 3.05583L1.44083 14.25C1.30258 14.4894 1.22943 14.7609 1.22866 15.0373C1.22789 15.3138 1.29951 15.5856 1.43642 15.8258C1.57333 16.066 1.77074 16.2662 2.00902 16.4064C2.2473 16.5466 2.51813 16.622 2.79458 16.625H16.2054C16.4819 16.622 16.7527 16.5466 16.991 16.4064C17.2293 16.2662 17.4267 16.066 17.5636 15.8258C17.7005 15.5856 17.7721 15.3138 17.7713 15.0373C17.7706 14.7609 17.6974 14.4894 17.5592 14.25L10.8538 3.05583C10.7126 2.82316 10.5139 2.6308 10.2768 2.49729C10.0397 2.36379 9.77213 2.29366 9.5 2.29366C9.22788 2.29366 8.96035 2.36379 8.72322 2.49729C8.4861 2.6308 8.28738 2.82316 8.14625 3.05583V3.05583Z"
+                      stroke="#733E00"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M9.5 7.125V10.2917"
+                      stroke="#733E00"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M9.5 13.4583V13.7083"
+                      stroke="#733E00"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0">
+                      <rect width="19" height="19" fill="white" />
+                    </clipPath>
+                  </defs>
+                </svg>
+              )}
+              {statusPageIoSummaryData.indicator === 'major' && (
+                <Icon type={Icon.TYPE.INTERFACE__SIGN__CLOSE} />
+              )}
+              {statusPageIoSummaryData.indicator === 'critical' && (
+                <Icon type={Icon.TYPE.INTERFACE__SIGN__CLOSE} />
+              )}
               {statusPageIoSummaryData.description}
             </h5>
           </div>
           <CurrentIncidents
             refreshRate={refreshRate}
-            hostname={hostname}
-            provider={provider}
+            hostname={hostname.hostName}
+            provider={hostname.provider}
             handleTileClick={i => {
               this.handleTileClick(
                 statusPageIoSummaryData,
                 refreshRate,
-                hostname,
-                provider,
+                hostname.hostName,
+                hostname.provider,
                 i
               );
             }}
@@ -373,19 +439,52 @@ export default class StatusPage extends React.Component {
             <TextField
               label="Service name"
               className="status-page-setting"
+              onChange={() =>
+                this.setState(previousState => ({
+                  ...previousState,
+                  editedServiceName: event.target.value,
+                }))
+              }
+              defaultValue={hostname.serviceName}
             ></TextField>
             <TextField
               label="Hostname"
               placeholder="https://status.myservice.com/"
               className="status-page-setting"
+              onChange={() =>
+                this.setState(previousState => ({
+                  ...previousState,
+                  editedHostName: event.target.value,
+                }))
+              }
+              defaultValue={hostname.hostName}
             ></TextField>
             <Dropdown
               title="Choose a provider"
               label="Provider"
               className="status-page-setting"
             >
-              <DropdownItem selected>Status Page</DropdownItem>
-              <DropdownItem>Google</DropdownItem>
+              <DropdownItem
+                selected
+                onClick={() =>
+                  this.setState(previousState => ({
+                    ...previousState,
+                    editedHostProvider: event.target.innerHTML,
+                  }))
+                }
+              >
+                Status Page
+              </DropdownItem>
+              <DropdownItem
+                onClick={() =>
+                  this.setState(previousState => ({
+                    ...previousState,
+                    editedHostProvider: event.target.innerHTML,
+                  }))
+                }
+              >
+                Google
+              </DropdownItem>
             </Dropdown>
             <div className="input-group status-page-setting">
               <label className="TextField-label">
@@ -408,21 +507,28 @@ export default class StatusPage extends React.Component {
             <TextField
               label="Service logo"
               className="status-page-setting"
+              onChange={() =>
+                this.setState(previousState => ({
+                  ...previousState,
+                  editedHostLogo: event.target.value,
+                }))
+              }
+              defaultValue={hostname.hostLogo}
             ></TextField>
           </div>
           <div className="status-page-settings-cta-container">
-            <Button
-              type={Button.TYPE.PRIMARY}
-              onClick={this.handleTileSettingsAnimation}
-            >
-              Done
-            </Button>
             <Button
               type={Button.TYPE.DESTRUCTIVE}
               onClick={e => this.handleDeleteButtonClick(e)}
               iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
             >
               Delete
+            </Button>
+            <Button
+              type={Button.TYPE.PRIMARY}
+              onClick={e => this.handleSaveButtonClick(e, hostname.hostName)}
+            >
+              Save
             </Button>
           </div>
         </div>
