@@ -16,6 +16,7 @@ import {
 } from 'nr1';
 const uuid = require('uuid/v4');
 import Toolbar from '../../components/toolbar';
+import AccountPicker from '../../components/account-picker';
 import {
   getHostNamesFromNerdStorage,
   saveHostNamesToNerdStorage,
@@ -254,13 +255,30 @@ export default class StatusPagesDashboard extends React.Component {
     }
     if (hostNames.length === 0) {
       return (
-        <GridItem className="no-status-pages" columnStart={1} columnEnd={12}>
+        <GridItem className="no-status-pages" columnStart={5} columnEnd={8}>
           <HeadingText
-            className="suggested-status-page-title"
-            type={HeadingText.TYPE.HEADING_1}
+            className="no-status-pages-header"
+            type={HeadingText.TYPE.HEADING_2}
           >
-            No Status Pages are configured
+            Get started
           </HeadingText>
+
+          <p className="no-status-pages-description">
+            Select an account below to get started. Then, click the "Add a new
+            service" button below to add it to the list of services who's
+            statuses you can view and track on this page.
+          </p>
+
+          <AccountPicker accountChangedCallback={this.onAccountSelected} />
+
+          <Button
+            type={Button.TYPE.PRIMARY}
+            iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+            sizeType={Button.SIZE_TYPE.LARGE}
+            onClick={this.handleCreateTileModal}
+          >
+            Add new service
+          </Button>
         </GridItem>
       );
     }
@@ -336,8 +354,11 @@ export default class StatusPagesDashboard extends React.Component {
           setSearchQuery={() => this.setSearchQuery}
         />
         <Grid
-          className="status-container"
+          className={`status-container ${
+            hostNames.length === 0 ? 'no-status-pages-found' : ''
+          }`}
           spacingType={[Grid.SPACING_TYPE.SMALL, Grid.SPACING_TYPE.EXTRA_LARGE]}
+          fullHeight
         >
           {this.getGridItems()}
         </Grid>

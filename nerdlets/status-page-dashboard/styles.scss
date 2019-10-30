@@ -1,8 +1,6 @@
-// @import "./styles/variables.scss";
-// @import "./styles/summary.scss";
-// @import "./styles/current-incidents.scss";
-// @import "./styles/toolbar.scss";
-// @import "./styles/suggested.scss";
+#root > div{
+  height: 100%;
+}
 
 // ==============================================================
 // NRDS text field and dropdown overrides
@@ -1010,4 +1008,54 @@ button[class*='Dropdown-trigger'],
 
 .no-incident-history-cta {
   margin-top: 16px;
+}
+
+.no-status-pages {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-self: center;;
+  padding: 32px 24px;
+  background: #FFFFFF;
+  box-shadow: 0px 1px 0px rgba(0, 75, 82, 0.11), 0px 3px 0px rgba(0, 49, 54, 0.04), 0px 1px 3px rgba(0, 134, 148, 0.03), 0px 8px 7px rgba(70, 107, 111, 0.05);
+  border-radius: 5px;
+
+  div[class$='wnd-Dropdown'] {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  button[class*='wnd-Dropdown-trigger'] {
+    width: 100%;
+  }
+  
+  [class*='wnd-Dropdown-trigger-content'] {
+    width: 100%;
+  }
+}
+
+
+.no-status-pages-header {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 32px;
+  text-align: center;
+  color: #2A3434;
+  margin-bottom: 16px;
+}
+
+.no-status-pages-description {
+  font-size: 14px;
+  line-height: 20px;
+  display: flex;
+  color: #464E4E;
+  margin-bottom: 16px;
+  align-items: center;
+  text-align: center;
+}
+
+.no-status-pages-found {
+  height: calc(100% - 102px);
+  align-content: center;
 }
