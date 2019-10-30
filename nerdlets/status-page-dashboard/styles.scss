@@ -957,3 +957,36 @@ button[class*='Dropdown-trigger'],
     display: none;
   }
 }
+
+.or-sep {
+  height: 1px;
+  border: none;
+  background-color: #b9bdbd;
+  margin: 24px 0 32px;
+  overflow: visible;
+
+  &:before {
+    content: 'or';
+    display: flex;
+    width: 30px;
+    font-style: italic;
+    font-family: 'open sans';
+    margin: 0 auto;
+    background-color: #fff;
+    justify-content: center;
+    color: #8e9494;
+    align-items: center;
+    position: relative;
+    bottom: 8px;
+  }
+}
+
+[class*='InnerModal-content'] {
+  button[class*='Dropdown-trigger'] {
+    width: 100%;
+  }
+
+  [class*='Dropdown-trigger-content'] {
+    width: 100%;
+  }
+}

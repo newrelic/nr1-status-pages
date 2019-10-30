@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import StatusPage from '../../components/status-page';
+import { popularSites } from '../../popular-status-pages';
 
 import {
   HeadingText,
@@ -46,6 +47,7 @@ export default class StatusPagesDashboard extends React.Component {
       newHostProvider: '',
       newHostLogo: '',
       searchQuery: '',
+      quickSetupSelection: '',
       keyObject: {
         key: props.entityGuid,
         type: props.entityGuid ? 'entity' : 'account',
@@ -151,6 +153,35 @@ export default class StatusPagesDashboard extends React.Component {
   handleSelectInputChange = inputValue => {
     this.setState({ inputValue });
   };
+
+  handleQuickSetupSelect(e) {
+    const selectedService = e.target.innerHTML;
+    let indexOfPopularSite = null;
+
+    switch (selectedService) {
+      case 'Google Cloud Provider':
+        indexOfPopularSite = 0;
+        break;
+      case 'New Relic':
+        indexOfPopularSite = 1;
+        break;
+      case 'Jira':
+        indexOfPopularSite = 2;
+        break;
+      case 'GitHub':
+        indexOfPopularSite = 3;
+        break;
+    }
+    const selectedPopularSite = popularSites.sites[indexOfPopularSite];
+
+    this.setState({
+      newServiceName: selectedPopularSite.serviceName,
+      newHostName: selectedPopularSite.hostName,
+      newHostProvider: selectedPopularSite.provider,
+      newHostLogo: selectedPopularSite.hostLogo,
+      quickSetupSelection: selectedService,
+    });
+  }
 
   handleSelectKeyDown = event => {
     const { inputValue, value } = this.state;
@@ -345,9 +376,36 @@ export default class StatusPagesDashboard extends React.Component {
             Add new service
           </HeadingText>
           <p>
-            Provide the information needed to determine the status of this
-            service. You will be able to edit this information in the future.
+            Select a common services from the "quick setup" dropdown below, or
+            provide the information needed to determine the status of the
+            service you'd like to add. You will be able to edit this information
+            in the future.
           </p>
+
+          <Dropdown
+            title={
+              this.state.newHostProvider === ''
+                ? 'Choose a service'
+                : this.state.quickSetupSelection
+            }
+            label="Quick setup"
+            className="status-page-setting"
+          >
+            <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+              Google Cloud Provider
+            </DropdownItem>
+            <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+              GitHub
+            </DropdownItem>
+            <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+              Jira
+            </DropdownItem>
+            <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+              New Relic
+            </DropdownItem>
+          </Dropdown>
+
+          <hr className="or-sep" />
 
           <TextField
             label="Service name"
