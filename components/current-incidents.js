@@ -101,9 +101,7 @@ export default class CurrentIncidents extends React.Component {
     if (!currentIncidents || currentIncidents.length === 0) {
       return (
         <div className="no-incident-history-container">
-          <h4 className="no-incident-history-header">
-            No recent incident history
-          </h4>
+          <h4 className="no-incident-history-header">No incident history</h4>
           <Button
             className="no-incident-history-cta"
             iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EXTERNAL_LINK}
