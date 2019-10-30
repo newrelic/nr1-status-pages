@@ -3,7 +3,7 @@ export const popularSites = {
   sites: [
     {
       id: '118f5f49-f709-4247-87cf-87d74a9d035d',
-      serviceName: 'Google Cloud Provider',
+      serviceName: 'Google Cloud',
       hostName: 'https://status.cloud.google.com',
       provider: 'google',
       hostLogo:

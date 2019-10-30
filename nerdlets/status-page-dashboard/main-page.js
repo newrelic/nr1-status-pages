@@ -159,7 +159,7 @@ export default class StatusPagesDashboard extends React.Component {
     let indexOfPopularSite = null;
 
     switch (selectedService) {
-      case 'Google Cloud Provider':
+      case 'Google Cloud':
         indexOfPopularSite = 0;
         break;
       case 'New Relic':
@@ -392,7 +392,7 @@ export default class StatusPagesDashboard extends React.Component {
             className="status-page-setting"
           >
             <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
-              Google Cloud Provider
+              Google Cloud
             </DropdownItem>
             <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
               GitHub
