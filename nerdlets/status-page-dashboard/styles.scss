@@ -990,3 +990,24 @@ button[class*='Dropdown-trigger'],
     width: 100%;
   }
 }
+
+.no-incident-history-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 151px;
+  justify-content: center;
+  align-items: center;
+}
+
+.no-incident-history-header {
+  color: #8e9494;
+  font-size: 16px;
+  text-transform: none;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.no-incident-history-cta {
+  margin-top: 16px;
+}

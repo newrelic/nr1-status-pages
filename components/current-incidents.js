@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import Network from '../utilities/network';
 import dayjs from 'dayjs';
 
-import { navigation, Icon } from 'nr1';
+import { navigation, Icon, Button } from 'nr1';
 import FormatService from '../utilities/format-service';
+import { hostname } from 'os';
 
 export default class CurrentIncidents extends React.Component {
   static propTypes = {
@@ -94,9 +95,28 @@ export default class CurrentIncidents extends React.Component {
   }
 
   render() {
-    const { handleTileClick } = this.props;
+    const { handleTileClick, hostname } = this.props;
     const { currentIncidents } = this.state;
-    if (!currentIncidents) return <div></div>;
+
+    if (!currentIncidents || currentIncidents.length === 0) {
+      return (
+        <div className="no-incident-history-container">
+          <h4 className="no-incident-history-header">
+            No recent incident history
+          </h4>
+          <Button
+            className="no-incident-history-cta"
+            iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EXTERNAL_LINK}
+            sizeType={Button.SIZE_TYPE.SMALL}
+            to={hostname}
+            onClick={e => e.stopPropagation()}
+          >
+            Go to status page
+          </Button>
+        </div>
+      );
+    }
+
     this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
     const first3Incicdents = currentIncidents.slice(0, 3);
     const first3TimelineItems = first3Incicdents.map((incident, i) => {
