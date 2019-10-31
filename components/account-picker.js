@@ -7,6 +7,7 @@ import {
   DropdownItem,
   UserStorageMutation,
   UserStorageQuery,
+  TextField,
 } from 'nr1';
 
 const USER_ACCOUNT_COLLECTION = 'user_account_collection_v1';
@@ -95,6 +96,11 @@ export default class AccountPicker extends React.Component {
       filteredAccounts = accounts.filter(a => {
         return a.name.match(re);
       });
+    }
+    if (this.props.disabled) {
+      return (
+        <TextField disabled label="Account" value={selectedAccount.name} />
+      );
     }
 
     return (

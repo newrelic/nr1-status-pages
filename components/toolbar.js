@@ -51,6 +51,7 @@ export default class Toolbar extends React.Component {
 
   render() {
     const { entityGuid, onAccountSelected } = this.props;
+
     return (
       <Stack
         className="toolbar-container"
@@ -60,12 +61,11 @@ export default class Toolbar extends React.Component {
         gapType={Stack.GAP_TYPE.NONE}
       >
         <StackItem className="toolbar-left-side">
-          {!entityGuid && (
-            <>
-              <AccountPicker accountChangedCallback={onAccountSelected} />
-              <hr />
-            </>
-          )}
+          <AccountPicker
+            disabled={entityGuid !== null && entityGuid !== undefined}
+            accountChangedCallback={onAccountSelected}
+          />
+          <hr />
 
           <div>
             <TextField
