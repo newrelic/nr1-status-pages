@@ -454,6 +454,7 @@ export default class StatusPage extends React.Component {
         } ${
           settingsViewActive ? 'settings-view-active' : 'settings-view-inactive'
         }`}
+        ref={this.props.setServiceTileRef}
       >
         <div
           className="primary-status-page-content"

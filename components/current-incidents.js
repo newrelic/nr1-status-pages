@@ -18,6 +18,7 @@ export default class CurrentIncidents extends React.Component {
     super(props);
     this.state = {
       currentIncidents: undefined,
+      isPolling: false,
     };
     this.FormatService = new FormatService(this.props.provider);
     this.statusPageNetwork = new Network(
@@ -41,7 +42,8 @@ export default class CurrentIncidents extends React.Component {
 
   componentDidMount() {
     this.statusPageNetwork.pollCurrentIncidents(
-      this.setIncidentData.bind(this)
+      this.setIncidentData.bind(this),
+      () => this.setState({ isPolling: !this.state.isPolling })
     );
   }
 
@@ -91,6 +93,7 @@ export default class CurrentIncidents extends React.Component {
   setIncidentData(data) {
     this.setState({
       currentIncidents: this.FormatService.uniformIncidentData(data),
+      isPolling: false,
     });
   }
 

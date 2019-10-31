@@ -53,6 +53,7 @@ export default class StatusPagesDashboard extends React.Component {
         key: props.entityGuid,
         type: props.entityGuid ? 'entity' : 'account',
       },
+      requestForHostnamesMade: false,
     };
 
     this.newHostNameInput = React.createRef();
@@ -77,7 +78,6 @@ export default class StatusPagesDashboard extends React.Component {
       });
       this.setHostNames(hostNames);
     }
-    this._interval = setInterval(this.pollHosts.bind(this), 15000);
   }
 
   componentWillUnmount() {
@@ -148,7 +148,7 @@ export default class StatusPagesDashboard extends React.Component {
   }
 
   setHostNames(hostNames) {
-    this.setState({ hostNames });
+    this.setState({ hostNames, requestForHostnamesMade: true });
   }
 
   handleSelectInputChange = inputValue => {
@@ -202,57 +202,62 @@ export default class StatusPagesDashboard extends React.Component {
   };
 
   async onAccountSelected(accountId, accounts) {
-    const keyObject = Object.assign({}, this.state.keyObject, {
-      key: accountId,
-    });
-
-    this.setState({
-      selectedAccountId: accountId,
-      accounts,
-      keyObject,
-    });
-
-    const hostNames = await getHostNamesFromNerdStorage({
-      key: accountId,
-      type: 'account',
-    });
-    this.setHostNames(hostNames);
-  }
-
-  //! This is a hack until there is an message bus between stacked nerdlets
-  async pollHosts() {
-    try {
-      const hostNames = await getHostNamesFromNerdStorage({
-        key: this.state.entityGuid
-          ? this.state.entityGuid
-          : this.state.selectedAccountId,
-        type: this.state.entityGuid ? 'entity' : 'account',
+    if (!this.state.entityGuid) {
+      const keyObject = Object.assign({}, this.state.keyObject, {
+        key: accountId,
       });
-      if (JSON.stringify(hostNames) !== JSON.stringify(this.state.hostNames)) {
-        this.setHostNames(hostNames);
-      }
-    } catch (err) {
-      console.log(err);
+
+      this.setState({
+        selectedAccountId: accountId,
+        accounts,
+        keyObject,
+      });
+
+      const hostNames = await getHostNamesFromNerdStorage({
+        key: accountId,
+        type: 'account',
+      });
+      this.setHostNames(hostNames);
     }
   }
+
+  // //! This is a hack until there is an message bus between stacked nerdlets
+  // async pollHosts() {
+  //   try {
+  //     const hostNames = await getHostNamesFromNerdStorage({
+  //       key: this.state.entityGuid
+  //         ? this.state.entityGuid
+  //         : this.state.selectedAccountId,
+  //       type: this.state.entityGuid ? 'entity' : 'account',
+  //     });
+  //     if (JSON.stringify(hostNames) !== JSON.stringify(this.state.hostNames)) {
+  //       this.setHostNames(hostNames);
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
 
   setSearchQuery(e) {
     this.setState({ searchQuery: event.target.value });
   }
 
   getGridItems() {
-    let { searchQuery, hostNames } = this.state;
+    let {
+      searchQuery,
+      hostNames,
+      requestForHostnamesMade,
+      keyObject,
+    } = this.state;
 
-    if (
-      !hostNames ||
-      (!this.state.selectedAccountId && !this.state.entityGuid)
-    ) {
+    if (!requestForHostnamesMade) {
       return (
-        <GridItem className="no-status-pages" columnStart={1} columnEnd={12}>
+        <GridItem columnStart={1} columnEnd={12}>
           <Spinner fillContainer />
         </GridItem>
       );
     }
+
     if (hostNames.length === 0) {
       return (
         <GridItem className="no-status-pages" columnStart={5} columnEnd={8}>
@@ -310,6 +315,7 @@ export default class StatusPagesDashboard extends React.Component {
           handleDeleteTileModal={() => this.handleDeleteTileModal}
           editHostName={() => this.editHostName}
           setSearchQuery={() => this.setSearchQuery}
+          keyObject={keyObject}
         />
       </GridItem>
     ));
@@ -349,7 +355,6 @@ export default class StatusPagesDashboard extends React.Component {
           selectedAccountId={selectedAccountId}
           hostNames={hostNames}
           hostNameCallBack={this.setHostNames}
-          pollHostCallBack={this.pollHosts}
           handleCreateTileModal={this.handleCreateTileModal}
           setSearchQuery={() => this.setSearchQuery}
         />
