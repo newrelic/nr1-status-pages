@@ -248,7 +248,10 @@ export default class StatusPagesDashboard extends React.Component {
       hostNames,
       requestForHostnamesMade,
       keyObject,
+      entityGuid,
     } = this.state;
+
+    const entityGuidExists = entityGuid !== null && entityGuid !== undefined;
 
     if (!requestForHostnamesMade) {
       return (
@@ -269,12 +272,16 @@ export default class StatusPagesDashboard extends React.Component {
           </HeadingText>
 
           <p className="no-status-pages-description">
-            Select an account below to get started. Then, click the "Add a new
+            {!entityGuidExists &&
+              'Select an account below to get started. Then,'}
+            {entityGuidExists && 'To get started,'} click the "Add a new
             service" button below to add it to the list of services who's
             statuses you can view and track on this page.
           </p>
 
-          <AccountPicker accountChangedCallback={this.onAccountSelected} />
+          {!entityGuidExists && (
+            <AccountPicker accountChangedCallback={this.onAccountSelected} />
+          )}
 
           <Button
             type={Button.TYPE.PRIMARY}
