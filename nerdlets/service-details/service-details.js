@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Network from '../utilities/network';
+import Network from '../../utilities/network';
+import FormatService from '../../utilities/format-service';
 import dayjs from 'dayjs';
 
-import { navigation, Icon, Button } from 'nr1';
-import FormatService from '../utilities/format-service';
-import { hostname } from 'os';
+import { Icon, Button } from 'nr1';
 
-export default class CurrentIncidents extends React.Component {
+export default class ServiceDetails extends React.Component {
   static propTypes = {
     hostname: PropTypes.string.isRequired,
     provider: PropTypes.string.isRequired,
@@ -18,7 +17,7 @@ export default class CurrentIncidents extends React.Component {
     super(props);
     this.state = {
       currentIncidents: undefined,
-      isPolling: false,
+      expandedTimelineItem: null,
     };
     this.FormatService = new FormatService(this.props.provider);
     this.statusPageNetwork = new Network(
@@ -26,25 +25,30 @@ export default class CurrentIncidents extends React.Component {
       this.props.refreshRate,
       this.props.provider
     );
-    this.seeMore = this.seeMore.bind(this);
-  }
 
-  seeMore() {
-    const nerdletWithState = {
-      id: 'incident-details',
-      urlState: {
-        hostname: this.props.hostname,
-        provider: this.props.provider,
-      },
-    };
-    navigation.openStackedNerdlet(nerdletWithState);
+    this.handleTimelineItemClick = this.handleTimelineItemClick.bind(this);
   }
 
   componentDidMount() {
+    const { timelineItemIndex } = this.props;
+    const { expandedTimelineItem } = this.state;
+
     this.statusPageNetwork.pollCurrentIncidents(
-      this.setIncidentData.bind(this),
-      () => this.setState({ isPolling: !this.state.isPolling })
+      this.setIncidentData.bind(this)
     );
+
+    if (
+      timelineItemIndex !== undefined &&
+      this.state.expandedTimelineItem === null
+    ) {
+      this.setState({ expandedTimelineItem: timelineItemIndex });
+    }
+  }
+
+  setIncidentData(data) {
+    this.setState({
+      currentIncidents: this.FormatService.uniformIncidentData(data),
+    });
   }
 
   setTimelineSymbol(incidentImpact) {
@@ -90,45 +94,51 @@ export default class CurrentIncidents extends React.Component {
     }
   }
 
-  setIncidentData(data) {
-    this.setState({
-      currentIncidents: this.FormatService.uniformIncidentData(data),
-      isPolling: false,
+  buildTimelineItemDetails(incident) {
+    let incident_updates = incident.incident_updates.map(incident_update => {
+      return (
+        <li key={incident_update.id} className="timeline-item-contents-item">
+          <span className="key">
+            {dayjs(incident_update.display_at).format('h:mm a')}:
+          </span>
+          <span className="value">{incident_update.body}</span>
+        </li>
+      );
     });
+
+    return incident_updates;
+  }
+
+  handleTimelineItemClick(e) {
+    let timelineItemId = e.currentTarget.getAttribute('data-timeline-item-id');
+    e.preventDefault();
+    if (timelineItemId == this.state.expandedTimelineItem) {
+      this.setState({
+        expandedTimelineItem: null,
+      });
+    } else {
+      this.setState({
+        expandedTimelineItem: timelineItemId,
+      });
+    }
   }
 
   render() {
-    const { handleTileClick, hostname } = this.props;
-    const { currentIncidents } = this.state;
-
-    if (!currentIncidents || currentIncidents.length === 0) {
-      return (
-        <div className="no-incident-history-container">
-          <h4 className="no-incident-history-header">No incident history</h4>
-          <Button
-            className="no-incident-history-cta"
-            iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EXTERNAL_LINK}
-            sizeType={Button.SIZE_TYPE.SMALL}
-            to={hostname}
-            onClick={e => e.stopPropagation()}
-          >
-            Go to status page
-          </Button>
-        </div>
-      );
-    }
-
+    const { currentIncidents, expandedTimelineItem } = this.state;
+    const { timelineItemIndex } = this.props;
+    if (!currentIncidents) return <div></div>;
     this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
-    const first3Incicdents = currentIncidents.slice(0, 3);
-    const first3TimelineItems = first3Incicdents.map((incident, i) => {
+    console.debug(currentIncidents);
+
+    const items = currentIncidents.map((incident, i) => {
       return (
         <div
-          className={`timeline-item impact-${incident.impact}`}
+          data-timeline-item-id={i}
+          onClick={this.handleTimelineItemClick}
+          className={`timeline-item impact-${incident.impact} ${
+            expandedTimelineItem == i ? 'timeline-item-expanded' : ''
+          }`}
           key={incident.created_at}
-          onClick={e => {
-            handleTileClick(i);
-            e.stopPropagation();
-          }}
         >
           <div className="timeline-item-timestamp">
             <span className="timeline-timestamp-date">
@@ -150,17 +160,24 @@ export default class CurrentIncidents extends React.Component {
               <div className="timeline-item-title">
                 {incident ? incident.name : 'None'}
               </div>
+              <Button
+                className="timeline-item-dropdown-arrow"
+                type={Button.TYPE.PLAIN_NEUTRAL}
+                iconType={
+                  Button.ICON_TYPE
+                    .INTERFACE__CHEVRON__CHEVRON_BOTTOM__V_ALTERNATE
+                }
+              ></Button>
+            </div>
+            <div className="timeline-item-contents-container">
+              <ul className="timeline-item-contents">
+                {this.buildTimelineItemDetails(incident)}
+              </ul>
             </div>
           </div>
         </div>
       );
     });
-
-    // Show first current incident and then add a see more button
-    return (
-      <div className="timeline-container mini-timeline">
-        {first3TimelineItems}
-      </div>
-    );
+    return <div className="service-details-modal-container">{items}</div>;
   }
 }

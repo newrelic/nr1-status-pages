@@ -7,7 +7,7 @@ const GoogleSeverityToKnown = {
 export const googleFormatter = data => {
   const formattedData = {};
   data = data.sort(incident => incident.begin);
-  formattedData.name = 'Google Cloud Provider';
+  formattedData.name = 'Google Cloud';
   const openIncident = data.find(
     incident => !incident.end || incident.end === ''
   );

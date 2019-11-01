@@ -13,7 +13,7 @@ const providers = {
       medium: 'major',
       high: 'critical',
     },
-    name: 'Google Cloud Provider',
+    name: 'Google Cloud',
     incidentFormatter: googleIncidentFormatter,
     summaryFormatter: googleFormatter,
   },
@@ -25,12 +25,15 @@ const providers = {
       major: 'major',
       critical: 'critical',
     },
-    name: 'Google Cloud Provider',
+    name: 'Google Cloud',
     summaryFormatter: statusPageIoFormatter,
     incidentFormatter: statusPageIncidentFormatter,
   },
 };
 
 export const getProvider = providerKey => {
-  return providers[providerKey];
+  providerKey = providerKey === 'Status Page' ? 'statusPageIo' : providerKey;
+  const provider = providers[providerKey];
+  // console.debug(provider);
+  return provider;
 };

@@ -7,6 +7,7 @@ import {
   DropdownItem,
   UserStorageMutation,
   UserStorageQuery,
+  TextField,
 } from 'nr1';
 
 const USER_ACCOUNT_COLLECTION = 'user_account_collection_v1';
@@ -15,7 +16,6 @@ const USER_SELECTED_ACCOUNT_ID = 'user_account_id';
 export default class AccountPicker extends React.Component {
   static propTypes = {
     hostname: PropTypes.string,
-    refreshRate: PropTypes.number,
   };
 
   constructor(props) {
@@ -34,12 +34,15 @@ export default class AccountPicker extends React.Component {
     if (accountsResults.data && accountsResults.data) {
       const accounts = accountsResults.data;
 
-      let accountId = await this.getLastChoseAccountId();
-      if (!accountId) {
-        accountId = accounts[0].id;
+      let account = await this.getLastChoseAccountId();
+
+      if (account === null) {
+        account = accountsResults.data;
       }
 
-      const account = accounts.find(a => a.id === accountId);
+      if (!account.id) {
+        account = accounts[0];
+      }
 
       if (account) {
         this._accountChanged(account, accounts);
@@ -94,10 +97,16 @@ export default class AccountPicker extends React.Component {
         return a.name.match(re);
       });
     }
+    if (this.props.disabled) {
+      return (
+        <TextField disabled label="Account" value={selectedAccount.name} />
+      );
+    }
 
     return (
       <Dropdown
         title={selectedAccount.name}
+        label="Account"
         search={filter}
         onSearch={event => {
           this.setState({ filter: event.target.value });

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import SearchIcon from '../assets/icon-search.svg';
 
 import {
   Button,
@@ -8,6 +9,7 @@ import {
   navigation,
   Stack,
   StackItem,
+  TextField,
 } from 'nr1';
 
 import AccountPicker from './account-picker';
@@ -48,12 +50,9 @@ export default class Toolbar extends React.Component {
   }
 
   render() {
-    const {
-      entityGuid,
-      onAccountSelected,
-      refreshRateCallback,
-      refreshRate,
-    } = this.props;
+    const { entityGuid, onAccountSelected } = this.props;
+    const entityGuidExists = entityGuid !== null && entityGuid !== undefined;
+
     return (
       <Stack
         className="toolbar-container"
@@ -62,47 +61,42 @@ export default class Toolbar extends React.Component {
         verticalType={Stack.VERTICAL_TYPE.CENTER}
         gapType={Stack.GAP_TYPE.NONE}
       >
-        <StackItem>
-          <Dropdown
-            className="toolbar-dropdown"
-            title={`Refresh Rate: ${refreshRate}`}
-          >
-            <DropdownItem onClick={refreshRateCallback}>2</DropdownItem>
-            <DropdownItem onClick={refreshRateCallback}>5</DropdownItem>
-            <DropdownItem onClick={refreshRateCallback}>10</DropdownItem>
-            <DropdownItem onClick={refreshRateCallback}>15</DropdownItem>
-            <DropdownItem onClick={refreshRateCallback}>20</DropdownItem>
-            <DropdownItem onClick={refreshRateCallback}>25</DropdownItem>
-          </Dropdown>
-          {!entityGuid && (
-            <AccountPicker accountChangedCallback={onAccountSelected} />
+        <StackItem className="toolbar-left-side">
+          {!entityGuidExists && (
+            <>
+              <AccountPicker
+                disabled={entityGuid !== null && entityGuid !== undefined}
+                accountChangedCallback={onAccountSelected}
+              />
+              <hr />
+            </>
           )}
-          <Button
-            type={Button.TYPE.NORMAL}
-            sizeType={Button.SIZE_TYPE.SMALL}
-            onClick={this.onEditStatusPageClick}
-          >
-            Edit StatusPages
-          </Button>
+
+          <div>
+            <TextField
+              label="Search"
+              className="toolbar-search"
+              onChange={this.props.setSearchQuery(event)}
+            ></TextField>
+          </div>
+
+          <hr />
         </StackItem>
         <StackItem>
-          <div className="dot-header">
-            <div className="dot-container">
-              {' '}
-              <div className="dot minor"></div>
-              <div className="dot-name">Minor Incident</div>
-            </div>
-            <div className="dot-container">
-              {' '}
-              <div className="dot major"></div>
-              <div className="dot-name">Major Incident</div>
-            </div>
-            <div className="dot-container">
-              {' '}
-              <div className="dot critical"></div>
-              <div className="dot-name">Critical Incident</div>
-            </div>
-          </div>
+          <Stack
+            className="toolbar-right-side"
+            fullWidth
+            horizontalType={Stack.HORIZONTAL_TYPE.RIGHT}
+          >
+            <Button
+              type={Button.TYPE.PRIMARY}
+              iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+              sizeType={Button.SIZE_TYPE.MEDIUM}
+              onClick={this.props.handleCreateTileModal}
+            >
+              Add new service
+            </Button>
+          </Stack>
         </StackItem>
       </Stack>
     );

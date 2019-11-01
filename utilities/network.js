@@ -15,8 +15,10 @@ export default class Network {
     return networkResponse;
   }
 
-  _pollData(url, callbackSetterFunction) {
+  _pollData(url, callbackSetterFunction, callbackBeforePolling) {
     setTimeout(async () => {
+      callbackBeforePolling && callbackBeforePolling();
+
       try {
         this._fetchAndPopulateData(url, callbackSetterFunction);
       } catch (err) {
@@ -34,11 +36,11 @@ export default class Network {
     this._pollData(url, callbackSetterFunction);
   }
 
-  async pollCurrentIncidents(callbackSetterFunction) {
+  async pollCurrentIncidents(callbackSetterFunction, callbackBeforePolling) {
     const url = `${this.statusPageUrl}${
       getProvider(this.provider).incidentUrl
     }`;
     await this._fetchAndPopulateData(url, callbackSetterFunction);
-    this._pollData(url, callbackSetterFunction);
+    this._pollData(url, callbackSetterFunction, callbackBeforePolling);
   }
 }

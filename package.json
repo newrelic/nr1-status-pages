@@ -2,7 +2,7 @@
   "private": true,
   "name": "nr1-status-pages",
   "description": "Nerdpack nr1-status-pages",
-  "version": "0.1.6",
+  "version": "0.9.0",
   "bugs": {
     "email": "opensource@newrelic.com"
   },
@@ -13,20 +13,23 @@
     "eslint-fix": "eslint nerdlets/ --fix"
   },
   "nr1": {
-    "uuid": "3f1c6a09-7537-4386-a527-e2e4aa03389b",
+    "uuid": "faa546f1-d92d-4c66-94a2-4cdf4ad9df1a",
     "sdkVersion": 2
   },
   "dependencies": {
     "axios": "^0.19.0",
+    "dayjs": "^1.8.16",
     "generate-schema": "^2.6.0",
     "lodash": "^4.17.15",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-markdown": "^4.1.0",
+    "react-select": "^3.0.8",
     "react-vertical-timeline-component": "^2.4.0",
     "uuid": "^3.3.3",
-    "vertical-timeline-component-for-react": "^1.0.6"
+    "vertical-timeline-component-for-react": "^1.0.6",
+    "web-animations-js": "^2.3.2"
   },
   "browserslist": [
     "last 2 versions",
