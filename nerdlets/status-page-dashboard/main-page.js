@@ -424,16 +424,16 @@ export default class StatusPagesDashboard extends React.Component {
             label="Quick setup"
             className="status-page-setting"
           >
-            <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+            <DropdownItem onClick={e => this.handleQuickSetupSelect(e)}>
               Google Cloud
             </DropdownItem>
-            <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+            <DropdownItem onClick={e => this.handleQuickSetupSelect(e)}>
               GitHub
             </DropdownItem>
-            <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+            <DropdownItem onClick={e => this.handleQuickSetupSelect(e)}>
               Jira
             </DropdownItem>
-            <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+            <DropdownItem onClick={e => this.handleQuickSetupSelect(e)}>
               New Relic
             </DropdownItem>
           </Dropdown>
