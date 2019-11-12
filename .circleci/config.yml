@@ -252,7 +252,7 @@ commands:
       - run:
           name: "Setting target UUID"
           command: |
-            json -I -f package.json -e 'this.nr1.uuid="${NR1_NERDPACK_UUID}"'
+            json -I -f package.json -e "this.nr1.uuid='${NR1_NERDPACK_UUID}'"
 
       - run:
           name: "Build"
