@@ -493,6 +493,16 @@ export default class StatusPagesDashboard extends React.Component {
             >
               Google
             </DropdownItem>
+            <DropdownItem
+              onClick={() =>
+                this.setState(previousState => ({
+                  ...previousState,
+                  newHostProvider: event.target.innerHTML,
+                }))
+              }
+            >
+              Status Io
+            </DropdownItem>
           </Dropdown>
 
           <TextField

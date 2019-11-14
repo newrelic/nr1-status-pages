@@ -177,6 +177,7 @@ export default class CustomHostNames extends React.Component {
                 >
                   <option value="statusPageIo">Status Page Io</option>
                   <option value="google">Google</option>
+                  <option value="statusIo">Status Io</option>
                 </select>
                 <TagsModal
                   addDepTypeCallback={this.addDepTypeCallback}

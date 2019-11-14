@@ -3,6 +3,10 @@ import {
   statusPageIncidentFormatter,
   statusPageIoFormatter,
 } from './formatters/status-page-io';
+import {
+  statusIoIncidentFormatter,
+  statusIoFormatter,
+} from './formatters/status-io';
 
 const providers = {
   google: {
@@ -25,9 +29,21 @@ const providers = {
       major: 'major',
       critical: 'critical',
     },
-    name: 'Google Cloud',
+    name: 'Status Page',
     summaryFormatter: statusPageIoFormatter,
     incidentFormatter: statusPageIncidentFormatter,
+  },
+  statusIo: {
+    summaryUrl: 'todo - determine json source',
+    incidentUrl: 'todo - determine json source',
+    impactMap: {
+      minor: 'minor',
+      major: 'major',
+      critical: 'critical',
+    },
+    name: 'Status Io',
+    summaryFormatter: statusIoFormatter,
+    incidentFormatter: statusIoIncidentFormatter,
   },
 };
 

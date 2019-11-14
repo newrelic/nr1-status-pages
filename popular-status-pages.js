@@ -1,5 +1,5 @@
 export const popularSites = {
-  providers: ['statusPageIo', 'google'],
+  providers: ['statusPageIo', 'google', 'statusIo'],
   sites: [
     {
       id: '118f5f49-f709-4247-87cf-87d74a9d035d',
