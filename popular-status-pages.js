@@ -33,5 +33,13 @@ export const popularSites = {
       hostLogo:
         'https://github.githubassets.com/images/modules/logos_page/GitHub-Logo.png',
     },
+    {
+      serviceName: 'Ezidebit',
+      id: 'c6d03b68-014c-4ce3-8b30-e5cdd89de6a3',
+      hostName:
+        'https://ezidebit.status.io/pages/history/598a973f96a8201305000142',
+      provider: 'statusIo',
+      hostLogo: 'https://image.status.io/rzhxxLCLmUBz.png',
+    },
   ],
 };

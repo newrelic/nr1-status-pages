@@ -172,6 +172,9 @@ export default class StatusPagesDashboard extends React.Component {
       case 'GitHub':
         indexOfPopularSite = 3;
         break;
+      case 'Ezidebit':
+        indexOfPopularSite = 4;
+        break;
     }
     const selectedPopularSite = popularSites.sites[indexOfPopularSite];
 
@@ -435,6 +438,9 @@ export default class StatusPagesDashboard extends React.Component {
             </DropdownItem>
             <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
               New Relic
+            </DropdownItem>
+            <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+              Ezidebit
             </DropdownItem>
           </Dropdown>
 
