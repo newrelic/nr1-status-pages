@@ -30,6 +30,20 @@ export const statusIoFormatter = data => {
 };
 
 export const statusIoIncidentFormatter = data => {
-  console.debug('Status Io Incidents: ' + data);
-  return data.incidents;
+  // console.log(data);
+  return data.result.incidents.map(incident => {
+    const firstMessage = incident.messages[0];
+
+    return {
+      name: incident.name,
+      created_at: incident.datetime_open,
+      impact: StatusIoSeverityToKnown[firstMessage.status],
+      incident_updates: incident.messages.map(message => {
+        return {
+          created_at: message.datetime,
+          body: message.details,
+        };
+      }),
+    };
+  });
 };
