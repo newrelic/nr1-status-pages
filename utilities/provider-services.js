@@ -34,8 +34,10 @@ const providers = {
     incidentFormatter: statusPageIncidentFormatter,
   },
   statusIo: {
-    summaryUrl: 'todo - determine json source',
-    incidentUrl: 'todo - determine json source',
+    // assumes format entered of https://hostname/pages/history/<identifier>
+    // will replace "pages/history" with "1.0/status"
+    summaryUrl: '1.0/status',
+    incidentUrl: '1.0/status',
     impactMap: {
       minor: 'minor',
       major: 'major',
@@ -48,7 +50,12 @@ const providers = {
 };
 
 export const getProvider = providerKey => {
-  providerKey = providerKey === 'Status Page' ? 'statusPageIo' : providerKey;
+  providerKey =
+    providerKey === 'Status Page'
+      ? 'statusPageIo'
+      : providerKey === 'Status Io'
+      ? 'statusIo'
+      : providerKey;
   const provider = providers[providerKey];
   // console.debug(provider);
   return provider;
