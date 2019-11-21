@@ -369,7 +369,7 @@ export default class StatusPagesDashboard extends React.Component {
           className={`status-container ${
             hostNames.length === 0 ? 'no-status-pages-found' : ''
           }`}
-          spacingType={[Grid.SPACING_TYPE.SMALL, Grid.SPACING_TYPE.EXTRA_LARGE]}
+          spacingType={[Grid.SPACING_TYPE.LARGE, Grid.SPACING_TYPE.LARGE]}
           fullHeight
         >
           {this.getGridItems()}
