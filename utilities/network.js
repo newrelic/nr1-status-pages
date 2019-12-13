@@ -31,16 +31,40 @@ export default class Network {
 
   async pollSummaryData(callbackSetterFunction) {
     // Populate initial data before we start polling
-    const url = `${this.statusPageUrl}${getProvider(this.provider).summaryUrl}`;
+    const url = this._getUrl('summaryUrl');
+
     await this._fetchAndPopulateData(url, callbackSetterFunction);
     this._pollData(url, callbackSetterFunction);
   }
 
   async pollCurrentIncidents(callbackSetterFunction, callbackBeforePolling) {
-    const url = `${this.statusPageUrl}${
-      getProvider(this.provider).incidentUrl
-    }`;
+    const url = this._getUrl('incidentUrl');
+
     await this._fetchAndPopulateData(url, callbackSetterFunction);
     this._pollData(url, callbackSetterFunction, callbackBeforePolling);
+  }
+
+  // helper function to get correct url
+  // pass either 'summaryUrl' or 'incidentUrl'
+  _getUrl(providerUrlProperty) {
+    const provider = getProvider(this.provider);
+    var url = '';
+
+    switch (provider.name) {
+      case 'Status Io':
+        // will replace "pages/history" with "1.0/status"
+        url = `${this.statusPageUrl.replace(
+          'pages/history',
+          provider[providerUrlProperty]
+        )}`;
+        break;
+      default:
+        url = `${this.statusPageUrl}${provider[providerUrlProperty]}`;
+        break;
+    }
+
+    // console.debug(url);
+
+    return url;
   }
 }

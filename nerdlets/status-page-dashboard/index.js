@@ -1,6 +1,12 @@
 import React from 'react';
 import StatusPagesDashboard from './main-page';
-import { NerdletStateContext, EntityByGuidQuery, Spinner, HeadingText, BlockText } from 'nr1';
+import {
+  NerdletStateContext,
+  EntityByGuidQuery,
+  Spinner,
+  HeadingText,
+  BlockText,
+} from 'nr1';
 
 export default class Wrapper extends React.PureComponent {
   render() {
@@ -10,11 +16,12 @@ export default class Wrapper extends React.PureComponent {
           const { entityGuid } = nerdletUrlState;
           const type = entityGuid ? 'entity' : 'account';
           if (type == 'entity') {
-            return <StatusPagesDashboard entityGuid={entityGuid} />
+            return <StatusPagesDashboard entityGuid={entityGuid} />;
           } else {
-            return <StatusPagesDashboard />
+            return <StatusPagesDashboard />;
           }
         }}
-      </NerdletStateContext.Consumer>);
+      </NerdletStateContext.Consumer>
+    );
   }
 }

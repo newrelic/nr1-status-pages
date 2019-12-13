@@ -380,6 +380,16 @@ export default class StatusPage extends React.Component {
             >
               Google
             </DropdownItem>
+            <DropdownItem
+              onClick={() =>
+                this.setState(previousState => ({
+                  ...previousState,
+                  editedHostProvider: event.target.innerHTML,
+                }))
+              }
+            >
+              Status Io
+            </DropdownItem>
           </Dropdown>
           <TextField
             label="Service logo"

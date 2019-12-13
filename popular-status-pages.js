@@ -1,5 +1,5 @@
 export const popularSites = {
-  providers: ['statusPageIo', 'google'],
+  providers: ['statusPageIo', 'google', 'statusIo'],
   sites: [
     {
       id: '118f5f49-f709-4247-87cf-87d74a9d035d',
@@ -32,6 +32,14 @@ export const popularSites = {
       provider: 'statusPageIo',
       hostLogo:
         'https://github.githubassets.com/images/modules/logos_page/GitHub-Logo.png',
+    },
+    {
+      serviceName: 'Ezidebit',
+      id: 'c6d03b68-014c-4ce3-8b30-e5cdd89de6a3',
+      hostName:
+        'https://ezidebit.status.io/pages/history/598a973f96a8201305000142',
+      provider: 'statusIo',
+      hostLogo: 'https://image.status.io/rzhxxLCLmUBz.png',
     },
   ],
 };
