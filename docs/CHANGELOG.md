@@ -1,3 +1,11 @@
+## [0.10.1](https://github.com/newrelic/nr1-status-pages/compare/v0.10.0...v0.10.1) (2019-12-13)
+
+
+### Bug Fixes
+
+* adjust spacing around status pages container ([059be09](https://github.com/newrelic/nr1-status-pages/commit/059be095bddf13fd90a6c656d3370fb795269725))
+* prioritize css overrides over defaults ([be55c83](https://github.com/newrelic/nr1-status-pages/commit/be55c83f48a368df60c35f55a5a43c93c94b9842))
+
 # [0.10.0](https://github.com/newrelic/nr1-status-pages/compare/v0.9.0...v0.10.0) (2019-11-26)
 
 
