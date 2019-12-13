@@ -1,3 +1,10 @@
+# [0.11.0](https://github.com/newrelic/nr1-status-pages/compare/v0.10.1...v0.11.0) (2019-12-13)
+
+
+### Features
+
+* add support for status io provider ([#29](https://github.com/newrelic/nr1-status-pages/issues/29)) ([ef460e4](https://github.com/newrelic/nr1-status-pages/commit/ef460e43c4b2ca81fe94b0055c1a194d5604bf36))
+
 ## [0.10.1](https://github.com/newrelic/nr1-status-pages/compare/v0.10.0...v0.10.1) (2019-12-13)
 
 
