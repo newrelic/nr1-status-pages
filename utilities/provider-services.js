@@ -3,6 +3,10 @@ import {
   statusPageIncidentFormatter,
   statusPageIoFormatter,
 } from './formatters/status-page-io';
+import {
+  statusIoIncidentFormatter,
+  statusIoFormatter,
+} from './formatters/status-io';
 
 const providers = {
   google: {
@@ -25,14 +29,33 @@ const providers = {
       major: 'major',
       critical: 'critical',
     },
-    name: 'Google Cloud',
+    name: 'Status Page',
     summaryFormatter: statusPageIoFormatter,
     incidentFormatter: statusPageIncidentFormatter,
+  },
+  statusIo: {
+    // assumes format entered of https://hostname/pages/history/<identifier>
+    // will replace "pages/history" with "1.0/status"
+    summaryUrl: '1.0/status',
+    incidentUrl: '1.0/status',
+    impactMap: {
+      minor: 'minor',
+      major: 'major',
+      critical: 'critical',
+    },
+    name: 'Status Io',
+    summaryFormatter: statusIoFormatter,
+    incidentFormatter: statusIoIncidentFormatter,
   },
 };
 
 export const getProvider = providerKey => {
-  providerKey = providerKey === 'Status Page' ? 'statusPageIo' : providerKey;
+  providerKey =
+    providerKey === 'Status Page'
+      ? 'statusPageIo'
+      : providerKey === 'Status Io'
+      ? 'statusIo'
+      : providerKey;
   const provider = providers[providerKey];
   // console.debug(provider);
   return provider;

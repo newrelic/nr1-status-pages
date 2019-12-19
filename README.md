@@ -8,6 +8,12 @@ nr1-status-pages collects multiple status pages [Statuspage.io style](https://ww
 
 ![Screenshot #1](screenshots/dashboard-view.png)
 
+## Supported Providers
+
+[Statuspage.io style](https://www.statuspage.io)
+[Google style](https://www.google.com)
+[Status.io style](https://status.io/)
+
 ## Open Source License
 
 This project is distributed under the [Apache 2 license](LICENSE).

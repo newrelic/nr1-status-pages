@@ -2,7 +2,7 @@
   "private": true,
   "name": "nr1-status-pages",
   "description": "Nerdpack nr1-status-pages",
-  "version": "0.9.0",
+  "version": "0.11.0",
   "bugs": {
     "email": "opensource@newrelic.com"
   },
@@ -37,10 +37,11 @@
     "not dead"
   ],
   "devDependencies": {
+    "@newrelic/eslint-plugin-newrelic": "^0.3.0",
     "@semantic-release/changelog": "^3.0.5",
     "@semantic-release/git": "^7.0.18",
     "babel-eslint": "^10.0.3",
-    "eslint": "^6.3.0",
+    "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.2.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
