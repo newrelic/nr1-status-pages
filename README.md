@@ -10,9 +10,30 @@ nr1-status-pages collects multiple status pages [Statuspage.io style](https://ww
 
 ## Supported Providers
 
-[Statuspage.io style](https://www.statuspage.io)
-[Google style](https://www.google.com)
-[Status.io style](https://status.io/)
+### [Statuspage.io](https://www.statuspage.io)
+
+Example hostnames:
+
+- [https://www.githubstatus.com/](https://www.githubstatus.com/)
+- [https://jira-software.status.atlassian.com/](https://jira-software.status.atlassian.com/)
+- [https://status.digitalocean.com/](https://status.digitalocean.com/)
+- [https://status.hashicorp.com/](https://status.hashicorp.com/)
+
+### [Google style](https://www.google.com)
+
+Example hostnames:
+
+- [https://status.cloud.google.com](https://status.cloud.google.com)
+
+### [Status.io](https://status.io/)
+
+Url Format:
+`{baseUrl}/pages/history/{`[numeric statuspage_id](https://statusio.docs.apiary.io/#reference/incidents/list-incidents-by-id)`}`
+
+Example hostnames:
+
+- [https://ezidebit.status.io/pages/history/598a973f96a8201305000142](https://ezidebit.status.io/pages/history/598a973f96a8201305000142)
+- [https://status.docker.com/pages/history/533c6539221ae15e3f000031](https://status.docker.com/pages/history/533c6539221ae15e3f000031)
 
 ## Open Source License
 
