@@ -1,5 +1,7 @@
 # Documentation
 
+[![New Relic One Catalog Project header](https://github.com/newrelic/open-source-office/raw/master/examples/categories/images/New_Relic_One_Catalog_Project.png)](https://github.com/newrelic/open-source-office/blob/master/examples/categories/index.md#nr1-catalog)
+
 ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr1-status-pages?include_prereleases&sort=semver) [![Snyk](https://snyk.io/test/github/newrelic/nr1-status-pages/badge.svg)](https://snyk.io/test/github/newrelic/nr1-status-pages)
 
 ## Usage
@@ -10,7 +12,7 @@ Status Page also displays an event stream of previous incidents and outages, alo
 
 Choose an existing supported service like Jira, or add a new service.
 
-![Screenshot #1](https://github.com/newrelic/nr1-status-pages/blob/master/screenshots/dashboard-view.png)
+![Screenshot #1](https://github.com/newrelic/nr1-status-pages/blob/master/catalog/screenshots/nr1-status-pages-1.png)
 
 ## Open Source License
 
@@ -50,7 +52,7 @@ Open a command prompt in the nerdpack's directory and run the following commands
 # nr1 nerdpack:uuid -g [--profile=your_profile_name]
 
 # To see a list of APIkeys / profiles available in your development environment:
-# nr1 credentials:list
+# nr1 profiles:list
 
 nr1 nerdpack:publish [--profile=your_profile_name]
 nr1 nerdpack:deploy [-c [DEV|BETA|STABLE]] [--profile=your_profile_name]

@@ -1,6 +1,7 @@
 {
+  "tagline": "Collect and display the statuses of key dependencies in one place",
   "repository": "https://github.com/newrelic/nr1-status-pages.git",
-  "details": "Collect and display the statuses of key dependencies in one place.",
+  "details": "Status Page is a Statuspage.io-inspired application that allows you to easily configure the most important key dependencies to your business in one color-coded view.\n Status Page also displays an event stream of previous incidents and outages, along with updates for easy follow-along. \n Choose an existing supported service like Jira, or add a new service.",
   "support": {
     "issues": {
       "url": "https://github.com/newrelic/nr1-status-pages/issues"
@@ -8,16 +9,9 @@
     "email": {
       "address": "opensource+nr1-status-pages@newrelic.com"
     },
-    "website": {
+    "community": {
       "url": "https://discuss.newrelic.com/t/statuspage-io-nerdpack/83284"
     }
   },
-  "whatsNew": [
-    "Feat: add support for status io provider",
-    "Fix: Quick start dropdown now behaves properly",
-    "Feat: If no incident history is provided, let the user know and provide them a link directly to the status page of the service",
-    "Feat: Update the design for the toolbar",
-    "Feat: Adds a \"mini timeline\" to each service tile",
-    "Feat: Enables searching of tiles via search input in toolbar"
-  ]
+  "whatsNew": "Feat: add support for status io provider \n - Fix: Quick start dropdown now behaves properly \n - Feat: If no incident history is provided, let the user know and provide them a link directly to the status page of the service \n - Feat: Update the design for the toolbar \n - Feat: Adds a \"mini timeline\" to each service tile \n - Feat: Enables searching of tiles via search input in toolbar"
 }

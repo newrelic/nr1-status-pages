@@ -1,3 +1,5 @@
+[![New Relic One Catalog Project header](https://github.com/newrelic/open-source-office/raw/master/examples/categories/images/New_Relic_One_Catalog_Project.png)](https://github.com/newrelic/open-source-office/blob/master/examples/categories/index.md#nr1-catalog)
+
 # Status Page
 
 ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr1-status-pages?include_prereleases&sort=semver) [![Snyk](https://snyk.io/test/github/newrelic/nr1-status-pages/badge.svg)](https://snyk.io/test/github/newrelic/nr1-status-pages)
@@ -10,7 +12,7 @@ Status Page also displays an event stream of previous incidents and outages, alo
 
 Choose an existing supported service like Jira, or add a new service.
 
-![Screenshot #1](screenshots/dashboard-view.png)
+![Screenshot #1](/catalog/screenshots/nr1-status-pages-1.png)
 
 ## Open Source License
 
