@@ -2,5 +2,5 @@
   "schemaType": "NERDPACK",
   "id": "faa546f1-d92d-4c66-94a2-4cdf4ad9df1a",
   "displayName": "Status Pages",
-  "description": "Nerdpack nr1-status-pages"
+  "description": "Collect and display the statuses of key dependencies in one place"
 }
