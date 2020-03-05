@@ -10,11 +10,11 @@ Status Page also displays an event stream of previous incidents and outages, alo
 
 Choose an existing supported service like Jira, or add a new service.
 
-![Screenshot #1](screenshots/nr1-status-pages-1.png)
+![Screenshot #1](https://github.com/newrelic/nr1-status-pages/blob/master/screenshots/dashboard-view.png)
 
 ## Open Source License
 
-This project is distributed under the [Apache 2 license](/LICENSE).
+This project is distributed under the [Apache 2 license](https://github.com/newrelic/nr1-status-pages/blob/master/LICENSE).
 
 ## Dependencies
 
@@ -73,6 +73,6 @@ Issues and enhancement requests can be submitted in the [Issues tab of this repo
 
 ## Contributing
 
-Contributions are welcome (and if you submit a Enhancement Request, expect to be invited to contribute it yourself :grin:). Please review our [Contributors Guide](/CONTRIBUTING.md).
+Contributions are welcome (and if you submit a Enhancement Request, expect to be invited to contribute it yourself :grin:). Please review our [Contributors Guide](https://github.com/newrelic/nr1-status-pages/blob/master/CONTRIBUTING.md).
 
 Keep in mind that when you submit your pull request, you'll need to sign the CLA via the click-through using CLA-Assistant. If you'd like to execute our corporate CLA, or if you have any questions, please drop us an email at opensource@newrelic.com.
