@@ -1,3 +1,11 @@
+## [0.11.1](https://github.com/newrelic/nr1-status-pages/compare/v0.11.0...v0.11.1) (2020-03-06)
+
+
+### Bug Fixes
+
+* **catalog:** update commands in README ([44742d7](https://github.com/newrelic/nr1-status-pages/commit/44742d7bfddfe24457daa3ec2bec455261822de6)), closes [newrelic#44](https://github.com/newrelic/issues/44)
+* **chore:** update nr1.json description ([c68abb3](https://github.com/newrelic/nr1-status-pages/commit/c68abb342633c45021c2b92116fd7f1347bfb759))
+
 # [0.11.0](https://github.com/newrelic/nr1-status-pages/compare/v0.10.1...v0.11.0) (2019-12-13)
 
 
