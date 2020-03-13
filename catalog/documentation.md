@@ -1,9 +1,3 @@
-# Documentation
-
-[![New Relic One Catalog Project header](https://github.com/newrelic/open-source-office/raw/master/examples/categories/images/New_Relic_One_Catalog_Project.png)](https://github.com/newrelic/open-source-office/blob/master/examples/categories/index.md#nr1-catalog)
-
-![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr1-status-pages?include_prereleases&sort=semver) [![Snyk](https://snyk.io/test/github/newrelic/nr1-status-pages/badge.svg)](https://snyk.io/test/github/newrelic/nr1-status-pages)
-
 ## Usage
 
 Status Page is a [Statuspage.io](https://www.statuspage.io)-inspired application that allows you to easily configure the most important key dependencies to your business in one color-coded view.
@@ -11,8 +5,6 @@ Status Page is a [Statuspage.io](https://www.statuspage.io)-inspired application
 Status Page also displays an event stream of previous incidents and outages, along with updates for easy follow-along.
 
 Choose an existing supported service like Jira, or add a new service.
-
-![Screenshot #1](https://github.com/newrelic/nr1-status-pages/blob/master/catalog/screenshots/nr1-status-pages-1.png)
 
 ## Open Source License
 
