@@ -41,6 +41,8 @@ export default class StatusPage extends React.Component {
       this.props.hostname.provider
     );
     this.FormatService = new FormatService(this.props.hostname.provider);
+    this.popupHoverTimer = null;
+
     this.state = {
       statusPageIoSummaryData: undefined,
       inputValue: '',
@@ -58,6 +60,11 @@ export default class StatusPage extends React.Component {
     );
     this.handleSettingsPopover = this.handleSettingsPopover.bind(this);
     this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
+    this.handleSettingsButtonMouseLeave = this.handleSettingsButtonMouseLeave.bind(
+      this
+    );
+    this.handlePopupMouseEnter = this.handlePopupMouseEnter.bind(this);
+    this.handlePopupMouseLeave = this.handlePopupMouseLeave.bind(this);
 
     this.serviceTilePrimaryContent = React.createRef();
     this.serviceTileSettingsContent = React.createRef();
@@ -279,6 +286,24 @@ export default class StatusPage extends React.Component {
     this.handleTileSettingsAnimation();
   }
 
+  handleSettingsButtonMouseLeave() {
+    this.popupHoverTimer = setTimeout(() => {
+      this.setState({ settingsPopoverActive: false });
+    }, 150);
+  }
+
+  handlePopupMouseEnter() {
+    if (this.popupHoverTimer) {
+      clearTimeout(this.popupHoverTimer);
+    }
+  }
+
+  handlePopupMouseLeave() {
+    this.popupHoverTimer = setTimeout(() => {
+      this.setState({ settingsPopoverActive: false });
+    }, 150);
+  }
+
   renderSettingsButton() {
     const hostname = this.props.hostname;
     return (
@@ -288,6 +313,7 @@ export default class StatusPage extends React.Component {
             ? 'settings-popover-active'
             : 'settings-popover-inactive'
         }`}
+        onMouseLeave={this.handleSettingsButtonMouseLeave}
       >
         <Button
           sizeType={Button.SIZE_TYPE.SMALL}
@@ -296,7 +322,11 @@ export default class StatusPage extends React.Component {
           iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__MORE}
           onClick={this.handleSettingsPopover}
         />
-        <ul className="service-settings-dropdown">
+        <ul
+          className="service-settings-dropdown"
+          onMouseEnter={this.handlePopupMouseEnter}
+          onMouseLeave={this.handlePopupMouseLeave}
+        >
           <li className="service-settings-dropdown-item">
             <Icon type={Icon.TYPE.INTERFACE__INFO__INFO} />
             View details
