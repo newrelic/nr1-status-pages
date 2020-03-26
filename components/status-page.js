@@ -483,8 +483,6 @@ export default class StatusPage extends React.Component {
       hostnameGeneric,
     } = this.props;
 
-    console.log(hostnameGeneric);
-
     const { settingsViewActive } = this.state;
 
     return (
