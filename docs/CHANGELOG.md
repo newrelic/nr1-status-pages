@@ -1,3 +1,10 @@
+## [0.12.1](https://github.com/newrelic/nr1-status-pages/compare/v0.12.0...v0.12.1) (2020-03-27)
+
+
+### Bug Fixes
+
+* Make popover menu disappear onMouseLeave ([#46](https://github.com/newrelic/nr1-status-pages/issues/46)) ([6043ae0](https://github.com/newrelic/nr1-status-pages/commit/6043ae0706fbd621fdd49286f3b393d01a50a3fd)), closes [newrelic#42](https://github.com/newrelic/issues/42)
+
 # [0.12.0](https://github.com/newrelic/nr1-status-pages/compare/v0.11.1...v0.12.0) (2020-03-06)
 
 
