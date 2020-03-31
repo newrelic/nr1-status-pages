@@ -9,11 +9,9 @@ import {
   Stack,
   StackItem
 } from 'nr1';
-
+import { v4 as uuidv4 } from 'uuid';
 import { saveHostNamesToNerdStorage } from '../../utilities/nerdlet-storage';
 import TagsModal from './modal-tag';
-
-const uuid = require('uuid/v4');
 
 export default class CustomHostNames extends React.PureComponent {
   static propTypes = {
@@ -57,7 +55,7 @@ export default class CustomHostNames extends React.PureComponent {
     const { addHostNameText, selectedProvider, tags } = this.state;
 
     const hostNameObject = {
-      id: uuid(),
+      id: uuidv4(),
       hostName: addHostNameText,
       provider: selectedProvider,
       tags: tags
