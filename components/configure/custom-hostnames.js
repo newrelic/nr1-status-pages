@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-const uuid = require('uuid/v4');
-
 import {
   NerdGraphQuery,
   Button,
@@ -9,26 +7,32 @@ import {
   Icon,
   TextField,
   Stack,
-  StackItem,
+  StackItem
 } from 'nr1';
-
+import { v4 as uuidv4 } from 'uuid';
 import { saveHostNamesToNerdStorage } from '../../utilities/nerdlet-storage';
 import TagsModal from './modal-tag';
 
-export default class CustomHostNames extends React.Component {
+export default class CustomHostNames extends React.PureComponent {
+  static propTypes = {
+    entityGuid: PropTypes.string,
+    accountId: PropTypes.number,
+    addHostNameCallback: PropTypes.func,
+    deleteHostNameCallback: PropTypes.func,
+    hostNames: PropTypes.array
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      hidden: true,
       tagHidden: true,
-      mounted: false,
       selectedProvider: 'statusPageIo',
       tags: [],
       keyObject: {
         key: props.entityGuid ? props.entityGuid : props.accountId,
-        type: props.entityGuid ? 'entity' : 'account',
+        type: props.entityGuid ? 'entity' : 'account'
       },
-      selectedEditHost: undefined,
+      selectedEditHost: undefined
     };
     this.addHostName = this.addHostName.bind(this);
     this.onTextInputChange = this.onTextInputChange.bind(this);
@@ -51,10 +55,10 @@ export default class CustomHostNames extends React.Component {
     const { addHostNameText, selectedProvider, tags } = this.state;
 
     const hostNameObject = {
-      id: uuid(),
+      id: uuidv4(),
       hostName: addHostNameText,
       provider: selectedProvider,
-      tags: tags,
+      tags: tags
     };
     this.setState({ tags: [] });
     addHostNameCallback(hostNameObject);
@@ -64,7 +68,7 @@ export default class CustomHostNames extends React.Component {
   generateListHostNames() {
     const { deleteHostNameCallback, hostNames } = this.props;
 
-    if (!hostNames) return <div></div>;
+    if (!hostNames) return <div />;
     return hostNames.map(hostNameObject => (
       <li key={hostNameObject.id} className="modal-list-item">
         <div className="modal-list-item-name"> {hostNameObject.hostName} </div>
@@ -73,7 +77,9 @@ export default class CustomHostNames extends React.Component {
             type={Button.TYPE.DESTRUCTIVE}
             sizeType={Button.SIZE_TYPE.SMALL}
             iconType={Button.ICON_TYPE.INTERFACE__SIGN__TIMES}
-            onClick={deleteHostNameCallback.bind(this, hostNameObject.hostName)}
+            onClick={() => {
+              deleteHostNameCallback(hostNameObject.hostName);
+            }}
           >
             Delete
           </Button>
@@ -81,7 +87,9 @@ export default class CustomHostNames extends React.Component {
             type={Button.TYPE.NORMAL}
             sizeType={Button.SIZE_TYPE.SMALL}
             iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EDIT}
-            onClick={this.editTags.bind(this, hostNameObject)}
+            onClick={() => {
+              this.editTags(hostNameObject);
+            }}
           >
             Edit
           </Button>
@@ -100,24 +108,23 @@ export default class CustomHostNames extends React.Component {
     try {
       // const accountsResults = await AccountsQuery.query();
       const accountsResults = await NerdGraphQuery.query({
-        query: '{ actor { accounts { id name } }}',
+        query: '{ actor { accounts { id name } }}'
       });
       if (
         accountsResults.data &&
         accountsResults.data.actor &&
         accountsResults.data.actor.accounts
       ) {
-        accountsResults.data.actor.accounts.forEach(
-          async account =>
-            await saveHostNamesToNerdStorage(
-              { key: account.id, type: 'account' },
-              hostNames
-            )
+        accountsResults.data.actor.accounts.forEach(async account =>
+          saveHostNamesToNerdStorage(
+            { key: account.id, type: 'account' },
+            hostNames
+          )
         );
         this._displaySaveMessage();
       }
     } catch (err) {
-      console.log(err);
+      console.log(err); // eslint-disable-line no-console
     }
   }
 
@@ -140,7 +147,7 @@ export default class CustomHostNames extends React.Component {
       tagHidden,
       selectedEditHost,
       showSaved,
-      selectedProvider,
+      selectedProvider
     } = this.state;
     const hostnames = this.generateListHostNames();
     return (
