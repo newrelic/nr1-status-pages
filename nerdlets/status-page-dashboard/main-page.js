@@ -10,9 +10,7 @@ import {
   Spinner,
   Modal,
   Button,
-  TextField,
-  Dropdown,
-  DropdownItem
+  TextField
 } from 'nr1';
 import Toolbar from '../../components/toolbar';
 import AccountPicker from '../../components/account-picker';
