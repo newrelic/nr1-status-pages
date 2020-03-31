@@ -417,26 +417,12 @@ export default class StatusPagesDashboard extends React.PureComponent {
           <div className="select-container">
             <label>Quick setup</label>
             <select onChange={e => this.handleQuickSetupSelect(e)}>
-              <option>
-                {this.state.newHostProvider === ''
-                  ? 'Choose a service'
-                  : this.state.quickSetupSelection}
-              </option>
-              <option onClick={e => this.handleQuickSetupSelect(e)}>
-                Google Cloud
-              </option>
-              <option onClick={e => this.handleQuickSetupSelect(e)}>
-                GitHub
-              </option>
-              <option onClick={e => this.handleQuickSetupSelect(e)}>
-                Jira
-              </option>
-              <option onClick={e => this.handleQuickSetupSelect(e)}>
-                New Relic
-              </option>
-              <option onClick={() => this.handleQuickSetupSelect(event)}>
-                Ezidebit
-              </option>
+              <option>Choose a service</option>
+              <option>Google Cloud</option>
+              <option>GitHub</option>
+              <option>Jira</option>
+              <option>New Relic</option>
+              <option>Ezidebit</option>
             </select>
           </div>
 
@@ -465,47 +451,28 @@ export default class StatusPagesDashboard extends React.PureComponent {
             }
             value={this.state.newHostName}
           />
-          <Dropdown
-            title={
-              this.state.newHostProvider === ''
-                ? 'Choose a provider'
-                : this.state.newHostProvider
-            }
-            label="Provider"
-            className="status-page-setting"
-          >
-            <DropdownItem
-              selected
-              onClick={() =>
+          <div className="select-container">
+            <label>Provider</label>
+            <select
+              onChange={() =>
                 this.setState(previousState => ({
                   ...previousState,
-                  newHostProvider: event.target.innerHTML
+                  newHostProvider: event.target.value
                 }))
               }
             >
-              Status Page
-            </DropdownItem>
-            <DropdownItem
-              onClick={() =>
-                this.setState(previousState => ({
-                  ...previousState,
-                  newHostProvider: event.target.innerHTML
-                }))
-              }
-            >
-              Google
-            </DropdownItem>
-            <DropdownItem
-              onClick={() =>
-                this.setState(previousState => ({
-                  ...previousState,
-                  newHostProvider: event.target.innerHTML
-                }))
-              }
-            >
-              Status Io
-            </DropdownItem>
-          </Dropdown>
+              <option>Choose a provider</option>
+              <option selected={this.state.newHostProvider === 'Status Page'}>
+                Status Page
+              </option>
+              <option selected={this.state.newHostProvider === 'Google'}>
+                Google
+              </option>
+              <option selected={this.state.newHostProvider === 'Status Io'}>
+                Status Io
+              </option>
+            </select>
+          </div>
 
           <TextField
             label="Service logo (url)"
