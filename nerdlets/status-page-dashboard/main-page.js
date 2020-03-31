@@ -158,7 +158,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
   };
 
   handleQuickSetupSelect(e) {
-    const selectedService = e.target.innerHTML;
+    const selectedService = e.target.value;
     let indexOfPopularSite = null;
 
     switch (selectedService) {
@@ -414,32 +414,31 @@ export default class StatusPagesDashboard extends React.PureComponent {
             service you'd like to add. You will be able to edit this information
             in the future.
           </p>
-
-          <Dropdown
-            title={
-              this.state.newHostProvider === ''
-                ? 'Choose a service'
-                : this.state.quickSetupSelection
-            }
-            label="Quick setup"
-            className="status-page-setting"
-          >
-            <DropdownItem onClick={e => this.handleQuickSetupSelect(e)}>
-              Google Cloud
-            </DropdownItem>
-            <DropdownItem onClick={e => this.handleQuickSetupSelect(e)}>
-              GitHub
-            </DropdownItem>
-            <DropdownItem onClick={e => this.handleQuickSetupSelect(e)}>
-              Jira
-            </DropdownItem>
-            <DropdownItem onClick={e => this.handleQuickSetupSelect(e)}>
-              New Relic
-            </DropdownItem>
-            <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
-              Ezidebit
-            </DropdownItem>
-          </Dropdown>
+          <div className="select-container">
+            <label>Quick setup</label>
+            <select onChange={e => this.handleQuickSetupSelect(e)}>
+              <option>
+                {this.state.newHostProvider === ''
+                  ? 'Choose a service'
+                  : this.state.quickSetupSelection}
+              </option>
+              <option onClick={e => this.handleQuickSetupSelect(e)}>
+                Google Cloud
+              </option>
+              <option onClick={e => this.handleQuickSetupSelect(e)}>
+                GitHub
+              </option>
+              <option onClick={e => this.handleQuickSetupSelect(e)}>
+                Jira
+              </option>
+              <option onClick={e => this.handleQuickSetupSelect(e)}>
+                New Relic
+              </option>
+              <option onClick={() => this.handleQuickSetupSelect(event)}>
+                Ezidebit
+              </option>
+            </select>
+          </div>
 
           <hr className="or-sep" />
 
