@@ -1,3 +1,14 @@
+## [0.12.2](https://github.com/newrelic/nr1-status-pages/compare/v0.12.1...v0.12.2) (2020-03-31)
+
+
+### Bug Fixes
+
+* implement uuid. ([a0bea83](https://github.com/newrelic/nr1-status-pages/commit/a0bea83bfed455de708b6a9f44869f99f4d5eda0))
+* remove confusing inline eslint rule. Simplify the code. ([1afa80b](https://github.com/newrelic/nr1-status-pages/commit/1afa80b6899e23a84516cc13e9a7d79d2283e495))
+* swap out Dropdown for select ([e470234](https://github.com/newrelic/nr1-status-pages/commit/e4702340536023a2097b707171896eefabe40087))
+* swaps another dropdown for vanilla select ([fa03eef](https://github.com/newrelic/nr1-status-pages/commit/fa03eef0e871006b5ebbc1762f017be37bcf1fa6))
+* unused binding calls. ([c1deae9](https://github.com/newrelic/nr1-status-pages/commit/c1deae90b4c357bb8327a0139052459e22d061b8))
+
 ## [0.12.1](https://github.com/newrelic/nr1-status-pages/compare/v0.12.0...v0.12.1) (2020-03-27)
 
 
