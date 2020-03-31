@@ -1,13 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, HeadingText, Modal, TextField, Stack, StackItem } from 'nr1';
 
-export default class TagsModal extends React.Component {
+export default class TagsModal extends React.PureComponent {
+  static propTypes = {
+    hostName: PropTypes.string,
+    hidden: PropTypes.bool,
+    onClose: PropTypes.func
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       addTagName: '',
-      tagHidden: props.tagHidden,
-      tags: props.hostName ? props.hostName.tags : [],
+      tags: props.hostName ? props.hostName.tags : []
     };
     this.addTag = this.addTag.bind(this);
     this.deleteTag = this.deleteTag.bind(this);
@@ -28,20 +34,25 @@ export default class TagsModal extends React.Component {
       this.props.hostName.tags.findIndex(tag => tag === tagName),
       1
     );
-    tags.splice(tags.findIndex(tag => tag === tagName), 1);
+    tags.splice(
+      tags.findIndex(tag => tag === tagName),
+      1
+    );
     this.setState({ tags: tags });
   }
 
   generateListHostNames() {
-    if (!this.props.hostName || !this.props.hostName.tags) return <div></div>;
+    if (!this.props.hostName || !this.props.hostName.tags) return <div />;
     return this.props.hostName.tags.map(tag => (
       <li key={tag} className="modal-list-item">
         <div className="modal-list-item-name"> {tag} </div>
         <Button
           className="btn-white modal-list-item-delete"
           iconType={Button.ICON_TYPE.INTERFACE__SIGN__TIMES}
-          onClick={this.deleteTag.bind(this, tag)}
-        ></Button>
+          onClick={() => {
+            this.deleteTag(tag);
+          }}
+        />
       </li>
     ));
   }
@@ -77,7 +88,9 @@ export default class TagsModal extends React.Component {
             <StackItem>
               <Button
                 type={Button.TYPE.NORMAL}
-                onClick={onClose.bind(this, tags)}
+                onClick={() => {
+                  onClose(tags);
+                }}
               >
                 Close
               </Button>

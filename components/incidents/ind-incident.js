@@ -4,9 +4,9 @@ import IndUpdates from './ind-updates';
 
 import { HeadingText } from 'nr1';
 
-export default class IndIncident extends React.Component {
+export default class IndIncident extends React.PureComponent {
   static propTypes = {
-    incident: PropTypes.any,
+    incident: PropTypes.object
   };
 
   generateIncidentUpdates() {

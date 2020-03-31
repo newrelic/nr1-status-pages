@@ -3,20 +3,16 @@ import PropTypes from 'prop-types';
 import { Timeline, TimelineItem } from 'vertical-timeline-component-for-react';
 import IndIncident from './ind-incident';
 
-export default class IncidentTimeline extends React.Component {
+export default class IncidentTimeline extends React.PureComponent {
   static propTypes = {
-    version: PropTypes.number,
-  };
-
-  static defaultProps = {
-    version: 1,
+    incidents: PropTypes.array
   };
 
   backgroundColors = {
     none: '#10a600',
     minor: '#ffda00',
     major: '#ea7c00',
-    critical: '#bd071f',
+    critical: '#bd071f'
   };
 
   getTimeLineItems() {
@@ -26,7 +22,7 @@ export default class IncidentTimeline extends React.Component {
         <TimelineItem
           className={`incident-impact-${incident.impact}`}
           dateInnerStyle={{
-            background: this.backgroundColors[incident.impact],
+            background: this.backgroundColors[incident.impact]
           }}
           key={`${index}`}
           dateText={`${date.toDateString()}`}
@@ -41,7 +37,7 @@ export default class IncidentTimeline extends React.Component {
     if (this.props.incidents.length === 0) {
       return <div> No reported outages </div>;
     }
-    return <Timeline lineColor={'black'}>{this.getTimeLineItems()}</Timeline>;
+    return <Timeline lineColor="black">{this.getTimeLineItems()}</Timeline>;
   }
 
   render() {
@@ -51,22 +47,22 @@ export default class IncidentTimeline extends React.Component {
           <div className="dot-header">
             <div className="dot-container">
               {' '}
-              <div className="dot none"></div>
+              <div className="dot none" />
               <div className="dot-name">No Impact</div>
             </div>
             <div className="dot-container">
               {' '}
-              <div className="dot minor"></div>
+              <div className="dot minor" />
               <div className="dot-name">Minor Impact</div>
             </div>
             <div className="dot-container">
               {' '}
-              <div className="dot major"></div>
+              <div className="dot major" />
               <div className="dot-name">Major Impact</div>
             </div>
             <div className="dot-container">
               {' '}
-              <div className="dot critical"></div>
+              <div className="dot critical" />
               <div className="dot-name">Critical Impact</div>
             </div>
           </div>

@@ -5,20 +5,21 @@ import dayjs from 'dayjs';
 
 import { navigation, Icon, Button } from 'nr1';
 import FormatService from '../utilities/format-service';
-import { hostname } from 'os';
+// import { hostname } from 'os';
 
-export default class CurrentIncidents extends React.Component {
+export default class CurrentIncidents extends React.PureComponent {
   static propTypes = {
     hostname: PropTypes.string.isRequired,
     provider: PropTypes.string.isRequired,
     refreshRate: PropTypes.number,
+    handleTileClick: PropTypes.func
   };
 
   constructor(props) {
     super(props);
     this.state = {
       currentIncidents: undefined,
-      isPolling: false,
+      isPolling: false
     };
     this.FormatService = new FormatService(this.props.provider);
     this.statusPageNetwork = new Network(
@@ -29,22 +30,25 @@ export default class CurrentIncidents extends React.Component {
     this.seeMore = this.seeMore.bind(this);
   }
 
+  componentDidMount() {
+    this.statusPageNetwork.pollCurrentIncidents(
+      this.setIncidentData.bind(this),
+      () => {
+        const { isPolling } = this.state;
+        this.setState({ isPolling: !isPolling });
+      }
+    );
+  }
+
   seeMore() {
     const nerdletWithState = {
       id: 'incident-details',
       urlState: {
         hostname: this.props.hostname,
-        provider: this.props.provider,
-      },
+        provider: this.props.provider
+      }
     };
     navigation.openStackedNerdlet(nerdletWithState);
-  }
-
-  componentDidMount() {
-    this.statusPageNetwork.pollCurrentIncidents(
-      this.setIncidentData.bind(this),
-      () => this.setState({ isPolling: !this.state.isPolling })
-    );
   }
 
   setTimelineSymbol(incidentImpact) {
@@ -93,7 +97,7 @@ export default class CurrentIncidents extends React.Component {
   setIncidentData(data) {
     this.setState({
       currentIncidents: this.FormatService.uniformIncidentData(data),
-      isPolling: false,
+      isPolling: false
     });
   }
 
@@ -138,7 +142,7 @@ export default class CurrentIncidents extends React.Component {
               {dayjs(incident.created_at).format('h:mm a')}
             </span>
           </div>
-          <div className="timeline-item-dot"></div>
+          <div className="timeline-item-dot" />
           <div className="timeline-item-body">
             <div className="timeline-item-body-header">
               <div

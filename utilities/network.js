@@ -22,7 +22,7 @@ export default class Network {
       try {
         this._fetchAndPopulateData(url, callbackSetterFunction);
       } catch (err) {
-        console.error(err);
+        console.error(err); // eslint-disable-line no-console
       } finally {
         this._pollData(url, callbackSetterFunction);
       }
@@ -48,7 +48,7 @@ export default class Network {
   // pass either 'summaryUrl' or 'incidentUrl'
   _getUrl(providerUrlProperty) {
     const provider = getProvider(this.provider);
-    var url = '';
+    let url = '';
 
     switch (provider.name) {
       case 'Status Io':

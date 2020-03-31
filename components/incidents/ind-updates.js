@@ -5,9 +5,9 @@ import { HeadingText } from 'nr1';
 
 const ReactMarkdown = require('react-markdown');
 
-export default class IndUpdates extends React.Component {
+export default class IndUpdates extends React.PureComponent {
   static propTypes = {
-    update: PropTypes.any,
+    update: PropTypes.object
   };
 
   render() {

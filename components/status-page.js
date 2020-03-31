@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Summary from './summary';
 import 'web-animations-js';
 
 import Network from '../utilities/network';
@@ -13,9 +12,8 @@ import {
   TextField,
   Dropdown,
   DropdownItem,
-  navigation,
+  navigation
 } from 'nr1';
-import CreatableSelect from 'react-select/creatable';
 
 import GitHubLogo from '../assets/logo-github.svg';
 import NewRelicLogo from '../assets/logo-new-relic.png';
@@ -24,12 +22,15 @@ import GoogleCloudProviderLogo from '../assets/logo-google-cloud.svg';
 
 const createOption = label => ({
   label,
-  value: label,
+  value: label
 });
-export default class StatusPage extends React.Component {
+export default class StatusPage extends React.PureComponent {
   static propTypes = {
     hostname: PropTypes.object.isRequired,
     refreshRate: PropTypes.number,
+    handleDeleteTileModal: PropTypes.func,
+    editHostName: PropTypes.func,
+    setServiceTileRef: PropTypes.object
   };
 
   constructor(props) {
@@ -52,7 +53,7 @@ export default class StatusPage extends React.Component {
       editedServiceName: this.props.hostname.serviceName,
       editedHostName: this.props.hostname.hostName,
       editedHostProvider: this.props.hostname.provider,
-      editedHostLogo: this.props.hostname.hostLogo,
+      editedHostLogo: this.props.hostname.hostLogo
     };
 
     this.handleTileSettingsAnimation = this.handleTileSettingsAnimation.bind(
@@ -74,13 +75,10 @@ export default class StatusPage extends React.Component {
     this.StatusPageNetwork.pollSummaryData(this.setSummaryData.bind(this));
   }
 
-  handleSelectChange = (value, actionMeta) => {
-    console.group('Value Changed');
-    console.log(value);
-    console.log(`action: ${actionMeta.action}`);
-    console.groupEnd();
+  handleSelectChange = value => {
     this.setState({ value });
   };
+
   handleSelectInputChange = inputValue => {
     this.setState({ inputValue });
   };
@@ -91,19 +89,16 @@ export default class StatusPage extends React.Component {
     switch (event.key) {
       case 'Enter':
       case 'Tab':
-        console.group('Value Added');
-        console.log(value);
-        console.groupEnd();
         this.setState({
           inputValue: '',
-          value: [...value, createOption(inputValue)],
+          value: [...value, createOption(inputValue)]
         });
         event.preventDefault();
     }
   };
 
   autoSetLogo(hostname) {
-    const { serviceName, hostName, provider, hostLogo } = hostname;
+    const { serviceName, hostName, hostLogo } = hostname;
     if (hostName.includes('githubstatus')) {
       return <img src={GitHubLogo} className="service-logo" alt="GitHub" />;
     } else if (hostName.includes('jira-software')) {
@@ -149,7 +144,7 @@ export default class StatusPage extends React.Component {
 
   setSummaryData(data) {
     this.setState({
-      statusPageIoSummaryData: this.FormatService.uniformSummaryData(data),
+      statusPageIoSummaryData: this.FormatService.uniformSummaryData(data)
     });
   }
 
@@ -159,51 +154,51 @@ export default class StatusPage extends React.Component {
     const settingsContent = this.serviceTileSettingsContent.current;
 
     if (settingsViewActive) {
-      const animateSettingsOut = settingsContent.animate(
+      settingsContent.animate(
         {
           opacity: [1, 0],
           transform: [
             'translateX(0) rotateY(0)',
-            'translateX(30px) rotateY(25deg)',
-          ],
+            'translateX(30px) rotateY(25deg)'
+          ]
         },
         {
           duration: 400,
           fill: 'forwards',
-          easing: 'cubic-bezier(.23, 1, .32, 1)',
+          easing: 'cubic-bezier(.23, 1, .32, 1)'
         }
       );
 
-      const animatePrimaryContentIn = primaryContent.animate(
+      primaryContent.animate(
         {
           opacity: [0, 1],
           transform: [
             'translateX(-30px) rotateY(-15deg)',
-            'translateX(0) rotateY(0deg)',
-          ],
+            'translateX(0) rotateY(0deg)'
+          ]
         },
         {
           duration: 400,
           fill: 'forwards',
           easing: 'cubic-bezier(.25, .46, .45, .94)',
-          delay: 200,
+          delay: 200
         }
       );
       this.setState({ settingsViewActive: false });
     } else {
-      const animateSettingsIn = settingsContent.animate(
+      settingsContent.animate(
         {
           opacity: [0, 1],
           transform: [
             'translateX(30px) rotateY(15deg)',
-            'translateX(0) rotateY(0deg)',
-          ],
+            'translateX(0) rotateY(0deg)'
+          ]
         },
         {
           duration: 400,
           fill: 'forwards',
           easing: 'cubic-bezier(.25, .46, .45, .94)',
-          delay: 200,
+          delay: 200
         }
       );
 
@@ -212,13 +207,13 @@ export default class StatusPage extends React.Component {
           opacity: [1, 0],
           transform: [
             'translateX(0) rotateY(0)',
-            'translateX(-30px) rotateY(-25deg)',
-          ],
+            'translateX(-30px) rotateY(-25deg)'
+          ]
         },
         {
           duration: 400,
           fill: 'forwards',
-          easing: 'cubic-bezier(.23, 1, .32, 1)',
+          easing: 'cubic-bezier(.23, 1, .32, 1)'
         }
       );
 
@@ -238,8 +233,8 @@ export default class StatusPage extends React.Component {
             refreshRate: refreshRate,
             hostname: hostname,
             provider: provider,
-            timelineItemIndex: i,
-          },
+            timelineItemIndex: i
+          }
         });
         event.stopPropagation();
       } else {
@@ -249,15 +244,15 @@ export default class StatusPage extends React.Component {
             statusPageIoSummaryData: statusPageIoSummaryData,
             refreshRate: refreshRate,
             hostname: hostname,
-            provider: provider,
-          },
+            provider: provider
+          }
         });
       }
     }
   }
 
   handleSettingsPopover(e) {
-    this.setState({ settingsPopoverActive: !this.state.settingsPopoverActive });
+    this.setState({ settingsPopoverActive: !this.state.settingsPopoverActive }); // eslint-disable-line react/no-access-state-in-setstate
     e.stopPropagation();
   }
 
@@ -273,12 +268,12 @@ export default class StatusPage extends React.Component {
     this.handleSettingsPopover();
   }
 
-  handleSaveButtonClick(e, hostname) {
+  handleSaveButtonClick(e) {
     const hostNameObject = {
       serviceName: this.state.editedServiceName,
       hostName: this.state.editedHostName,
       provider: this.state.editedHostProvider,
-      hostLogo: this.state.editedHostLogo,
+      hostLogo: this.state.editedHostLogo
     };
 
     this.props.editHostName()(hostNameObject);
@@ -367,11 +362,11 @@ export default class StatusPage extends React.Component {
             onChange={() =>
               this.setState(previousState => ({
                 ...previousState,
-                editedServiceName: event.target.value,
+                editedServiceName: event.target.value
               }))
             }
             defaultValue={hostname.serviceName}
-          ></TextField>
+          />
           <TextField
             label="Hostname"
             placeholder="https://status.myservice.com/"
@@ -379,11 +374,11 @@ export default class StatusPage extends React.Component {
             onChange={() =>
               this.setState(previousState => ({
                 ...previousState,
-                editedHostName: event.target.value,
+                editedHostName: event.target.value
               }))
             }
             defaultValue={hostname.hostName}
-          ></TextField>
+          />
           <Dropdown
             title="Choose a provider"
             label="Provider"
@@ -394,7 +389,7 @@ export default class StatusPage extends React.Component {
               onClick={() =>
                 this.setState(previousState => ({
                   ...previousState,
-                  editedHostProvider: event.target.innerHTML,
+                  editedHostProvider: event.target.innerHTML
                 }))
               }
             >
@@ -404,7 +399,7 @@ export default class StatusPage extends React.Component {
               onClick={() =>
                 this.setState(previousState => ({
                   ...previousState,
-                  editedHostProvider: event.target.innerHTML,
+                  editedHostProvider: event.target.innerHTML
                 }))
               }
             >
@@ -414,7 +409,7 @@ export default class StatusPage extends React.Component {
               onClick={() =>
                 this.setState(previousState => ({
                   ...previousState,
-                  editedHostProvider: event.target.innerHTML,
+                  editedHostProvider: event.target.innerHTML
                 }))
               }
             >
@@ -427,12 +422,12 @@ export default class StatusPage extends React.Component {
             onChange={() =>
               this.setState(previousState => ({
                 ...previousState,
-                editedHostLogo: event.target.value,
+                editedHostLogo: event.target.value
               }))
             }
             defaultValue={hostname.hostLogo}
             placeholder="https://website.com/logo.png"
-          ></TextField>
+          />
         </div>
         <div className="status-page-settings-cta-container">
           <Button
@@ -463,25 +458,19 @@ export default class StatusPage extends React.Component {
       >
         {this.renderSettingsButton()}
         <Spinner fillContainer />
-        <div ref={this.serviceTilePrimaryContent}></div>
+        <div ref={this.serviceTilePrimaryContent} />
         {this.renderSettings()}
       </div>
     );
   }
 
   render() {
-    const { statusPageIoSummaryData, inputValue, value } = this.state;
+    const { statusPageIoSummaryData } = this.state;
     if (!statusPageIoSummaryData) {
       return this.renderLoadingState();
     }
 
-    const {
-      refreshRate,
-      hostname,
-      handleDeleteTileModal,
-      editHostName,
-      hostnameGeneric,
-    } = this.props;
+    const { refreshRate, hostname } = this.props;
 
     const { settingsViewActive } = this.state;
 
@@ -524,27 +513,27 @@ export default class StatusPage extends React.Component {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <g clip-path="url(#clip0)">
+                  <g clipPath="url(#clip0)">
                     <path
                       d="M8.14625 3.05583L1.44083 14.25C1.30258 14.4894 1.22943 14.7609 1.22866 15.0373C1.22789 15.3138 1.29951 15.5856 1.43642 15.8258C1.57333 16.066 1.77074 16.2662 2.00902 16.4064C2.2473 16.5466 2.51813 16.622 2.79458 16.625H16.2054C16.4819 16.622 16.7527 16.5466 16.991 16.4064C17.2293 16.2662 17.4267 16.066 17.5636 15.8258C17.7005 15.5856 17.7721 15.3138 17.7713 15.0373C17.7706 14.7609 17.6974 14.4894 17.5592 14.25L10.8538 3.05583C10.7126 2.82316 10.5139 2.6308 10.2768 2.49729C10.0397 2.36379 9.77213 2.29366 9.5 2.29366C9.22788 2.29366 8.96035 2.36379 8.72322 2.49729C8.4861 2.6308 8.28738 2.82316 8.14625 3.05583V3.05583Z"
                       stroke="#733E00"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M9.5 7.125V10.2917"
                       stroke="#733E00"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M9.5 13.4583V13.7083"
                       stroke="#733E00"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </g>
                   <defs>

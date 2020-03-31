@@ -1,11 +1,11 @@
 import { googleIncidentFormatter, googleFormatter } from './formatters/google';
 import {
   statusPageIncidentFormatter,
-  statusPageIoFormatter,
+  statusPageIoFormatter
 } from './formatters/status-page-io';
 import {
   statusIoIncidentFormatter,
-  statusIoFormatter,
+  statusIoFormatter
 } from './formatters/status-io';
 
 const providers = {
@@ -15,11 +15,11 @@ const providers = {
     impactMap: {
       low: 'minor',
       medium: 'major',
-      high: 'critical',
+      high: 'critical'
     },
     name: 'Google Cloud',
     incidentFormatter: googleIncidentFormatter,
-    summaryFormatter: googleFormatter,
+    summaryFormatter: googleFormatter
   },
   statusPageIo: {
     summaryUrl: '/api/v2/summary.json',
@@ -27,11 +27,11 @@ const providers = {
     impactMap: {
       minor: 'minor',
       major: 'major',
-      critical: 'critical',
+      critical: 'critical'
     },
     name: 'Status Page',
     summaryFormatter: statusPageIoFormatter,
-    incidentFormatter: statusPageIncidentFormatter,
+    incidentFormatter: statusPageIncidentFormatter
   },
   statusIo: {
     // assumes format entered of https://hostname/pages/history/<identifier>
@@ -41,21 +41,20 @@ const providers = {
     impactMap: {
       minor: 'minor',
       major: 'major',
-      critical: 'critical',
+      critical: 'critical'
     },
     name: 'Status Io',
     summaryFormatter: statusIoFormatter,
-    incidentFormatter: statusIoIncidentFormatter,
-  },
+    incidentFormatter: statusIoIncidentFormatter
+  }
 };
 
 export const getProvider = providerKey => {
-  providerKey =
-    providerKey === 'Status Page'
-      ? 'statusPageIo'
-      : providerKey === 'Status Io'
-      ? 'statusIo'
-      : providerKey;
+  if (providerKey === 'Status Page') {
+    providerKey = 'statusPageIo';
+  } else if (providerKey === 'Status Io') {
+    providerKey = 'statusIo';
+  }
   const provider = providers[providerKey];
   // console.debug(provider);
   return provider;

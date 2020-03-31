@@ -1,8 +1,8 @@
 export const statusPageIoFormatter = data => {
   return {
-    name: data['page']['name'],
-    description: data['status']['description'],
-    indicator: data['status']['indicator'],
+    name: data.page.name,
+    description: data.status.description,
+    indicator: data.status.indicator
   };
 };
 

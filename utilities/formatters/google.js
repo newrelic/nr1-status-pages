@@ -1,7 +1,7 @@
 const GoogleSeverityToKnown = {
   low: 'minor',
   medium: 'major',
-  high: 'critical',
+  high: 'critical'
 };
 
 export const googleFormatter = data => {
@@ -30,9 +30,9 @@ export const googleIncidentFormatter = data => {
       incident_updates: incident.updates.map(update => {
         return {
           created_at: update.created,
-          body: update.text,
+          body: update.text
         };
-      }),
+      })
     };
   });
 };

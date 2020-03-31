@@ -12,23 +12,24 @@ import {
   Button,
   TextField,
   Dropdown,
-  DropdownItem,
+  DropdownItem
 } from 'nr1';
-const uuid = require('uuid/v4');
 import Toolbar from '../../components/toolbar';
 import AccountPicker from '../../components/account-picker';
 import {
   getHostNamesFromNerdStorage,
-  saveHostNamesToNerdStorage,
+  saveHostNamesToNerdStorage
 } from '../../utilities/nerdlet-storage';
+
+const uuid = require('uuid/v4');
 
 const createOption = label => ({
   label,
-  value: label,
+  value: label
 });
-export default class StatusPagesDashboard extends React.Component {
+export default class StatusPagesDashboard extends React.PureComponent {
   static propTypes = {
-    entityGuid: PropTypes.any,
+    entityGuid: PropTypes.string
   };
 
   constructor(props) {
@@ -51,9 +52,9 @@ export default class StatusPagesDashboard extends React.Component {
       quickSetupSelection: '',
       keyObject: {
         key: props.entityGuid,
-        type: props.entityGuid ? 'entity' : 'account',
+        type: props.entityGuid ? 'entity' : 'account'
       },
-      requestForHostnamesMade: false,
+      requestForHostnamesMade: false
     };
 
     this.newHostNameInput = React.createRef();
@@ -74,7 +75,7 @@ export default class StatusPagesDashboard extends React.Component {
     if (entityGuid) {
       const hostNames = await getHostNamesFromNerdStorage({
         key: entityGuid,
-        type: 'entity',
+        type: 'entity'
       });
       this.setHostNames(hostNames);
     }
@@ -95,7 +96,7 @@ export default class StatusPagesDashboard extends React.Component {
       serviceName: this.state.newServiceName,
       hostName: this.state.newHostName,
       provider: this.state.newHostProvider,
-      hostLogo: this.state.newHostLogo,
+      hostLogo: this.state.newHostLogo
     };
 
     this.addHostName(hostNameObject);
@@ -104,7 +105,7 @@ export default class StatusPagesDashboard extends React.Component {
       newServiceName: '',
       newHostName: '',
       newHostProvider: '',
-      newHostLogo: '',
+      newHostLogo: ''
     });
   }
 
@@ -125,21 +126,22 @@ export default class StatusPagesDashboard extends React.Component {
       hostNames.findIndex(val => val.hostName === hostNameText),
       1
     );
+    const { deleteTileModalActive } = this.state;
     this.setState({
       hostNames: hostNames,
-      deleteTileModalActive: !this.state.deleteTileModalActive,
+      deleteTileModalActive: !deleteTileModalActive
     });
     await this.save();
   }
 
   async editHostName(hostnameObject) {
     const { hostNames } = this.state;
-    const { serviceName, hostName, provider, hostLogo } = hostnameObject;
+    const { hostName } = hostnameObject;
     const indexOfEditedHostname = hostNames.findIndex(
       val => val.hostName === hostName
     );
 
-    let newHostnameObject = hostnameObject;
+    const newHostnameObject = hostnameObject;
     newHostnameObject.id = hostNames[indexOfEditedHostname].id;
     hostNames[indexOfEditedHostname] = newHostnameObject;
 
@@ -183,7 +185,7 @@ export default class StatusPagesDashboard extends React.Component {
       newHostName: selectedPopularSite.hostName,
       newHostProvider: selectedPopularSite.provider,
       newHostLogo: selectedPopularSite.hostLogo,
-      quickSetupSelection: selectedService,
+      quickSetupSelection: selectedService
     });
   }
 
@@ -193,12 +195,9 @@ export default class StatusPagesDashboard extends React.Component {
     switch (event.key) {
       case 'Enter':
       case 'Tab':
-        console.group('Value Added');
-        console.log(value);
-        console.groupEnd();
         this.setState({
           inputValue: '',
-          value: [...value, createOption(inputValue)],
+          value: [...value, createOption(inputValue)]
         });
         event.preventDefault();
     }
@@ -206,19 +205,18 @@ export default class StatusPagesDashboard extends React.Component {
 
   async onAccountSelected(accountId, accounts) {
     if (!this.state.entityGuid) {
-      const keyObject = Object.assign({}, this.state.keyObject, {
-        key: accountId,
-      });
+      let { keyObject } = this.state;
+      keyObject = { ...keyObject, key: accountId };
 
       this.setState({
         selectedAccountId: accountId,
         accounts,
-        keyObject,
+        keyObject
       });
 
       const hostNames = await getHostNamesFromNerdStorage({
         key: accountId,
-        type: 'account',
+        type: 'account'
       });
       this.setHostNames(hostNames);
     }
@@ -241,17 +239,17 @@ export default class StatusPagesDashboard extends React.Component {
   //   }
   // }
 
-  setSearchQuery(e) {
+  setSearchQuery() {
     this.setState({ searchQuery: event.target.value });
   }
 
   getGridItems() {
-    let {
+    const {
       searchQuery,
       hostNames,
       requestForHostnamesMade,
       keyObject,
-      entityGuid,
+      entityGuid
     } = this.state;
 
     const entityGuidExists = entityGuid !== null && entityGuid !== undefined;
@@ -332,14 +330,16 @@ export default class StatusPagesDashboard extends React.Component {
   }
 
   handleDeleteTileModal(hostname) {
+    const { deleteTileModalActive } = this.state;
     this.setState({
-      deleteTileModalActive: !this.state.deleteTileModalActive,
-      tileToBeDeleted: hostname.hostName,
+      deleteTileModalActive: !deleteTileModalActive,
+      tileToBeDeleted: hostname.hostName
     });
   }
 
   handleCreateTileModal() {
-    this.setState({ createTileModalActive: !this.state.createTileModalActive });
+    const { createTileModalActive } = this.state;
+    this.setState({ createTileModalActive: !createTileModalActive });
   }
 
   render() {
@@ -347,12 +347,9 @@ export default class StatusPagesDashboard extends React.Component {
       accounts,
       entityGuid,
       hostNames,
-      refreshRate,
       selectedAccountId,
       deleteTileModalActive,
-      createTileModalActive,
-      inputValue,
-      value,
+      createTileModalActive
     } = this.state;
 
     return (
@@ -452,11 +449,11 @@ export default class StatusPagesDashboard extends React.Component {
             onChange={() =>
               this.setState(previousState => ({
                 ...previousState,
-                newServiceName: event.target.value,
+                newServiceName: event.target.value
               }))
             }
             value={this.state.newServiceName}
-          ></TextField>
+          />
           <TextField
             label="Hostname"
             placeholder="https://status.myservice.com/"
@@ -464,11 +461,11 @@ export default class StatusPagesDashboard extends React.Component {
             onChange={() =>
               this.setState(previousState => ({
                 ...previousState,
-                newHostName: event.target.value,
+                newHostName: event.target.value
               }))
             }
             value={this.state.newHostName}
-          ></TextField>
+          />
           <Dropdown
             title={
               this.state.newHostProvider === ''
@@ -483,7 +480,7 @@ export default class StatusPagesDashboard extends React.Component {
               onClick={() =>
                 this.setState(previousState => ({
                   ...previousState,
-                  newHostProvider: event.target.innerHTML,
+                  newHostProvider: event.target.innerHTML
                 }))
               }
             >
@@ -493,7 +490,7 @@ export default class StatusPagesDashboard extends React.Component {
               onClick={() =>
                 this.setState(previousState => ({
                   ...previousState,
-                  newHostProvider: event.target.innerHTML,
+                  newHostProvider: event.target.innerHTML
                 }))
               }
             >
@@ -503,7 +500,7 @@ export default class StatusPagesDashboard extends React.Component {
               onClick={() =>
                 this.setState(previousState => ({
                   ...previousState,
-                  newHostProvider: event.target.innerHTML,
+                  newHostProvider: event.target.innerHTML
                 }))
               }
             >
@@ -517,12 +514,12 @@ export default class StatusPagesDashboard extends React.Component {
             onChange={() =>
               this.setState(previousState => ({
                 ...previousState,
-                newHostLogo: event.target.value,
+                newHostLogo: event.target.value
               }))
             }
             value={this.state.newHostLogo}
             placeholder="https://myservice.com/logo.png"
-          ></TextField>
+          />
 
           <Button
             type={Button.TYPE.Secondary}

@@ -2,7 +2,7 @@ import {
   AccountStorageMutation,
   AccountStorageQuery,
   EntityStorageMutation,
-  EntityStorageQuery,
+  EntityStorageQuery
 } from 'nr1';
 
 const HOST_NAMES_COLLECTION_KEY = 'host_names_v1';
@@ -27,7 +27,7 @@ const getHostNameFromAccountStorage = async (accountId, queryProp) => {
       await AccountStorageQuery.query(queryProp)
     );
   } catch (err) {
-    console.log(err);
+    console.log(err); // eslint-disable-line no-console
   }
 };
 
@@ -38,7 +38,7 @@ const getHostNameFromEntityStorage = async (entityGuid, queryProp) => {
       await EntityStorageQuery.query(queryProp)
     );
   } catch (err) {
-    console.log(err);
+    console.log(err); // eslint-disable-line no-console
   }
 };
 
@@ -57,7 +57,7 @@ const saveHostNamesToEntityStorage = async (entityGuid, mutationProp) => {
 export const getHostNamesFromNerdStorage = async keyObject => {
   const queryProp = {
     collection: HOST_NAMES_COLLECTION_KEY,
-    documentId: HOST_NAMES_DOCUMENT_ID,
+    documentId: HOST_NAMES_DOCUMENT_ID
   };
 
   let result;
@@ -77,7 +77,7 @@ export const saveHostNamesToNerdStorage = async (keyObject, document) => {
   const mutationProp = {
     collection: HOST_NAMES_COLLECTION_KEY,
     document: { hostNames: document },
-    documentId: HOST_NAMES_DOCUMENT_ID,
+    documentId: HOST_NAMES_DOCUMENT_ID
   };
 
   if (keyObject.type === 'account') {

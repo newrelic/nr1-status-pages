@@ -6,18 +6,19 @@ import dayjs from 'dayjs';
 
 import { Icon, Button } from 'nr1';
 
-export default class ServiceDetails extends React.Component {
+export default class ServiceDetails extends React.PureComponent {
   static propTypes = {
     hostname: PropTypes.string.isRequired,
     provider: PropTypes.string.isRequired,
     refreshRate: PropTypes.number,
+    timelineItemIndex: PropTypes.object
   };
 
   constructor(props) {
     super(props);
     this.state = {
       currentIncidents: undefined,
-      expandedTimelineItem: null,
+      expandedTimelineItem: null
     };
     this.FormatService = new FormatService(this.props.provider);
     this.statusPageNetwork = new Network(
@@ -37,17 +38,14 @@ export default class ServiceDetails extends React.Component {
       this.setIncidentData.bind(this)
     );
 
-    if (
-      timelineItemIndex !== undefined &&
-      this.state.expandedTimelineItem === null
-    ) {
+    if (timelineItemIndex !== undefined && expandedTimelineItem === null) {
       this.setState({ expandedTimelineItem: timelineItemIndex });
     }
   }
 
   setIncidentData(data) {
     this.setState({
-      currentIncidents: this.FormatService.uniformIncidentData(data),
+      currentIncidents: this.FormatService.uniformIncidentData(data)
     });
   }
 
@@ -95,7 +93,7 @@ export default class ServiceDetails extends React.Component {
   }
 
   buildTimelineItemDetails(incident) {
-    let incident_updates = incident.incident_updates.map(incident_update => {
+    const incident_updates = incident.incident_updates.map(incident_update => {
       return (
         <li key={incident_update.id} className="timeline-item-contents-item">
           <span className="key">
@@ -110,25 +108,26 @@ export default class ServiceDetails extends React.Component {
   }
 
   handleTimelineItemClick(e) {
-    let timelineItemId = e.currentTarget.getAttribute('data-timeline-item-id');
+    const timelineItemId = e.currentTarget.getAttribute(
+      'data-timeline-item-id'
+    );
     e.preventDefault();
-    if (timelineItemId == this.state.expandedTimelineItem) {
+    if (timelineItemId === this.state.expandedTimelineItem) {
       this.setState({
-        expandedTimelineItem: null,
+        expandedTimelineItem: null
       });
     } else {
       this.setState({
-        expandedTimelineItem: timelineItemId,
+        expandedTimelineItem: timelineItemId
       });
     }
   }
 
   render() {
     const { currentIncidents, expandedTimelineItem } = this.state;
-    const { timelineItemIndex } = this.props;
-    if (!currentIncidents) return <div></div>;
+    if (!currentIncidents) return <div />;
     this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
-    console.debug(currentIncidents);
+    // console.debug(currentIncidents);
 
     const items = currentIncidents.map((incident, i) => {
       return (
@@ -136,7 +135,7 @@ export default class ServiceDetails extends React.Component {
           data-timeline-item-id={i}
           onClick={this.handleTimelineItemClick}
           className={`timeline-item impact-${incident.impact} ${
-            expandedTimelineItem == i ? 'timeline-item-expanded' : ''
+            expandedTimelineItem === i ? 'timeline-item-expanded' : ''
           }`}
           key={incident.created_at}
         >
@@ -148,7 +147,7 @@ export default class ServiceDetails extends React.Component {
               {dayjs(incident.created_at).format('h:mm a')}
             </span>
           </div>
-          <div className="timeline-item-dot"></div>
+          <div className="timeline-item-dot" />
           <div className="timeline-item-body">
             <div className="timeline-item-body-header">
               <div
@@ -167,7 +166,7 @@ export default class ServiceDetails extends React.Component {
                   Button.ICON_TYPE
                     .INTERFACE__CHEVRON__CHEVRON_BOTTOM__V_ALTERNATE
                 }
-              ></Button>
+              />
             </div>
             <div className="timeline-item-contents-container">
               <ul className="timeline-item-contents">

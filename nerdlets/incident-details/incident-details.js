@@ -5,20 +5,20 @@ import { Spinner } from 'nr1';
 
 // TODO: This seems real bad since we are requiring a lib from other nerdlet
 import Network from '../../utilities/network';
-import IncidentTimeline from '../../components/incidents/incident-timline';
+import IncidentTimeline from '../../components/incidents/incident-timeline';
 import FormatService from '../../utilities/format-service';
 
 const REFRESH_RATE = 15;
 
-export default class IncidentDetails extends React.Component {
+export default class IncidentDetails extends React.PureComponent {
   static propTypes = {
-    nerdletUrlState: PropTypes.object,
+    nerdletUrlState: PropTypes.object
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      incidents: undefined,
+      incidents: undefined
     };
     this.FormatService = new FormatService(this.props.nerdletUrlState.provider);
   }
@@ -38,6 +38,6 @@ export default class IncidentDetails extends React.Component {
   render() {
     const { incidents } = this.state;
     if (!incidents) return <Spinner />;
-    return <IncidentTimeline incidents={incidents}></IncidentTimeline>;
+    return <IncidentTimeline incidents={incidents} />;
   }
 }

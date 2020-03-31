@@ -7,15 +7,16 @@ import {
   DropdownItem,
   UserStorageMutation,
   UserStorageQuery,
-  TextField,
+  TextField
 } from 'nr1';
 
 const USER_ACCOUNT_COLLECTION = 'user_account_collection_v1';
 const USER_SELECTED_ACCOUNT_ID = 'user_account_id';
 
-export default class AccountPicker extends React.Component {
+export default class AccountPicker extends React.PureComponent {
   static propTypes = {
-    hostname: PropTypes.string,
+    accountChangedCallback: PropTypes.func,
+    disabled: PropTypes.bool
   };
 
   constructor(props) {
@@ -23,7 +24,7 @@ export default class AccountPicker extends React.Component {
     this.state = {
       selectedAccount: { name: '' },
       accounts: [],
-      filter: '',
+      filter: ''
     };
     this.onAccountChange = this.onAccountChange.bind(this);
   }
@@ -55,7 +56,7 @@ export default class AccountPicker extends React.Component {
   async getLastChoseAccountId() {
     const userStorageQuery = {
       collection: USER_ACCOUNT_COLLECTION,
-      documentId: USER_SELECTED_ACCOUNT_ID,
+      documentId: USER_SELECTED_ACCOUNT_ID
     };
     // TODO: Add error handling
     const queryResults = await UserStorageQuery.query(userStorageQuery);
@@ -67,7 +68,7 @@ export default class AccountPicker extends React.Component {
       actionType: UserStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
       collection: USER_ACCOUNT_COLLECTION,
       document: { account: accountId },
-      documentId: USER_SELECTED_ACCOUNT_ID,
+      documentId: USER_SELECTED_ACCOUNT_ID
     };
     UserStorageMutation.mutate(userMutation);
   }
