@@ -252,7 +252,8 @@ export default class StatusPage extends React.PureComponent {
   }
 
   handleSettingsPopover(e) {
-    this.setState({ settingsPopoverActive: !this.state.settingsPopoverActive }); // eslint-disable-line react/no-access-state-in-setstate
+    const { settingsPopoverActive } = this.state;
+    this.setState({ settingsPopoverActive: !settingsPopoverActive });
     e.stopPropagation();
   }
 
