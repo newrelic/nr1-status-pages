@@ -4,9 +4,10 @@ on:
   pull_request:
     branches:
       - master
+      - develop
 
   repository_dispatch:
-    types: [pull-request]
+    types: [pull-request-develop, pull-request-master]
 
 jobs:
   checkout-and-build-pr:
