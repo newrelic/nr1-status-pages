@@ -13,14 +13,14 @@
     "eslint-fix": "eslint --fix nerdlets/ components/ utilities/"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.19.2",
     "dayjs": "^1.8.16",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-markdown": "^4.3.1",
-    "uuid": "^3.3.3",
-    "vertical-timeline-component-for-react": "^1.0.6",
+    "uuid": "^3.4.0",
+    "vertical-timeline-component-for-react": "^1.0.7",
     "web-animations-js": "^2.3.2"
   },
   "browserslist": [
