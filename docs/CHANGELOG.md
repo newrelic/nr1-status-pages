@@ -1,3 +1,17 @@
+## [0.12.3](https://github.com/newrelic/nr1-status-pages/compare/v0.12.2...v0.12.3) (2020-07-07)
+
+
+### Bug Fixes
+
+* upgrade axios from 0.19.0 to 0.19.2 ([c4edf5e](https://github.com/newrelic/nr1-status-pages/commit/c4edf5ef4ac694e2f7aef7640e5ed66b55d9339d))
+* upgrade axios from 0.19.0 to 0.19.2 ([a073197](https://github.com/newrelic/nr1-status-pages/commit/a07319721891d061849cd67bde7a47a440f1baea))
+* upgrade dayjs from 1.8.17 to 1.8.28 ([f7ea7c7](https://github.com/newrelic/nr1-status-pages/commit/f7ea7c7813e3fab71fd97f100df1b2cfff270a22))
+* upgrade react-markdown from 4.2.2 to 4.3.1 ([9bf4e5f](https://github.com/newrelic/nr1-status-pages/commit/9bf4e5f80bdb5e47ce0fdc770f9dc2ab26ade817))
+* upgrade uuid from 3.3.3 to 3.4.0 ([17e4a9d](https://github.com/newrelic/nr1-status-pages/commit/17e4a9d84dc043ee77e1b7fc1940f5744cf5f3ec))
+* upgrade uuid from 3.3.3 to 3.4.0 ([5887c1d](https://github.com/newrelic/nr1-status-pages/commit/5887c1d97c5cdbc7ffc057f25f1da7a8059223e4))
+* upgrade vertical-timeline-component-for-react from 1.0.6 to 1.0.7 ([c14dbb6](https://github.com/newrelic/nr1-status-pages/commit/c14dbb6bb2d52326f98c881db561fe092713ea2f))
+* upgrade vertical-timeline-component-for-react from 1.0.6 to 1.0.7 ([1509755](https://github.com/newrelic/nr1-status-pages/commit/1509755ea635c8842ca3b7e8040dc9a598269c34))
+
 ## [0.12.2](https://github.com/newrelic/nr1-status-pages/compare/v0.12.1...v0.12.2) (2020-03-31)
 
 
