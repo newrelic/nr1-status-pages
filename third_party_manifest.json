@@ -1,30 +1,30 @@
 {
-  "lastUpdated": "Fri Jun 05 2020 22:20:38 GMT+0000 (Coordinated Universal Time)",
+  "lastUpdated": "Tue Jul 07 2020 16:38:33 GMT+0000 (Coordinated Universal Time)",
   "projectName": "nr1-status-pages",
   "projectUrl": "https://github.com/newrelic/nr1-status-pages",
   "includeDev": true,
   "dependencies": {
-    "axios@0.19.0": {
+    "axios@0.19.2": {
       "name": "axios",
-      "version": "0.19.0",
-      "range": "^0.19.0",
+      "version": "0.19.2",
+      "range": "^0.19.2",
       "licenses": "MIT",
       "repoUrl": "https://github.com/axios/axios",
-      "versionedRepoUrl": "https://github.com/axios/axios/tree/v0.19.0",
+      "versionedRepoUrl": "https://github.com/axios/axios/tree/v0.19.2",
       "licenseFile": "node_modules/axios/LICENSE",
-      "licenseUrl": "https://github.com/axios/axios/blob/v0.19.0/LICENSE",
+      "licenseUrl": "https://github.com/axios/axios/blob/v0.19.2/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Matt Zabriskie"
     },
-    "dayjs@1.8.17": {
+    "dayjs@1.8.28": {
       "name": "dayjs",
-      "version": "1.8.17",
-      "range": "^1.8.16",
+      "version": "1.8.28",
+      "range": "^1.8.28",
       "licenses": "MIT",
       "repoUrl": "https://github.com/iamkun/dayjs",
-      "versionedRepoUrl": "https://github.com/iamkun/dayjs/tree/v1.8.17",
+      "versionedRepoUrl": "https://github.com/iamkun/dayjs/tree/v1.8.28",
       "licenseFile": "node_modules/dayjs/LICENSE",
-      "licenseUrl": "https://github.com/iamkun/dayjs/blob/v1.8.17/LICENSE",
+      "licenseUrl": "https://github.com/iamkun/dayjs/blob/v1.8.28/LICENSE",
       "licenseTextSource": "file",
       "publisher": "iamkun"
     },
@@ -50,15 +50,15 @@
       "licenseUrl": "https://github.com/facebook/react/blob/v16.12.0/LICENSE",
       "licenseTextSource": "file"
     },
-    "react-markdown@4.2.2": {
+    "react-markdown@4.3.1": {
       "name": "react-markdown",
-      "version": "4.2.2",
-      "range": "^4.1.0",
+      "version": "4.3.1",
+      "range": "^4.3.1",
       "licenses": "MIT",
       "repoUrl": "https://github.com/rexxars/react-markdown",
-      "versionedRepoUrl": "https://github.com/rexxars/react-markdown/tree/v4.2.2",
+      "versionedRepoUrl": "https://github.com/rexxars/react-markdown/tree/v4.3.1",
       "licenseFile": "node_modules/react-markdown/LICENSE",
-      "licenseUrl": "https://github.com/rexxars/react-markdown/blob/v4.2.2/LICENSE",
+      "licenseUrl": "https://github.com/rexxars/react-markdown/blob/v4.3.1/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Espen Hovlandsdal",
       "email": "espen@hovlandsdal.com"
@@ -74,26 +74,26 @@
       "licenseUrl": "https://github.com/facebook/react/blob/v16.12.0/LICENSE",
       "licenseTextSource": "file"
     },
-    "uuid@3.3.3": {
+    "uuid@3.4.0": {
       "name": "uuid",
-      "version": "3.3.3",
-      "range": "^3.3.3",
+      "version": "3.4.0",
+      "range": "^3.4.0",
       "licenses": "MIT",
-      "repoUrl": "https://github.com/kelektiv/node-uuid",
-      "versionedRepoUrl": "https://github.com/kelektiv/node-uuid/tree/v3.3.3",
+      "repoUrl": "https://github.com/uuidjs/uuid",
+      "versionedRepoUrl": "https://github.com/uuidjs/uuid/tree/v3.4.0",
       "licenseFile": "node_modules/uuid/LICENSE.md",
-      "licenseUrl": "https://github.com/kelektiv/node-uuid/blob/v3.3.3/LICENSE.md",
+      "licenseUrl": "https://github.com/uuidjs/uuid/blob/v3.4.0/LICENSE.md",
       "licenseTextSource": "file"
     },
-    "vertical-timeline-component-for-react@1.0.6": {
+    "vertical-timeline-component-for-react@1.0.7": {
       "name": "vertical-timeline-component-for-react",
-      "version": "1.0.6",
-      "range": "^1.0.6",
+      "version": "1.0.7",
+      "range": "^1.0.7",
       "licenses": "MIT",
       "repoUrl": "https://github.com/veysiyildiz/vertical-timeline-component-for-react",
-      "versionedRepoUrl": "https://github.com/veysiyildiz/vertical-timeline-component-for-react/tree/v1.0.6",
+      "versionedRepoUrl": "https://github.com/veysiyildiz/vertical-timeline-component-for-react/tree/v1.0.7",
       "licenseFile": "node_modules/vertical-timeline-component-for-react/LICENSE",
-      "licenseUrl": "https://github.com/veysiyildiz/vertical-timeline-component-for-react/blob/v1.0.6/LICENSE",
+      "licenseUrl": "https://github.com/veysiyildiz/vertical-timeline-component-for-react/blob/v1.0.7/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Veysi YILDIZ"
     },

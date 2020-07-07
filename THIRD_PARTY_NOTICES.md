@@ -37,7 +37,7 @@ code, the source code can be found at [https://github.com/newrelic/nr1-status-pa
 
 ### axios
 
-This product includes source derived from [axios](https://github.com/axios/axios) ([v0.19.0](https://github.com/axios/axios/tree/v0.19.0)), distributed under the [MIT License](https://github.com/axios/axios/blob/v0.19.0/LICENSE):
+This product includes source derived from [axios](https://github.com/axios/axios) ([v0.19.2](https://github.com/axios/axios/tree/v0.19.2)), distributed under the [MIT License](https://github.com/axios/axios/blob/v0.19.2/LICENSE):
 
 ```
 Copyright (c) 2014-present Matt Zabriskie
@@ -64,7 +64,7 @@ THE SOFTWARE.
 
 ### dayjs
 
-This product includes source derived from [dayjs](https://github.com/iamkun/dayjs) ([v1.8.17](https://github.com/iamkun/dayjs/tree/v1.8.17)), distributed under the [MIT License](https://github.com/iamkun/dayjs/blob/v1.8.17/LICENSE):
+This product includes source derived from [dayjs](https://github.com/iamkun/dayjs) ([v1.8.28](https://github.com/iamkun/dayjs/tree/v1.8.28)), distributed under the [MIT License](https://github.com/iamkun/dayjs/blob/v1.8.28/LICENSE):
 
 ```
 MIT License
@@ -151,7 +151,7 @@ SOFTWARE.
 
 ### react-markdown
 
-This product includes source derived from [react-markdown](https://github.com/rexxars/react-markdown) ([v4.2.2](https://github.com/rexxars/react-markdown/tree/v4.2.2)), distributed under the [MIT License](https://github.com/rexxars/react-markdown/blob/v4.2.2/LICENSE):
+This product includes source derived from [react-markdown](https://github.com/rexxars/react-markdown) ([v4.3.1](https://github.com/rexxars/react-markdown/tree/v4.3.1)), distributed under the [MIT License](https://github.com/rexxars/react-markdown/blob/v4.3.1/LICENSE):
 
 ```
 The MIT License (MIT)
@@ -209,7 +209,7 @@ SOFTWARE.
 
 ### uuid
 
-This product includes source derived from [uuid](https://github.com/kelektiv/node-uuid) ([v3.3.3](https://github.com/kelektiv/node-uuid/tree/v3.3.3)), distributed under the [MIT License](https://github.com/kelektiv/node-uuid/blob/v3.3.3/LICENSE.md):
+This product includes source derived from [uuid](https://github.com/uuidjs/uuid) ([v3.4.0](https://github.com/uuidjs/uuid/tree/v3.4.0)), distributed under the [MIT License](https://github.com/uuidjs/uuid/blob/v3.4.0/LICENSE.md):
 
 ```
 The MIT License (MIT)
@@ -238,7 +238,7 @@ SOFTWARE.
 
 ### vertical-timeline-component-for-react
 
-This product includes source derived from [vertical-timeline-component-for-react](https://github.com/veysiyildiz/vertical-timeline-component-for-react) ([v1.0.6](https://github.com/veysiyildiz/vertical-timeline-component-for-react/tree/v1.0.6)), distributed under the [MIT License](https://github.com/veysiyildiz/vertical-timeline-component-for-react/blob/v1.0.6/LICENSE):
+This product includes source derived from [vertical-timeline-component-for-react](https://github.com/veysiyildiz/vertical-timeline-component-for-react) ([v1.0.7](https://github.com/veysiyildiz/vertical-timeline-component-for-react/tree/v1.0.7)), distributed under the [MIT License](https://github.com/veysiyildiz/vertical-timeline-component-for-react/blob/v1.0.7/LICENSE):
 
 ```
 MIT License
