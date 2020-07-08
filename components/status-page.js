@@ -53,7 +53,8 @@ export default class StatusPage extends React.PureComponent {
       editedServiceName: this.props.hostname.serviceName,
       editedHostName: this.props.hostname.hostName,
       editedHostProvider: this.props.hostname.provider,
-      editedHostLogo: this.props.hostname.hostLogo
+      editedHostLogo: this.props.hostname.hostLogo,
+      editedHostId: this.props.hostname.id
     };
 
     this.handleTileSettingsAnimation = this.handleTileSettingsAnimation.bind(
@@ -274,7 +275,8 @@ export default class StatusPage extends React.PureComponent {
       serviceName: this.state.editedServiceName,
       hostName: this.state.editedHostName,
       provider: this.state.editedHostProvider,
-      hostLogo: this.state.editedHostLogo
+      hostLogo: this.state.editedHostLogo,
+      id: this.state.editedHostId
     };
 
     this.props.editHostName()(hostNameObject);
