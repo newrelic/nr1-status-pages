@@ -1,3 +1,5 @@
+$desktop-breakpoint: 1024px;
+
 #root > div {
   height: 100%;
 }
@@ -216,7 +218,7 @@ button[class*='Dropdown-trigger'],
   grid-auto-rows: 330px;
   align-items: stretch;
 
-  @media (max-width: 1003px) {
+  @media (max-width: $desktop-breakpoint) {
     grid-template-columns: 1fr;
   }
 }
