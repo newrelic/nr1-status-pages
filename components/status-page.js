@@ -57,17 +57,6 @@ export default class StatusPage extends React.PureComponent {
       editedHostId: this.props.hostname.id
     };
 
-    this.handleTileSettingsAnimation = this.handleTileSettingsAnimation.bind(
-      this
-    );
-    this.handleSettingsPopover = this.handleSettingsPopover.bind(this);
-    this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
-    this.handleSettingsButtonMouseLeave = this.handleSettingsButtonMouseLeave.bind(
-      this
-    );
-    this.handlePopupMouseEnter = this.handlePopupMouseEnter.bind(this);
-    this.handlePopupMouseLeave = this.handlePopupMouseLeave.bind(this);
-
     this.serviceTilePrimaryContent = React.createRef();
     this.serviceTileSettingsContent = React.createRef();
   }
@@ -149,7 +138,7 @@ export default class StatusPage extends React.PureComponent {
     });
   }
 
-  handleTileSettingsAnimation() {
+  handleTileSettingsAnimation = () => {
     const { settingsViewActive } = this.state;
     const primaryContent = this.serviceTilePrimaryContent.current;
     const settingsContent = this.serviceTileSettingsContent.current;
@@ -157,6 +146,7 @@ export default class StatusPage extends React.PureComponent {
     if (settingsViewActive) {
       settingsContent.animate(
         {
+          visibility: ['visible', 'hidden'],
           opacity: [1, 0],
           transform: [
             'translateX(0) rotateY(0)',
@@ -189,6 +179,7 @@ export default class StatusPage extends React.PureComponent {
     } else {
       settingsContent.animate(
         {
+          visibility: ['hidden', 'visible'],
           opacity: [0, 1],
           transform: [
             'translateX(30px) rotateY(15deg)',
@@ -222,7 +213,7 @@ export default class StatusPage extends React.PureComponent {
         this.setState({ settingsViewActive: true });
       };
     }
-  }
+  };
 
   handleTileClick(statusPageIoSummaryData, refreshRate, hostname, provider, i) {
     if (!event.target.closest('.destructive')) {
@@ -252,17 +243,17 @@ export default class StatusPage extends React.PureComponent {
     }
   }
 
-  handleSettingsPopover(e) {
+  handleSettingsPopover = e => {
     const { settingsPopoverActive } = this.state;
     this.setState({ settingsPopoverActive: !settingsPopoverActive });
     e.stopPropagation();
-  }
+  };
 
-  handleEditButtonClick(e) {
+  handleEditButtonClick = e => {
     e.stopPropagation();
     this.handleTileSettingsAnimation();
     this.handleSettingsPopover();
-  }
+  };
 
   handleDeleteButtonClick(hostname, e) {
     this.props.handleDeleteTileModal()(hostname);
@@ -284,23 +275,23 @@ export default class StatusPage extends React.PureComponent {
     this.handleTileSettingsAnimation();
   }
 
-  handleSettingsButtonMouseLeave() {
+  handleSettingsButtonMouseLeave = () => {
     this.popupHoverTimer = setTimeout(() => {
       this.setState({ settingsPopoverActive: false });
     }, 150);
-  }
+  };
 
-  handlePopupMouseEnter() {
+  handlePopupMouseEnter = () => {
     if (this.popupHoverTimer) {
       clearTimeout(this.popupHoverTimer);
     }
-  }
+  };
 
-  handlePopupMouseLeave() {
+  handlePopupMouseLeave = () => {
     this.popupHoverTimer = setTimeout(() => {
       this.setState({ settingsPopoverActive: false });
     }, 150);
-  }
+  };
 
   renderSettingsButton() {
     const hostname = this.props.hostname;

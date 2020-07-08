@@ -771,6 +771,7 @@ button[class*='Dropdown-trigger'],
   opacity: 0;
   display: flex;
   flex-direction: column;
+  visibility: hidden;
 }
 
 .status-page-settings-content {
