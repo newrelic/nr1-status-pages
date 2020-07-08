@@ -56,16 +56,6 @@ export default class StatusPagesDashboard extends React.PureComponent {
     };
 
     this.newHostNameInput = React.createRef();
-
-    this.onAccountSelected = this.onAccountSelected.bind(this);
-    this.setHostNames = this.setHostNames.bind(this);
-    this.handleDeleteTileModal = this.handleDeleteTileModal.bind(this);
-    this.handleCreateTileModal = this.handleCreateTileModal.bind(this);
-    this.addHostName = this.addHostName.bind(this);
-    this.handleAddNewService = this.handleAddNewService.bind(this);
-    this.deleteHostName = this.deleteHostName.bind(this);
-    this.editHostName = this.editHostName.bind(this);
-    this.setSearchQuery = this.setSearchQuery.bind(this);
   }
 
   async componentDidMount() {
@@ -88,7 +78,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
     await saveHostNamesToNerdStorage(keyObject, hostNames);
   }
 
-  handleAddNewService() {
+  handleAddNewService = () => {
     const hostNameObject = {
       id: uuid(),
       serviceName: this.state.newServiceName,
@@ -105,9 +95,9 @@ export default class StatusPagesDashboard extends React.PureComponent {
       newHostProvider: '',
       newHostLogo: ''
     });
-  }
+  };
 
-  async addHostName(hostNameObject) {
+  addHostName = async hostNameObject => {
     const { hostNames } = this.state;
     hostNames.push(hostNameObject);
     this.setState({ hostNames }, async () => {
@@ -115,9 +105,9 @@ export default class StatusPagesDashboard extends React.PureComponent {
     });
 
     this.setState({ createTileModalActive: false });
-  }
+  };
 
-  async deleteHostName() {
+  deleteHostName = async () => {
     const hostNameText = this.state.tileToBeDeleted;
     const { hostNames } = this.state;
     hostNames.splice(
@@ -130,14 +120,12 @@ export default class StatusPagesDashboard extends React.PureComponent {
       deleteTileModalActive: !deleteTileModalActive
     });
     await this.save();
-  }
+  };
 
-  async editHostName(hostnameObject) {
+  editHostName = async hostnameObject => {
     const { hostNames } = this.state;
-    const { hostName } = hostnameObject;
-    const indexOfEditedHostname = hostNames.findIndex(
-      val => val.hostName === hostName
-    );
+    const { id } = hostnameObject;
+    const indexOfEditedHostname = hostNames.findIndex(val => val.id === id);
 
     const newHostnameObject = hostnameObject;
     newHostnameObject.id = hostNames[indexOfEditedHostname].id;
@@ -145,11 +133,11 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
     this.setState({ hostNames: hostNames });
     await this.save();
-  }
+  };
 
-  setHostNames(hostNames) {
+  setHostNames = hostNames => {
     this.setState({ hostNames, requestForHostnamesMade: true });
-  }
+  };
 
   handleSelectInputChange = inputValue => {
     this.setState({ inputValue });
@@ -201,7 +189,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
     }
   };
 
-  async onAccountSelected(accountId, accounts) {
+  onAccountSelected = async (accountId, accounts) => {
     if (!this.state.entityGuid) {
       let { keyObject } = this.state;
       keyObject = { ...keyObject, key: accountId };
@@ -218,7 +206,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
       });
       this.setHostNames(hostNames);
     }
-  }
+  };
 
   // //! This is a hack until there is an message bus between stacked nerdlets
   // async pollHosts() {
@@ -237,9 +225,9 @@ export default class StatusPagesDashboard extends React.PureComponent {
   //   }
   // }
 
-  setSearchQuery() {
+  setSearchQuery = () => {
     this.setState({ searchQuery: event.target.value });
-  }
+  };
 
   getGridItems() {
     const {
@@ -327,18 +315,18 @@ export default class StatusPagesDashboard extends React.PureComponent {
     ));
   }
 
-  handleDeleteTileModal(hostname) {
+  handleDeleteTileModal = hostname => {
     const { deleteTileModalActive } = this.state;
     this.setState({
       deleteTileModalActive: !deleteTileModalActive,
       tileToBeDeleted: hostname.hostName
     });
-  }
+  };
 
-  handleCreateTileModal() {
+  handleCreateTileModal = () => {
     const { createTileModalActive } = this.state;
     this.setState({ createTileModalActive: !createTileModalActive });
-  }
+  };
 
   render() {
     const {
