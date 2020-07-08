@@ -156,6 +156,7 @@ export default class StatusPage extends React.PureComponent {
     if (settingsViewActive) {
       settingsContent.animate(
         {
+          visibility: ['visible', 'hidden'],
           opacity: [1, 0],
           transform: [
             'translateX(0) rotateY(0)',
@@ -188,6 +189,7 @@ export default class StatusPage extends React.PureComponent {
     } else {
       settingsContent.animate(
         {
+          visibility: ['hidden', 'visible'],
           opacity: [0, 1],
           transform: [
             'translateX(30px) rotateY(15deg)',

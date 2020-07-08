@@ -762,6 +762,7 @@ button[class*='Dropdown-trigger'],
   opacity: 0;
   display: flex;
   flex-direction: column;
+  visibility: hidden;
 }
 
 .status-page-settings-content {
@@ -990,7 +991,7 @@ button[class*='Dropdown-trigger'],
 
 .select-container {
   margin-bottom: 16px;
-  
+
   label {
     display: block;
     padding-bottom: 4px;
