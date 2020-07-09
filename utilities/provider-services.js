@@ -56,6 +56,5 @@ export const getProvider = providerKey => {
     providerKey = 'statusIo';
   }
   const provider = providers[providerKey];
-  // console.debug(provider);
   return provider;
 };

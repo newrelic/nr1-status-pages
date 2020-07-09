@@ -34,7 +34,6 @@ export default class StatusPagesDashboard extends React.PureComponent {
     super(props);
     this.state = {
       entityGuid: props.entityGuid ? props.entityGuid : null,
-      suggestedDependencies: [],
       selectedAccountId: undefined,
       hostNames: [],
       refreshRate: 15,
@@ -47,7 +46,6 @@ export default class StatusPagesDashboard extends React.PureComponent {
       newHostProvider: '',
       newHostLogo: '',
       searchQuery: '',
-      quickSetupSelection: '',
       keyObject: {
         key: props.entityGuid,
         type: props.entityGuid ? 'entity' : 'account'
@@ -170,8 +168,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
       newServiceName: selectedPopularSite.serviceName,
       newHostName: selectedPopularSite.hostName,
       newHostProvider: selectedPopularSite.provider,
-      newHostLogo: selectedPopularSite.hostLogo,
-      quickSetupSelection: selectedService
+      newHostLogo: selectedPopularSite.hostLogo
     });
   }
 
@@ -313,10 +310,9 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
   updateInputValue = (event, inputName) => {
     event.persist();
-    this.setState(previousState => ({
-      ...previousState,
+    this.setState({
       [inputName]: event.target.value
-    }));
+    });
   };
 
   render() {
@@ -425,18 +421,18 @@ export default class StatusPagesDashboard extends React.PureComponent {
           <div className="select-container">
             <label>Provider</label>
             <select
-              onChange={() =>
-                this.setState(previousState => ({
-                  ...previousState,
+              onChange={event => {
+                event.persist();
+                this.setState({
                   newHostProvider: event.target.value
-                }))
-              }
+                });
+              }}
               value={this.state.newHostProvider}
             >
               <option>Choose a provider</option>
-              <option>Status Page</option>
-              <option>Google</option>
-              <option>Status Io</option>
+              <option value="statusPageIo">Status Page</option>
+              <option value="google">Google</option>
+              <option value="statusIo">Status Io</option>
             </select>
           </div>
 
