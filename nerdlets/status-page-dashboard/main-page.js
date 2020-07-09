@@ -208,23 +208,6 @@ export default class StatusPagesDashboard extends React.PureComponent {
     }
   };
 
-  // //! This is a hack until there is an message bus between stacked nerdlets
-  // async pollHosts() {
-  //   try {
-  //     const hostNames = await getHostNamesFromNerdStorage({
-  //       key: this.state.entityGuid
-  //         ? this.state.entityGuid
-  //         : this.state.selectedAccountId,
-  //       type: this.state.entityGuid ? 'entity' : 'account',
-  //     });
-  //     if (JSON.stringify(hostNames) !== JSON.stringify(this.state.hostNames)) {
-  //       this.setHostNames(hostNames);
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
-
   setSearchQuery = () => {
     this.setState({ searchQuery: event.target.value });
   };
@@ -328,6 +311,14 @@ export default class StatusPagesDashboard extends React.PureComponent {
     this.setState({ createTileModalActive: !createTileModalActive });
   };
 
+  updateInputValue = (event, inputName) => {
+    event.persist();
+    this.setState(previousState => ({
+      ...previousState,
+      [inputName]: event.target.value
+    }));
+  };
+
   render() {
     const {
       accounts,
@@ -417,24 +408,18 @@ export default class StatusPagesDashboard extends React.PureComponent {
           <TextField
             label="Service name"
             className="status-page-setting"
-            onChange={() =>
-              this.setState(previousState => ({
-                ...previousState,
-                newServiceName: event.target.value
-              }))
-            }
+            onChange={event => {
+              this.updateInputValue(event, 'newServiceName');
+            }}
             value={this.state.newServiceName}
           />
           <TextField
             label="Hostname"
             placeholder="https://status.myservice.com/"
             className="status-page-setting"
-            onChange={() =>
-              this.setState(previousState => ({
-                ...previousState,
-                newHostName: event.target.value
-              }))
-            }
+            onChange={event => {
+              this.updateInputValue(event, 'newHostName');
+            }}
             value={this.state.newHostName}
           />
           <div className="select-container">
@@ -446,29 +431,21 @@ export default class StatusPagesDashboard extends React.PureComponent {
                   newHostProvider: event.target.value
                 }))
               }
+              value={this.state.newHostProvider}
             >
               <option>Choose a provider</option>
-              <option selected={this.state.newHostProvider === 'Status Page'}>
-                Status Page
-              </option>
-              <option selected={this.state.newHostProvider === 'Google'}>
-                Google
-              </option>
-              <option selected={this.state.newHostProvider === 'Status Io'}>
-                Status Io
-              </option>
+              <option>Status Page</option>
+              <option>Google</option>
+              <option>Status Io</option>
             </select>
           </div>
 
           <TextField
             label="Service logo (url)"
             className="status-page-setting"
-            onChange={() =>
-              this.setState(previousState => ({
-                ...previousState,
-                newHostLogo: event.target.value
-              }))
-            }
+            onChange={event => {
+              this.updateInputValue(event, 'newHostLogo');
+            }}
             value={this.state.newHostLogo}
             placeholder="https://myservice.com/logo.png"
           />
