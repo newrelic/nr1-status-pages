@@ -1,3 +1,14 @@
+## [0.12.4](https://github.com/newrelic/nr1-status-pages/compare/v0.12.3...v0.12.4) (2020-07-09)
+
+
+### Bug Fixes
+
+* breakpoint for desktop added ([57e0cb0](https://github.com/newrelic/nr1-status-pages/commit/57e0cb0d7088a67c03fb545f9302ddcdf30a2310))
+* edit hostname fixed ([d16f924](https://github.com/newrelic/nr1-status-pages/commit/d16f9244664e823744d19384116f2cd606b36999))
+* nerdpack id reverted ([547ad85](https://github.com/newrelic/nr1-status-pages/commit/547ad85a73f9819156260e2939de05ca093b842b))
+* setting dropdown visible fix ([f02a44a](https://github.com/newrelic/nr1-status-pages/commit/f02a44a5d44001378c38d8c0a497121633146b81))
+* setting dropdown visible fix ([a9a3dad](https://github.com/newrelic/nr1-status-pages/commit/a9a3dad86560cc648bb0694436c8991894f999b7))
+
 ## [0.12.3](https://github.com/newrelic/nr1-status-pages/compare/v0.12.2...v0.12.3) (2020-07-07)
 
 
