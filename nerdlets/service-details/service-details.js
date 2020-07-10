@@ -26,8 +26,6 @@ export default class ServiceDetails extends React.PureComponent {
       this.props.refreshRate,
       this.props.provider
     );
-
-    this.handleTimelineItemClick = this.handleTimelineItemClick.bind(this);
   }
 
   componentDidMount() {
@@ -41,6 +39,26 @@ export default class ServiceDetails extends React.PureComponent {
     if (timelineItemIndex !== undefined && expandedTimelineItem === null) {
       this.setState({ expandedTimelineItem: timelineItemIndex });
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.hostname !== this.props.hostname) {
+      this.statusPageNetwork.clear();
+
+      this.statusPageNetwork = new Network(
+        this.props.hostname,
+        this.props.refreshRate,
+        this.props.provider
+      );
+
+      this.statusPageNetwork.pollCurrentIncidents(
+        this.setIncidentData.bind(this)
+      );
+    }
+  }
+
+  componentWillUnmount() {
+    this.statusPageNetwork.clear();
   }
 
   setIncidentData(data) {
@@ -107,7 +125,7 @@ export default class ServiceDetails extends React.PureComponent {
     return incident_updates;
   }
 
-  handleTimelineItemClick(e) {
+  handleTimelineItemClick = e => {
     const timelineItemId = e.currentTarget.getAttribute(
       'data-timeline-item-id'
     );
@@ -121,7 +139,7 @@ export default class ServiceDetails extends React.PureComponent {
         expandedTimelineItem: timelineItemId
       });
     }
-  }
+  };
 
   render() {
     const { currentIncidents, expandedTimelineItem } = this.state;

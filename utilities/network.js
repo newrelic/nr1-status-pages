@@ -7,7 +7,16 @@ export default class Network {
     this.statusPageUrl = statusPageUrl;
     this.refreshRateInSeconds = refreshRateInSeconds;
     this.provider = provider;
+    this.setTimeoutId = undefined;
   }
+
+  clear = () => {
+    console.log(
+      'Network -> clearTimeout -> this.setTimeoutId',
+      this.setTimeoutId
+    );
+    clearTimeout(this.setTimeoutId);
+  };
 
   async _fetchAndPopulateData(url, callbackSetterFunction) {
     const networkResponse = await axios.get(url);
@@ -16,8 +25,10 @@ export default class Network {
   }
 
   _pollData(url, callbackSetterFunction, callbackBeforePolling) {
-    setTimeout(async () => {
+    this.setTimeoutId = setTimeout(async () => {
       callbackBeforePolling && callbackBeforePolling();
+
+      console.log('polling');
 
       try {
         this._fetchAndPopulateData(url, callbackSetterFunction);
