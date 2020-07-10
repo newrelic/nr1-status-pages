@@ -3,21 +3,14 @@ import PropTypes from 'prop-types';
 import StatusPage from '../../components/status-page';
 import { popularSites } from '../../popular-status-pages';
 
-import {
-  HeadingText,
-  Grid,
-  GridItem,
-  Spinner,
-  Modal,
-  Button,
-  TextField
-} from 'nr1';
+import { HeadingText, Grid, GridItem, Spinner, Modal, Button } from 'nr1';
 import Toolbar from '../../components/toolbar';
 import AccountPicker from '../../components/account-picker';
 import {
   getHostNamesFromNerdStorage,
   saveHostNamesToNerdStorage
 } from '../../utilities/nerdlet-storage';
+import TextFieldWrapper from './TextFieldWrapper/TextFieldWrapper';
 
 const uuid = require('uuid/v4');
 
@@ -41,10 +34,24 @@ export default class StatusPagesDashboard extends React.PureComponent {
       createTileModalActive: false,
       inputValue: '',
       value: [],
-      newServiceName: '',
-      newHostName: '',
-      newHostProvider: '',
-      newHostLogo: '',
+      formInputs: {
+        serviceName: {
+          inputValue: '',
+          validationError: ''
+        },
+        hostName: {
+          inputValue: '',
+          validationError: ''
+        },
+        providerName: {
+          inputValue: '',
+          validationError: ''
+        },
+        logoUrl: {
+          inputValue: '',
+          validationError: ''
+        }
+      },
       searchQuery: '',
       keyObject: {
         key: props.entityGuid,
@@ -76,7 +83,29 @@ export default class StatusPagesDashboard extends React.PureComponent {
     await saveHostNamesToNerdStorage(keyObject, hostNames);
   }
 
+  validateFormAndReturnStatus = () => {
+    const genericValidatioError = 'Please fill this field before saving.';
+    const { formInputs } = this.state;
+    const updatedFormInputs = { ...formInputs };
+    const inputsList = Object.keys(formInputs);
+    let isFormValid = true;
+
+    for (const inputName of inputsList) {
+      if (formInputs[inputName].inputValue.length < 2) {
+        updatedFormInputs[inputName].validationError = genericValidatioError;
+        isFormValid = false;
+      } else {
+        updatedFormInputs[inputName].validationError = '';
+      }
+    }
+
+    this.setState({ formInputs: updatedFormInputs });
+    return isFormValid;
+  };
+
   handleAddNewService = () => {
+    if (this.validateFormAndReturnStatus() === false) return;
+
     const hostNameObject = {
       id: uuid(),
       serviceName: this.state.newServiceName,
@@ -137,10 +166,6 @@ export default class StatusPagesDashboard extends React.PureComponent {
     this.setState({ hostNames, requestForHostnamesMade: true });
   };
 
-  handleSelectInputChange = inputValue => {
-    this.setState({ inputValue });
-  };
-
   handleQuickSetupSelect(e) {
     const selectedService = e.target.value;
     let indexOfPopularSite = null;
@@ -164,12 +189,19 @@ export default class StatusPagesDashboard extends React.PureComponent {
     }
     const selectedPopularSite = popularSites.sites[indexOfPopularSite];
 
-    this.setState({
-      newServiceName: selectedPopularSite.serviceName,
-      newHostName: selectedPopularSite.hostName,
-      newHostProvider: selectedPopularSite.provider,
-      newHostLogo: selectedPopularSite.hostLogo
-    });
+    const { formInputs } = this.state;
+    const filledInputs = { ...formInputs };
+
+    filledInputs.serviceName.inputValue = selectedPopularSite.serviceName;
+    filledInputs.hostName.inputValue = selectedPopularSite.hostName;
+    filledInputs.providerName.inputValue = selectedPopularSite.provider;
+    filledInputs.logoUrl.inputValue = selectedPopularSite.hostLogo;
+
+    Object.keys(filledInputs).forEach(
+      inputName => (filledInputs[inputName].validationText = '')
+    );
+
+    this.setState({ formInputs: filledInputs });
   }
 
   handleSelectKeyDown = event => {
@@ -310,8 +342,11 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
   updateInputValue = (event, inputName) => {
     event.persist();
+    const { formInputs } = this.state;
+    const updatedFormInputs = { ...formInputs };
+    updatedFormInputs[inputName].inputValue = event.target.value;
     this.setState({
-      [inputName]: event.target.value
+      formInputs: updatedFormInputs
     });
   };
 
@@ -322,11 +357,13 @@ export default class StatusPagesDashboard extends React.PureComponent {
       hostNames,
       selectedAccountId,
       deleteTileModalActive,
-      createTileModalActive
+      createTileModalActive,
+      formInputs
     } = this.state;
 
+    const { serviceName, hostName, providerName, logoUrl } = formInputs;
+
     return (
-      // <AccountsContext.Provider value={this.state}>
       <div>
         <Toolbar
           accounts={accounts}
@@ -401,48 +438,54 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
           <hr className="or-sep" />
 
-          <TextField
+          <TextFieldWrapper
             label="Service name"
-            className="status-page-setting"
             onChange={event => {
-              this.updateInputValue(event, 'newServiceName');
+              this.updateInputValue(event, 'serviceName');
             }}
-            value={this.state.newServiceName}
+            value={serviceName.inputValue}
+            validationText={serviceName.validationError}
           />
-          <TextField
+          <TextFieldWrapper
             label="Hostname"
             placeholder="https://status.myservice.com/"
-            className="status-page-setting"
             onChange={event => {
-              this.updateInputValue(event, 'newHostName');
+              this.updateInputValue(event, 'hostName');
             }}
-            value={this.state.newHostName}
+            value={hostName.inputValue}
+            validationText={hostName.validationError}
           />
           <div className="select-container">
             <label>Provider</label>
             <select
               onChange={event => {
                 event.persist();
-                this.setState({
-                  newHostProvider: event.target.value
-                });
+                const { formInputs } = this.state;
+                const updatedFormInputs = { ...formInputs };
+                updatedFormInputs.providerName.inputValue = event.target.value;
+                this.setState({ formInputs: updatedFormInputs });
               }}
-              value={this.state.newHostProvider}
+              value={providerName.inputValue}
             >
-              <option>Choose a provider</option>
+              <option value="">Choose a provider</option>
               <option value="statusPageIo">Status Page</option>
               <option value="google">Google</option>
               <option value="statusIo">Status Io</option>
             </select>
           </div>
+          {providerName.validationError && (
+            <p className="text-field__validation">
+              {providerName.validationError}
+            </p>
+          )}
 
-          <TextField
+          <TextFieldWrapper
             label="Service logo (url)"
-            className="status-page-setting"
             onChange={event => {
-              this.updateInputValue(event, 'newHostLogo');
+              this.updateInputValue(event, 'logoUrl');
             }}
-            value={this.state.newHostLogo}
+            value={logoUrl.inputValue}
+            validationText={logoUrl.validationError}
             placeholder="https://myservice.com/logo.png"
           />
 

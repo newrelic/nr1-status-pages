@@ -1,0 +1,16 @@
+@import '../styles/variables';
+
+.text-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.text-field--danger {
+  color: $criticalColor;
+}
+
+.text-field__validation {
+  position: relative;
+  top: -10px;
+  color: $criticalColor
+}

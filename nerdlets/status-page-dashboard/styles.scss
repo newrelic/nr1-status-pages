@@ -1,5 +1,7 @@
 $desktop-breakpoint: 1024px;
 
+@import './TextFieldWrapper/TextFieldWrapper.scss';
+
 #root > div {
   height: 100%;
 }
@@ -589,7 +591,7 @@ button[class*='Dropdown-trigger'],
   border-bottom: 1px solid #edeeee;
   padding: 0 8px;
 
-  .key {
+  .key {  
     margin-right: 8px;
     font-weight: 600;
     color: #464e4e;
