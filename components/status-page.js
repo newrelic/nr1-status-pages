@@ -215,9 +215,15 @@ export default class StatusPage extends React.PureComponent {
     }
   };
 
-  handleTileClick(statusPageIoSummaryData, refreshRate, hostname, provider, i) {
+  handleTileClick(
+    statusPageIoSummaryData,
+    refreshRate,
+    hostname,
+    provider,
+    selectedIndex
+  ) {
     if (!event.target.closest('.destructive')) {
-      if (i !== undefined) {
+      if (selectedIndex !== undefined) {
         navigation.openStackedNerdlet({
           id: 'service-details',
           urlState: {
@@ -225,9 +231,10 @@ export default class StatusPage extends React.PureComponent {
             refreshRate: refreshRate,
             hostname: hostname,
             provider: provider,
-            timelineItemIndex: i
+            timelineItemIndex: selectedIndex
           }
         });
+
         event.stopPropagation();
       } else {
         navigation.openStackedNerdlet({

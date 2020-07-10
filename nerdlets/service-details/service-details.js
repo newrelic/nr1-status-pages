@@ -20,34 +20,48 @@ export default class ServiceDetails extends React.PureComponent {
       currentIncidents: undefined,
       expandedTimelineItem: null
     };
-    this.FormatService = new FormatService(this.props.provider);
-    this.statusPageNetwork = new Network(
-      this.props.hostname,
-      this.props.refreshRate,
-      this.props.provider
-    );
-
-    this.handleTimelineItemClick = this.handleTimelineItemClick.bind(this);
   }
 
   componentDidMount() {
-    const { timelineItemIndex } = this.props;
+    const { timelineItemIndex, hostname, refreshRate, provider } = this.props;
     const { expandedTimelineItem } = this.state;
 
-    this.statusPageNetwork.pollCurrentIncidents(
-      this.setIncidentData.bind(this)
-    );
+    this.setupTimelinePolling(hostname, refreshRate, provider);
 
     if (timelineItemIndex !== undefined && expandedTimelineItem === null) {
       this.setState({ expandedTimelineItem: timelineItemIndex });
     }
   }
 
-  setIncidentData(data) {
+  componentDidUpdate(prevProps) {
+    const { timelineItemIndex, hostname, refreshRate, provider } = this.props;
+
+    if (prevProps.timelineItemIndex !== timelineItemIndex) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ expandedTimelineItem: timelineItemIndex });
+    }
+
+    if (prevProps.hostname !== hostname) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ currentIncidents: undefined });
+      this.setupTimelinePolling(hostname, refreshRate, provider);
+    }
+  }
+
+  setupTimelinePolling = (hostname, refreshRate, provider) => {
+    if (this.statusPageNetwork) this.statusPageNetwork.clear();
+
+    this.FormatService = new FormatService(provider);
+
+    this.statusPageNetwork = new Network(hostname, refreshRate, provider);
+    this.statusPageNetwork.pollCurrentIncidents(this.setIncidentData);
+  };
+
+  setIncidentData = data => {
     this.setState({
       currentIncidents: this.FormatService.uniformIncidentData(data)
     });
-  }
+  };
 
   setTimelineSymbol(incidentImpact) {
     switch (incidentImpact) {
@@ -95,7 +109,10 @@ export default class ServiceDetails extends React.PureComponent {
   buildTimelineItemDetails(incident) {
     const incident_updates = incident.incident_updates.map(incident_update => {
       return (
-        <li key={incident_update.id} className="timeline-item-contents-item">
+        <li
+          key={incident_update.created_at}
+          className="timeline-item-contents-item"
+        >
           <span className="key">
             {dayjs(incident_update.display_at).format('h:mm a')}:
           </span>
@@ -107,7 +124,7 @@ export default class ServiceDetails extends React.PureComponent {
     return incident_updates;
   }
 
-  handleTimelineItemClick(e) {
+  handleTimelineItemClick = e => {
     const timelineItemId = e.currentTarget.getAttribute(
       'data-timeline-item-id'
     );
@@ -121,13 +138,11 @@ export default class ServiceDetails extends React.PureComponent {
         expandedTimelineItem: timelineItemId
       });
     }
-  }
+  };
 
   render() {
     const { currentIncidents, expandedTimelineItem } = this.state;
     if (!currentIncidents) return <div />;
-    this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
-    // console.debug(currentIncidents);
 
     const items = currentIncidents.map((incident, i) => {
       return (
