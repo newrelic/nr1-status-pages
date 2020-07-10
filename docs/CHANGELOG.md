@@ -1,3 +1,20 @@
+## [0.12.4](https://github.com/newrelic/nr1-status-pages/compare/v0.12.3...v0.12.4) (2020-07-10)
+
+
+### Bug Fixes
+
+* breakpoint for desktop added ([57e0cb0](https://github.com/newrelic/nr1-status-pages/commit/57e0cb0d7088a67c03fb545f9302ddcdf30a2310))
+* edit hostname fixed ([d16f924](https://github.com/newrelic/nr1-status-pages/commit/d16f9244664e823744d19384116f2cd606b36999))
+* fixed incorrect behavior on Safari when adding new service and refactored part of the code ([1fdd2d8](https://github.com/newrelic/nr1-status-pages/commit/1fdd2d89420cc32169628937327f109da7c0e9eb))
+* Fixed possibility of adding new status page by fixing provider setting ([55952cb](https://github.com/newrelic/nr1-status-pages/commit/55952cb676a9f4e5087d288c071d1c584d4235e2))
+* nerdpack id reverted ([547ad85](https://github.com/newrelic/nr1-status-pages/commit/547ad85a73f9819156260e2939de05ca093b842b))
+* refresh rate for timeline fixed ([946f951](https://github.com/newrelic/nr1-status-pages/commit/946f95188e740b01ca621e3e6e30a593f1be4b33))
+* refreshing timeline fixed ([c8b5a5c](https://github.com/newrelic/nr1-status-pages/commit/c8b5a5cf8ebc28c1ec93f9ed4a1decd401c5b21e))
+* setting dropdown visible fix ([f02a44a](https://github.com/newrelic/nr1-status-pages/commit/f02a44a5d44001378c38d8c0a497121633146b81))
+* setting dropdown visible fix ([a9a3dad](https://github.com/newrelic/nr1-status-pages/commit/a9a3dad86560cc648bb0694436c8991894f999b7))
+* updating to latest version of semantic release plugins ([0a8d049](https://github.com/newrelic/nr1-status-pages/commit/0a8d049348699110dcf46c0bcb962e5a0cb9103f))
+* variable name changed ([f7157b1](https://github.com/newrelic/nr1-status-pages/commit/f7157b133ed7cb9b2e3a97b718b5474f9a6387f1))
+
 ## [0.12.3](https://github.com/newrelic/nr1-status-pages/compare/v0.12.2...v0.12.3) (2020-07-07)
 
 
