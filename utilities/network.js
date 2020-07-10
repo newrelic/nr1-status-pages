@@ -11,10 +11,6 @@ export default class Network {
   }
 
   clear = () => {
-    console.log(
-      'Network -> clearTimeout -> this.setTimeoutId',
-      this.setTimeoutId
-    );
     clearTimeout(this.setTimeoutId);
   };
 
@@ -27,8 +23,6 @@ export default class Network {
   _pollData(url, callbackSetterFunction, callbackBeforePolling) {
     this.setTimeoutId = setTimeout(async () => {
       callbackBeforePolling && callbackBeforePolling();
-
-      console.log('polling');
 
       try {
         this._fetchAndPopulateData(url, callbackSetterFunction);

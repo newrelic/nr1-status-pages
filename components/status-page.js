@@ -228,6 +228,7 @@ export default class StatusPage extends React.PureComponent {
             timelineItemIndex: i
           }
         });
+
         event.stopPropagation();
       } else {
         navigation.openStackedNerdlet({
