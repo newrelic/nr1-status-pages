@@ -25,6 +25,12 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
   constructor(props) {
     super(props);
+
+    const emptyInputState = {
+      inputValue: '',
+      validationText: ''
+    };
+
     this.state = {
       entityGuid: props.entityGuid ? props.entityGuid : null,
       selectedAccountId: undefined,
@@ -36,22 +42,10 @@ export default class StatusPagesDashboard extends React.PureComponent {
       value: [],
       selectedPopularSiteIndex: '',
       formInputs: {
-        serviceName: {
-          inputValue: '',
-          validationText: ''
-        },
-        hostName: {
-          inputValue: '',
-          validationText: ''
-        },
-        providerName: {
-          inputValue: '',
-          validationText: ''
-        },
-        logoUrl: {
-          inputValue: '',
-          validationText: ''
-        }
+        serviceName: emptyInputState,
+        hostName: emptyInputState,
+        providerName: emptyInputState,
+        logoUrl: emptyInputState
       },
       searchQuery: '',
       keyObject: {
