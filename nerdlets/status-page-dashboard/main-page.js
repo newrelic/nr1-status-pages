@@ -34,22 +34,23 @@ export default class StatusPagesDashboard extends React.PureComponent {
       createTileModalActive: false,
       inputValue: '',
       value: [],
+      selectedPopularSiteIndex: '',
       formInputs: {
         serviceName: {
           inputValue: '',
-          validationError: ''
+          validationText: ''
         },
         hostName: {
           inputValue: '',
-          validationError: ''
+          validationText: ''
         },
         providerName: {
           inputValue: '',
-          validationError: ''
+          validationText: ''
         },
         logoUrl: {
           inputValue: '',
-          validationError: ''
+          validationText: ''
         }
       },
       searchQuery: '',
@@ -83,6 +84,17 @@ export default class StatusPagesDashboard extends React.PureComponent {
     await saveHostNamesToNerdStorage(keyObject, hostNames);
   }
 
+  clearFormInputs = () => {
+    const { formInputs } = this.state;
+    const updatedInputs = { ...formInputs };
+    Object.keys(updatedInputs).forEach(inputName => {
+      updatedInputs[inputName].validationText = '';
+      updatedInputs[inputName].inputValue = '';
+    });
+
+    this.setState({ formInputs: updatedInputs, selectedPopularSiteIndex: '' });
+  };
+
   validateFormAndReturnStatus = () => {
     const genericValidatioError = 'Please fill this field before saving.';
     const { formInputs } = this.state;
@@ -106,22 +118,19 @@ export default class StatusPagesDashboard extends React.PureComponent {
   handleAddNewService = () => {
     if (this.validateFormAndReturnStatus() === false) return;
 
+    const { formInputs } = this.state;
+    const { serviceName, hostName, providerName, logoUrl } = formInputs;
+
     const hostNameObject = {
       id: uuid(),
-      serviceName: this.state.newServiceName,
-      hostName: this.state.newHostName,
-      provider: this.state.newHostProvider,
-      hostLogo: this.state.newHostLogo
+      serviceName: serviceName.inputValue,
+      hostName: hostName.inputValue,
+      provider: providerName.inputValue,
+      hostLogo: logoUrl.inputValue
     };
 
     this.addHostName(hostNameObject);
-
-    this.setState({
-      newServiceName: '',
-      newHostName: '',
-      newHostProvider: '',
-      newHostLogo: ''
-    });
+    this.clearFormInputs();
   };
 
   addHostName = async hostNameObject => {
@@ -130,7 +139,6 @@ export default class StatusPagesDashboard extends React.PureComponent {
     this.setState({ hostNames }, async () => {
       await this.save();
     });
-
     this.setState({ createTileModalActive: false });
   };
 
@@ -167,25 +175,10 @@ export default class StatusPagesDashboard extends React.PureComponent {
   };
 
   handleQuickSetupSelect(e) {
-    const selectedService = e.target.value;
-    let indexOfPopularSite = null;
-
-    switch (selectedService) {
-      case 'Google Cloud':
-        indexOfPopularSite = 0;
-        break;
-      case 'New Relic':
-        indexOfPopularSite = 1;
-        break;
-      case 'Jira':
-        indexOfPopularSite = 2;
-        break;
-      case 'GitHub':
-        indexOfPopularSite = 3;
-        break;
-      case 'Ezidebit':
-        indexOfPopularSite = 4;
-        break;
+    const indexOfPopularSite = e.target.value;
+    if (indexOfPopularSite === '') {
+      this.clearFormInputs();
+      return;
     }
     const selectedPopularSite = popularSites.sites[indexOfPopularSite];
 
@@ -197,11 +190,10 @@ export default class StatusPagesDashboard extends React.PureComponent {
     filledInputs.providerName.inputValue = selectedPopularSite.provider;
     filledInputs.logoUrl.inputValue = selectedPopularSite.hostLogo;
 
-    Object.keys(filledInputs).forEach(
-      inputName => (filledInputs[inputName].validationText = '')
-    );
-
-    this.setState({ formInputs: filledInputs });
+    this.setState({
+      formInputs: filledInputs,
+      selectedPopularSiteIndex: indexOfPopularSite
+    });
   }
 
   handleSelectKeyDown = event => {
@@ -358,7 +350,8 @@ export default class StatusPagesDashboard extends React.PureComponent {
       selectedAccountId,
       deleteTileModalActive,
       createTileModalActive,
-      formInputs
+      formInputs,
+      selectedPopularSiteIndex
     } = this.state;
 
     const { serviceName, hostName, providerName, logoUrl } = formInputs;
@@ -426,13 +419,16 @@ export default class StatusPagesDashboard extends React.PureComponent {
           </p>
           <div className="select-container">
             <label>Quick setup</label>
-            <select onChange={e => this.handleQuickSetupSelect(e)}>
-              <option>Choose a service</option>
-              <option>Google Cloud</option>
-              <option>GitHub</option>
-              <option>Jira</option>
-              <option>New Relic</option>
-              <option>Ezidebit</option>
+            <select
+              value={selectedPopularSiteIndex}
+              onChange={e => this.handleQuickSetupSelect(e)}
+            >
+              <option value="">Choose a service</option>
+              <option value="0">Google Cloud</option>
+              <option value="1">GitHub</option>
+              <option value="2">Jira</option>
+              <option value="3">New Relic</option>
+              <option value="4">Ezidebit</option>
             </select>
           </div>
 
