@@ -98,10 +98,19 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
     for (const inputName of inputsList) {
       if (formInputs[inputName].inputValue.length < 2) {
-        updatedFormInputs[inputName].validationError = genericValidatioError;
+        updatedFormInputs[inputName].validationText = genericValidatioError;
         isFormValid = false;
       } else {
-        updatedFormInputs[inputName].validationError = '';
+        updatedFormInputs[inputName].validationText = '';
+      }
+    }
+
+    if (updatedFormInputs.providerName.inputValue === 'statusIo') {
+      const regExp = new RegExp(/\/pages\/history\/[a-z0-9]+$/g);
+      if (!regExp.test(updatedFormInputs.hostName.inputValue)) {
+        isFormValid = false;
+        updatedFormInputs.hostName.validationText =
+          'Please provide a valid StatusIO URL according to the documentation';
       }
     }
 
@@ -331,6 +340,11 @@ export default class StatusPagesDashboard extends React.PureComponent {
     const { formInputs } = this.state;
     const updatedFormInputs = { ...formInputs };
     updatedFormInputs[inputName].inputValue = event.target.value;
+
+    if (updatedFormInputs[inputName].inputValue.length > 2) {
+      updatedFormInputs[inputName].validationText = '';
+    }
+
     this.setState({
       formInputs: updatedFormInputs
     });
@@ -434,7 +448,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
               this.updateInputValue(event, 'serviceName');
             }}
             value={serviceName.inputValue}
-            validationText={serviceName.validationError}
+            validationText={serviceName.validationText}
           />
           <TextFieldWrapper
             label="Hostname"
@@ -443,7 +457,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
               this.updateInputValue(event, 'hostName');
             }}
             value={hostName.inputValue}
-            validationText={hostName.validationError}
+            validationText={hostName.validationText}
           />
           <div className="select-container">
             <label>Provider</label>
@@ -453,6 +467,11 @@ export default class StatusPagesDashboard extends React.PureComponent {
                 const { formInputs } = this.state;
                 const updatedFormInputs = { ...formInputs };
                 updatedFormInputs.providerName.inputValue = event.target.value;
+
+                if (updatedFormInputs.providerName.inputValue) {
+                  updatedFormInputs.providerName.validationText = '';
+                }
+
                 this.setState({ formInputs: updatedFormInputs });
               }}
               value={providerName.inputValue}
@@ -463,9 +482,9 @@ export default class StatusPagesDashboard extends React.PureComponent {
               <option value="statusIo">Status Io</option>
             </select>
           </div>
-          {providerName.validationError && (
+          {providerName.validationText && (
             <p className="text-field__validation">
-              {providerName.validationError}
+              {providerName.validationText}
             </p>
           )}
 
@@ -475,7 +494,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
               this.updateInputValue(event, 'logoUrl');
             }}
             value={logoUrl.inputValue}
-            validationText={logoUrl.validationError}
+            validationText={logoUrl.validationText}
             placeholder="https://myservice.com/logo.png"
           />
 
