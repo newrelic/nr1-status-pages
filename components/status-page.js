@@ -41,12 +41,14 @@ export default class StatusPage extends React.PureComponent {
       this.props.refreshRate,
       this.props.hostname.provider
     );
+
     this.FormatService = new FormatService(this.props.hostname.provider);
     this.popupHoverTimer = null;
 
     this.state = {
       statusPageIoSummaryData: undefined,
       inputValue: '',
+      errorInfo: '',
       value: [],
       settingsViewActive: false,
       settingsPopoverActive: false,
@@ -133,9 +135,13 @@ export default class StatusPage extends React.PureComponent {
   }
 
   setSummaryData(data) {
-    this.setState({
-      statusPageIoSummaryData: this.FormatService.uniformSummaryData(data)
-    });
+    if (typeof data === 'string') {
+      this.setState({ errorInfo: data });
+    } else {
+      this.setState({
+        statusPageIoSummaryData: this.FormatService.uniformSummaryData(data)
+      });
+    }
   }
 
   handleTileSettingsAnimation = () => {
@@ -449,8 +455,8 @@ export default class StatusPage extends React.PureComponent {
     );
   }
 
-  renderLoadingState() {
-    const { settingsViewActive } = this.state;
+  renderAlternativeState(type) {
+    const { settingsViewActive, errorInfo } = this.state;
     return (
       <div
         className={`status-page-container ${
@@ -458,7 +464,12 @@ export default class StatusPage extends React.PureComponent {
         }`}
       >
         {this.renderSettingsButton()}
-        <Spinner fillContainer />
+        {type === 'loading' && <Spinner fillContainer />}
+        {type === 'error' && (
+          <div className="status-page-container-error">
+            <p>{errorInfo}</p>
+          </div>
+        )}
         <div ref={this.serviceTilePrimaryContent} />
         {this.renderSettings()}
       </div>
@@ -466,9 +477,13 @@ export default class StatusPage extends React.PureComponent {
   }
 
   render() {
-    const { statusPageIoSummaryData } = this.state;
-    if (!statusPageIoSummaryData) {
-      return this.renderLoadingState();
+    const { statusPageIoSummaryData, errorInfo } = this.state;
+    if (!statusPageIoSummaryData && !errorInfo) {
+      return this.renderAlternativeState('loading');
+    }
+
+    if (errorInfo) {
+      return this.renderAlternativeState('error');
     }
 
     const { refreshRate, hostname } = this.props;
