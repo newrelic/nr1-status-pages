@@ -124,11 +124,7 @@ export default class ServiceDetails extends React.PureComponent {
     return incident_updates;
   }
 
-  handleTimelineItemClick = e => {
-    const timelineItemId = e.currentTarget.getAttribute(
-      'data-timeline-item-id'
-    );
-    e.preventDefault();
+  handleTimelineItemClick = timelineItemId => {
     if (timelineItemId === this.state.expandedTimelineItem) {
       this.setState({
         expandedTimelineItem: null
@@ -144,13 +140,14 @@ export default class ServiceDetails extends React.PureComponent {
     const { currentIncidents, expandedTimelineItem } = this.state;
     if (!currentIncidents) return <div />;
 
-    const items = currentIncidents.map((incident, i) => {
+    const items = currentIncidents.map((incident, incidentId) => {
       return (
         <div
-          data-timeline-item-id={i}
-          onClick={this.handleTimelineItemClick}
+          onClick={() => {
+            this.handleTimelineItemClick(incidentId);
+          }}
           className={`timeline-item impact-${incident.impact} ${
-            expandedTimelineItem === i ? 'timeline-item-expanded' : ''
+            expandedTimelineItem === incidentId ? 'timeline-item-expanded' : ''
           }`}
           key={incident.created_at}
         >
@@ -183,11 +180,13 @@ export default class ServiceDetails extends React.PureComponent {
                 }
               />
             </div>
-            <div className="timeline-item-contents-container">
-              <ul className="timeline-item-contents">
-                {this.buildTimelineItemDetails(incident)}
-              </ul>
-            </div>
+            {expandedTimelineItem === incidentId && (
+              <div className="timeline-item-contents-container">
+                <ul className="timeline-item-contents">
+                  {this.buildTimelineItemDetails(incident)}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       );

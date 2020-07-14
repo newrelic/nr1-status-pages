@@ -15,7 +15,14 @@ export default class Network {
   };
 
   async _fetchAndPopulateData(url, callbackSetterFunction) {
-    const networkResponse = await axios.get(url);
+    let networkResponse;
+
+    try {
+      networkResponse = await axios.get(url);
+    } catch {
+      networkResponse =
+        'There was an error while fetching data. Check your data provider or host URL.';
+    }
     callbackSetterFunction(networkResponse);
     return networkResponse;
   }

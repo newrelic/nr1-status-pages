@@ -1,5 +1,7 @@
 $desktop-breakpoint: 1024px;
 
+@import './TextFieldWrapper/TextFieldWrapper.scss';
+
 #root > div {
   height: 100%;
 }
@@ -209,6 +211,18 @@ button[class*='Dropdown-trigger'],
       z-index: 0;
     }
   }
+}
+
+.status-page-container-error {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 10%;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: $criticalColor;
 }
 
 .status-container {
@@ -461,7 +475,6 @@ button[class*='Dropdown-trigger'],
 }
 
 .timeline-item-contents-container {
-  display: none;
   box-shadow: inset 0 10px 3px -5px rgba(0, 0, 0, 0.005),
     inset 0 2px 0 rgba(0, 0, 0, 0.03);
   background-color: #fafbfb;
@@ -589,7 +602,7 @@ button[class*='Dropdown-trigger'],
   border-bottom: 1px solid #edeeee;
   padding: 0 8px;
 
-  .key {
+  .key {  
     margin-right: 8px;
     font-weight: 600;
     color: #464e4e;
@@ -728,7 +741,6 @@ button[class*='Dropdown-trigger'],
   }
 
   .timeline-item-contents-container {
-    display: none;
     box-shadow: inset 0 10px 3px -5px rgba(0, 0, 0, 0.005),
       inset 0 2px 0 rgba(0, 0, 0, 0.03);
     background-color: #fafbfb;
