@@ -3,7 +3,15 @@ import PropTypes from 'prop-types';
 import StatusPage from '../../components/status-page';
 import { popularSites } from '../../popular-status-pages';
 
-import { HeadingText, Grid, GridItem, Spinner, Modal, Button } from 'nr1';
+import {
+  HeadingText,
+  Grid,
+  GridItem,
+  Spinner,
+  Modal,
+  Button,
+  Checkbox
+} from 'nr1';
 import Toolbar from '../../components/toolbar';
 import AccountPicker from '../../components/account-picker';
 import {
@@ -61,6 +69,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
       inputValue: '',
       value: [],
       selectedPopularSiteIndex: '',
+      hostRequiresProxy: false,
       formInputs: {
         serviceName: { ...emptyInputState },
         hostName: { ...emptyInputState },
@@ -143,7 +152,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
   handleAddNewService = async () => {
     if (this.validateFormAndReturnStatus() === false) return;
 
-    const { formInputs } = this.state;
+    const { formInputs, hostRequiresProxy } = this.state;
     const {
       serviceName,
       hostName,
@@ -152,10 +161,18 @@ export default class StatusPagesDashboard extends React.PureComponent {
       nrqlQuery
     } = formInputs;
 
+    let formattedHostName;
+    if (providerName !== PROVIDERS.NRQL.value) {
+      const CORSproxy = 'https://cors-anywhere.herokuapp.com/';
+      formattedHostName = hostRequiresProxy
+        ? `${CORSproxy}${hostName?.inputValue}`
+        : hostName.inputValue;
+    }
+
     const hostNameObject = {
       id: uuid(),
       serviceName: serviceName.inputValue,
-      hostName: hostName?.inputValue,
+      hostName: formattedHostName,
       provider: providerName.inputValue,
       hostLogo: logoUrl.inputValue,
       nrqlQuery: nrqlQuery?.inputValue
@@ -225,6 +242,10 @@ export default class StatusPagesDashboard extends React.PureComponent {
     filledInputs.serviceName.inputValue = selectedPopularSite.serviceName;
     filledInputs.providerName.inputValue = selectedPopularSite.provider;
     filledInputs.logoUrl.inputValue = selectedPopularSite.hostLogo;
+
+    Object.keys(filledInputs).forEach(inputName => {
+      filledInputs[inputName].validationText = '';
+    });
 
     this.setState({
       formInputs: filledInputs,
@@ -502,6 +523,15 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
           <hr className="or-sep" />
 
+          <div className="select-container">
+            <Checkbox
+              onChange={() => {
+                const { hostRequiresProxy } = this.state;
+                this.setState({ hostRequiresProxy: !hostRequiresProxy });
+              }}
+              label="Host requires CORS proxy"
+            />
+          </div>
           <div className="select-container">
             <label>Provider</label>
             <select

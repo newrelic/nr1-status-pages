@@ -95,6 +95,7 @@ export default class CurrentIncidents extends React.PureComponent {
   }
 
   setIncidentData(data) {
+    if (typeof data === 'string') return;
     this.setState({
       currentIncidents: this.FormatService.uniformIncidentData(data),
       isPolling: false
