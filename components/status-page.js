@@ -259,7 +259,7 @@ export default class StatusPage extends React.PureComponent {
   handleSettingsPopover = e => {
     const { settingsPopoverActive } = this.state;
     this.setState({ settingsPopoverActive: !settingsPopoverActive });
-    e.stopPropagation();
+    if (e) e.stopPropagation();
   };
 
   handleEditButtonClick = e => {
@@ -306,8 +306,9 @@ export default class StatusPage extends React.PureComponent {
     }, 150);
   };
 
-  renderSettingsButton() {
-    const hostname = this.props.hostname;
+  renderSettingsButton(canShowDetails = true) {
+    const { hostname } = this.props;
+
     return (
       <div
         className={`service-settings-button-container ${
@@ -329,10 +330,12 @@ export default class StatusPage extends React.PureComponent {
           onMouseEnter={this.handlePopupMouseEnter}
           onMouseLeave={this.handlePopupMouseLeave}
         >
-          <li className="service-settings-dropdown-item">
-            <Icon type={Icon.TYPE.INTERFACE__INFO__INFO} />
-            View details
-          </li>
+          {canShowDetails && (
+            <li className="service-settings-dropdown-item">
+              <Icon type={Icon.TYPE.INTERFACE__INFO__INFO} />
+              View details
+            </li>
+          )}
           <li
             className="service-settings-dropdown-item"
             onClick={this.handleEditButtonClick}
@@ -356,7 +359,8 @@ export default class StatusPage extends React.PureComponent {
   }
 
   renderSettings() {
-    const hostname = this.props.hostname;
+    const { hostname } = this.props;
+
     return (
       <div
         className="status-page-settings-container"
@@ -455,8 +459,8 @@ export default class StatusPage extends React.PureComponent {
     );
   }
 
-  renderAlternativeState(type) {
-    const { settingsViewActive, errorInfo } = this.state;
+  renderLoadingState() {
+    const { settingsViewActive } = this.state;
     return (
       <div
         className={`status-page-container ${
@@ -464,31 +468,128 @@ export default class StatusPage extends React.PureComponent {
         }`}
       >
         {this.renderSettingsButton()}
-        {type === 'loading' && <Spinner fillContainer />}
-        {type === 'error' && (
-          <div className="status-page-container-error">
-            <p>{errorInfo}</p>
-          </div>
-        )}
-        <div ref={this.serviceTilePrimaryContent} />
+        <Spinner fillContainer />
         {this.renderSettings()}
       </div>
     );
   }
 
-  render() {
-    const { statusPageIoSummaryData, errorInfo } = this.state;
-    if (!statusPageIoSummaryData && !errorInfo) {
-      return this.renderAlternativeState('loading');
-    }
-
-    if (errorInfo) {
-      return this.renderAlternativeState('error');
-    }
-
+  renderSuccessfulState() {
     const { refreshRate, hostname } = this.props;
+    const { statusPageIoSummaryData = {} } = this.state;
 
-    const { settingsViewActive } = this.state;
+    return (
+      <div
+        className="primary-status-page-content"
+        ref={this.serviceTilePrimaryContent}
+        onClick={() =>
+          this.handleTileClick(
+            statusPageIoSummaryData,
+            refreshRate,
+            hostname.hostName,
+            hostname.provider
+          )
+        }
+      >
+        <div className="logo-container">
+          {this.renderSettingsButton()}
+
+          {this.autoSetLogo(hostname)}
+        </div>
+        <div className="service-current-status">
+          <h5 className="service-current-status-heading">
+            {statusPageIoSummaryData.indicator === 'none' && (
+              <Icon type={Icon.TYPE.INTERFACE__SIGN__CHECKMARK} />
+            )}
+            {statusPageIoSummaryData.indicator === 'minor' && (
+              <svg
+                width="19"
+                height="19"
+                viewBox="0 0 19 19"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g clipPath="url(#clip0)">
+                  <path
+                    d="M8.14625 3.05583L1.44083 14.25C1.30258 14.4894 1.22943 14.7609 1.22866 15.0373C1.22789 15.3138 1.29951 15.5856 1.43642 15.8258C1.57333 16.066 1.77074 16.2662 2.00902 16.4064C2.2473 16.5466 2.51813 16.622 2.79458 16.625H16.2054C16.4819 16.622 16.7527 16.5466 16.991 16.4064C17.2293 16.2662 17.4267 16.066 17.5636 15.8258C17.7005 15.5856 17.7721 15.3138 17.7713 15.0373C17.7706 14.7609 17.6974 14.4894 17.5592 14.25L10.8538 3.05583C10.7126 2.82316 10.5139 2.6308 10.2768 2.49729C10.0397 2.36379 9.77213 2.29366 9.5 2.29366C9.22788 2.29366 8.96035 2.36379 8.72322 2.49729C8.4861 2.6308 8.28738 2.82316 8.14625 3.05583V3.05583Z"
+                    stroke="#733E00"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M9.5 7.125V10.2917"
+                    stroke="#733E00"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M9.5 13.4583V13.7083"
+                    stroke="#733E00"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0">
+                    <rect width="19" height="19" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+            )}
+            {statusPageIoSummaryData.indicator === 'major' && (
+              <Icon type={Icon.TYPE.INTERFACE__SIGN__CLOSE} />
+            )}
+            {statusPageIoSummaryData.indicator === 'critical' && (
+              <Icon type={Icon.TYPE.INTERFACE__SIGN__CLOSE} />
+            )}
+            {statusPageIoSummaryData.description}
+          </h5>
+        </div>
+        <CurrentIncidents
+          refreshRate={refreshRate}
+          hostname={hostname.hostName}
+          provider={hostname.provider}
+          handleTileClick={i => {
+            this.handleTileClick(
+              statusPageIoSummaryData,
+              refreshRate,
+              hostname.hostName,
+              hostname.provider,
+              i
+            );
+          }}
+        />
+      </div>
+    );
+  }
+
+  renderErrorState(errorInfo) {
+    return (
+      <div
+        className="primary-status-page-content"
+        ref={this.serviceTilePrimaryContent}
+      >
+        <div className="logo-container">{this.renderSettingsButton(false)}</div>
+        <div className="service-current-status">
+          <div className="status-page-container-error">{errorInfo}</div>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    const {
+      statusPageIoSummaryData = {},
+      errorInfo,
+      settingsViewActive
+    } = this.state;
+
+    if (!statusPageIoSummaryData && !errorInfo) {
+      return this.renderLoadingState('loading');
+    }
 
     return (
       <div
@@ -499,90 +600,8 @@ export default class StatusPage extends React.PureComponent {
         }`}
         ref={this.props.setServiceTileRef}
       >
-        <div
-          className="primary-status-page-content"
-          ref={this.serviceTilePrimaryContent}
-          onClick={() =>
-            this.handleTileClick(
-              statusPageIoSummaryData,
-              refreshRate,
-              hostname.hostName,
-              hostname.provider
-            )
-          }
-        >
-          <div className="logo-container">
-            {this.renderSettingsButton(hostname)}
-
-            {this.autoSetLogo(hostname)}
-          </div>
-          <div className="service-current-status">
-            <h5 className="service-current-status-heading">
-              {statusPageIoSummaryData.indicator === 'none' && (
-                <Icon type={Icon.TYPE.INTERFACE__SIGN__CHECKMARK} />
-              )}
-              {statusPageIoSummaryData.indicator === 'minor' && (
-                <svg
-                  width="19"
-                  height="19"
-                  viewBox="0 0 19 19"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g clipPath="url(#clip0)">
-                    <path
-                      d="M8.14625 3.05583L1.44083 14.25C1.30258 14.4894 1.22943 14.7609 1.22866 15.0373C1.22789 15.3138 1.29951 15.5856 1.43642 15.8258C1.57333 16.066 1.77074 16.2662 2.00902 16.4064C2.2473 16.5466 2.51813 16.622 2.79458 16.625H16.2054C16.4819 16.622 16.7527 16.5466 16.991 16.4064C17.2293 16.2662 17.4267 16.066 17.5636 15.8258C17.7005 15.5856 17.7721 15.3138 17.7713 15.0373C17.7706 14.7609 17.6974 14.4894 17.5592 14.25L10.8538 3.05583C10.7126 2.82316 10.5139 2.6308 10.2768 2.49729C10.0397 2.36379 9.77213 2.29366 9.5 2.29366C9.22788 2.29366 8.96035 2.36379 8.72322 2.49729C8.4861 2.6308 8.28738 2.82316 8.14625 3.05583V3.05583Z"
-                      stroke="#733E00"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M9.5 7.125V10.2917"
-                      stroke="#733E00"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M9.5 13.4583V13.7083"
-                      stroke="#733E00"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </g>
-                  <defs>
-                    <clipPath id="clip0">
-                      <rect width="19" height="19" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
-              )}
-              {statusPageIoSummaryData.indicator === 'major' && (
-                <Icon type={Icon.TYPE.INTERFACE__SIGN__CLOSE} />
-              )}
-              {statusPageIoSummaryData.indicator === 'critical' && (
-                <Icon type={Icon.TYPE.INTERFACE__SIGN__CLOSE} />
-              )}
-              {statusPageIoSummaryData.description}
-            </h5>
-          </div>
-          <CurrentIncidents
-            refreshRate={refreshRate}
-            hostname={hostname.hostName}
-            provider={hostname.provider}
-            handleTileClick={i => {
-              this.handleTileClick(
-                statusPageIoSummaryData,
-                refreshRate,
-                hostname.hostName,
-                hostname.provider,
-                i
-              );
-            }}
-          />
-        </div>
+        {errorInfo && this.renderErrorState(errorInfo)}
+        {!errorInfo && this.renderSuccessfulState()}
         {this.renderSettings()}
       </div>
     );
