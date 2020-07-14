@@ -1,3 +1,22 @@
+# [0.14.0](https://github.com/newrelic/nr1-status-pages/compare/v0.13.0...v0.14.0) (2020-07-14)
+
+
+### Bug Fixes
+
+* solved problem with incidents that doesn't expand on incidents list ([ec639af](https://github.com/newrelic/nr1-status-pages/commit/ec639af50f3b13385144065a6e3e02a19be8ea52))
+
+
+### Features
+
+* Added input validation, new TextField wrapper and styling ([e67e631](https://github.com/newrelic/nr1-status-pages/commit/e67e631d7898c620e094e74e6fd5fc7ddf17d75c))
+* added temporary way of handling CORS problems ([81bde93](https://github.com/newrelic/nr1-status-pages/commit/81bde935e1fcc28d42e6acfcb93aaeb37d2965d6))
+* Added validation in order to prevent creating status pages with incorrect StatusIO urls ([0a4148d](https://github.com/newrelic/nr1-status-pages/commit/0a4148d2916663e33461804698e293077e15cdfa))
+* Added validation in order to prevent creating status pages with incorrect StatusIO urls ([e385bf3](https://github.com/newrelic/nr1-status-pages/commit/e385bf39a18e7375c9170bc39c442d7441f8fdbe))
+* adjusted saving validation ([2413b22](https://github.com/newrelic/nr1-status-pages/commit/2413b22238c46a91d37fe5edfb18697f81fe14b5))
+* informing user that there is an error while downloading page info or provided url is incorrect ([4f5d347](https://github.com/newrelic/nr1-status-pages/commit/4f5d347514de1e6d41dc4da3bcabb43f0cc97b43))
+* validation adjustments code cleanup ([f1a37e1](https://github.com/newrelic/nr1-status-pages/commit/f1a37e184c21404e88eff9722d540b8395eee35b))
+* validation adjustments code cleanup ([9ff7c39](https://github.com/newrelic/nr1-status-pages/commit/9ff7c39965c31792babb1d304b99dc76de3a38a0))
+
 # [0.13.0](https://github.com/newrelic/nr1-status-pages/compare/v0.12.3...v0.13.0) (2020-07-10)
 
 
