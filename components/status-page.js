@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import 'web-animations-js';
 
 import Network from '../utilities/network';
+import NRQLHelper from '../utilities/nrql-helper';
 import CurrentIncidents from './current-incidents';
 import FormatService from '../utilities/format-service';
 import {
@@ -24,6 +25,9 @@ const createOption = label => ({
   label,
   value: label
 });
+
+const NRQL_PROVIDER_NAME = 'nrql';
+
 export default class StatusPage extends React.PureComponent {
   static propTypes = {
     hostname: PropTypes.object.isRequired,
@@ -36,11 +40,18 @@ export default class StatusPage extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.StatusPageNetwork = new Network(
-      this.props.hostname.hostName,
-      this.props.refreshRate,
-      this.props.hostname.provider
-    );
+    if (this.props.hostname.provider !== NRQL_PROVIDER_NAME) {
+      this.StatusPageNetwork = new Network(
+        this.props.hostname.hostName,
+        this.props.refreshRate,
+        this.props.hostname.provider
+      );
+    } else {
+      this.StatusPageNetwork = new NRQLHelper(
+        this.props.hostname.nrqlQuery,
+        this.props.refreshRate
+      );
+    }
 
     this.FormatService = new FormatService(this.props.hostname.provider);
     this.popupHoverTimer = null;
@@ -64,7 +75,9 @@ export default class StatusPage extends React.PureComponent {
   }
 
   async componentDidMount() {
-    this.StatusPageNetwork.pollSummaryData(this.setSummaryData.bind(this));
+    if (this.StatusPageNetwork) {
+      this.StatusPageNetwork.pollSummaryData(this.setSummaryData.bind(this));
+    }
   }
 
   handleSelectChange = value => {
@@ -90,7 +103,16 @@ export default class StatusPage extends React.PureComponent {
   };
 
   autoSetLogo(hostname) {
-    const { serviceName, hostName, hostLogo } = hostname;
+    const { serviceName, hostName, hostLogo, provider } = hostname;
+
+    if (provider === NRQL_PROVIDER_NAME) {
+      if (hostLogo) {
+        return <img src={hostLogo} className="service-logo" alt="nrql" />;
+      } else {
+        return <h2 className="service-name">{serviceName}</h2>;
+      }
+    }
+
     if (hostName.includes('githubstatus')) {
       return <img src={GitHubLogo} className="service-logo" alt="GitHub" />;
     } else if (hostName.includes('jira-software')) {
@@ -478,6 +500,11 @@ export default class StatusPage extends React.PureComponent {
 
   render() {
     const { statusPageIoSummaryData, errorInfo } = this.state;
+    console.log('StatusPage -> render -> errorInfo', errorInfo);
+    console.log(
+      'StatusPage -> render -> statusPageIoSummaryData',
+      statusPageIoSummaryData
+    );
     if (!statusPageIoSummaryData && !errorInfo) {
       return this.renderAlternativeState('loading');
     }
