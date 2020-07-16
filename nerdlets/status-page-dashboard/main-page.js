@@ -146,11 +146,13 @@ export default class StatusPagesDashboard extends React.PureComponent {
       );
 
       if (!formatRegexp.test(updatedFormInputs.nrqlQuery.inputValue)) {
+        isFormValid = false;
         updatedFormInputs.nrqlQuery.validationText =
           'Provided value is not correct NRQL query';
       } else if (!fieldsRegexp.test(updatedFormInputs.nrqlQuery.inputValue)) {
+        isFormValid = false;
         updatedFormInputs.nrqlQuery.validationText =
-          'Correct query must contain following fields/aliases: EventName, EventStatus and EventTimeStamp';
+          'Query must contain following fields/aliases: EventName, EventStatus and EventTimeStamp';
       }
     }
 
@@ -580,7 +582,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
           />
 
           {providerName.inputValue === PROVIDERS.NRQL.value ? (
-            <div>
+            <>
               <TextFieldWrapper
                 label="NRQL"
                 placeholder="Put your NRQL query here"
@@ -590,13 +592,11 @@ export default class StatusPagesDashboard extends React.PureComponent {
                 value={nrqlQuery.inputValue}
                 validationText={nrqlQuery.validationText}
               />
-              {!nrqlQuery.validationText && (
-                <p>
-                  Correct NRQL query must contain following fields/aliases:
-                  EventName, EventStatus and EventTimeStamp.
-                </p>
-              )}
-            </div>
+              <p>
+                Correct NRQL query must contain following fields/aliases:
+                EventName, EventStatus and EventTimeStamp.
+              </p>
+            </>
           ) : (
             <TextFieldWrapper
               label="Hostname"
