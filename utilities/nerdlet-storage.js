@@ -10,7 +10,6 @@ const HOST_NAMES_DOCUMENT_ID = 'host_names';
 
 const _getHostNameFromQueryResults = queryResults => {
   if (queryResults.data) {
-    // console.debug(queryResults);
     let hostNames = queryResults.data;
     if (!hostNames) {
       hostNames = [];

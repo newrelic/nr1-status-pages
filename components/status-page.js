@@ -35,31 +35,16 @@ export default class StatusPage extends React.PureComponent {
     handleDeleteTileModal: PropTypes.func,
     editHostName: PropTypes.func,
     setServiceTileRef: PropTypes.object,
-    accountId: PropTypes.string
+    accountId: PropTypes.number
   };
 
   constructor(props) {
     super(props);
-
-    if (this.props.hostname.provider !== NRQL_PROVIDER_NAME) {
-      this.StatusPageNetwork = new Network(
-        this.props.hostname.hostName,
-        this.props.refreshRate,
-        this.props.hostname.provider
-      );
-    } else {
-      this.StatusPageNetwork = new NRQLHelper(
-        this.props.hostname.nrqlQuery,
-        this.props.refreshRate,
-        this.props.accountId
-      );
-    }
-
-    this.FormatService = new FormatService(this.props.hostname.provider);
     this.popupHoverTimer = null;
 
     this.state = {
       statusPageIoSummaryData: undefined,
+      currentIncidents: undefined,
       inputValue: '',
       errorInfo: '',
       value: [],
@@ -78,10 +63,37 @@ export default class StatusPage extends React.PureComponent {
   }
 
   async componentDidMount() {
-    if (this.StatusPageNetwork) {
-      this.StatusPageNetwork.pollSummaryData(this.setSummaryData.bind(this));
-    }
+    this.setupDataPolling();
   }
+
+  setupDataPolling = () => {
+    if (this.StatusPageNetwork) {
+      this.StatusPageNetwork.clear();
+    }
+
+    const { refreshRate, accountId } = this.props;
+    const { editedHostProvider, editedHostName, editedNrqlQuery } = this.state;
+    if (editedHostProvider === NRQL_PROVIDER_NAME) {
+      this.StatusPageNetwork = new NRQLHelper(
+        editedNrqlQuery,
+        refreshRate,
+        accountId
+      );
+
+      this.StatusPageNetwork.pollCurrentIncidents(this.setData);
+    } else {
+      this.StatusPageNetwork = new Network(
+        editedHostName,
+        refreshRate,
+        editedHostProvider
+      );
+
+      this.StatusPageNetwork.pollCurrentIncidents(this.setIncidentsData);
+      this.StatusPageNetwork.pollSummaryData(this.setSummaryData);
+    }
+
+    this.FormatService = new FormatService(editedHostProvider);
+  };
 
   handleSelectChange = value => {
     this.setState({ value });
@@ -159,7 +171,7 @@ export default class StatusPage extends React.PureComponent {
     }
   }
 
-  setSummaryData(data) {
+  setSummaryData = data => {
     if (typeof data === 'string') {
       this.setState({ errorInfo: data });
     } else {
@@ -167,7 +179,24 @@ export default class StatusPage extends React.PureComponent {
         statusPageIoSummaryData: this.FormatService.uniformSummaryData(data)
       });
     }
-  }
+  };
+
+  setIncidentsData = data => {
+    if (typeof data === 'string') return;
+
+    this.setState({
+      currentIncidents: this.FormatService.uniformIncidentData(data)
+    });
+  };
+
+  setData = data => {
+    if (typeof data === 'string') {
+      this.setState({ errorInfo: data });
+    } else {
+      this.setIncidentsData(data);
+      this.setSummaryData(data);
+    }
+  };
 
   handleTileSettingsAnimation = () => {
     const { settingsViewActive } = this.state;
@@ -524,7 +553,7 @@ export default class StatusPage extends React.PureComponent {
 
   renderSuccessfulState() {
     const { refreshRate, hostname, accountId } = this.props;
-    const { statusPageIoSummaryData = {} } = this.state;
+    const { currentIncidents = [], statusPageIoSummaryData = {} } = this.state;
 
     return (
       <div
@@ -598,6 +627,7 @@ export default class StatusPage extends React.PureComponent {
           </h5>
         </div>
         <CurrentIncidents
+          currentIncidents={currentIncidents}
           refreshRate={refreshRate}
           hostname={hostname.hostName}
           provider={hostname.provider}

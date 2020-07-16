@@ -164,7 +164,7 @@ export default class ServiceDetails extends React.PureComponent {
           className={`timeline-item impact-${incident.impact} ${
             expandedTimelineItem === incidentId ? 'timeline-item-expanded' : ''
           }`}
-          key={incident.created_at}
+          key={`${incident.created_at}-${incidentId}`}
         >
           <div className="timeline-item-timestamp">
             <span className="timeline-timestamp-date">

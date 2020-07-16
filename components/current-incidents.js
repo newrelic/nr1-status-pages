@@ -1,71 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Network from '../utilities/network';
 import dayjs from 'dayjs';
 
-import { navigation, Icon, Button } from 'nr1';
-import FormatService from '../utilities/format-service';
-import NRQLHelper from '../utilities/nrql-helper';
-// import { hostname } from 'os';
-
-const NRQL_PROVIDER_NAME = 'nrql';
+import { Icon, Button } from 'nr1';
 
 export default class CurrentIncidents extends React.PureComponent {
   static propTypes = {
     hostname: PropTypes.string,
-    provider: PropTypes.string.isRequired,
-    refreshRate: PropTypes.number,
     handleTileClick: PropTypes.func,
-    accountId: PropTypes.string,
-    nrqlQuery: PropTypes.string
+    currentIncidents: PropTypes.array
   };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentIncidents: undefined,
-      isPolling: false
-    };
-
-    if (this.props.provider !== NRQL_PROVIDER_NAME) {
-      this.statusPageNetwork = new Network(
-        this.props.hostname,
-        this.props.refreshRate,
-        this.props.provider
-      );
-    } else {
-      this.statusPageNetwork = new NRQLHelper(
-        this.props.nrqlQuery,
-        this.props.refreshRate,
-        this.props.accountId
-      );
-    }
-    this.FormatService = new FormatService(this.props.provider);
-
-    this.seeMore = this.seeMore.bind(this);
-  }
-
-  componentDidMount() {
-    this.statusPageNetwork.pollCurrentIncidents(
-      this.setIncidentData.bind(this),
-      () => {
-        const { isPolling } = this.state;
-        this.setState({ isPolling: !isPolling });
-      }
-    );
-  }
-
-  seeMore() {
-    const nerdletWithState = {
-      id: 'incident-details',
-      urlState: {
-        hostname: this.props.hostname,
-        provider: this.props.provider,
-        nrqlQuery: this.props.nrqlQuery
-      }
-    };
-    navigation.openStackedNerdlet(nerdletWithState);
-  }
 
   setTimelineSymbol(incidentImpact) {
     switch (incidentImpact) {
@@ -110,17 +54,8 @@ export default class CurrentIncidents extends React.PureComponent {
     }
   }
 
-  setIncidentData(data) {
-    if (typeof data === 'string') return;
-    this.setState({
-      currentIncidents: this.FormatService.uniformIncidentData(data),
-      isPolling: false
-    });
-  }
-
   render() {
-    const { handleTileClick, hostname } = this.props;
-    const { currentIncidents } = this.state;
+    const { handleTileClick, hostname, currentIncidents } = this.props;
 
     if (!currentIncidents || currentIncidents.length === 0) {
       return (
@@ -138,14 +73,13 @@ export default class CurrentIncidents extends React.PureComponent {
         </div>
       );
     }
-    // console.table(currentIncidents);
-    // this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
-    const first3Incicdents = currentIncidents.slice(0, 3);
-    const first3TimelineItems = first3Incicdents.map((incident, i) => {
+
+    const first3Incidents = currentIncidents.slice(0, 3);
+    const first3TimelineItems = first3Incidents.map((incident, i) => {
       return (
         <div
           className={`timeline-item impact-${incident.impact}`}
-          key={incident.created_at}
+          key={`${incident.created_at}-${i}`}
           onClick={e => {
             handleTileClick(i);
             e.stopPropagation();

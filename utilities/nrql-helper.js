@@ -19,7 +19,8 @@ export default class NRQLHelper {
       networkResponse = await NrqlQuery.query({
         accountId: this.accountId,
         query: this.query,
-        formatType: NrqlQuery.FORMAT_TYPE.RAW
+        formatType: NrqlQuery.FORMAT_TYPE.RAW,
+        pollInterval: this.refreshRateInSeconds
       });
     } catch (error) {
       networkResponse =
