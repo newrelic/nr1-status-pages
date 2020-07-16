@@ -5,12 +5,10 @@ const NRQLSeverityToKnown = {
 };
 
 export const nrqlFormatter = data => {
-  let statusCode;
+  let statusCode = NRQLSeverityToKnown.None;
   let status = 'All Systems Operational';
 
-  if (data.raw.results[0].events.length === 0) {
-    statusCode = NRQLSeverityToKnown.None;
-  } else {
+  if (data.raw.results[0].events.length > 0) {
     const incident = data.raw.results[0].events[0];
     statusCode = NRQLSeverityToKnown[incident.EventStatus];
 

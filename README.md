@@ -38,7 +38,22 @@ Example hostnames:
 
 - [https://ezidebit.status.io/pages/history/598a973f96a8201305000142](https://ezidebit.status.io/pages/history/598a973f96a8201305000142)
 - [https://status.docker.com/pages/history/533c6539221ae15e3f000031](https://status.docker.com/pages/history/533c6539221ae15e3f000031)
-=======
+
+### NRQL query
+
+NRQL query requires three fields/aliases to be returned: *EventTimeStamp, EventStatus, EventName*.
+
+Example NRQL query:
+
+```sql
+FROM AlertViolationsSample SELECT timestamp as EventTimeStamp, priority as EventStatus, condition_name as EventName, entity.name LIMIT 50
+```
+
+or
+
+```sql
+SELECT timestamp as EventTimeStamp, priority as EventStatus, condition_name as EventName, entity.name FROM AlertViolationsSample LIMIT 50
+```
 
 ## Open Source License
 
