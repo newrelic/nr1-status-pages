@@ -22,6 +22,10 @@ export default class NRQLHelper {
         formatType: NrqlQuery.FORMAT_TYPE.RAW,
         pollInterval: this.refreshRateInSeconds
       });
+
+      if (networkResponse.data.raw.metadata.messages[0]) {
+        networkResponse = networkResponse.data.raw.metadata.messages[0];
+      }
     } catch (error) {
       networkResponse =
         'There was an error while fetching data. Check your data provider or host URL.';

@@ -21,7 +21,6 @@ export default class Network {
   async _fetchAndPopulateData(url, callbackSetterFunction) {
     let networkResponse;
 
-    console.log('polling network');
     try {
       networkResponse = await axios.get(url);
     } catch {

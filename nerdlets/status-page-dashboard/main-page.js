@@ -136,6 +136,24 @@ export default class StatusPagesDashboard extends React.PureComponent {
       }
     }
 
+    if (updatedFormInputs.nrqlQuery && updatedFormInputs.nrqlQuery.inputValue) {
+      const formatRegexp = new RegExp(
+        /^((?=.*SELECT.*FROM)|(?=.*FROM.*SELECT)).*$/i
+      );
+
+      const fieldsRegexp = new RegExp(
+        /^.*(?=.*EventName)(?=.*EventStatus)(?=.*EventTimeStamp).*$/
+      );
+
+      if (!formatRegexp.test(updatedFormInputs.nrqlQuery.inputValue)) {
+        updatedFormInputs.nrqlQuery.validationText =
+          'Provided value is not correct NRQL query';
+      } else if (!fieldsRegexp.test(updatedFormInputs.nrqlQuery.inputValue)) {
+        updatedFormInputs.nrqlQuery.validationText =
+          'Correct query must contain following fields/aliases: EventName, EventStatus and EventTimeStamp';
+      }
+    }
+
     if (updatedFormInputs.providerName.inputValue === 'statusIo') {
       const regExp = new RegExp(/\/pages\/history\/[a-z0-9]+$/g);
       if (!regExp.test(updatedFormInputs.hostName.inputValue)) {
@@ -562,15 +580,23 @@ export default class StatusPagesDashboard extends React.PureComponent {
           />
 
           {providerName.inputValue === PROVIDERS.NRQL.value ? (
-            <TextFieldWrapper
-              label="NRQL"
-              placeholder="Put your NRQL query here"
-              onChange={event => {
-                this.updateInputValue(event, 'nrqlQuery');
-              }}
-              value={nrqlQuery.inputValue}
-              validationText={nrqlQuery.validationText}
-            />
+            <div>
+              <TextFieldWrapper
+                label="NRQL"
+                placeholder="Put your NRQL query here"
+                onChange={event => {
+                  this.updateInputValue(event, 'nrqlQuery');
+                }}
+                value={nrqlQuery.inputValue}
+                validationText={nrqlQuery.validationText}
+              />
+              {!nrqlQuery.validationText && (
+                <p>
+                  Correct NRQL query must contain following fields/aliases:
+                  EventName, EventStatus and EventTimeStamp.
+                </p>
+              )}
+            </div>
           ) : (
             <TextFieldWrapper
               label="Hostname"
