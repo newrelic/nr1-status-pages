@@ -1,3 +1,20 @@
+# [0.15.0](https://github.com/newrelic/nr1-status-pages/compare/v0.14.0...v0.15.0) (2020-07-16)
+
+
+### Bug Fixes
+
+* polling data optimization ([9ba5c19](https://github.com/newrelic/nr1-status-pages/commit/9ba5c19a5fc2ea1748e0c87cec6291b698a0d9a4))
+* polling data optimization and unique key fixed ([df0f54d](https://github.com/newrelic/nr1-status-pages/commit/df0f54defc3f0822abf7ee030c6c2addfd402cd7))
+
+
+### Features
+
+* fetching incidents with nrql query ([fc8215a](https://github.com/newrelic/nr1-status-pages/commit/fc8215a584488f8b058de1fc10c834f72afa0a33))
+* nrql handled in create new service form ([af56bd4](https://github.com/newrelic/nr1-status-pages/commit/af56bd45e75084fd831566c21c4b1c6513be9370))
+* readme update for nrql query ([0bc175b](https://github.com/newrelic/nr1-status-pages/commit/0bc175bdafb4916e1b6cb5c118265293e10329b6))
+* validation for nrql query added ([9641982](https://github.com/newrelic/nr1-status-pages/commit/964198204116bc74b9d26f600d18b007f767e01d))
+* validation for nrql query added ([df7b690](https://github.com/newrelic/nr1-status-pages/commit/df7b690966eea245100334e871577d5494357698))
+
 # [0.14.0](https://github.com/newrelic/nr1-status-pages/compare/v0.13.0...v0.14.0) (2020-07-14)
 
 
