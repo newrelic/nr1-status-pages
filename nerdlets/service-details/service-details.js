@@ -5,13 +5,18 @@ import FormatService from '../../utilities/format-service';
 import dayjs from 'dayjs';
 
 import { Icon, Button } from 'nr1';
+import NRQLHelper from '../../utilities/nrql-helper';
+
+const NRQL_PROVIDER_NAME = 'nrql';
 
 export default class ServiceDetails extends React.PureComponent {
   static propTypes = {
-    hostname: PropTypes.string.isRequired,
+    hostname: PropTypes.string,
     provider: PropTypes.string.isRequired,
     refreshRate: PropTypes.number,
-    timelineItemIndex: PropTypes.object
+    timelineItemIndex: PropTypes.number,
+    nrqlQuery: PropTypes.string,
+    accountId: PropTypes.number
   };
 
   constructor(props) {
@@ -34,14 +39,20 @@ export default class ServiceDetails extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { timelineItemIndex, hostname, refreshRate, provider } = this.props;
+    const {
+      timelineItemIndex,
+      hostname,
+      refreshRate,
+      provider,
+      nrqlQuery
+    } = this.props;
 
     if (prevProps.timelineItemIndex !== timelineItemIndex) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ expandedTimelineItem: timelineItemIndex });
     }
 
-    if (prevProps.hostname !== hostname) {
+    if (prevProps.hostname !== hostname || prevProps.nrqlQuery !== nrqlQuery) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ currentIncidents: undefined });
       this.setupTimelinePolling(hostname, refreshRate, provider);
@@ -53,7 +64,17 @@ export default class ServiceDetails extends React.PureComponent {
 
     this.FormatService = new FormatService(provider);
 
-    this.statusPageNetwork = new Network(hostname, refreshRate, provider);
+    if (provider === NRQL_PROVIDER_NAME) {
+      const { nrqlQuery, accountId } = this.props;
+      this.statusPageNetwork = new NRQLHelper(
+        nrqlQuery,
+        refreshRate,
+        accountId
+      );
+    } else {
+      this.statusPageNetwork = new Network(hostname, refreshRate, provider);
+    }
+
     this.statusPageNetwork.pollCurrentIncidents(this.setIncidentData);
   };
 
@@ -107,19 +128,21 @@ export default class ServiceDetails extends React.PureComponent {
   }
 
   buildTimelineItemDetails(incident) {
-    const incident_updates = incident.incident_updates.map(incident_update => {
-      return (
-        <li
-          key={incident_update.created_at}
-          className="timeline-item-contents-item"
-        >
-          <span className="key">
-            {dayjs(incident_update.display_at).format('h:mm a')}:
-          </span>
-          <span className="value">{incident_update.body}</span>
-        </li>
-      );
-    });
+    const incident_updates = incident.incident_updates.map(
+      (incident_update, index) => {
+        return (
+          <li
+            key={`${incident_update.created_at}-${index}`}
+            className="timeline-item-contents-item"
+          >
+            <span className="key">
+              {dayjs(incident_update.display_at).format('h:mm a')}:
+            </span>
+            <span className="value">{incident_update.body}</span>
+          </li>
+        );
+      }
+    );
 
     return incident_updates;
   }
@@ -149,7 +172,7 @@ export default class ServiceDetails extends React.PureComponent {
           className={`timeline-item impact-${incident.impact} ${
             expandedTimelineItem === incidentId ? 'timeline-item-expanded' : ''
           }`}
-          key={incident.created_at}
+          key={`${incident.created_at}-${incidentId}`}
         >
           <div className="timeline-item-timestamp">
             <span className="timeline-timestamp-date">

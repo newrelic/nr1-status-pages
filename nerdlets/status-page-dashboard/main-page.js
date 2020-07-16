@@ -26,6 +26,31 @@ const createOption = label => ({
   label,
   value: label
 });
+
+const PROVIDERS = {
+  STATUS_PAGE: {
+    value: 'statusPageIo',
+    label: 'Status Page'
+  },
+  GOOGLE: {
+    value: 'google',
+    label: 'Google'
+  },
+  STATUS_IO: {
+    value: 'statusIo',
+    label: 'Status Io'
+  },
+  NRQL: {
+    value: 'nrql',
+    label: 'NRQL'
+  }
+};
+
+const emptyInputState = {
+  inputValue: '',
+  validationText: ''
+};
+
 export default class StatusPagesDashboard extends React.PureComponent {
   static propTypes = {
     entityGuid: PropTypes.string
@@ -33,11 +58,6 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
   constructor(props) {
     super(props);
-
-    const emptyInputState = {
-      inputValue: '',
-      validationText: ''
-    };
 
     this.state = {
       entityGuid: props.entityGuid ? props.entityGuid : null,
@@ -91,9 +111,11 @@ export default class StatusPagesDashboard extends React.PureComponent {
     const { formInputs } = this.state;
     const updatedInputs = { ...formInputs };
     Object.keys(updatedInputs).forEach(inputName => {
-      updatedInputs[inputName].validationText = '';
-      updatedInputs[inputName].inputValue = '';
+      updatedInputs[inputName] = { ...emptyInputState };
     });
+
+    delete updatedInputs.nrqlQuery;
+    updatedInputs.hostName = { ...emptyInputState };
 
     this.setState({ formInputs: updatedInputs, selectedPopularSiteIndex: '' });
   };
@@ -102,15 +124,35 @@ export default class StatusPagesDashboard extends React.PureComponent {
     const { formInputs } = this.state;
     const updatedFormInputs = { ...formInputs };
     const inputsList = Object.keys(formInputs);
-    const genericValidatioError = 'Please fill this field before saving.';
+    const genericValidationError = 'Please fill this field before saving.';
     let isFormValid = true;
 
     for (const inputName of inputsList) {
       if (formInputs[inputName].inputValue.length < 2) {
-        updatedFormInputs[inputName].validationText = genericValidatioError;
+        updatedFormInputs[inputName].validationText = genericValidationError;
         isFormValid = false;
       } else {
         updatedFormInputs[inputName].validationText = '';
+      }
+    }
+
+    if (updatedFormInputs.nrqlQuery && updatedFormInputs.nrqlQuery.inputValue) {
+      const formatRegexp = new RegExp(
+        /^((?=.*SELECT.*FROM)|(?=.*FROM.*SELECT)).*$/i
+      );
+
+      const fieldsRegexp = new RegExp(
+        /^.*(?=.*EventName)(?=.*EventStatus)(?=.*EventTimeStamp).*$/
+      );
+
+      if (!formatRegexp.test(updatedFormInputs.nrqlQuery.inputValue)) {
+        isFormValid = false;
+        updatedFormInputs.nrqlQuery.validationText =
+          'Provided value is not correct NRQL query';
+      } else if (!fieldsRegexp.test(updatedFormInputs.nrqlQuery.inputValue)) {
+        isFormValid = false;
+        updatedFormInputs.nrqlQuery.validationText =
+          'Query must contain following fields/aliases: EventName, EventStatus and EventTimeStamp';
       }
     }
 
@@ -127,26 +169,36 @@ export default class StatusPagesDashboard extends React.PureComponent {
     return isFormValid;
   };
 
-  handleAddNewService = () => {
+  handleAddNewService = async () => {
     if (this.validateFormAndReturnStatus() === false) return;
 
     const { formInputs, hostRequiresProxy } = this.state;
-    const { serviceName, hostName, providerName, logoUrl } = formInputs;
+    const {
+      serviceName,
+      hostName,
+      providerName,
+      logoUrl,
+      nrqlQuery
+    } = formInputs;
 
-    const CORSproxy = 'https://cors-anywhere.herokuapp.com/';
-    const formattedHostName = hostRequiresProxy
-      ? `${CORSproxy}${hostName.inputValue}`
-      : hostName.inputValue;
+    let formattedHostName;
+    if (providerName.inputValue !== PROVIDERS.NRQL.value) {
+      const CORSproxy = 'https://cors-anywhere.herokuapp.com/';
+      formattedHostName = hostRequiresProxy
+        ? `${CORSproxy}${hostName?.inputValue}`
+        : hostName?.inputValue;
+    }
 
     const hostNameObject = {
       id: uuid(),
       serviceName: serviceName.inputValue,
       hostName: formattedHostName,
       provider: providerName.inputValue,
-      hostLogo: logoUrl.inputValue
+      hostLogo: logoUrl.inputValue,
+      nrqlQuery: nrqlQuery?.inputValue
     };
 
-    this.addHostName(hostNameObject);
+    await this.addHostName(hostNameObject);
     this.clearFormInputs();
   };
 
@@ -202,8 +254,13 @@ export default class StatusPagesDashboard extends React.PureComponent {
     const { formInputs } = this.state;
     const filledInputs = { ...formInputs };
 
-    filledInputs.serviceName.inputValue = selectedPopularSite.serviceName;
+    if (filledInputs.providerName.inputValue === PROVIDERS.NRQL.value) {
+      filledInputs.hostName = { ...emptyInputState };
+      delete filledInputs.nrqlQuery;
+    }
+
     filledInputs.hostName.inputValue = selectedPopularSite.hostName;
+    filledInputs.serviceName.inputValue = selectedPopularSite.serviceName;
     filledInputs.providerName.inputValue = selectedPopularSite.provider;
     filledInputs.logoUrl.inputValue = selectedPopularSite.hostLogo;
 
@@ -229,6 +286,27 @@ export default class StatusPagesDashboard extends React.PureComponent {
         });
         event.preventDefault();
     }
+  };
+
+  handleProviderChange = event => {
+    event.persist();
+    const { formInputs } = this.state;
+    const updatedFormInputs = { ...formInputs };
+    updatedFormInputs.providerName.inputValue = event.target.value;
+
+    if (updatedFormInputs.providerName.inputValue) {
+      updatedFormInputs.providerName.validationText = '';
+
+      if (updatedFormInputs.providerName.inputValue === PROVIDERS.NRQL.value) {
+        delete updatedFormInputs.hostName;
+        updatedFormInputs.nrqlQuery = { ...emptyInputState };
+      } else {
+        delete updatedFormInputs.nrqlQuery;
+        updatedFormInputs.hostName = { ...emptyInputState };
+      }
+    }
+
+    this.setState({ formInputs: updatedFormInputs });
   };
 
   onAccountSelected = async (accountId, accounts) => {
@@ -259,7 +337,6 @@ export default class StatusPagesDashboard extends React.PureComponent {
       searchQuery,
       hostNames,
       requestForHostnamesMade,
-      keyObject,
       entityGuid
     } = this.state;
 
@@ -334,7 +411,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
           handleDeleteTileModal={() => this.handleDeleteTileModal}
           editHostName={() => this.editHostName}
           setSearchQuery={() => this.setSearchQuery}
-          keyObject={keyObject}
+          accountId={this.state.selectedAccountId}
         />
       </GridItem>
     ));
@@ -380,7 +457,13 @@ export default class StatusPagesDashboard extends React.PureComponent {
       selectedPopularSiteIndex
     } = this.state;
 
-    const { serviceName, hostName, providerName, logoUrl } = formInputs;
+    const {
+      serviceName,
+      hostName,
+      providerName,
+      logoUrl,
+      nrqlQuery
+    } = formInputs;
 
     return (
       <div>
@@ -460,23 +543,6 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
           <hr className="or-sep" />
 
-          <TextFieldWrapper
-            label="Service name"
-            onChange={event => {
-              this.updateInputValue(event, 'serviceName');
-            }}
-            value={serviceName.inputValue}
-            validationText={serviceName.validationText}
-          />
-          <TextFieldWrapper
-            label="Hostname"
-            placeholder="https://status.myservice.com/"
-            onChange={event => {
-              this.updateInputValue(event, 'hostName');
-            }}
-            value={hostName.inputValue}
-            validationText={hostName.validationText}
-          />
           <div className="select-container">
             <Checkbox
               onChange={() => {
@@ -489,30 +555,58 @@ export default class StatusPagesDashboard extends React.PureComponent {
           <div className="select-container">
             <label>Provider</label>
             <select
-              onChange={event => {
-                event.persist();
-                const { formInputs } = this.state;
-                const updatedFormInputs = { ...formInputs };
-                updatedFormInputs.providerName.inputValue = event.target.value;
-
-                if (updatedFormInputs.providerName.inputValue) {
-                  updatedFormInputs.providerName.validationText = '';
-                }
-
-                this.setState({ formInputs: updatedFormInputs });
-              }}
+              onChange={this.handleProviderChange}
               value={providerName.inputValue}
             >
               <option value="">Choose a provider</option>
-              <option value="statusPageIo">Status Page</option>
-              <option value="google">Google</option>
-              <option value="statusIo">Status Io</option>
+              {Object.values(PROVIDERS).map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
             </select>
           </div>
           {providerName.validationText && (
             <p className="text-field__validation">
               {providerName.validationText}
             </p>
+          )}
+
+          <TextFieldWrapper
+            label="Service name"
+            onChange={event => {
+              this.updateInputValue(event, 'serviceName');
+            }}
+            value={serviceName.inputValue}
+            validationText={serviceName.validationText}
+          />
+
+          {providerName.inputValue === PROVIDERS.NRQL.value ? (
+            <>
+              <TextFieldWrapper
+                label="NRQL"
+                placeholder="Put your NRQL query here"
+                onChange={event => {
+                  this.updateInputValue(event, 'nrqlQuery');
+                }}
+                value={nrqlQuery.inputValue}
+                validationText={nrqlQuery.validationText}
+              />
+              <p>
+                Correct NRQL query must contain following fields/aliases:
+                EventName, EventStatus and EventTimeStamp.
+              </p>
+            </>
+          ) : (
+            <TextFieldWrapper
+              label="Hostname"
+              placeholder="https://status.myservice.com/"
+              onChange={event => {
+                this.updateInputValue(event, 'hostName');
+              }}
+              value={hostName.inputValue}
+              validationText={hostName.validationText}
+            />
           )}
 
           <TextFieldWrapper

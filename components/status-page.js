@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import 'web-animations-js';
 
 import Network from '../utilities/network';
+import NRQLHelper from '../utilities/nrql-helper';
 import CurrentIncidents from './current-incidents';
 import FormatService from '../utilities/format-service';
 import {
@@ -24,29 +25,26 @@ const createOption = label => ({
   label,
   value: label
 });
+
+const NRQL_PROVIDER_NAME = 'nrql';
+
 export default class StatusPage extends React.PureComponent {
   static propTypes = {
     hostname: PropTypes.object.isRequired,
     refreshRate: PropTypes.number,
     handleDeleteTileModal: PropTypes.func,
     editHostName: PropTypes.func,
-    setServiceTileRef: PropTypes.object
+    setServiceTileRef: PropTypes.object,
+    accountId: PropTypes.number
   };
 
   constructor(props) {
     super(props);
-
-    this.StatusPageNetwork = new Network(
-      this.props.hostname.hostName,
-      this.props.refreshRate,
-      this.props.hostname.provider
-    );
-
-    this.FormatService = new FormatService(this.props.hostname.provider);
     this.popupHoverTimer = null;
 
     this.state = {
       statusPageIoSummaryData: undefined,
+      currentIncidents: undefined,
       inputValue: '',
       errorInfo: '',
       value: [],
@@ -54,6 +52,7 @@ export default class StatusPage extends React.PureComponent {
       settingsPopoverActive: false,
       editedServiceName: this.props.hostname.serviceName,
       editedHostName: this.props.hostname.hostName,
+      editedNrqlQuery: this.props.hostname.nrqlQuery,
       editedHostProvider: this.props.hostname.provider,
       editedHostLogo: this.props.hostname.hostLogo,
       editedHostId: this.props.hostname.id
@@ -64,8 +63,52 @@ export default class StatusPage extends React.PureComponent {
   }
 
   async componentDidMount() {
-    this.StatusPageNetwork.pollSummaryData(this.setSummaryData.bind(this));
+    this.setupDataPolling();
   }
+
+  componentWillUnmount() {
+    this.stopPollingData();
+  }
+
+  stopPollingData() {
+    if (this.StatusPageNetwork) {
+      this.StatusPageNetwork.clear();
+    }
+  }
+
+  setupDataPolling = () => {
+    this.stopPollingData();
+
+    const { refreshRate, accountId } = this.props;
+    const { editedHostProvider, editedHostName, editedNrqlQuery } = this.state;
+
+    if (editedHostProvider === NRQL_PROVIDER_NAME) {
+      this.StatusPageNetwork = new NRQLHelper(
+        editedNrqlQuery,
+        refreshRate,
+        accountId
+      );
+
+      this.StatusPageNetwork.pollCurrentIncidents(this.setData);
+    } else {
+      this.StatusPageNetwork = new Network(
+        editedHostName,
+        refreshRate,
+        editedHostProvider
+      );
+
+      const isSameDataSource = this.StatusPageNetwork.checkIfTheSameDataSource();
+
+      if (isSameDataSource) {
+        this.StatusPageNetwork.pollCurrentIncidents(this.setData);
+      } else {
+        this.StatusPageNetwork.pollCurrentIncidents(this.setIncidentsData);
+        this.StatusPageNetwork.pollSummaryData(this.setSummaryData);
+      }
+    }
+
+    this.FormatService = new FormatService(editedHostProvider);
+  };
 
   handleSelectChange = value => {
     this.setState({ value });
@@ -90,7 +133,16 @@ export default class StatusPage extends React.PureComponent {
   };
 
   autoSetLogo(hostname) {
-    const { serviceName, hostName, hostLogo } = hostname;
+    const { serviceName, hostName, hostLogo, provider } = hostname;
+
+    if (provider === NRQL_PROVIDER_NAME) {
+      if (hostLogo) {
+        return <img src={hostLogo} className="service-logo" alt="nrql" />;
+      } else {
+        return <h2 className="service-name">{serviceName}</h2>;
+      }
+    }
+
     if (hostName.includes('githubstatus')) {
       return <img src={GitHubLogo} className="service-logo" alt="GitHub" />;
     } else if (hostName.includes('jira-software')) {
@@ -134,7 +186,7 @@ export default class StatusPage extends React.PureComponent {
     }
   }
 
-  setSummaryData(data) {
+  setSummaryData = data => {
     if (typeof data === 'string') {
       this.setState({ errorInfo: data });
     } else {
@@ -142,7 +194,24 @@ export default class StatusPage extends React.PureComponent {
         statusPageIoSummaryData: this.FormatService.uniformSummaryData(data)
       });
     }
-  }
+  };
+
+  setIncidentsData = data => {
+    if (typeof data === 'string') return;
+
+    this.setState({
+      currentIncidents: this.FormatService.uniformIncidentData(data)
+    });
+  };
+
+  setData = data => {
+    if (typeof data === 'string') {
+      this.setState({ errorInfo: data });
+    } else {
+      this.setIncidentsData(data);
+      this.setSummaryData(data);
+    }
+  };
 
   handleTileSettingsAnimation = () => {
     const { settingsViewActive } = this.state;
@@ -226,6 +295,7 @@ export default class StatusPage extends React.PureComponent {
     refreshRate,
     hostname,
     provider,
+    nrqlQuery,
     selectedIndex
   ) {
     if (!event.target.closest('.destructive')) {
@@ -237,6 +307,8 @@ export default class StatusPage extends React.PureComponent {
             refreshRate: refreshRate,
             hostname: hostname,
             provider: provider,
+            nrqlQuery: this.state.editedNrqlQuery,
+            accountId: this.props.accountId,
             timelineItemIndex: selectedIndex
           }
         });
@@ -249,7 +321,9 @@ export default class StatusPage extends React.PureComponent {
             statusPageIoSummaryData: statusPageIoSummaryData,
             refreshRate: refreshRate,
             hostname: hostname,
-            provider: provider
+            provider: provider,
+            nrqlQuery: nrqlQuery,
+            accountId: this.props.accountId
           }
         });
       }
@@ -280,12 +354,14 @@ export default class StatusPage extends React.PureComponent {
       hostName: this.state.editedHostName,
       provider: this.state.editedHostProvider,
       hostLogo: this.state.editedHostLogo,
+      nrqlQuery: this.state.editedNrqlQuery,
       id: this.state.editedHostId
     };
 
     this.props.editHostName()(hostNameObject);
     e.stopPropagation();
     this.handleTileSettingsAnimation();
+    this.setupDataPolling();
   }
 
   handleSettingsButtonMouseLeave = () => {
@@ -378,55 +454,72 @@ export default class StatusPage extends React.PureComponent {
             }
             defaultValue={hostname.serviceName}
           />
-          <TextField
-            label="Hostname"
-            placeholder="https://status.myservice.com/"
-            className="status-page-setting"
-            onChange={() =>
-              this.setState(previousState => ({
-                ...previousState,
-                editedHostName: event.target.value
-              }))
-            }
-            defaultValue={hostname.hostName}
-          />
-          <Dropdown
-            title="Choose a provider"
-            label="Provider"
-            className="status-page-setting"
-          >
-            <DropdownItem
-              selected
-              onClick={() =>
+          {hostname.provider !== NRQL_PROVIDER_NAME ? (
+            <>
+              <TextField
+                label="Hostname"
+                placeholder="https://status.myservice.com/"
+                className="status-page-setting"
+                onChange={() =>
+                  this.setState(previousState => ({
+                    ...previousState,
+                    editedHostName: event.target.value
+                  }))
+                }
+                defaultValue={hostname.hostName}
+              />
+              <Dropdown
+                title="Choose a provider"
+                label="Provider"
+                className="status-page-setting"
+              >
+                <DropdownItem
+                  selected
+                  onClick={() =>
+                    this.setState(previousState => ({
+                      ...previousState,
+                      editedHostProvider: event.target.innerHTML
+                    }))
+                  }
+                >
+                  Status Page
+                </DropdownItem>
+                <DropdownItem
+                  onClick={() =>
+                    this.setState(previousState => ({
+                      ...previousState,
+                      editedHostProvider: event.target.innerHTML
+                    }))
+                  }
+                >
+                  Google
+                </DropdownItem>
+                <DropdownItem
+                  onClick={() =>
+                    this.setState(previousState => ({
+                      ...previousState,
+                      editedHostProvider: event.target.innerHTML
+                    }))
+                  }
+                >
+                  Status Io
+                </DropdownItem>
+              </Dropdown>
+            </>
+          ) : (
+            <TextField
+              label="NRQL"
+              placeholder="Put your NRQL query here"
+              className="status-page-setting"
+              onChange={() =>
                 this.setState(previousState => ({
                   ...previousState,
-                  editedHostProvider: event.target.innerHTML
+                  editedNrqlQuery: event.target.value
                 }))
               }
-            >
-              Status Page
-            </DropdownItem>
-            <DropdownItem
-              onClick={() =>
-                this.setState(previousState => ({
-                  ...previousState,
-                  editedHostProvider: event.target.innerHTML
-                }))
-              }
-            >
-              Google
-            </DropdownItem>
-            <DropdownItem
-              onClick={() =>
-                this.setState(previousState => ({
-                  ...previousState,
-                  editedHostProvider: event.target.innerHTML
-                }))
-              }
-            >
-              Status Io
-            </DropdownItem>
-          </Dropdown>
+              defaultValue={hostname.nrqlQuery}
+            />
+          )}
           <TextField
             label="Service logo"
             className="status-page-setting"
@@ -475,8 +568,8 @@ export default class StatusPage extends React.PureComponent {
   }
 
   renderSuccessfulState() {
-    const { refreshRate, hostname } = this.props;
-    const { statusPageIoSummaryData = {} } = this.state;
+    const { refreshRate, hostname, accountId } = this.props;
+    const { currentIncidents = [], statusPageIoSummaryData = {} } = this.state;
 
     return (
       <div
@@ -486,8 +579,9 @@ export default class StatusPage extends React.PureComponent {
           this.handleTileClick(
             statusPageIoSummaryData,
             refreshRate,
-            hostname.hostName,
-            hostname.provider
+            this.state.editedHostName,
+            this.state.editedHostProvider,
+            this.state.editedNrqlQuery
           )
         }
       >
@@ -549,15 +643,19 @@ export default class StatusPage extends React.PureComponent {
           </h5>
         </div>
         <CurrentIncidents
+          currentIncidents={currentIncidents}
           refreshRate={refreshRate}
           hostname={hostname.hostName}
           provider={hostname.provider}
+          accountId={accountId}
+          nrqlQuery={hostname.nrqlQuery}
           handleTileClick={i => {
             this.handleTileClick(
               statusPageIoSummaryData,
               refreshRate,
-              hostname.hostName,
-              hostname.provider,
+              this.state.editedHostName,
+              this.state.editedHostProvider,
+              this.state.editedNrqlQuery,
               i
             );
           }}
