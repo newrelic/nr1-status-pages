@@ -317,7 +317,6 @@ export default class StatusPagesDashboard extends React.PureComponent {
       searchQuery,
       hostNames,
       requestForHostnamesMade,
-      keyObject,
       entityGuid
     } = this.state;
 

@@ -66,13 +66,22 @@ export default class StatusPage extends React.PureComponent {
     this.setupDataPolling();
   }
 
-  setupDataPolling = () => {
+  componentWillUnmount() {
+    this.stopPollingData();
+  }
+
+  stopPollingData() {
     if (this.StatusPageNetwork) {
       this.StatusPageNetwork.clear();
     }
+  }
+
+  setupDataPolling = () => {
+    this.stopPollingData();
 
     const { refreshRate, accountId } = this.props;
     const { editedHostProvider, editedHostName, editedNrqlQuery } = this.state;
+
     if (editedHostProvider === NRQL_PROVIDER_NAME) {
       this.StatusPageNetwork = new NRQLHelper(
         editedNrqlQuery,
@@ -88,8 +97,14 @@ export default class StatusPage extends React.PureComponent {
         editedHostProvider
       );
 
-      this.StatusPageNetwork.pollCurrentIncidents(this.setIncidentsData);
-      this.StatusPageNetwork.pollSummaryData(this.setSummaryData);
+      const isSameDataSource = this.StatusPageNetwork.checkIfTheSameDataSource();
+
+      if (isSameDataSource) {
+        this.StatusPageNetwork.pollCurrentIncidents(this.setData);
+      } else {
+        this.StatusPageNetwork.pollCurrentIncidents(this.setIncidentsData);
+        this.StatusPageNetwork.pollSummaryData(this.setSummaryData);
+      }
     }
 
     this.FormatService = new FormatService(editedHostProvider);
@@ -292,7 +307,7 @@ export default class StatusPage extends React.PureComponent {
             refreshRate: refreshRate,
             hostname: hostname,
             provider: provider,
-            nrqlQuery: nrqlQuery,
+            nrqlQuery: this.state.editedNrqlQuery,
             accountId: this.props.accountId,
             timelineItemIndex: selectedIndex
           }
@@ -346,6 +361,7 @@ export default class StatusPage extends React.PureComponent {
     this.props.editHostName()(hostNameObject);
     e.stopPropagation();
     this.handleTileSettingsAnimation();
+    this.setupDataPolling();
   }
 
   handleSettingsButtonMouseLeave = () => {
@@ -563,9 +579,9 @@ export default class StatusPage extends React.PureComponent {
           this.handleTileClick(
             statusPageIoSummaryData,
             refreshRate,
-            hostname.hostName,
-            hostname.provider,
-            hostname.nrqlQuery
+            this.state.editedHostName,
+            this.state.editedHostProvider,
+            this.state.editedNrqlQuery
           )
         }
       >
@@ -637,9 +653,9 @@ export default class StatusPage extends React.PureComponent {
             this.handleTileClick(
               statusPageIoSummaryData,
               refreshRate,
-              hostname.hostName,
-              hostname.provider,
-              hostname.nrqlQuery,
+              this.state.editedHostName,
+              this.state.editedHostProvider,
+              this.state.editedNrqlQuery,
               i
             );
           }}

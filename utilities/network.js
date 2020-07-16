@@ -7,16 +7,21 @@ export default class Network {
     this.statusPageUrl = statusPageUrl;
     this.refreshRateInSeconds = refreshRateInSeconds;
     this.provider = provider;
-    this.setTimeoutId = undefined;
+    this.setTimeoutIds = [];
   }
 
   clear = () => {
-    clearTimeout(this.setTimeoutId);
+    this.setTimeoutIds.forEach(timeoutId => {
+      clearTimeout(timeoutId);
+    });
+
+    this.setTimeoutIds = [];
   };
 
   async _fetchAndPopulateData(url, callbackSetterFunction) {
     let networkResponse;
 
+    console.log('polling network');
     try {
       networkResponse = await axios.get(url);
     } catch {
@@ -28,7 +33,7 @@ export default class Network {
   }
 
   _pollData(url, callbackSetterFunction, callbackBeforePolling) {
-    this.setTimeoutId = setTimeout(async () => {
+    const setTimeoutId = setTimeout(async () => {
       callbackBeforePolling && callbackBeforePolling();
 
       try {
@@ -39,6 +44,8 @@ export default class Network {
         this._pollData(url, callbackSetterFunction);
       }
     }, this.refreshRateInSeconds * 1000);
+
+    this.setTimeoutIds.push(setTimeoutId);
   }
 
   async pollSummaryData(callbackSetterFunction) {
@@ -54,6 +61,11 @@ export default class Network {
 
     await this._fetchAndPopulateData(url, callbackSetterFunction);
     this._pollData(url, callbackSetterFunction, callbackBeforePolling);
+  }
+
+  checkIfTheSameDataSource() {
+    const provider = getProvider(this.provider);
+    return provider.summaryUrl === provider.incidentUrl;
   }
 
   // helper function to get correct url
