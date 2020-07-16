@@ -5,13 +5,18 @@ import FormatService from '../../utilities/format-service';
 import dayjs from 'dayjs';
 
 import { Icon, Button } from 'nr1';
+import NRQLHelper from '../../utilities/nrql-helper';
+
+const NRQL_PROVIDER_NAME = 'nrql';
 
 export default class ServiceDetails extends React.PureComponent {
   static propTypes = {
-    hostname: PropTypes.string.isRequired,
+    hostname: PropTypes.string,
     provider: PropTypes.string.isRequired,
     refreshRate: PropTypes.number,
-    timelineItemIndex: PropTypes.object
+    timelineItemIndex: PropTypes.object,
+    nrqlQuery: PropTypes.string,
+    accountId: PropTypes.string
   };
 
   constructor(props) {
@@ -53,7 +58,17 @@ export default class ServiceDetails extends React.PureComponent {
 
     this.FormatService = new FormatService(provider);
 
-    this.statusPageNetwork = new Network(hostname, refreshRate, provider);
+    if (NRQL_PROVIDER_NAME === provider) {
+      const { nrqlQuery, accountId } = this.props;
+      this.statusPageNetwork = new NRQLHelper(
+        nrqlQuery,
+        refreshRate,
+        accountId
+      );
+    } else {
+      this.statusPageNetwork = new Network(hostname, refreshRate, provider);
+    }
+
     this.statusPageNetwork.pollCurrentIncidents(this.setIncidentData);
   };
 

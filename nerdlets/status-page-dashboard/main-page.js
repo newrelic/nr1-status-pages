@@ -162,11 +162,11 @@ export default class StatusPagesDashboard extends React.PureComponent {
     } = formInputs;
 
     let formattedHostName;
-    if (providerName !== PROVIDERS.NRQL.value) {
+    if (providerName.inputValue !== PROVIDERS.NRQL.value) {
       const CORSproxy = 'https://cors-anywhere.herokuapp.com/';
       formattedHostName = hostRequiresProxy
         ? `${CORSproxy}${hostName?.inputValue}`
-        : hostName.inputValue;
+        : hostName?.inputValue;
     }
 
     const hostNameObject = {
@@ -236,6 +236,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
     if (filledInputs.providerName.inputValue === PROVIDERS.NRQL.value) {
       filledInputs.hostName = { ...emptyInputState };
+      delete filledInputs.nrqlQuery;
     }
 
     filledInputs.hostName.inputValue = selectedPopularSite.hostName;
@@ -391,7 +392,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
           handleDeleteTileModal={() => this.handleDeleteTileModal}
           editHostName={() => this.editHostName}
           setSearchQuery={() => this.setSearchQuery}
-          keyObject={keyObject}
+          accountId={this.state.selectedAccountId}
         />
       </GridItem>
     ));

@@ -1,10 +1,11 @@
 import { NrqlQuery } from 'nr1';
 
 export default class NRQLHelper {
-  constructor(query, refreshRateInSeconds) {
+  constructor(query, refreshRateInSeconds, accountId) {
     this.refreshRateInSeconds = refreshRateInSeconds;
     this.query = query;
     this.setTimeoutId = undefined;
+    this.accountId = accountId;
   }
 
   clear = () => {
@@ -15,17 +16,12 @@ export default class NRQLHelper {
     let networkResponse;
 
     try {
-      // const response = await NrqlQuery.query({
-      //   accountId: 1,
-      //   query:
-      //     'SELECT product, severity, condition_name FROM alert SINCE 1 DAY AGO'
-      // });
-      // console.log('NRQLHelper -> _fetchAndPopulateData -> response', response);
-      // networkResponse = await axios.get(url);
-      networkResponse = 'test';
+      networkResponse = await NrqlQuery.query({
+        accountId: this.accountId,
+        query: this.query,
+        formatType: NrqlQuery.FORMAT_TYPE.RAW
+      });
     } catch (error) {
-      console.log('NRQLHelper -> _fetchAndPopulateData -> error', error);
-
       networkResponse =
         'There was an error while fetching data. Check your data provider or host URL.';
     }

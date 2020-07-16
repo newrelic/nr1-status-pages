@@ -5,14 +5,19 @@ import dayjs from 'dayjs';
 
 import { navigation, Icon, Button } from 'nr1';
 import FormatService from '../utilities/format-service';
+import NRQLHelper from '../utilities/nrql-helper';
 // import { hostname } from 'os';
+
+const NRQL_PROVIDER_NAME = 'nrql';
 
 export default class CurrentIncidents extends React.PureComponent {
   static propTypes = {
-    hostname: PropTypes.string.isRequired,
+    hostname: PropTypes.string,
     provider: PropTypes.string.isRequired,
     refreshRate: PropTypes.number,
-    handleTileClick: PropTypes.func
+    handleTileClick: PropTypes.func,
+    accountId: PropTypes.string,
+    nrqlQuery: PropTypes.string
   };
 
   constructor(props) {
@@ -21,12 +26,22 @@ export default class CurrentIncidents extends React.PureComponent {
       currentIncidents: undefined,
       isPolling: false
     };
+
+    if (this.props.provider !== NRQL_PROVIDER_NAME) {
+      this.statusPageNetwork = new Network(
+        this.props.hostname,
+        this.props.refreshRate,
+        this.props.provider
+      );
+    } else {
+      this.statusPageNetwork = new NRQLHelper(
+        this.props.nrqlQuery,
+        this.props.refreshRate,
+        this.props.accountId
+      );
+    }
     this.FormatService = new FormatService(this.props.provider);
-    this.statusPageNetwork = new Network(
-      this.props.hostname,
-      this.props.refreshRate,
-      this.props.provider
-    );
+
     this.seeMore = this.seeMore.bind(this);
   }
 
@@ -45,7 +60,8 @@ export default class CurrentIncidents extends React.PureComponent {
       id: 'incident-details',
       urlState: {
         hostname: this.props.hostname,
-        provider: this.props.provider
+        provider: this.props.provider,
+        nrqlQuery: this.props.nrqlQuery
       }
     };
     navigation.openStackedNerdlet(nerdletWithState);
@@ -122,8 +138,8 @@ export default class CurrentIncidents extends React.PureComponent {
         </div>
       );
     }
-
-    this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
+    // console.table(currentIncidents);
+    // this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
     const first3Incicdents = currentIncidents.slice(0, 3);
     const first3TimelineItems = first3Incicdents.map((incident, i) => {
       return (

@@ -13,7 +13,9 @@ export default class ServiceDetailsWrapper extends React.PureComponent {
               provider,
               hostname,
               timelineItemIndex,
-              refreshRate
+              refreshRate,
+              nrqlQuery,
+              accountDetails
             } = nerdletUrlState;
 
             return (
@@ -26,6 +28,8 @@ export default class ServiceDetailsWrapper extends React.PureComponent {
                   provider={provider}
                   refreshRate={refreshRate}
                   timelineItemIndex={timelineItemIndex}
+                  nrqlQuery={nrqlQuery}
+                  accountDetails={accountDetails}
                 />
               </>
             );
