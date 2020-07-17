@@ -57,7 +57,7 @@ SELECT timestamp as EventTimeStamp, priority as EventStatus, condition_name as E
 
 ### RSS feed
 
-It is possible to chose RSS feed as a provider for status pages.
+It is possible to choose RSS feed as a provider for status pages.
 
 ## Open Source License
 
