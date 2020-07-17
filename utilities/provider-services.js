@@ -8,6 +8,7 @@ import {
   statusIoFormatter
 } from './formatters/status-io';
 import { nrqlFormatter, nrqlIncidentFormatter } from './formatters/nrql';
+import { rssFormatter, rssIncidentFormatter } from './formatters/rss';
 
 const providers = {
   google: {
@@ -57,6 +58,16 @@ const providers = {
     name: 'NRQL',
     summaryFormatter: nrqlFormatter,
     incidentFormatter: nrqlIncidentFormatter
+  },
+  rss: {
+    impactMap: {
+      warning: 'minor',
+      major: 'major',
+      critical: 'critical'
+    },
+    name: 'RSS Feed',
+    summaryFormatter: rssFormatter,
+    incidentFormatter: rssIncidentFormatter
   }
 };
 
@@ -67,7 +78,8 @@ export const getProvider = providerKey => {
     providerKey = 'statusIo';
   } else if (providerKey === 'nrql') {
     providerKey = 'nrql';
+  } else if (providerKey === 'rss') {
+    providerKey = 'rss';
   }
-  const provider = providers[providerKey];
-  return provider;
+  return providers[providerKey];
 };

@@ -12,7 +12,15 @@ export default class CurrentIncidents extends React.PureComponent {
   };
 
   setTimelineSymbol(incidentImpact) {
-    switch (incidentImpact) {
+    switch (incidentImpact.toLowerCase()) {
+      case 'unknown':
+        return (
+          <Icon
+            className="timeline-item-symbol-icon"
+            color="#464e4e"
+            type={Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__BROWSER}
+          />
+        );
       case 'none':
         return (
           <Icon

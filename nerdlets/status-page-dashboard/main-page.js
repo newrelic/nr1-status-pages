@@ -43,6 +43,10 @@ const PROVIDERS = {
   NRQL: {
     value: 'nrql',
     label: 'NRQL'
+  },
+  RSS: {
+    value: 'rss',
+    label: 'RSS Feed'
   }
 };
 
