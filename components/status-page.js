@@ -4,6 +4,7 @@ import 'web-animations-js';
 
 import Network from '../utilities/network';
 import NRQLHelper from '../utilities/nrql-helper';
+import RSSHelper from '../utilities/rss-helper';
 import CurrentIncidents from './current-incidents';
 import FormatService from '../utilities/format-service';
 import {
@@ -27,6 +28,7 @@ const createOption = label => ({
 });
 
 const NRQL_PROVIDER_NAME = 'nrql';
+const RSS_PROVIDER_NAME = 'rss';
 
 export default class StatusPage extends React.PureComponent {
   static propTypes = {
@@ -88,6 +90,10 @@ export default class StatusPage extends React.PureComponent {
         refreshRate,
         accountId
       );
+
+      this.StatusPageNetwork.pollCurrentIncidents(this.setData);
+    } else if (editedHostProvider === RSS_PROVIDER_NAME) {
+      this.StatusPageNetwork = new RSSHelper(editedHostName, refreshRate);
 
       this.StatusPageNetwork.pollCurrentIncidents(this.setData);
     } else {
@@ -382,6 +388,22 @@ export default class StatusPage extends React.PureComponent {
     }, 150);
   };
 
+  handleExternalLinkClick = event => {
+    const {
+      statusPageIoSummaryData: { link }
+    } = this.state;
+
+    if (link)
+      navigation.openStackedNerdlet({
+        id: 'external-page',
+        urlState: {
+          externalLink: link
+        }
+      });
+
+    event.stopPropagation();
+  };
+
   renderSettingsButton(canShowDetails = true) {
     const { hostname } = this.props;
 
@@ -454,7 +476,20 @@ export default class StatusPage extends React.PureComponent {
             }
             defaultValue={hostname.serviceName}
           />
-          {hostname.provider !== NRQL_PROVIDER_NAME ? (
+          {hostname.provider === NRQL_PROVIDER_NAME ? (
+            <TextField
+              label="NRQL"
+              placeholder="Put your NRQL query here"
+              className="status-page-setting"
+              onChange={() =>
+                this.setState(previousState => ({
+                  ...previousState,
+                  editedNrqlQuery: event.target.value
+                }))
+              }
+              defaultValue={hostname.nrqlQuery}
+            />
+          ) : (
             <>
               <TextField
                 label="Hostname"
@@ -468,57 +503,46 @@ export default class StatusPage extends React.PureComponent {
                 }
                 defaultValue={hostname.hostName}
               />
-              <Dropdown
-                title="Choose a provider"
-                label="Provider"
-                className="status-page-setting"
-              >
-                <DropdownItem
-                  selected
-                  onClick={() =>
-                    this.setState(previousState => ({
-                      ...previousState,
-                      editedHostProvider: event.target.innerHTML
-                    }))
-                  }
+              {hostname.provider !== RSS_PROVIDER_NAME && (
+                <Dropdown
+                  title="Choose a provider"
+                  label="Provider"
+                  className="status-page-setting"
                 >
-                  Status Page
-                </DropdownItem>
-                <DropdownItem
-                  onClick={() =>
-                    this.setState(previousState => ({
-                      ...previousState,
-                      editedHostProvider: event.target.innerHTML
-                    }))
-                  }
-                >
-                  Google
-                </DropdownItem>
-                <DropdownItem
-                  onClick={() =>
-                    this.setState(previousState => ({
-                      ...previousState,
-                      editedHostProvider: event.target.innerHTML
-                    }))
-                  }
-                >
-                  Status Io
-                </DropdownItem>
-              </Dropdown>
+                  <DropdownItem
+                    selected
+                    onClick={() =>
+                      this.setState(previousState => ({
+                        ...previousState,
+                        editedHostProvider: event.target.innerHTML
+                      }))
+                    }
+                  >
+                    Status Page
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() =>
+                      this.setState(previousState => ({
+                        ...previousState,
+                        editedHostProvider: event.target.innerHTML
+                      }))
+                    }
+                  >
+                    Google
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() =>
+                      this.setState(previousState => ({
+                        ...previousState,
+                        editedHostProvider: event.target.innerHTML
+                      }))
+                    }
+                  >
+                    Status Io
+                  </DropdownItem>
+                </Dropdown>
+              )}
             </>
-          ) : (
-            <TextField
-              label="NRQL"
-              placeholder="Put your NRQL query here"
-              className="status-page-setting"
-              onChange={() =>
-                this.setState(previousState => ({
-                  ...previousState,
-                  editedNrqlQuery: event.target.value
-                }))
-              }
-              defaultValue={hostname.nrqlQuery}
-            />
           )}
           <TextField
             label="Service logo"
@@ -567,6 +591,17 @@ export default class StatusPage extends React.PureComponent {
     );
   }
 
+  renderRssIcon = () => {
+    return (
+      <div className="rss-icon-container">
+        <Icon
+          color="#464e4e"
+          type={Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__FEED}
+        />
+      </div>
+    );
+  };
+
   renderSuccessfulState() {
     const { refreshRate, hostname, accountId } = this.props;
     const { currentIncidents = [], statusPageIoSummaryData = {} } = this.state;
@@ -587,60 +622,70 @@ export default class StatusPage extends React.PureComponent {
       >
         <div className="logo-container">
           {this.renderSettingsButton()}
-
           {this.autoSetLogo(hostname)}
+          {hostname.provider === RSS_PROVIDER_NAME && this.renderRssIcon()}
         </div>
         <div className="service-current-status">
-          <h5 className="service-current-status-heading">
-            {statusPageIoSummaryData.indicator === 'none' && (
-              <Icon type={Icon.TYPE.INTERFACE__SIGN__CHECKMARK} />
-            )}
-            {statusPageIoSummaryData.indicator === 'minor' && (
-              <svg
-                width="19"
-                height="19"
-                viewBox="0 0 19 19"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g clipPath="url(#clip0)">
-                  <path
-                    d="M8.14625 3.05583L1.44083 14.25C1.30258 14.4894 1.22943 14.7609 1.22866 15.0373C1.22789 15.3138 1.29951 15.5856 1.43642 15.8258C1.57333 16.066 1.77074 16.2662 2.00902 16.4064C2.2473 16.5466 2.51813 16.622 2.79458 16.625H16.2054C16.4819 16.622 16.7527 16.5466 16.991 16.4064C17.2293 16.2662 17.4267 16.066 17.5636 15.8258C17.7005 15.5856 17.7721 15.3138 17.7713 15.0373C17.7706 14.7609 17.6974 14.4894 17.5592 14.25L10.8538 3.05583C10.7126 2.82316 10.5139 2.6308 10.2768 2.49729C10.0397 2.36379 9.77213 2.29366 9.5 2.29366C9.22788 2.29366 8.96035 2.36379 8.72322 2.49729C8.4861 2.6308 8.28738 2.82316 8.14625 3.05583V3.05583Z"
-                    stroke="#733E00"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M9.5 7.125V10.2917"
-                    stroke="#733E00"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M9.5 13.4583V13.7083"
-                    stroke="#733E00"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0">
-                    <rect width="19" height="19" fill="white" />
-                  </clipPath>
-                </defs>
-              </svg>
-            )}
-            {statusPageIoSummaryData.indicator === 'major' && (
-              <Icon type={Icon.TYPE.INTERFACE__SIGN__CLOSE} />
-            )}
-            {statusPageIoSummaryData.indicator === 'critical' && (
-              <Icon type={Icon.TYPE.INTERFACE__SIGN__CLOSE} />
-            )}
-            {statusPageIoSummaryData.description}
-          </h5>
+          {statusPageIoSummaryData.link ? (
+            <h5
+              onClick={this.handleExternalLinkClick}
+              className="service-current-status-heading"
+            >
+              See status page
+            </h5>
+          ) : (
+            <h5 className="service-current-status-heading">
+              {statusPageIoSummaryData.indicator?.toLowerCase() ===
+                'unknown' && <Icon type={Icon.TYPE.INTERFACE__INFO__HELP} />}
+              {statusPageIoSummaryData.indicator?.toLowerCase() === 'none' && (
+                <Icon type={Icon.TYPE.INTERFACE__SIGN__CHECKMARK} />
+              )}
+              {statusPageIoSummaryData.indicator?.toLowerCase() === 'minor' && (
+                <svg
+                  width="19"
+                  height="19"
+                  viewBox="0 0 19 19"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g clipPath="url(#clip0)">
+                    <path
+                      d="M8.14625 3.05583L1.44083 14.25C1.30258 14.4894 1.22943 14.7609 1.22866 15.0373C1.22789 15.3138 1.29951 15.5856 1.43642 15.8258C1.57333 16.066 1.77074 16.2662 2.00902 16.4064C2.2473 16.5466 2.51813 16.622 2.79458 16.625H16.2054C16.4819 16.622 16.7527 16.5466 16.991 16.4064C17.2293 16.2662 17.4267 16.066 17.5636 15.8258C17.7005 15.5856 17.7721 15.3138 17.7713 15.0373C17.7706 14.7609 17.6974 14.4894 17.5592 14.25L10.8538 3.05583C10.7126 2.82316 10.5139 2.6308 10.2768 2.49729C10.0397 2.36379 9.77213 2.29366 9.5 2.29366C9.22788 2.29366 8.96035 2.36379 8.72322 2.49729C8.4861 2.6308 8.28738 2.82316 8.14625 3.05583V3.05583Z"
+                      stroke="#733E00"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M9.5 7.125V10.2917"
+                      stroke="#733E00"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M9.5 13.4583V13.7083"
+                      stroke="#733E00"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0">
+                      <rect width="19" height="19" fill="white" />
+                    </clipPath>
+                  </defs>
+                </svg>
+              )}
+              {statusPageIoSummaryData.indicator?.toLowerCase() === 'major' && (
+                <Icon type={Icon.TYPE.INTERFACE__SIGN__CLOSE} />
+              )}
+              {statusPageIoSummaryData.indicator?.toLowerCase() ===
+                'critical' && <Icon type={Icon.TYPE.INTERFACE__SIGN__CLOSE} />}
+              {statusPageIoSummaryData.description}
+            </h5>
+          )}
         </div>
         <CurrentIncidents
           currentIncidents={currentIncidents}

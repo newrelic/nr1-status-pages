@@ -1,0 +1,18 @@
+.container {
+  padding: 32px;
+  background-color: #fff;
+}
+
+.heading {
+  font-size: 32px;
+  line-height: 40px;
+  padding-bottom: 24px;
+  color: #2a3434;
+  border-bottom: 1px solid #e3e4e4;
+}
+
+iframe {
+  border: none;
+  min-height: calc(100vh - 128px);
+  min-width: 100%;
+}

@@ -6,8 +6,10 @@ import dayjs from 'dayjs';
 
 import { Icon, Button } from 'nr1';
 import NRQLHelper from '../../utilities/nrql-helper';
+import RSSHelper from '../../utilities/rss-helper';
 
 const NRQL_PROVIDER_NAME = 'nrql';
+const RSS_PROVIDER_NAME = 'rss';
 
 export default class ServiceDetails extends React.PureComponent {
   static propTypes = {
@@ -71,6 +73,8 @@ export default class ServiceDetails extends React.PureComponent {
         refreshRate,
         accountId
       );
+    } else if (provider === RSS_PROVIDER_NAME) {
+      this.statusPageNetwork = new RSSHelper(hostname, refreshRate);
     } else {
       this.statusPageNetwork = new Network(hostname, refreshRate, provider);
     }
@@ -85,7 +89,15 @@ export default class ServiceDetails extends React.PureComponent {
   };
 
   setTimelineSymbol(incidentImpact) {
-    switch (incidentImpact) {
+    switch (incidentImpact.toLowerCase()) {
+      case 'unknown':
+        return (
+          <Icon
+            className="timeline-item-symbol-icon"
+            color="#464e4e"
+            type={Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__BROWSER}
+          />
+        );
       case 'none':
         return (
           <Icon

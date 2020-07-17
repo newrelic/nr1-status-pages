@@ -55,6 +55,10 @@ or
 SELECT timestamp as EventTimeStamp, priority as EventStatus, condition_name as EventName, entity.name FROM AlertViolationsSample LIMIT 50
 ```
 
+### RSS feed
+
+It is possible to chose RSS feed as a provider for status pages.
+
 ## Open Source License
 
 This project is distributed under the [Apache 2 license](LICENSE).
