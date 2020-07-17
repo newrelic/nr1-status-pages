@@ -1,3 +1,11 @@
+# [0.16.0](https://github.com/newrelic/nr1-status-pages/compare/v0.15.0...v0.16.0) (2020-07-17)
+
+
+### Features
+
+* rss feed added as provider ([7d54f41](https://github.com/newrelic/nr1-status-pages/commit/7d54f412d44e073593bc7f78e436c6d79628a97a))
+* rss feed added as provider ([2ce9cff](https://github.com/newrelic/nr1-status-pages/commit/2ce9cffd4567bcd105eb25db688168d8efcdec8a))
+
 # [0.15.0](https://github.com/newrelic/nr1-status-pages/compare/v0.14.0...v0.15.0) (2020-07-16)
 
 
