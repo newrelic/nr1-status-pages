@@ -299,6 +299,10 @@ button[class*='Dropdown-trigger'],
   padding: 8px;
   max-height: 35px;
 
+  a {
+    color: #fff;
+  }
+
   .status-none & {
     background-color: #3ca653;
 

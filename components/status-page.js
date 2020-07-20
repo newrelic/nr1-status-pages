@@ -14,6 +14,7 @@ import {
   TextField,
   Dropdown,
   DropdownItem,
+  Link,
   navigation
 } from 'nr1';
 
@@ -211,6 +212,7 @@ export default class StatusPage extends React.PureComponent {
   };
 
   setData = data => {
+    console.log(data);
     if (typeof data === 'string') {
       this.setState({ errorInfo: data });
     } else {
@@ -386,22 +388,6 @@ export default class StatusPage extends React.PureComponent {
     this.popupHoverTimer = setTimeout(() => {
       this.setState({ settingsPopoverActive: false });
     }, 150);
-  };
-
-  handleExternalLinkClick = event => {
-    const {
-      statusPageIoSummaryData: { link }
-    } = this.state;
-
-    if (link)
-      navigation.openStackedNerdlet({
-        id: 'external-page',
-        urlState: {
-          externalLink: link
-        }
-      });
-
-    event.stopPropagation();
   };
 
   renderSettingsButton(canShowDetails = true) {
@@ -628,10 +614,10 @@ export default class StatusPage extends React.PureComponent {
         <div className="service-current-status">
           {statusPageIoSummaryData.link ? (
             <h5
-              onClick={this.handleExternalLinkClick}
+              onClick={e => e.stopPropagation()}
               className="service-current-status-heading"
             >
-              See status page
+              <Link to={statusPageIoSummaryData.link}>See status page</Link>
             </h5>
           ) : (
             <h5 className="service-current-status-heading">
