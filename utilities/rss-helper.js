@@ -17,7 +17,7 @@ export default class RSSHelper {
 
     try {
       networkResponse.data = await this.parser.parseURL(this.rssUrl);
-    } catch (error) {
+    } catch {
       networkResponse =
         'There was an error while fetching data. Check your data provider or host URL.';
     }
