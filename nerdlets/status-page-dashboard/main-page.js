@@ -140,6 +140,16 @@ export default class StatusPagesDashboard extends React.PureComponent {
       }
     }
 
+    if (
+      updatedFormInputs.corsProxyAddress &&
+      updatedFormInputs.corsProxyAddress.inputValue
+    ) {
+      if (!updatedFormInputs.corsProxyAddress.inputValue.includes('{url}')) {
+        updatedFormInputs.corsProxyAddress.validationText =
+          "CORS address must contain '{url}' that will be replaced with hostname";
+      }
+    }
+
     if (updatedFormInputs.nrqlQuery && updatedFormInputs.nrqlQuery.inputValue) {
       const formatRegexp = new RegExp(
         /^((?=.*SELECT.*FROM)|(?=.*FROM.*SELECT)).*$/i
@@ -182,14 +192,14 @@ export default class StatusPagesDashboard extends React.PureComponent {
       hostName,
       providerName,
       logoUrl,
-      nrqlQuery
+      nrqlQuery,
+      corsProxyAddress
     } = formInputs;
 
     let formattedHostName;
     if (providerName.inputValue !== PROVIDERS.NRQL.value) {
-      const CORSproxy = 'https://cors-anywhere.herokuapp.com/';
       formattedHostName = hostRequiresProxy
-        ? `${CORSproxy}${hostName?.inputValue}`
+        ? corsProxyAddress.inputValue.replace('{url}', hostName?.inputValue)
         : hostName?.inputValue;
     }
 
@@ -290,6 +300,24 @@ export default class StatusPagesDashboard extends React.PureComponent {
         });
         event.preventDefault();
     }
+  };
+
+  handleCORSChange = event => {
+    const isChecked = event.target.checked;
+
+    const { formInputs } = this.state;
+    const updatedFormInputs = { ...formInputs };
+
+    if (isChecked) {
+      updatedFormInputs.corsProxyAddress = { ...emptyInputState };
+    } else {
+      delete updatedFormInputs.corsProxyAddress;
+    }
+
+    this.setState({
+      hostRequiresProxy: isChecked,
+      formInputs: updatedFormInputs
+    });
   };
 
   handleProviderChange = event => {
@@ -458,7 +486,8 @@ export default class StatusPagesDashboard extends React.PureComponent {
       deleteTileModalActive,
       createTileModalActive,
       formInputs,
-      selectedPopularSiteIndex
+      selectedPopularSiteIndex,
+      hostRequiresProxy
     } = this.state;
 
     const {
@@ -466,7 +495,8 @@ export default class StatusPagesDashboard extends React.PureComponent {
       hostName,
       providerName,
       logoUrl,
-      nrqlQuery
+      nrqlQuery,
+      corsProxyAddress
     } = formInputs;
 
     return (
@@ -549,13 +579,23 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
           <div className="select-container">
             <Checkbox
-              onChange={() => {
-                const { hostRequiresProxy } = this.state;
-                this.setState({ hostRequiresProxy: !hostRequiresProxy });
-              }}
+              onChange={this.handleCORSChange}
               label="Host requires CORS proxy"
             />
           </div>
+          {hostRequiresProxy && (
+            <div className="select-container">
+              <TextFieldWrapper
+                label="CORS proxy address"
+                onChange={event => {
+                  this.updateInputValue(event, 'corsProxyAddress');
+                }}
+                value={corsProxyAddress.inputValue}
+                validationText={corsProxyAddress.validationText}
+              />
+            </div>
+          )}
+
           <div className="select-container">
             <label>Provider</label>
             <select
