@@ -59,6 +59,12 @@ SELECT timestamp as EventTimeStamp, priority as EventStatus, condition_name as E
 
 It is possible to choose RSS feed as a provider for status pages.
 
+### CORS configuration
+
+It is possible to configure CORS proxy when creating new service. CORS proxy address must contain `{url}` placeholder that will be replaced with provided hostname.
+
+Example: `https://cors-anywhere.herokuapp.com/{url}`
+
 ## Open Source License
 
 This project is distributed under the [Apache 2 license](LICENSE).

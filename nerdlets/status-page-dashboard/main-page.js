@@ -310,6 +310,8 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
     if (isChecked) {
       updatedFormInputs.corsProxyAddress = { ...emptyInputState };
+      updatedFormInputs.corsProxyAddress.inputValue =
+        'https://cors-anywhere.herokuapp.com/{url}';
     } else {
       delete updatedFormInputs.corsProxyAddress;
     }
