@@ -212,7 +212,6 @@ export default class StatusPage extends React.PureComponent {
   };
 
   setData = data => {
-    console.log(data);
     if (typeof data === 'string') {
       this.setState({ errorInfo: data });
     } else {
