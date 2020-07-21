@@ -13,7 +13,7 @@ export default class RSSHelper {
   };
 
   async _fetchAndPopulateData(callbackSetterFunction) {
-    let networkResponse;
+    let networkResponse = {};
 
     try {
       networkResponse.data = await this.parser.parseURL(this.rssUrl);
