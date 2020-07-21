@@ -10,7 +10,7 @@ import {
   Spinner,
   Modal,
   Button,
-  TextField
+  Checkbox
 } from 'nr1';
 import Toolbar from '../../components/toolbar';
 import AccountPicker from '../../components/account-picker';
@@ -18,6 +18,7 @@ import {
   getHostNamesFromNerdStorage,
   saveHostNamesToNerdStorage
 } from '../../utilities/nerdlet-storage';
+import TextFieldWrapper from './TextFieldWrapper/TextFieldWrapper';
 
 const uuid = require('uuid/v4');
 
@@ -25,6 +26,35 @@ const createOption = label => ({
   label,
   value: label
 });
+
+const PROVIDERS = {
+  STATUS_PAGE: {
+    value: 'statusPageIo',
+    label: 'Status Page'
+  },
+  GOOGLE: {
+    value: 'google',
+    label: 'Google'
+  },
+  STATUS_IO: {
+    value: 'statusIo',
+    label: 'Status Io'
+  },
+  NRQL: {
+    value: 'nrql',
+    label: 'NRQL'
+  },
+  RSS: {
+    value: 'rss',
+    label: 'RSS Feed'
+  }
+};
+
+const emptyInputState = {
+  inputValue: '',
+  validationText: ''
+};
+
 export default class StatusPagesDashboard extends React.PureComponent {
   static propTypes = {
     entityGuid: PropTypes.string
@@ -32,9 +62,9 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
   constructor(props) {
     super(props);
+
     this.state = {
       entityGuid: props.entityGuid ? props.entityGuid : null,
-      suggestedDependencies: [],
       selectedAccountId: undefined,
       hostNames: [],
       refreshRate: 15,
@@ -42,12 +72,15 @@ export default class StatusPagesDashboard extends React.PureComponent {
       createTileModalActive: false,
       inputValue: '',
       value: [],
-      newServiceName: '',
-      newHostName: '',
-      newHostProvider: '',
-      newHostLogo: '',
+      selectedPopularSiteIndex: '',
+      hostRequiresProxy: false,
+      formInputs: {
+        serviceName: { ...emptyInputState },
+        hostName: { ...emptyInputState },
+        providerName: { ...emptyInputState },
+        logoUrl: { ...emptyInputState }
+      },
       searchQuery: '',
-      quickSetupSelection: '',
       keyObject: {
         key: props.entityGuid,
         type: props.entityGuid ? 'entity' : 'account'
@@ -56,16 +89,6 @@ export default class StatusPagesDashboard extends React.PureComponent {
     };
 
     this.newHostNameInput = React.createRef();
-
-    this.onAccountSelected = this.onAccountSelected.bind(this);
-    this.setHostNames = this.setHostNames.bind(this);
-    this.handleDeleteTileModal = this.handleDeleteTileModal.bind(this);
-    this.handleCreateTileModal = this.handleCreateTileModal.bind(this);
-    this.addHostName = this.addHostName.bind(this);
-    this.handleAddNewService = this.handleAddNewService.bind(this);
-    this.deleteHostName = this.deleteHostName.bind(this);
-    this.editHostName = this.editHostName.bind(this);
-    this.setSearchQuery = this.setSearchQuery.bind(this);
   }
 
   async componentDidMount() {
@@ -88,36 +111,126 @@ export default class StatusPagesDashboard extends React.PureComponent {
     await saveHostNamesToNerdStorage(keyObject, hostNames);
   }
 
-  handleAddNewService() {
+  clearFormInputs = () => {
+    const { formInputs } = this.state;
+    const updatedInputs = { ...formInputs };
+    Object.keys(updatedInputs).forEach(inputName => {
+      updatedInputs[inputName] = { ...emptyInputState };
+    });
+
+    delete updatedInputs.nrqlQuery;
+    updatedInputs.hostName = { ...emptyInputState };
+
+    this.setState({ formInputs: updatedInputs, selectedPopularSiteIndex: '' });
+  };
+
+  validateFormAndReturnStatus = () => {
+    const { formInputs } = this.state;
+    const updatedFormInputs = { ...formInputs };
+    const inputsList = Object.keys(formInputs);
+    const genericValidationError = 'Please fill this field before saving.';
+    let isFormValid = true;
+
+    for (const inputName of inputsList) {
+      if (formInputs[inputName].inputValue.length < 2) {
+        updatedFormInputs[inputName].validationText = genericValidationError;
+        isFormValid = false;
+      } else {
+        updatedFormInputs[inputName].validationText = '';
+      }
+    }
+
+    const {
+      corsProxyAddress,
+      nrqlQuery,
+      providerName,
+      hostName
+    } = updatedFormInputs;
+
+    if (corsProxyAddress && corsProxyAddress.inputValue) {
+      if (!corsProxyAddress.inputValue.includes('{url}')) {
+        corsProxyAddress.validationText =
+          "CORS address must contain '{url}' that will be replaced with hostname";
+      }
+    }
+
+    if (nrqlQuery && nrqlQuery.inputValue) {
+      const formatRegexp = new RegExp(
+        /^((?=.*SELECT.*FROM)|(?=.*FROM.*SELECT)).*$/i
+      );
+
+      const fieldsRegexp = new RegExp(
+        /^.*(?=.*EventName)(?=.*EventStatus)(?=.*EventTimeStamp).*$/
+      );
+
+      if (!formatRegexp.test(nrqlQuery.inputValue)) {
+        isFormValid = false;
+        nrqlQuery.validationText = 'Provided value is not correct NRQL query';
+      } else if (!fieldsRegexp.test(nrqlQuery.inputValue)) {
+        isFormValid = false;
+        nrqlQuery.validationText =
+          'Query must contain following fields/aliases: EventName, EventStatus and EventTimeStamp';
+      }
+    }
+
+    if (providerName.inputValue === 'statusIo') {
+      const regExp = new RegExp(/\/pages\/history\/[a-z0-9]+$/g);
+      if (!regExp.test(hostName.inputValue)) {
+        isFormValid = false;
+        hostName.validationText =
+          'Please provide a valid StatusIO URL according to the documentation';
+      }
+    }
+
+    this.setState({ formInputs: updatedFormInputs });
+    return isFormValid;
+  };
+
+  handleAddNewService = async () => {
+    if (this.validateFormAndReturnStatus() === false) return;
+
+    const { formInputs, hostRequiresProxy } = this.state;
+    const {
+      serviceName,
+      hostName,
+      providerName,
+      logoUrl,
+      nrqlQuery,
+      corsProxyAddress
+    } = formInputs;
+
+    let formattedHostName;
+    if (providerName.inputValue !== PROVIDERS.NRQL.value) {
+      formattedHostName = hostRequiresProxy
+        ? corsProxyAddress.inputValue.replace('{url}', hostName?.inputValue)
+        : hostName?.inputValue;
+
+      formattedHostName = encodeURI(formattedHostName);
+    }
+
     const hostNameObject = {
       id: uuid(),
-      serviceName: this.state.newServiceName,
-      hostName: this.state.newHostName,
-      provider: this.state.newHostProvider,
-      hostLogo: this.state.newHostLogo
+      serviceName: serviceName.inputValue,
+      hostName: formattedHostName,
+      provider: providerName.inputValue,
+      hostLogo: logoUrl.inputValue,
+      nrqlQuery: nrqlQuery?.inputValue
     };
 
-    this.addHostName(hostNameObject);
+    await this.addHostName(hostNameObject);
+    this.clearFormInputs();
+  };
 
-    this.setState({
-      newServiceName: '',
-      newHostName: '',
-      newHostProvider: '',
-      newHostLogo: ''
-    });
-  }
-
-  async addHostName(hostNameObject) {
+  addHostName = async hostNameObject => {
     const { hostNames } = this.state;
     hostNames.push(hostNameObject);
     this.setState({ hostNames }, async () => {
       await this.save();
     });
-
     this.setState({ createTileModalActive: false });
-  }
+  };
 
-  async deleteHostName() {
+  deleteHostName = async () => {
     const hostNameText = this.state.tileToBeDeleted;
     const { hostNames } = this.state;
     hostNames.splice(
@@ -130,14 +243,12 @@ export default class StatusPagesDashboard extends React.PureComponent {
       deleteTileModalActive: !deleteTileModalActive
     });
     await this.save();
-  }
+  };
 
-  async editHostName(hostnameObject) {
+  editHostName = async hostnameObject => {
     const { hostNames } = this.state;
-    const { hostName } = hostnameObject;
-    const indexOfEditedHostname = hostNames.findIndex(
-      val => val.hostName === hostName
-    );
+    const { id } = hostnameObject;
+    const indexOfEditedHostname = hostNames.findIndex(val => val.id === id);
 
     const newHostnameObject = hostnameObject;
     newHostnameObject.id = hostNames[indexOfEditedHostname].id;
@@ -145,45 +256,40 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
     this.setState({ hostNames: hostNames });
     await this.save();
-  }
+  };
 
-  setHostNames(hostNames) {
+  setHostNames = hostNames => {
     this.setState({ hostNames, requestForHostnamesMade: true });
-  }
-
-  handleSelectInputChange = inputValue => {
-    this.setState({ inputValue });
   };
 
   handleQuickSetupSelect(e) {
-    const selectedService = e.target.value;
-    let indexOfPopularSite = null;
-
-    switch (selectedService) {
-      case 'Google Cloud':
-        indexOfPopularSite = 0;
-        break;
-      case 'New Relic':
-        indexOfPopularSite = 1;
-        break;
-      case 'Jira':
-        indexOfPopularSite = 2;
-        break;
-      case 'GitHub':
-        indexOfPopularSite = 3;
-        break;
-      case 'Ezidebit':
-        indexOfPopularSite = 4;
-        break;
+    const indexOfPopularSite = e.target.value;
+    if (indexOfPopularSite === '') {
+      this.clearFormInputs();
+      return;
     }
     const selectedPopularSite = popularSites.sites[indexOfPopularSite];
 
+    const { formInputs } = this.state;
+    const filledInputs = { ...formInputs };
+
+    if (filledInputs.providerName.inputValue === PROVIDERS.NRQL.value) {
+      filledInputs.hostName = { ...emptyInputState };
+      delete filledInputs.nrqlQuery;
+    }
+
+    filledInputs.hostName.inputValue = selectedPopularSite.hostName;
+    filledInputs.serviceName.inputValue = selectedPopularSite.serviceName;
+    filledInputs.providerName.inputValue = selectedPopularSite.provider;
+    filledInputs.logoUrl.inputValue = selectedPopularSite.hostLogo;
+
+    Object.keys(filledInputs).forEach(inputName => {
+      filledInputs[inputName].validationText = '';
+    });
+
     this.setState({
-      newServiceName: selectedPopularSite.serviceName,
-      newHostName: selectedPopularSite.hostName,
-      newHostProvider: selectedPopularSite.provider,
-      newHostLogo: selectedPopularSite.hostLogo,
-      quickSetupSelection: selectedService
+      formInputs: filledInputs,
+      selectedPopularSiteIndex: indexOfPopularSite
     });
   }
 
@@ -201,7 +307,48 @@ export default class StatusPagesDashboard extends React.PureComponent {
     }
   };
 
-  async onAccountSelected(accountId, accounts) {
+  handleCORSChange = event => {
+    const isChecked = event.target.checked;
+
+    const { formInputs } = this.state;
+    const updatedFormInputs = { ...formInputs };
+
+    if (isChecked) {
+      updatedFormInputs.corsProxyAddress = { ...emptyInputState };
+      updatedFormInputs.corsProxyAddress.inputValue =
+        'https://cors-anywhere.herokuapp.com/{url}';
+    } else {
+      delete updatedFormInputs.corsProxyAddress;
+    }
+
+    this.setState({
+      hostRequiresProxy: isChecked,
+      formInputs: updatedFormInputs
+    });
+  };
+
+  handleProviderChange = event => {
+    event.persist();
+    const { formInputs } = this.state;
+    const updatedFormInputs = { ...formInputs };
+    updatedFormInputs.providerName.inputValue = event.target.value;
+
+    if (updatedFormInputs.providerName.inputValue) {
+      updatedFormInputs.providerName.validationText = '';
+
+      if (updatedFormInputs.providerName.inputValue === PROVIDERS.NRQL.value) {
+        delete updatedFormInputs.hostName;
+        updatedFormInputs.nrqlQuery = { ...emptyInputState };
+      } else {
+        delete updatedFormInputs.nrqlQuery;
+        updatedFormInputs.hostName = { ...emptyInputState };
+      }
+    }
+
+    this.setState({ formInputs: updatedFormInputs });
+  };
+
+  onAccountSelected = async (accountId, accounts) => {
     if (!this.state.entityGuid) {
       let { keyObject } = this.state;
       keyObject = { ...keyObject, key: accountId };
@@ -218,35 +365,17 @@ export default class StatusPagesDashboard extends React.PureComponent {
       });
       this.setHostNames(hostNames);
     }
-  }
+  };
 
-  // //! This is a hack until there is an message bus between stacked nerdlets
-  // async pollHosts() {
-  //   try {
-  //     const hostNames = await getHostNamesFromNerdStorage({
-  //       key: this.state.entityGuid
-  //         ? this.state.entityGuid
-  //         : this.state.selectedAccountId,
-  //       type: this.state.entityGuid ? 'entity' : 'account',
-  //     });
-  //     if (JSON.stringify(hostNames) !== JSON.stringify(this.state.hostNames)) {
-  //       this.setHostNames(hostNames);
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
-
-  setSearchQuery() {
+  setSearchQuery = () => {
     this.setState({ searchQuery: event.target.value });
-  }
+  };
 
   getGridItems() {
     const {
       searchQuery,
       hostNames,
       requestForHostnamesMade,
-      keyObject,
       entityGuid
     } = this.state;
 
@@ -321,24 +450,39 @@ export default class StatusPagesDashboard extends React.PureComponent {
           handleDeleteTileModal={() => this.handleDeleteTileModal}
           editHostName={() => this.editHostName}
           setSearchQuery={() => this.setSearchQuery}
-          keyObject={keyObject}
+          accountId={this.state.selectedAccountId}
         />
       </GridItem>
     ));
   }
 
-  handleDeleteTileModal(hostname) {
+  handleDeleteTileModal = hostname => {
     const { deleteTileModalActive } = this.state;
     this.setState({
       deleteTileModalActive: !deleteTileModalActive,
       tileToBeDeleted: hostname.hostName
     });
-  }
+  };
 
-  handleCreateTileModal() {
+  handleCreateTileModal = () => {
     const { createTileModalActive } = this.state;
     this.setState({ createTileModalActive: !createTileModalActive });
-  }
+  };
+
+  updateInputValue = (event, inputName) => {
+    event.persist();
+    const { formInputs } = this.state;
+    const updatedFormInputs = { ...formInputs };
+    updatedFormInputs[inputName].inputValue = event.target.value;
+
+    if (updatedFormInputs[inputName].inputValue.length > 2) {
+      updatedFormInputs[inputName].validationText = '';
+    }
+
+    this.setState({
+      formInputs: updatedFormInputs
+    });
+  };
 
   render() {
     const {
@@ -347,11 +491,22 @@ export default class StatusPagesDashboard extends React.PureComponent {
       hostNames,
       selectedAccountId,
       deleteTileModalActive,
-      createTileModalActive
+      createTileModalActive,
+      formInputs,
+      selectedPopularSiteIndex,
+      hostRequiresProxy
     } = this.state;
 
+    const {
+      serviceName,
+      hostName,
+      providerName,
+      logoUrl,
+      nrqlQuery,
+      corsProxyAddress
+    } = formInputs;
+
     return (
-      // <AccountsContext.Provider value={this.state}>
       <div>
         <Toolbar
           accounts={accounts}
@@ -414,74 +569,104 @@ export default class StatusPagesDashboard extends React.PureComponent {
           </p>
           <div className="select-container">
             <label>Quick setup</label>
-            <select onChange={e => this.handleQuickSetupSelect(e)}>
-              <option>Choose a service</option>
-              <option>Google Cloud</option>
-              <option>GitHub</option>
-              <option>Jira</option>
-              <option>New Relic</option>
-              <option>Ezidebit</option>
+            <select
+              value={selectedPopularSiteIndex}
+              onChange={e => this.handleQuickSetupSelect(e)}
+            >
+              <option value="">Choose a service</option>
+              <option value="0">Google Cloud</option>
+              <option value="1">GitHub</option>
+              <option value="2">Jira</option>
+              <option value="3">New Relic</option>
+              <option value="4">Ezidebit</option>
             </select>
           </div>
 
           <hr className="or-sep" />
 
-          <TextField
-            label="Service name"
-            className="status-page-setting"
-            onChange={() =>
-              this.setState(previousState => ({
-                ...previousState,
-                newServiceName: event.target.value
-              }))
-            }
-            value={this.state.newServiceName}
-          />
-          <TextField
-            label="Hostname"
-            placeholder="https://status.myservice.com/"
-            className="status-page-setting"
-            onChange={() =>
-              this.setState(previousState => ({
-                ...previousState,
-                newHostName: event.target.value
-              }))
-            }
-            value={this.state.newHostName}
-          />
+          <div className="select-container">
+            <Checkbox
+              onChange={this.handleCORSChange}
+              label="Host requires CORS proxy"
+            />
+          </div>
+          {hostRequiresProxy && (
+            <div className="select-container">
+              <TextFieldWrapper
+                label="CORS proxy address"
+                onChange={event => {
+                  this.updateInputValue(event, 'corsProxyAddress');
+                }}
+                value={corsProxyAddress.inputValue}
+                validationText={corsProxyAddress.validationText}
+              />
+            </div>
+          )}
+
           <div className="select-container">
             <label>Provider</label>
             <select
-              onChange={() =>
-                this.setState(previousState => ({
-                  ...previousState,
-                  newHostProvider: event.target.value
-                }))
-              }
+              onChange={this.handleProviderChange}
+              value={providerName.inputValue}
             >
-              <option>Choose a provider</option>
-              <option selected={this.state.newHostProvider === 'Status Page'}>
-                Status Page
-              </option>
-              <option selected={this.state.newHostProvider === 'Google'}>
-                Google
-              </option>
-              <option selected={this.state.newHostProvider === 'Status Io'}>
-                Status Io
-              </option>
+              <option value="">Choose a provider</option>
+              {Object.values(PROVIDERS).map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
             </select>
           </div>
+          {providerName.validationText && (
+            <p className="text-field__validation">
+              {providerName.validationText}
+            </p>
+          )}
 
-          <TextField
+          <TextFieldWrapper
+            label="Service name"
+            onChange={event => {
+              this.updateInputValue(event, 'serviceName');
+            }}
+            value={serviceName.inputValue}
+            validationText={serviceName.validationText}
+          />
+
+          {providerName.inputValue === PROVIDERS.NRQL.value ? (
+            <>
+              <TextFieldWrapper
+                label="NRQL"
+                placeholder="Put your NRQL query here"
+                onChange={event => {
+                  this.updateInputValue(event, 'nrqlQuery');
+                }}
+                value={nrqlQuery.inputValue}
+                validationText={nrqlQuery.validationText}
+              />
+              <p>
+                Correct NRQL query must contain following fields/aliases:
+                EventName, EventStatus and EventTimeStamp.
+              </p>
+            </>
+          ) : (
+            <TextFieldWrapper
+              label="Hostname"
+              placeholder="https://status.myservice.com/"
+              onChange={event => {
+                this.updateInputValue(event, 'hostName');
+              }}
+              value={hostName.inputValue}
+              validationText={hostName.validationText}
+            />
+          )}
+
+          <TextFieldWrapper
             label="Service logo (url)"
-            className="status-page-setting"
-            onChange={() =>
-              this.setState(previousState => ({
-                ...previousState,
-                newHostLogo: event.target.value
-              }))
-            }
-            value={this.state.newHostLogo}
+            onChange={event => {
+              this.updateInputValue(event, 'logoUrl');
+            }}
+            value={logoUrl.inputValue}
+            validationText={logoUrl.validationText}
             placeholder="https://myservice.com/logo.png"
           />
 

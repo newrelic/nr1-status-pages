@@ -1,3 +1,115 @@
+# [1.0.0](https://github.com/newrelic/nr1-status-pages/compare/v0.17.0...v1.0.0) (2020-07-21)
+
+
+### chore
+
+* **release:** updating to 1.0.0 ([c733d1f](https://github.com/newrelic/nr1-status-pages/commit/c733d1f61b6cb76afbfb88cf3013a907efd38c29))
+
+
+### BREAKING CHANGES
+
+* **release:** NRQL cards, RSS cards, CORS proxy support, and bug fixes
+
+# [0.17.0](https://github.com/newrelic/nr1-status-pages/compare/v0.16.0...v0.17.0) (2020-07-21)
+
+
+### Bug Fixes
+
+* encodeuri added ([920d0f0](https://github.com/newrelic/nr1-status-pages/commit/920d0f0623ad58b944c7be7b50ce4c755475dff1))
+* external page open in new card ([1a2545a](https://github.com/newrelic/nr1-status-pages/commit/1a2545a5c8b631c6d002a4d0abc4a21c07fd7028))
+* provider select in edit fixed ([59f49b3](https://github.com/newrelic/nr1-status-pages/commit/59f49b3e649300d3e0eb5af4844043db3abdfb28))
+* small code refactors ([3bc9c5d](https://github.com/newrelic/nr1-status-pages/commit/3bc9c5d3d79f8ec224874f2715139d876449723d))
+* unnecessary code removed ([bedc5d1](https://github.com/newrelic/nr1-status-pages/commit/bedc5d1f65b443b42d2bf00476f9ab1e383e74b8))
+
+
+### Features
+
+* cors address configuration added ([7307f61](https://github.com/newrelic/nr1-status-pages/commit/7307f614703c3ef7318e70d03319e432bcd18e01))
+* readme updated and default url added ([5b4abb9](https://github.com/newrelic/nr1-status-pages/commit/5b4abb905512bd2d262283f90d443b47d37e7a1b))
+
+# [0.16.0](https://github.com/newrelic/nr1-status-pages/compare/v0.15.0...v0.16.0) (2020-07-17)
+
+
+### Features
+
+* rss feed added as provider ([7d54f41](https://github.com/newrelic/nr1-status-pages/commit/7d54f412d44e073593bc7f78e436c6d79628a97a))
+* rss feed added as provider ([2ce9cff](https://github.com/newrelic/nr1-status-pages/commit/2ce9cffd4567bcd105eb25db688168d8efcdec8a))
+
+# [0.15.0](https://github.com/newrelic/nr1-status-pages/compare/v0.14.0...v0.15.0) (2020-07-16)
+
+
+### Bug Fixes
+
+* polling data optimization ([9ba5c19](https://github.com/newrelic/nr1-status-pages/commit/9ba5c19a5fc2ea1748e0c87cec6291b698a0d9a4))
+* polling data optimization and unique key fixed ([df0f54d](https://github.com/newrelic/nr1-status-pages/commit/df0f54defc3f0822abf7ee030c6c2addfd402cd7))
+
+
+### Features
+
+* fetching incidents with nrql query ([fc8215a](https://github.com/newrelic/nr1-status-pages/commit/fc8215a584488f8b058de1fc10c834f72afa0a33))
+* nrql handled in create new service form ([af56bd4](https://github.com/newrelic/nr1-status-pages/commit/af56bd45e75084fd831566c21c4b1c6513be9370))
+* readme update for nrql query ([0bc175b](https://github.com/newrelic/nr1-status-pages/commit/0bc175bdafb4916e1b6cb5c118265293e10329b6))
+* validation for nrql query added ([9641982](https://github.com/newrelic/nr1-status-pages/commit/964198204116bc74b9d26f600d18b007f767e01d))
+* validation for nrql query added ([df7b690](https://github.com/newrelic/nr1-status-pages/commit/df7b690966eea245100334e871577d5494357698))
+
+# [0.14.0](https://github.com/newrelic/nr1-status-pages/compare/v0.13.0...v0.14.0) (2020-07-14)
+
+
+### Bug Fixes
+
+* solved problem with incidents that doesn't expand on incidents list ([ec639af](https://github.com/newrelic/nr1-status-pages/commit/ec639af50f3b13385144065a6e3e02a19be8ea52))
+
+
+### Features
+
+* Added input validation, new TextField wrapper and styling ([e67e631](https://github.com/newrelic/nr1-status-pages/commit/e67e631d7898c620e094e74e6fd5fc7ddf17d75c))
+* added temporary way of handling CORS problems ([81bde93](https://github.com/newrelic/nr1-status-pages/commit/81bde935e1fcc28d42e6acfcb93aaeb37d2965d6))
+* Added validation in order to prevent creating status pages with incorrect StatusIO urls ([0a4148d](https://github.com/newrelic/nr1-status-pages/commit/0a4148d2916663e33461804698e293077e15cdfa))
+* Added validation in order to prevent creating status pages with incorrect StatusIO urls ([e385bf3](https://github.com/newrelic/nr1-status-pages/commit/e385bf39a18e7375c9170bc39c442d7441f8fdbe))
+* adjusted saving validation ([2413b22](https://github.com/newrelic/nr1-status-pages/commit/2413b22238c46a91d37fe5edfb18697f81fe14b5))
+* informing user that there is an error while downloading page info or provided url is incorrect ([4f5d347](https://github.com/newrelic/nr1-status-pages/commit/4f5d347514de1e6d41dc4da3bcabb43f0cc97b43))
+* validation adjustments code cleanup ([f1a37e1](https://github.com/newrelic/nr1-status-pages/commit/f1a37e184c21404e88eff9722d540b8395eee35b))
+* validation adjustments code cleanup ([9ff7c39](https://github.com/newrelic/nr1-status-pages/commit/9ff7c39965c31792babb1d304b99dc76de3a38a0))
+
+# [0.13.0](https://github.com/newrelic/nr1-status-pages/compare/v0.12.3...v0.13.0) (2020-07-10)
+
+
+### Bug Fixes
+
+* breakpoint for desktop added ([57e0cb0](https://github.com/newrelic/nr1-status-pages/commit/57e0cb0d7088a67c03fb545f9302ddcdf30a2310))
+* edit hostname fixed ([d16f924](https://github.com/newrelic/nr1-status-pages/commit/d16f9244664e823744d19384116f2cd606b36999))
+* fixed incorrect behavior on Safari when adding new service and refactored part of the code ([1fdd2d8](https://github.com/newrelic/nr1-status-pages/commit/1fdd2d89420cc32169628937327f109da7c0e9eb))
+* Fixed possibility of adding new status page by fixing provider setting ([55952cb](https://github.com/newrelic/nr1-status-pages/commit/55952cb676a9f4e5087d288c071d1c584d4235e2))
+* nerdpack id reverted ([547ad85](https://github.com/newrelic/nr1-status-pages/commit/547ad85a73f9819156260e2939de05ca093b842b))
+* refresh rate for timeline fixed ([946f951](https://github.com/newrelic/nr1-status-pages/commit/946f95188e740b01ca621e3e6e30a593f1be4b33))
+* refreshing timeline fixed ([c8b5a5c](https://github.com/newrelic/nr1-status-pages/commit/c8b5a5cf8ebc28c1ec93f9ed4a1decd401c5b21e))
+* setting dropdown visible fix ([f02a44a](https://github.com/newrelic/nr1-status-pages/commit/f02a44a5d44001378c38d8c0a497121633146b81))
+* setting dropdown visible fix ([a9a3dad](https://github.com/newrelic/nr1-status-pages/commit/a9a3dad86560cc648bb0694436c8991894f999b7))
+* updating to latest version of semantic release plugins ([0a8d049](https://github.com/newrelic/nr1-status-pages/commit/0a8d049348699110dcf46c0bcb962e5a0cb9103f))
+* variable name changed ([f7157b1](https://github.com/newrelic/nr1-status-pages/commit/f7157b133ed7cb9b2e3a97b718b5474f9a6387f1))
+
+
+### Features
+
+* Trigger patch release to get semantic-release back on track ([1ccc693](https://github.com/newrelic/nr1-status-pages/commit/1ccc6938903a08dbcd429634da5f35d2cb879d07))
+
+## [0.12.4](https://github.com/newrelic/nr1-status-pages/compare/v0.12.3...v0.12.4) (2020-07-10)
+
+
+### Bug Fixes
+
+* breakpoint for desktop added ([57e0cb0](https://github.com/newrelic/nr1-status-pages/commit/57e0cb0d7088a67c03fb545f9302ddcdf30a2310))
+* edit hostname fixed ([d16f924](https://github.com/newrelic/nr1-status-pages/commit/d16f9244664e823744d19384116f2cd606b36999))
+* fixed incorrect behavior on Safari when adding new service and refactored part of the code ([1fdd2d8](https://github.com/newrelic/nr1-status-pages/commit/1fdd2d89420cc32169628937327f109da7c0e9eb))
+* Fixed possibility of adding new status page by fixing provider setting ([55952cb](https://github.com/newrelic/nr1-status-pages/commit/55952cb676a9f4e5087d288c071d1c584d4235e2))
+* nerdpack id reverted ([547ad85](https://github.com/newrelic/nr1-status-pages/commit/547ad85a73f9819156260e2939de05ca093b842b))
+* refresh rate for timeline fixed ([946f951](https://github.com/newrelic/nr1-status-pages/commit/946f95188e740b01ca621e3e6e30a593f1be4b33))
+* refreshing timeline fixed ([c8b5a5c](https://github.com/newrelic/nr1-status-pages/commit/c8b5a5cf8ebc28c1ec93f9ed4a1decd401c5b21e))
+* setting dropdown visible fix ([f02a44a](https://github.com/newrelic/nr1-status-pages/commit/f02a44a5d44001378c38d8c0a497121633146b81))
+* setting dropdown visible fix ([a9a3dad](https://github.com/newrelic/nr1-status-pages/commit/a9a3dad86560cc648bb0694436c8991894f999b7))
+* updating to latest version of semantic release plugins ([0a8d049](https://github.com/newrelic/nr1-status-pages/commit/0a8d049348699110dcf46c0bcb962e5a0cb9103f))
+* variable name changed ([f7157b1](https://github.com/newrelic/nr1-status-pages/commit/f7157b133ed7cb9b2e3a97b718b5474f9a6387f1))
+
 ## [0.12.3](https://github.com/newrelic/nr1-status-pages/compare/v0.12.2...v0.12.3) (2020-07-07)
 
 

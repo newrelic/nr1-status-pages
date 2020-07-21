@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Tue Jul 07 2020 16:38:33 GMT+0000 (Coordinated Universal Time)",
+  "lastUpdated": "Tue Jul 21 2020 13:45:35 GMT+0000 (Coordinated Universal Time)",
   "projectName": "nr1-status-pages",
   "projectUrl": "https://github.com/newrelic/nr1-status-pages",
   "includeDev": true,
@@ -74,6 +74,18 @@
       "licenseUrl": "https://github.com/facebook/react/blob/v16.12.0/LICENSE",
       "licenseTextSource": "file"
     },
+    "rss-parser@3.8.0": {
+      "name": "rss-parser",
+      "version": "3.8.0",
+      "range": "^3.8.0",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/bobby-brennan/rss-parser",
+      "versionedRepoUrl": "https://github.com/bobby-brennan/rss-parser/tree/v3.8.0",
+      "licenseFile": "node_modules/rss-parser/LICENSE",
+      "licenseUrl": "https://github.com/bobby-brennan/rss-parser/blob/v3.8.0/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Bobby Brennan"
+    },
     "uuid@3.4.0": {
       "name": "uuid",
       "version": "3.4.0",
@@ -122,28 +134,28 @@
       "licenseTextSource": "file",
       "publisher": "New Relic"
     },
-    "@semantic-release/changelog@3.0.5": {
+    "@semantic-release/changelog@5.0.1": {
       "name": "@semantic-release/changelog",
-      "version": "3.0.5",
-      "range": "^3.0.5",
+      "version": "5.0.1",
+      "range": "^5.0.1",
       "licenses": "MIT",
       "repoUrl": "https://github.com/semantic-release/changelog",
-      "versionedRepoUrl": "https://github.com/semantic-release/changelog/tree/v3.0.5",
+      "versionedRepoUrl": "https://github.com/semantic-release/changelog/tree/v5.0.1",
       "licenseFile": "node_modules/@semantic-release/changelog/LICENSE",
-      "licenseUrl": "https://github.com/semantic-release/changelog/blob/v3.0.5/LICENSE",
+      "licenseUrl": "https://github.com/semantic-release/changelog/blob/v5.0.1/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Pierre Vanduynslager",
       "url": "https://github.com/pvdlg"
     },
-    "@semantic-release/git@7.0.18": {
+    "@semantic-release/git@9.0.0": {
       "name": "@semantic-release/git",
-      "version": "7.0.18",
-      "range": "^7.0.18",
+      "version": "9.0.0",
+      "range": "^9.0.0",
       "licenses": "MIT",
       "repoUrl": "https://github.com/semantic-release/git",
-      "versionedRepoUrl": "https://github.com/semantic-release/git/tree/v7.0.18",
+      "versionedRepoUrl": "https://github.com/semantic-release/git/tree/v9.0.0",
       "licenseFile": "node_modules/@semantic-release/git/LICENSE",
-      "licenseUrl": "https://github.com/semantic-release/git/blob/v7.0.18/LICENSE",
+      "licenseUrl": "https://github.com/semantic-release/git/blob/v9.0.0/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Pierre Vanduynslager",
       "url": "https://github.com/pvdlg"

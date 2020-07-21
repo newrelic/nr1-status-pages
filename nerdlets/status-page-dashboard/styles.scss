@@ -1,3 +1,7 @@
+$desktop-breakpoint: 1024px;
+
+@import './TextFieldWrapper/TextFieldWrapper.scss';
+
 #root > div {
   height: 100%;
 }
@@ -209,12 +213,28 @@ button[class*='Dropdown-trigger'],
   }
 }
 
+.status-page-container-error {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 10%;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: $criticalColor;
+}
+
 .status-container {
   margin: 16px;
   grid-gap: 16px;
   position: relative;
   grid-auto-rows: 330px;
   align-items: stretch;
+
+  @media (max-width: $desktop-breakpoint) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .logo-container {
@@ -223,9 +243,12 @@ button[class*='Dropdown-trigger'],
   align-items: center;
   height: 110px;
   text-align: center;
+  padding: 0 10px;
 }
 
 .service-logo {
+  object-fit: contain;
+  width: 100%;
   max-width: 270px;
   max-height: 50px;
 }
@@ -275,6 +298,10 @@ button[class*='Dropdown-trigger'],
   /*! height: 35px; */
   padding: 8px;
   max-height: 35px;
+
+  a {
+    color: #fff;
+  }
 
   .status-none & {
     background-color: #3ca653;
@@ -452,7 +479,6 @@ button[class*='Dropdown-trigger'],
 }
 
 .timeline-item-contents-container {
-  display: none;
   box-shadow: inset 0 10px 3px -5px rgba(0, 0, 0, 0.005),
     inset 0 2px 0 rgba(0, 0, 0, 0.03);
   background-color: #fafbfb;
@@ -719,7 +745,6 @@ button[class*='Dropdown-trigger'],
   }
 
   .timeline-item-contents-container {
-    display: none;
     box-shadow: inset 0 10px 3px -5px rgba(0, 0, 0, 0.005),
       inset 0 2px 0 rgba(0, 0, 0, 0.03);
     background-color: #fafbfb;
@@ -762,6 +787,7 @@ button[class*='Dropdown-trigger'],
   opacity: 0;
   display: flex;
   flex-direction: column;
+  visibility: hidden;
 }
 
 .status-page-settings-content {
@@ -990,7 +1016,7 @@ button[class*='Dropdown-trigger'],
 
 .select-container {
   margin-bottom: 16px;
-  
+
   label {
     display: block;
     padding-bottom: 4px;
@@ -1008,4 +1034,10 @@ button[class*='Dropdown-trigger'],
     position: relative;
     left: 0;
   }
+}
+
+.rss-icon-container {
+  position: absolute;
+  top: 12px;
+  left: 12px;
 }

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import 'web-animations-js';
 
 import Network from '../utilities/network';
+import NRQLHelper from '../utilities/nrql-helper';
+import RSSHelper from '../utilities/rss-helper';
 import CurrentIncidents from './current-incidents';
 import FormatService from '../utilities/format-service';
 import {
@@ -12,6 +14,7 @@ import {
   TextField,
   Dropdown,
   DropdownItem,
+  Link,
   navigation
 } from 'nr1';
 
@@ -24,56 +27,114 @@ const createOption = label => ({
   label,
   value: label
 });
+
+const PROVIDERS = [
+  {
+    value: 'statusPageIo',
+    label: 'Status Page'
+  },
+  {
+    value: 'google',
+    label: 'Google'
+  },
+  {
+    value: 'statusIo',
+    label: 'Status Io'
+  },
+  {
+    value: 'rss',
+    label: 'RSS Feed'
+  }
+];
+
+const NRQL_PROVIDER_NAME = 'nrql';
+const RSS_PROVIDER_NAME = 'rss';
+
 export default class StatusPage extends React.PureComponent {
   static propTypes = {
     hostname: PropTypes.object.isRequired,
     refreshRate: PropTypes.number,
     handleDeleteTileModal: PropTypes.func,
     editHostName: PropTypes.func,
-    setServiceTileRef: PropTypes.object
+    setServiceTileRef: PropTypes.object,
+    accountId: PropTypes.number
   };
 
   constructor(props) {
     super(props);
-
-    this.StatusPageNetwork = new Network(
-      this.props.hostname.hostName,
-      this.props.refreshRate,
-      this.props.hostname.provider
-    );
-    this.FormatService = new FormatService(this.props.hostname.provider);
     this.popupHoverTimer = null;
 
     this.state = {
       statusPageIoSummaryData: undefined,
+      currentIncidents: undefined,
       inputValue: '',
+      errorInfo: '',
       value: [],
       settingsViewActive: false,
       settingsPopoverActive: false,
       editedServiceName: this.props.hostname.serviceName,
       editedHostName: this.props.hostname.hostName,
+      editedNrqlQuery: this.props.hostname.nrqlQuery,
       editedHostProvider: this.props.hostname.provider,
-      editedHostLogo: this.props.hostname.hostLogo
+      editedHostLogo: this.props.hostname.hostLogo,
+      editedHostId: this.props.hostname.id
     };
-
-    this.handleTileSettingsAnimation = this.handleTileSettingsAnimation.bind(
-      this
-    );
-    this.handleSettingsPopover = this.handleSettingsPopover.bind(this);
-    this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
-    this.handleSettingsButtonMouseLeave = this.handleSettingsButtonMouseLeave.bind(
-      this
-    );
-    this.handlePopupMouseEnter = this.handlePopupMouseEnter.bind(this);
-    this.handlePopupMouseLeave = this.handlePopupMouseLeave.bind(this);
 
     this.serviceTilePrimaryContent = React.createRef();
     this.serviceTileSettingsContent = React.createRef();
   }
 
   async componentDidMount() {
-    this.StatusPageNetwork.pollSummaryData(this.setSummaryData.bind(this));
+    this.setupDataPolling();
   }
+
+  componentWillUnmount() {
+    this.stopPollingData();
+  }
+
+  stopPollingData() {
+    if (this.StatusPageNetwork) {
+      this.StatusPageNetwork.clear();
+    }
+  }
+
+  setupDataPolling = () => {
+    this.stopPollingData();
+
+    const { refreshRate, accountId } = this.props;
+    const { editedHostProvider, editedHostName, editedNrqlQuery } = this.state;
+
+    if (editedHostProvider === NRQL_PROVIDER_NAME) {
+      this.StatusPageNetwork = new NRQLHelper(
+        editedNrqlQuery,
+        refreshRate,
+        accountId
+      );
+
+      this.StatusPageNetwork.pollCurrentIncidents(this.setData);
+    } else if (editedHostProvider === RSS_PROVIDER_NAME) {
+      this.StatusPageNetwork = new RSSHelper(editedHostName, refreshRate);
+
+      this.StatusPageNetwork.pollCurrentIncidents(this.setData);
+    } else {
+      this.StatusPageNetwork = new Network(
+        editedHostName,
+        refreshRate,
+        editedHostProvider
+      );
+
+      const isSameDataSource = this.StatusPageNetwork.checkIfTheSameDataSource();
+
+      if (isSameDataSource) {
+        this.StatusPageNetwork.pollCurrentIncidents(this.setData);
+      } else {
+        this.StatusPageNetwork.pollCurrentIncidents(this.setIncidentsData);
+        this.StatusPageNetwork.pollSummaryData(this.setSummaryData);
+      }
+    }
+
+    this.FormatService = new FormatService(editedHostProvider);
+  };
 
   handleSelectChange = value => {
     this.setState({ value });
@@ -98,7 +159,16 @@ export default class StatusPage extends React.PureComponent {
   };
 
   autoSetLogo(hostname) {
-    const { serviceName, hostName, hostLogo } = hostname;
+    const { serviceName, hostName, hostLogo, provider } = hostname;
+
+    if (provider === NRQL_PROVIDER_NAME) {
+      if (hostLogo) {
+        return <img src={hostLogo} className="service-logo" alt="nrql" />;
+      } else {
+        return <h2 className="service-name">{serviceName}</h2>;
+      }
+    }
+
     if (hostName.includes('githubstatus')) {
       return <img src={GitHubLogo} className="service-logo" alt="GitHub" />;
     } else if (hostName.includes('jira-software')) {
@@ -142,13 +212,35 @@ export default class StatusPage extends React.PureComponent {
     }
   }
 
-  setSummaryData(data) {
-    this.setState({
-      statusPageIoSummaryData: this.FormatService.uniformSummaryData(data)
-    });
-  }
+  setSummaryData = data => {
+    if (typeof data === 'string') {
+      this.setState({ errorInfo: data });
+    } else {
+      this.setState({
+        errorInfo: undefined,
+        statusPageIoSummaryData: this.FormatService.uniformSummaryData(data)
+      });
+    }
+  };
 
-  handleTileSettingsAnimation() {
+  setIncidentsData = data => {
+    if (typeof data === 'string') return;
+
+    this.setState({
+      currentIncidents: this.FormatService.uniformIncidentData(data)
+    });
+  };
+
+  setData = data => {
+    if (typeof data === 'string') {
+      this.setState({ errorInfo: data });
+    } else {
+      this.setIncidentsData(data);
+      this.setSummaryData(data);
+    }
+  };
+
+  handleTileSettingsAnimation = () => {
     const { settingsViewActive } = this.state;
     const primaryContent = this.serviceTilePrimaryContent.current;
     const settingsContent = this.serviceTileSettingsContent.current;
@@ -156,6 +248,7 @@ export default class StatusPage extends React.PureComponent {
     if (settingsViewActive) {
       settingsContent.animate(
         {
+          visibility: ['visible', 'hidden'],
           opacity: [1, 0],
           transform: [
             'translateX(0) rotateY(0)',
@@ -188,6 +281,7 @@ export default class StatusPage extends React.PureComponent {
     } else {
       settingsContent.animate(
         {
+          visibility: ['hidden', 'visible'],
           opacity: [0, 1],
           transform: [
             'translateX(30px) rotateY(15deg)',
@@ -221,11 +315,18 @@ export default class StatusPage extends React.PureComponent {
         this.setState({ settingsViewActive: true });
       };
     }
-  }
+  };
 
-  handleTileClick(statusPageIoSummaryData, refreshRate, hostname, provider, i) {
+  handleTileClick(
+    statusPageIoSummaryData,
+    refreshRate,
+    hostname,
+    provider,
+    nrqlQuery,
+    selectedIndex
+  ) {
     if (!event.target.closest('.destructive')) {
-      if (i !== undefined) {
+      if (selectedIndex !== undefined) {
         navigation.openStackedNerdlet({
           id: 'service-details',
           urlState: {
@@ -233,9 +334,12 @@ export default class StatusPage extends React.PureComponent {
             refreshRate: refreshRate,
             hostname: hostname,
             provider: provider,
-            timelineItemIndex: i
+            nrqlQuery: this.state.editedNrqlQuery,
+            accountId: this.props.accountId,
+            timelineItemIndex: selectedIndex
           }
         });
+
         event.stopPropagation();
       } else {
         navigation.openStackedNerdlet({
@@ -244,24 +348,26 @@ export default class StatusPage extends React.PureComponent {
             statusPageIoSummaryData: statusPageIoSummaryData,
             refreshRate: refreshRate,
             hostname: hostname,
-            provider: provider
+            provider: provider,
+            nrqlQuery: nrqlQuery,
+            accountId: this.props.accountId
           }
         });
       }
     }
   }
 
-  handleSettingsPopover(e) {
+  handleSettingsPopover = e => {
     const { settingsPopoverActive } = this.state;
     this.setState({ settingsPopoverActive: !settingsPopoverActive });
-    e.stopPropagation();
-  }
+    if (e) e.stopPropagation();
+  };
 
-  handleEditButtonClick(e) {
+  handleEditButtonClick = e => {
     e.stopPropagation();
     this.handleTileSettingsAnimation();
     this.handleSettingsPopover();
-  }
+  };
 
   handleDeleteButtonClick(hostname, e) {
     this.props.handleDeleteTileModal()(hostname);
@@ -274,34 +380,38 @@ export default class StatusPage extends React.PureComponent {
       serviceName: this.state.editedServiceName,
       hostName: this.state.editedHostName,
       provider: this.state.editedHostProvider,
-      hostLogo: this.state.editedHostLogo
+      hostLogo: this.state.editedHostLogo,
+      nrqlQuery: this.state.editedNrqlQuery,
+      id: this.state.editedHostId
     };
 
     this.props.editHostName()(hostNameObject);
     e.stopPropagation();
     this.handleTileSettingsAnimation();
+    this.setupDataPolling();
   }
 
-  handleSettingsButtonMouseLeave() {
+  handleSettingsButtonMouseLeave = () => {
     this.popupHoverTimer = setTimeout(() => {
       this.setState({ settingsPopoverActive: false });
     }, 150);
-  }
+  };
 
-  handlePopupMouseEnter() {
+  handlePopupMouseEnter = () => {
     if (this.popupHoverTimer) {
       clearTimeout(this.popupHoverTimer);
     }
-  }
+  };
 
-  handlePopupMouseLeave() {
+  handlePopupMouseLeave = () => {
     this.popupHoverTimer = setTimeout(() => {
       this.setState({ settingsPopoverActive: false });
     }, 150);
-  }
+  };
 
-  renderSettingsButton() {
-    const hostname = this.props.hostname;
+  renderSettingsButton(canShowDetails = true) {
+    const { hostname } = this.props;
+
     return (
       <div
         className={`service-settings-button-container ${
@@ -323,10 +433,12 @@ export default class StatusPage extends React.PureComponent {
           onMouseEnter={this.handlePopupMouseEnter}
           onMouseLeave={this.handlePopupMouseLeave}
         >
-          <li className="service-settings-dropdown-item">
-            <Icon type={Icon.TYPE.INTERFACE__INFO__INFO} />
-            View details
-          </li>
+          {canShowDetails && (
+            <li className="service-settings-dropdown-item">
+              <Icon type={Icon.TYPE.INTERFACE__INFO__INFO} />
+              View details
+            </li>
+          )}
           <li
             className="service-settings-dropdown-item"
             onClick={this.handleEditButtonClick}
@@ -350,7 +462,8 @@ export default class StatusPage extends React.PureComponent {
   }
 
   renderSettings() {
-    const hostname = this.props.hostname;
+    const { hostname } = this.props;
+
     return (
       <div
         className="status-page-settings-container"
@@ -368,55 +481,59 @@ export default class StatusPage extends React.PureComponent {
             }
             defaultValue={hostname.serviceName}
           />
-          <TextField
-            label="Hostname"
-            placeholder="https://status.myservice.com/"
-            className="status-page-setting"
-            onChange={() =>
-              this.setState(previousState => ({
-                ...previousState,
-                editedHostName: event.target.value
-              }))
-            }
-            defaultValue={hostname.hostName}
-          />
-          <Dropdown
-            title="Choose a provider"
-            label="Provider"
-            className="status-page-setting"
-          >
-            <DropdownItem
-              selected
-              onClick={() =>
+          {hostname.provider === NRQL_PROVIDER_NAME ? (
+            <TextField
+              label="NRQL"
+              placeholder="Put your NRQL query here"
+              className="status-page-setting"
+              onChange={() =>
                 this.setState(previousState => ({
                   ...previousState,
-                  editedHostProvider: event.target.innerHTML
+                  editedNrqlQuery: event.target.value
                 }))
               }
-            >
-              Status Page
-            </DropdownItem>
-            <DropdownItem
-              onClick={() =>
-                this.setState(previousState => ({
-                  ...previousState,
-                  editedHostProvider: event.target.innerHTML
-                }))
-              }
-            >
-              Google
-            </DropdownItem>
-            <DropdownItem
-              onClick={() =>
-                this.setState(previousState => ({
-                  ...previousState,
-                  editedHostProvider: event.target.innerHTML
-                }))
-              }
-            >
-              Status Io
-            </DropdownItem>
-          </Dropdown>
+              defaultValue={hostname.nrqlQuery}
+            />
+          ) : (
+            <>
+              <TextField
+                label="Hostname"
+                placeholder="https://status.myservice.com/"
+                className="status-page-setting"
+                onChange={() =>
+                  this.setState(previousState => ({
+                    ...previousState,
+                    editedHostName: event.target.value
+                  }))
+                }
+                defaultValue={hostname.hostName}
+              />
+              <Dropdown
+                title={
+                  PROVIDERS.find(
+                    element => element.value === this.state.editedHostProvider
+                  )?.label
+                }
+                label="Provider"
+                className="status-page-setting"
+              >
+                {PROVIDERS.map(({ value, label }) => (
+                  <DropdownItem
+                    key={value}
+                    selected={hostname.provider === value}
+                    onClick={() =>
+                      this.setState(previousState => ({
+                        ...previousState,
+                        editedHostProvider: value
+                      }))
+                    }
+                  >
+                    {label}
+                  </DropdownItem>
+                ))}
+              </Dropdown>
+            </>
+          )}
           <TextField
             label="Service logo"
             className="status-page-setting"
@@ -459,54 +576,61 @@ export default class StatusPage extends React.PureComponent {
       >
         {this.renderSettingsButton()}
         <Spinner fillContainer />
-        <div ref={this.serviceTilePrimaryContent} />
         {this.renderSettings()}
       </div>
     );
   }
 
-  render() {
-    const { statusPageIoSummaryData } = this.state;
-    if (!statusPageIoSummaryData) {
-      return this.renderLoadingState();
-    }
+  renderRssIcon = () => {
+    return (
+      <div className="rss-icon-container">
+        <Icon
+          color="#464e4e"
+          type={Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__FEED}
+        />
+      </div>
+    );
+  };
 
-    const { refreshRate, hostname } = this.props;
-
-    const { settingsViewActive } = this.state;
+  renderSuccessfulState() {
+    const { refreshRate, hostname, accountId } = this.props;
+    const { currentIncidents = [], statusPageIoSummaryData = {} } = this.state;
 
     return (
       <div
-        className={`status-page-container status-${
-          statusPageIoSummaryData.indicator
-        } ${
-          settingsViewActive ? 'settings-view-active' : 'settings-view-inactive'
-        }`}
-        ref={this.props.setServiceTileRef}
+        className="primary-status-page-content"
+        ref={this.serviceTilePrimaryContent}
+        onClick={() =>
+          this.handleTileClick(
+            statusPageIoSummaryData,
+            refreshRate,
+            this.state.editedHostName,
+            this.state.editedHostProvider,
+            this.state.editedNrqlQuery
+          )
+        }
       >
-        <div
-          className="primary-status-page-content"
-          ref={this.serviceTilePrimaryContent}
-          onClick={() =>
-            this.handleTileClick(
-              statusPageIoSummaryData,
-              refreshRate,
-              hostname.hostName,
-              hostname.provider
-            )
-          }
-        >
-          <div className="logo-container">
-            {this.renderSettingsButton(hostname)}
-
-            {this.autoSetLogo(hostname)}
-          </div>
-          <div className="service-current-status">
+        <div className="logo-container">
+          {this.renderSettingsButton()}
+          {this.autoSetLogo(hostname)}
+          {hostname.provider === RSS_PROVIDER_NAME && this.renderRssIcon()}
+        </div>
+        <div className="service-current-status">
+          {statusPageIoSummaryData.link ? (
+            <h5
+              onClick={e => e.stopPropagation()}
+              className="service-current-status-heading"
+            >
+              <Link to={statusPageIoSummaryData.link}>See status page</Link>
+            </h5>
+          ) : (
             <h5 className="service-current-status-heading">
-              {statusPageIoSummaryData.indicator === 'none' && (
+              {statusPageIoSummaryData.indicator?.toLowerCase() ===
+                'unknown' && <Icon type={Icon.TYPE.INTERFACE__INFO__HELP} />}
+              {statusPageIoSummaryData.indicator?.toLowerCase() === 'none' && (
                 <Icon type={Icon.TYPE.INTERFACE__SIGN__CHECKMARK} />
               )}
-              {statusPageIoSummaryData.indicator === 'minor' && (
+              {statusPageIoSummaryData.indicator?.toLowerCase() === 'minor' && (
                 <svg
                   width="19"
                   height="19"
@@ -544,30 +668,73 @@ export default class StatusPage extends React.PureComponent {
                   </defs>
                 </svg>
               )}
-              {statusPageIoSummaryData.indicator === 'major' && (
+              {statusPageIoSummaryData.indicator?.toLowerCase() === 'major' && (
                 <Icon type={Icon.TYPE.INTERFACE__SIGN__CLOSE} />
               )}
-              {statusPageIoSummaryData.indicator === 'critical' && (
-                <Icon type={Icon.TYPE.INTERFACE__SIGN__CLOSE} />
-              )}
+              {statusPageIoSummaryData.indicator?.toLowerCase() ===
+                'critical' && <Icon type={Icon.TYPE.INTERFACE__SIGN__CLOSE} />}
               {statusPageIoSummaryData.description}
             </h5>
-          </div>
-          <CurrentIncidents
-            refreshRate={refreshRate}
-            hostname={hostname.hostName}
-            provider={hostname.provider}
-            handleTileClick={i => {
-              this.handleTileClick(
-                statusPageIoSummaryData,
-                refreshRate,
-                hostname.hostName,
-                hostname.provider,
-                i
-              );
-            }}
-          />
+          )}
         </div>
+        <CurrentIncidents
+          currentIncidents={currentIncidents}
+          refreshRate={refreshRate}
+          hostname={hostname.hostName}
+          provider={hostname.provider}
+          accountId={accountId}
+          nrqlQuery={hostname.nrqlQuery}
+          handleTileClick={i => {
+            this.handleTileClick(
+              statusPageIoSummaryData,
+              refreshRate,
+              this.state.editedHostName,
+              this.state.editedHostProvider,
+              this.state.editedNrqlQuery,
+              i
+            );
+          }}
+        />
+      </div>
+    );
+  }
+
+  renderErrorState(errorInfo) {
+    return (
+      <div
+        className="primary-status-page-content"
+        ref={this.serviceTilePrimaryContent}
+      >
+        <div className="logo-container">{this.renderSettingsButton(false)}</div>
+        <div className="service-current-status">
+          <div className="status-page-container-error">{errorInfo}</div>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    const {
+      statusPageIoSummaryData = {},
+      errorInfo,
+      settingsViewActive
+    } = this.state;
+
+    if (!statusPageIoSummaryData && !errorInfo) {
+      return this.renderLoadingState('loading');
+    }
+
+    return (
+      <div
+        className={`status-page-container status-${
+          statusPageIoSummaryData.indicator
+        } ${
+          settingsViewActive ? 'settings-view-active' : 'settings-view-inactive'
+        }`}
+        ref={this.props.setServiceTileRef}
+      >
+        {errorInfo && this.renderErrorState(errorInfo)}
+        {!errorInfo && this.renderSuccessfulState()}
         {this.renderSettings()}
       </div>
     );

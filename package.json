@@ -2,7 +2,7 @@
   "private": true,
   "name": "nr1-status-pages",
   "description": "Nerdpack nr1-status-pages",
-  "version": "0.12.3",
+  "version": "1.0.0",
   "bugs": {
     "email": "opensource+nr1-status-pages@newrelic.com"
   },
@@ -19,6 +19,7 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-markdown": "^4.3.1",
+    "rss-parser": "^3.8.0",
     "uuid": "^3.4.0",
     "vertical-timeline-component-for-react": "^1.0.7",
     "web-animations-js": "^2.3.2"
@@ -30,8 +31,8 @@
   ],
   "devDependencies": {
     "@newrelic/eslint-plugin-newrelic": "^0.3.0",
-    "@semantic-release/changelog": "^3.0.5",
-    "@semantic-release/git": "^7.0.18",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/git": "^9.0.0",
     "eslint": "^6.8.0",
     "prettier": "^1.19.1"
   }

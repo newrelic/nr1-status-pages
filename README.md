@@ -38,7 +38,32 @@ Example hostnames:
 
 - [https://ezidebit.status.io/pages/history/598a973f96a8201305000142](https://ezidebit.status.io/pages/history/598a973f96a8201305000142)
 - [https://status.docker.com/pages/history/533c6539221ae15e3f000031](https://status.docker.com/pages/history/533c6539221ae15e3f000031)
-=======
+
+### NRQL query
+
+NRQL query requires three fields/aliases to be returned: *EventTimeStamp, EventStatus, EventName*.
+
+Example NRQL query:
+
+```sql
+FROM AlertViolationsSample SELECT timestamp as EventTimeStamp, priority as EventStatus, condition_name as EventName, entity.name LIMIT 50
+```
+
+or
+
+```sql
+SELECT timestamp as EventTimeStamp, priority as EventStatus, condition_name as EventName, entity.name FROM AlertViolationsSample LIMIT 50
+```
+
+### RSS feed
+
+It is possible to choose RSS feed as a provider for status pages.
+
+### CORS configuration
+
+It is possible to configure CORS proxy when creating new service. CORS proxy address must contain `{url}` placeholder that will be replaced with provided hostname.
+
+Example: `https://cors-anywhere.herokuapp.com/{url}`
 
 ## Open Source License
 

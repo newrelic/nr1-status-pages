@@ -9,7 +9,14 @@ export default class ServiceDetailsWrapper extends React.PureComponent {
         <NerdletStateContext.Consumer>
           {nerdletUrlState => {
             const serviceName = nerdletUrlState.statusPageIoSummaryData.name;
-            const { provider, hostname, timelineItemIndex } = nerdletUrlState;
+            const {
+              provider,
+              hostname,
+              timelineItemIndex,
+              refreshRate,
+              nrqlQuery,
+              accountId
+            } = nerdletUrlState;
 
             return (
               <>
@@ -19,7 +26,10 @@ export default class ServiceDetailsWrapper extends React.PureComponent {
                 <ServiceDetails
                   hostname={hostname}
                   provider={provider}
+                  refreshRate={refreshRate}
                   timelineItemIndex={timelineItemIndex}
+                  nrqlQuery={nrqlQuery}
+                  accountId={accountId}
                 />
               </>
             );

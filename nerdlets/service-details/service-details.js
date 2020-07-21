@@ -5,13 +5,20 @@ import FormatService from '../../utilities/format-service';
 import dayjs from 'dayjs';
 
 import { Icon, Button } from 'nr1';
+import NRQLHelper from '../../utilities/nrql-helper';
+import RSSHelper from '../../utilities/rss-helper';
+
+const NRQL_PROVIDER_NAME = 'nrql';
+const RSS_PROVIDER_NAME = 'rss';
 
 export default class ServiceDetails extends React.PureComponent {
   static propTypes = {
-    hostname: PropTypes.string.isRequired,
+    hostname: PropTypes.string,
     provider: PropTypes.string.isRequired,
     refreshRate: PropTypes.number,
-    timelineItemIndex: PropTypes.object
+    timelineItemIndex: PropTypes.number,
+    nrqlQuery: PropTypes.string,
+    accountId: PropTypes.number
   };
 
   constructor(props) {
@@ -20,37 +27,77 @@ export default class ServiceDetails extends React.PureComponent {
       currentIncidents: undefined,
       expandedTimelineItem: null
     };
-    this.FormatService = new FormatService(this.props.provider);
-    this.statusPageNetwork = new Network(
-      this.props.hostname,
-      this.props.refreshRate,
-      this.props.provider
-    );
-
-    this.handleTimelineItemClick = this.handleTimelineItemClick.bind(this);
   }
 
   componentDidMount() {
-    const { timelineItemIndex } = this.props;
+    const { timelineItemIndex, hostname, refreshRate, provider } = this.props;
     const { expandedTimelineItem } = this.state;
 
-    this.statusPageNetwork.pollCurrentIncidents(
-      this.setIncidentData.bind(this)
-    );
+    this.setupTimelinePolling(hostname, refreshRate, provider);
 
     if (timelineItemIndex !== undefined && expandedTimelineItem === null) {
       this.setState({ expandedTimelineItem: timelineItemIndex });
     }
   }
 
-  setIncidentData(data) {
+  componentDidUpdate(prevProps) {
+    const {
+      timelineItemIndex,
+      hostname,
+      refreshRate,
+      provider,
+      nrqlQuery
+    } = this.props;
+
+    if (prevProps.timelineItemIndex !== timelineItemIndex) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ expandedTimelineItem: timelineItemIndex });
+    }
+
+    if (prevProps.hostname !== hostname || prevProps.nrqlQuery !== nrqlQuery) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ currentIncidents: undefined });
+      this.setupTimelinePolling(hostname, refreshRate, provider);
+    }
+  }
+
+  setupTimelinePolling = (hostname, refreshRate, provider) => {
+    if (this.statusPageNetwork) this.statusPageNetwork.clear();
+
+    this.FormatService = new FormatService(provider);
+
+    if (provider === NRQL_PROVIDER_NAME) {
+      const { nrqlQuery, accountId } = this.props;
+      this.statusPageNetwork = new NRQLHelper(
+        nrqlQuery,
+        refreshRate,
+        accountId
+      );
+    } else if (provider === RSS_PROVIDER_NAME) {
+      this.statusPageNetwork = new RSSHelper(hostname, refreshRate);
+    } else {
+      this.statusPageNetwork = new Network(hostname, refreshRate, provider);
+    }
+
+    this.statusPageNetwork.pollCurrentIncidents(this.setIncidentData);
+  };
+
+  setIncidentData = data => {
     this.setState({
       currentIncidents: this.FormatService.uniformIncidentData(data)
     });
-  }
+  };
 
   setTimelineSymbol(incidentImpact) {
-    switch (incidentImpact) {
+    switch (incidentImpact.toLowerCase()) {
+      case 'unknown':
+        return (
+          <Icon
+            className="timeline-item-symbol-icon"
+            color="#464e4e"
+            type={Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__BROWSER}
+          />
+        );
       case 'none':
         return (
           <Icon
@@ -93,25 +140,26 @@ export default class ServiceDetails extends React.PureComponent {
   }
 
   buildTimelineItemDetails(incident) {
-    const incident_updates = incident.incident_updates.map(incident_update => {
-      return (
-        <li key={incident_update.id} className="timeline-item-contents-item">
-          <span className="key">
-            {dayjs(incident_update.display_at).format('h:mm a')}:
-          </span>
-          <span className="value">{incident_update.body}</span>
-        </li>
-      );
-    });
+    const incident_updates = incident.incident_updates.map(
+      (incident_update, index) => {
+        return (
+          <li
+            key={`${incident_update.created_at}-${index}`}
+            className="timeline-item-contents-item"
+          >
+            <span className="key">
+              {dayjs(incident_update.display_at).format('h:mm a')}:
+            </span>
+            <span className="value">{incident_update.body}</span>
+          </li>
+        );
+      }
+    );
 
     return incident_updates;
   }
 
-  handleTimelineItemClick(e) {
-    const timelineItemId = e.currentTarget.getAttribute(
-      'data-timeline-item-id'
-    );
-    e.preventDefault();
+  handleTimelineItemClick = timelineItemId => {
     if (timelineItemId === this.state.expandedTimelineItem) {
       this.setState({
         expandedTimelineItem: null
@@ -121,23 +169,22 @@ export default class ServiceDetails extends React.PureComponent {
         expandedTimelineItem: timelineItemId
       });
     }
-  }
+  };
 
   render() {
     const { currentIncidents, expandedTimelineItem } = this.state;
     if (!currentIncidents) return <div />;
-    this.statusPageNetwork.refreshRateInSeconds = this.props.refreshRate;
-    // console.debug(currentIncidents);
 
-    const items = currentIncidents.map((incident, i) => {
+    const items = currentIncidents.map((incident, incidentId) => {
       return (
         <div
-          data-timeline-item-id={i}
-          onClick={this.handleTimelineItemClick}
+          onClick={() => {
+            this.handleTimelineItemClick(incidentId);
+          }}
           className={`timeline-item impact-${incident.impact} ${
-            expandedTimelineItem === i ? 'timeline-item-expanded' : ''
+            expandedTimelineItem === incidentId ? 'timeline-item-expanded' : ''
           }`}
-          key={incident.created_at}
+          key={`${incident.created_at}-${incidentId}`}
         >
           <div className="timeline-item-timestamp">
             <span className="timeline-timestamp-date">
@@ -168,11 +215,13 @@ export default class ServiceDetails extends React.PureComponent {
                 }
               />
             </div>
-            <div className="timeline-item-contents-container">
-              <ul className="timeline-item-contents">
-                {this.buildTimelineItemDetails(incident)}
-              </ul>
-            </div>
+            {expandedTimelineItem === incidentId && (
+              <div className="timeline-item-contents-container">
+                <ul className="timeline-item-contents">
+                  {this.buildTimelineItemDetails(incident)}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       );
