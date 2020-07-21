@@ -140,17 +140,21 @@ export default class StatusPagesDashboard extends React.PureComponent {
       }
     }
 
-    if (
-      updatedFormInputs.corsProxyAddress &&
-      updatedFormInputs.corsProxyAddress.inputValue
-    ) {
-      if (!updatedFormInputs.corsProxyAddress.inputValue.includes('{url}')) {
-        updatedFormInputs.corsProxyAddress.validationText =
+    const {
+      corsProxyAddress,
+      nrqlQuery,
+      providerName,
+      hostName
+    } = updatedFormInputs;
+
+    if (corsProxyAddress && corsProxyAddress.inputValue) {
+      if (!corsProxyAddress.inputValue.includes('{url}')) {
+        corsProxyAddress.validationText =
           "CORS address must contain '{url}' that will be replaced with hostname";
       }
     }
 
-    if (updatedFormInputs.nrqlQuery && updatedFormInputs.nrqlQuery.inputValue) {
+    if (nrqlQuery && nrqlQuery.inputValue) {
       const formatRegexp = new RegExp(
         /^((?=.*SELECT.*FROM)|(?=.*FROM.*SELECT)).*$/i
       );
@@ -159,22 +163,21 @@ export default class StatusPagesDashboard extends React.PureComponent {
         /^.*(?=.*EventName)(?=.*EventStatus)(?=.*EventTimeStamp).*$/
       );
 
-      if (!formatRegexp.test(updatedFormInputs.nrqlQuery.inputValue)) {
+      if (!formatRegexp.test(nrqlQuery.inputValue)) {
         isFormValid = false;
-        updatedFormInputs.nrqlQuery.validationText =
-          'Provided value is not correct NRQL query';
-      } else if (!fieldsRegexp.test(updatedFormInputs.nrqlQuery.inputValue)) {
+        nrqlQuery.validationText = 'Provided value is not correct NRQL query';
+      } else if (!fieldsRegexp.test(nrqlQuery.inputValue)) {
         isFormValid = false;
-        updatedFormInputs.nrqlQuery.validationText =
+        nrqlQuery.validationText =
           'Query must contain following fields/aliases: EventName, EventStatus and EventTimeStamp';
       }
     }
 
-    if (updatedFormInputs.providerName.inputValue === 'statusIo') {
+    if (providerName.inputValue === 'statusIo') {
       const regExp = new RegExp(/\/pages\/history\/[a-z0-9]+$/g);
-      if (!regExp.test(updatedFormInputs.hostName.inputValue)) {
+      if (!regExp.test(hostName.inputValue)) {
         isFormValid = false;
-        updatedFormInputs.hostName.validationText =
+        hostName.validationText =
           'Please provide a valid StatusIO URL according to the documentation';
       }
     }
