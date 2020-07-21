@@ -1,3 +1,15 @@
+# [1.0.0](https://github.com/newrelic/nr1-status-pages/compare/v0.17.0...v1.0.0) (2020-07-21)
+
+
+### chore
+
+* **release:** updating to 1.0.0 ([c733d1f](https://github.com/newrelic/nr1-status-pages/commit/c733d1f61b6cb76afbfb88cf3013a907efd38c29))
+
+
+### BREAKING CHANGES
+
+* **release:** NRQL cards, RSS cards, CORS proxy support, and bug fixes
+
 # [0.17.0](https://github.com/newrelic/nr1-status-pages/compare/v0.16.0...v0.17.0) (2020-07-21)
 
 
