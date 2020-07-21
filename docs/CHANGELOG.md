@@ -1,3 +1,20 @@
+# [0.17.0](https://github.com/newrelic/nr1-status-pages/compare/v0.16.0...v0.17.0) (2020-07-21)
+
+
+### Bug Fixes
+
+* encodeuri added ([920d0f0](https://github.com/newrelic/nr1-status-pages/commit/920d0f0623ad58b944c7be7b50ce4c755475dff1))
+* external page open in new card ([1a2545a](https://github.com/newrelic/nr1-status-pages/commit/1a2545a5c8b631c6d002a4d0abc4a21c07fd7028))
+* provider select in edit fixed ([59f49b3](https://github.com/newrelic/nr1-status-pages/commit/59f49b3e649300d3e0eb5af4844043db3abdfb28))
+* small code refactors ([3bc9c5d](https://github.com/newrelic/nr1-status-pages/commit/3bc9c5d3d79f8ec224874f2715139d876449723d))
+* unnecessary code removed ([bedc5d1](https://github.com/newrelic/nr1-status-pages/commit/bedc5d1f65b443b42d2bf00476f9ab1e383e74b8))
+
+
+### Features
+
+* cors address configuration added ([7307f61](https://github.com/newrelic/nr1-status-pages/commit/7307f614703c3ef7318e70d03319e432bcd18e01))
+* readme updated and default url added ([5b4abb9](https://github.com/newrelic/nr1-status-pages/commit/5b4abb905512bd2d262283f90d443b47d37e7a1b))
+
 # [0.16.0](https://github.com/newrelic/nr1-status-pages/compare/v0.15.0...v0.16.0) (2020-07-17)
 
 
