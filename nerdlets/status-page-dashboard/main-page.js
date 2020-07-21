@@ -140,7 +140,21 @@ export default class StatusPagesDashboard extends React.PureComponent {
       }
     }
 
-    if (updatedFormInputs.nrqlQuery && updatedFormInputs.nrqlQuery.inputValue) {
+    const {
+      corsProxyAddress,
+      nrqlQuery,
+      providerName,
+      hostName
+    } = updatedFormInputs;
+
+    if (corsProxyAddress && corsProxyAddress.inputValue) {
+      if (!corsProxyAddress.inputValue.includes('{url}')) {
+        corsProxyAddress.validationText =
+          "CORS address must contain '{url}' that will be replaced with hostname";
+      }
+    }
+
+    if (nrqlQuery && nrqlQuery.inputValue) {
       const formatRegexp = new RegExp(
         /^((?=.*SELECT.*FROM)|(?=.*FROM.*SELECT)).*$/i
       );
@@ -149,22 +163,21 @@ export default class StatusPagesDashboard extends React.PureComponent {
         /^.*(?=.*EventName)(?=.*EventStatus)(?=.*EventTimeStamp).*$/
       );
 
-      if (!formatRegexp.test(updatedFormInputs.nrqlQuery.inputValue)) {
+      if (!formatRegexp.test(nrqlQuery.inputValue)) {
         isFormValid = false;
-        updatedFormInputs.nrqlQuery.validationText =
-          'Provided value is not correct NRQL query';
-      } else if (!fieldsRegexp.test(updatedFormInputs.nrqlQuery.inputValue)) {
+        nrqlQuery.validationText = 'Provided value is not correct NRQL query';
+      } else if (!fieldsRegexp.test(nrqlQuery.inputValue)) {
         isFormValid = false;
-        updatedFormInputs.nrqlQuery.validationText =
+        nrqlQuery.validationText =
           'Query must contain following fields/aliases: EventName, EventStatus and EventTimeStamp';
       }
     }
 
-    if (updatedFormInputs.providerName.inputValue === 'statusIo') {
+    if (providerName.inputValue === 'statusIo') {
       const regExp = new RegExp(/\/pages\/history\/[a-z0-9]+$/g);
-      if (!regExp.test(updatedFormInputs.hostName.inputValue)) {
+      if (!regExp.test(hostName.inputValue)) {
         isFormValid = false;
-        updatedFormInputs.hostName.validationText =
+        hostName.validationText =
           'Please provide a valid StatusIO URL according to the documentation';
       }
     }
@@ -182,15 +195,17 @@ export default class StatusPagesDashboard extends React.PureComponent {
       hostName,
       providerName,
       logoUrl,
-      nrqlQuery
+      nrqlQuery,
+      corsProxyAddress
     } = formInputs;
 
     let formattedHostName;
     if (providerName.inputValue !== PROVIDERS.NRQL.value) {
-      const CORSproxy = 'https://cors-anywhere.herokuapp.com/';
       formattedHostName = hostRequiresProxy
-        ? `${CORSproxy}${hostName?.inputValue}`
+        ? corsProxyAddress.inputValue.replace('{url}', hostName?.inputValue)
         : hostName?.inputValue;
+
+      formattedHostName = encodeURI(formattedHostName);
     }
 
     const hostNameObject = {
@@ -290,6 +305,26 @@ export default class StatusPagesDashboard extends React.PureComponent {
         });
         event.preventDefault();
     }
+  };
+
+  handleCORSChange = event => {
+    const isChecked = event.target.checked;
+
+    const { formInputs } = this.state;
+    const updatedFormInputs = { ...formInputs };
+
+    if (isChecked) {
+      updatedFormInputs.corsProxyAddress = { ...emptyInputState };
+      updatedFormInputs.corsProxyAddress.inputValue =
+        'https://cors-anywhere.herokuapp.com/{url}';
+    } else {
+      delete updatedFormInputs.corsProxyAddress;
+    }
+
+    this.setState({
+      hostRequiresProxy: isChecked,
+      formInputs: updatedFormInputs
+    });
   };
 
   handleProviderChange = event => {
@@ -458,7 +493,8 @@ export default class StatusPagesDashboard extends React.PureComponent {
       deleteTileModalActive,
       createTileModalActive,
       formInputs,
-      selectedPopularSiteIndex
+      selectedPopularSiteIndex,
+      hostRequiresProxy
     } = this.state;
 
     const {
@@ -466,7 +502,8 @@ export default class StatusPagesDashboard extends React.PureComponent {
       hostName,
       providerName,
       logoUrl,
-      nrqlQuery
+      nrqlQuery,
+      corsProxyAddress
     } = formInputs;
 
     return (
@@ -549,13 +586,23 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
           <div className="select-container">
             <Checkbox
-              onChange={() => {
-                const { hostRequiresProxy } = this.state;
-                this.setState({ hostRequiresProxy: !hostRequiresProxy });
-              }}
+              onChange={this.handleCORSChange}
               label="Host requires CORS proxy"
             />
           </div>
+          {hostRequiresProxy && (
+            <div className="select-container">
+              <TextFieldWrapper
+                label="CORS proxy address"
+                onChange={event => {
+                  this.updateInputValue(event, 'corsProxyAddress');
+                }}
+                value={corsProxyAddress.inputValue}
+                validationText={corsProxyAddress.validationText}
+              />
+            </div>
+          )}
+
           <div className="select-container">
             <label>Provider</label>
             <select

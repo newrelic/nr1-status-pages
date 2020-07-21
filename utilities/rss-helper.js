@@ -16,12 +16,12 @@ export default class RSSHelper {
     let networkResponse;
 
     try {
-      networkResponse = await this.parser.parseURL(this.rssUrl);
+      networkResponse.data = await this.parser.parseURL(this.rssUrl);
     } catch {
       networkResponse =
         'There was an error while fetching data. Check your data provider or host URL.';
     }
-    callbackSetterFunction({ data: networkResponse });
+    callbackSetterFunction(networkResponse);
   }
 
   _pollData(callbackSetterFunction) {

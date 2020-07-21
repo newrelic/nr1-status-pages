@@ -14,6 +14,7 @@ import {
   TextField,
   Dropdown,
   DropdownItem,
+  Link,
   navigation
 } from 'nr1';
 
@@ -26,6 +27,25 @@ const createOption = label => ({
   label,
   value: label
 });
+
+const PROVIDERS = [
+  {
+    value: 'statusPageIo',
+    label: 'Status Page'
+  },
+  {
+    value: 'google',
+    label: 'Google'
+  },
+  {
+    value: 'statusIo',
+    label: 'Status Io'
+  },
+  {
+    value: 'rss',
+    label: 'RSS Feed'
+  }
+];
 
 const NRQL_PROVIDER_NAME = 'nrql';
 const RSS_PROVIDER_NAME = 'rss';
@@ -197,6 +217,7 @@ export default class StatusPage extends React.PureComponent {
       this.setState({ errorInfo: data });
     } else {
       this.setState({
+        errorInfo: undefined,
         statusPageIoSummaryData: this.FormatService.uniformSummaryData(data)
       });
     }
@@ -388,22 +409,6 @@ export default class StatusPage extends React.PureComponent {
     }, 150);
   };
 
-  handleExternalLinkClick = event => {
-    const {
-      statusPageIoSummaryData: { link }
-    } = this.state;
-
-    if (link)
-      navigation.openStackedNerdlet({
-        id: 'external-page',
-        urlState: {
-          externalLink: link
-        }
-      });
-
-    event.stopPropagation();
-  };
-
   renderSettingsButton(canShowDetails = true) {
     const { hostname } = this.props;
 
@@ -503,45 +508,30 @@ export default class StatusPage extends React.PureComponent {
                 }
                 defaultValue={hostname.hostName}
               />
-              {hostname.provider !== RSS_PROVIDER_NAME && (
-                <Dropdown
-                  title="Choose a provider"
-                  label="Provider"
-                  className="status-page-setting"
-                >
+              <Dropdown
+                title={
+                  PROVIDERS.find(
+                    element => element.value === this.state.editedHostProvider
+                  )?.label
+                }
+                label="Provider"
+                className="status-page-setting"
+              >
+                {PROVIDERS.map(({ value, label }) => (
                   <DropdownItem
-                    selected
+                    key={value}
+                    selected={hostname.provider === value}
                     onClick={() =>
                       this.setState(previousState => ({
                         ...previousState,
-                        editedHostProvider: event.target.innerHTML
+                        editedHostProvider: value
                       }))
                     }
                   >
-                    Status Page
+                    {label}
                   </DropdownItem>
-                  <DropdownItem
-                    onClick={() =>
-                      this.setState(previousState => ({
-                        ...previousState,
-                        editedHostProvider: event.target.innerHTML
-                      }))
-                    }
-                  >
-                    Google
-                  </DropdownItem>
-                  <DropdownItem
-                    onClick={() =>
-                      this.setState(previousState => ({
-                        ...previousState,
-                        editedHostProvider: event.target.innerHTML
-                      }))
-                    }
-                  >
-                    Status Io
-                  </DropdownItem>
-                </Dropdown>
-              )}
+                ))}
+              </Dropdown>
             </>
           )}
           <TextField
@@ -628,10 +618,10 @@ export default class StatusPage extends React.PureComponent {
         <div className="service-current-status">
           {statusPageIoSummaryData.link ? (
             <h5
-              onClick={this.handleExternalLinkClick}
+              onClick={e => e.stopPropagation()}
               className="service-current-status-heading"
             >
-              See status page
+              <Link to={statusPageIoSummaryData.link}>See status page</Link>
             </h5>
           ) : (
             <h5 className="service-current-status-heading">
