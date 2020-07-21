@@ -199,11 +199,10 @@ export default class StatusPagesDashboard extends React.PureComponent {
     let formattedHostName;
     if (providerName.inputValue !== PROVIDERS.NRQL.value) {
       formattedHostName = hostRequiresProxy
-        ? corsProxyAddress.inputValue.replace(
-            '{url}',
-            encodeURI(hostName?.inputValue)
-          )
+        ? corsProxyAddress.inputValue.replace('{url}', hostName?.inputValue)
         : hostName?.inputValue;
+
+      formattedHostName = encodeURI(formattedHostName);
     }
 
     const hostNameObject = {

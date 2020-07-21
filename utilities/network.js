@@ -7,15 +7,15 @@ export default class Network {
     this.statusPageUrl = statusPageUrl;
     this.refreshRateInSeconds = refreshRateInSeconds;
     this.provider = provider;
-    this.setTimeoutIds = [];
+    this.setIntervalIds = [];
   }
 
   clear = () => {
-    this.setTimeoutIds.forEach(timeoutId => {
-      clearTimeout(timeoutId);
+    this.setIntervalIds.forEach(timeoutId => {
+      clearInterval(timeoutId);
     });
 
-    this.setTimeoutIds = [];
+    this.setIntervalIds = [];
   };
 
   async _fetchAndPopulateData(url, callbackSetterFunction) {
@@ -32,19 +32,17 @@ export default class Network {
   }
 
   _pollData(url, callbackSetterFunction, callbackBeforePolling) {
-    const setTimeoutId = setTimeout(async () => {
+    const setIntervalId = setInterval(async () => {
       callbackBeforePolling && callbackBeforePolling();
 
       try {
         this._fetchAndPopulateData(url, callbackSetterFunction);
       } catch (err) {
         console.error(err); // eslint-disable-line no-console
-      } finally {
-        this._pollData(url, callbackSetterFunction);
       }
     }, this.refreshRateInSeconds * 1000);
 
-    this.setTimeoutIds.push(setTimeoutId);
+    this.setIntervalIds.push(setIntervalId);
   }
 
   async pollSummaryData(callbackSetterFunction) {

@@ -28,6 +28,25 @@ const createOption = label => ({
   value: label
 });
 
+const PROVIDERS = [
+  {
+    value: 'statusPageIo',
+    label: 'Status Page'
+  },
+  {
+    value: 'google',
+    label: 'Google'
+  },
+  {
+    value: 'statusIo',
+    label: 'Status Io'
+  },
+  {
+    value: 'rss',
+    label: 'RSS Feed'
+  }
+];
+
 const NRQL_PROVIDER_NAME = 'nrql';
 const RSS_PROVIDER_NAME = 'rss';
 
@@ -198,6 +217,7 @@ export default class StatusPage extends React.PureComponent {
       this.setState({ errorInfo: data });
     } else {
       this.setState({
+        errorInfo: undefined,
         statusPageIoSummaryData: this.FormatService.uniformSummaryData(data)
       });
     }
@@ -488,45 +508,30 @@ export default class StatusPage extends React.PureComponent {
                 }
                 defaultValue={hostname.hostName}
               />
-              {hostname.provider !== RSS_PROVIDER_NAME && (
-                <Dropdown
-                  title="Choose a provider"
-                  label="Provider"
-                  className="status-page-setting"
-                >
+              <Dropdown
+                title={
+                  PROVIDERS.find(
+                    element => element.value === this.state.editedHostProvider
+                  )?.label
+                }
+                label="Provider"
+                className="status-page-setting"
+              >
+                {PROVIDERS.map(({ value, label }) => (
                   <DropdownItem
-                    selected
+                    key={value}
+                    selected={hostname.provider === value}
                     onClick={() =>
                       this.setState(previousState => ({
                         ...previousState,
-                        editedHostProvider: event.target.innerHTML
+                        editedHostProvider: value
                       }))
                     }
                   >
-                    Status Page
+                    {label}
                   </DropdownItem>
-                  <DropdownItem
-                    onClick={() =>
-                      this.setState(previousState => ({
-                        ...previousState,
-                        editedHostProvider: event.target.innerHTML
-                      }))
-                    }
-                  >
-                    Google
-                  </DropdownItem>
-                  <DropdownItem
-                    onClick={() =>
-                      this.setState(previousState => ({
-                        ...previousState,
-                        editedHostProvider: event.target.innerHTML
-                      }))
-                    }
-                  >
-                    Status Io
-                  </DropdownItem>
-                </Dropdown>
-              )}
+                ))}
+              </Dropdown>
             </>
           )}
           <TextField
