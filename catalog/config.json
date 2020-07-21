@@ -13,5 +13,5 @@
       "url": "https://discuss.newrelic.com/t/statuspage-io-nerdpack/83284"
     }
   },
-  "whatsNew": "Feat: add support for status io provider \n\n - Fix: Quick start dropdown now behaves properly \n\n - Feat: If no incident history is provided, let the user know and provide them a link directly to the status page of the service \n\n - Feat: Update the design for the toolbar \n\n - Feat: Adds a \"mini timeline\" to each service tile \n\n - Feat: Enables searching of tiles via search input in toolbar"
+  "whatsNew": "- Feat: support proxied status services for CORS issues\n\n - Feat: support for NRQL-based status cards\n\n - Feat: support RSS status services\n\n - Fix: Resolving support for multiple status page services"
 }
