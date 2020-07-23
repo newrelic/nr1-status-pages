@@ -127,7 +127,6 @@ export default class StatusPagesDashboard extends React.PureComponent {
   validateFormAndReturnStatus = () => {
     const { formInputs } = this.state;
     const updatedFormInputs = { ...formInputs };
-    // const inputsList = Object.keys(formInputs);
     const inputsList = Object.keys(formInputs).filter(k => k !== 'logoUrl');
     const genericValidationError = 'Please fill this field before saving.';
     let isFormValid = true;

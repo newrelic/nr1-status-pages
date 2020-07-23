@@ -5,7 +5,6 @@ const NRQLSeverityToKnown = {
 };
 
 export const nrqlFormatter = data => {
-  console.log('data', data);
   let statusCode = NRQLSeverityToKnown.None;
   let status = 'All Systems Operational';
 
