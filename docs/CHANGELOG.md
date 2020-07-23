@@ -1,3 +1,17 @@
+## [1.0.2](https://github.com/newrelic/nr1-status-pages/compare/v1.0.1...v1.0.2) (2020-07-23)
+
+
+### Bug Fixes
+
+* unknown EventStatus transformed into none ([3f96d59](https://github.com/newrelic/nr1-status-pages/commit/3f96d59f4201234758343c7e87e2e12018baa6a6))
+
+## [1.0.1](https://github.com/newrelic/nr1-status-pages/compare/v1.0.0...v1.0.1) (2020-07-21)
+
+
+### Bug Fixes
+
+* initialize networkResponse. Trigger release and changelog generation (via GitHub Actions) ([8d12a37](https://github.com/newrelic/nr1-status-pages/commit/8d12a3707f179aeff919588827cad28d55f42ac2))
+
 # [1.0.0](https://github.com/newrelic/nr1-status-pages/compare/v0.17.0...v1.0.0) (2020-07-21)
 
 
