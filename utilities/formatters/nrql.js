@@ -12,6 +12,10 @@ export const nrqlFormatter = data => {
     const incident = data.raw.results[0].events[0];
     statusCode = NRQLSeverityToKnown[incident.EventStatus];
 
+    if (statusCode === undefined) {
+      statusCode = NRQLSeverityToKnown.None;
+    }
+
     if (statusCode !== NRQLSeverityToKnown.None) {
       status = 'Ongoing Issues';
     }
@@ -27,6 +31,7 @@ export const nrqlFormatter = data => {
 export const nrqlIncidentFormatter = data => {
   return data.raw.results[0].events.map(incident => {
     const incident_updates = [];
+    let incidentCode = NRQLSeverityToKnown[incident.EventStatus];
 
     Object.entries(incident).forEach(([key, value]) => {
       incident_updates.push({
@@ -35,10 +40,14 @@ export const nrqlIncidentFormatter = data => {
       });
     });
 
+    if (incidentCode === undefined) {
+      incidentCode = NRQLSeverityToKnown.None;
+    }
+
     return {
       name: incident.EventName,
       created_at: incident.EventTimeStamp,
-      impact: NRQLSeverityToKnown[incident.EventStatus],
+      impact: incidentCode,
       incident_updates
     };
   });
