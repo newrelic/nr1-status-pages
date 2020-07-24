@@ -65,7 +65,7 @@ THE SOFTWARE.
 
 ### dayjs
 
-This product includes source derived from [dayjs](https://github.com/iamkun/dayjs) ([v1.8.28](https://github.com/iamkun/dayjs/tree/v1.8.28)), distributed under the [MIT License](https://github.com/iamkun/dayjs/blob/v1.8.28/LICENSE):
+This product includes source derived from [dayjs](https://github.com/iamkun/dayjs) ([v1.8.29](https://github.com/iamkun/dayjs/tree/v1.8.29)), distributed under the [MIT License](https://github.com/iamkun/dayjs/blob/v1.8.29/LICENSE):
 
 ```
 MIT License

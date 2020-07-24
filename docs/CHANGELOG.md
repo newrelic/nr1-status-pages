@@ -1,3 +1,11 @@
+## [1.0.3](https://github.com/newrelic/nr1-status-pages/compare/v1.0.2...v1.0.3) (2020-07-24)
+
+
+### Bug Fixes
+
+* screenshot catalog fix ([aa8ed22](https://github.com/newrelic/nr1-status-pages/commit/aa8ed227b1678a5873b6a1061fa70383d6d33bee))
+* upgrade dayjs from 1.8.28 to 1.8.29 ([d56e8df](https://github.com/newrelic/nr1-status-pages/commit/d56e8dfb5c7c62432a100724dda8242d1ce1fa18))
+
 ## [1.0.2](https://github.com/newrelic/nr1-status-pages/compare/v1.0.1...v1.0.2) (2020-07-23)
 
 
