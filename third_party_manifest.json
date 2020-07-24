@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Thu Jul 23 2020 23:59:31 GMT+0000 (Coordinated Universal Time)",
+  "lastUpdated": "Fri Jul 24 2020 00:02:04 GMT+0000 (Coordinated Universal Time)",
   "projectName": "nr1-status-pages",
   "projectUrl": "https://github.com/newrelic/nr1-status-pages",
   "includeDev": true,
@@ -16,15 +16,15 @@
       "licenseTextSource": "file",
       "publisher": "Matt Zabriskie"
     },
-    "dayjs@1.8.28": {
+    "dayjs@1.8.29": {
       "name": "dayjs",
-      "version": "1.8.28",
-      "range": "^1.8.28",
+      "version": "1.8.29",
+      "range": "^1.8.29",
       "licenses": "MIT",
       "repoUrl": "https://github.com/iamkun/dayjs",
-      "versionedRepoUrl": "https://github.com/iamkun/dayjs/tree/v1.8.28",
+      "versionedRepoUrl": "https://github.com/iamkun/dayjs/tree/v1.8.29",
       "licenseFile": "node_modules/dayjs/LICENSE",
-      "licenseUrl": "https://github.com/iamkun/dayjs/blob/v1.8.28/LICENSE",
+      "licenseUrl": "https://github.com/iamkun/dayjs/blob/v1.8.29/LICENSE",
       "licenseTextSource": "file",
       "publisher": "iamkun"
     },
