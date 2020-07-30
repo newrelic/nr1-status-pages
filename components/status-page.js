@@ -49,6 +49,7 @@ const PROVIDERS = [
 
 const NRQL_PROVIDER_NAME = 'nrql';
 const RSS_PROVIDER_NAME = 'rss';
+const ATOM_PROVIDER_NAME = 'atom';
 
 export default class StatusPage extends React.PureComponent {
   static propTypes = {
@@ -613,7 +614,9 @@ export default class StatusPage extends React.PureComponent {
         <div className="logo-container">
           {this.renderSettingsButton()}
           {this.autoSetLogo(hostname)}
-          {hostname.provider === RSS_PROVIDER_NAME && this.renderRssIcon()}
+          {(hostname.provider === RSS_PROVIDER_NAME ||
+            hostname.provider === ATOM_PROVIDER_NAME) &&
+            this.renderRssIcon()}
         </div>
         <div className="service-current-status">
           {statusPageIoSummaryData.link ? (

@@ -9,6 +9,7 @@ import {
 } from './formatters/status-io';
 import { nrqlFormatter, nrqlIncidentFormatter } from './formatters/nrql';
 import { rssFormatter, rssIncidentFormatter } from './formatters/rss';
+import { atomFormatter, atomIncidentFormatter } from './formatters/atom';
 
 const providers = {
   google: {
@@ -68,6 +69,18 @@ const providers = {
     name: 'RSS Feed',
     summaryFormatter: rssFormatter,
     incidentFormatter: rssIncidentFormatter
+  },
+  atom: {
+    summaryUrl: '',
+    incidentUrl: '',
+    impactMap: {
+      warning: 'minor',
+      major: 'major',
+      critical: 'critical'
+    },
+    name: 'Atom Feed',
+    summaryFormatter: atomFormatter,
+    incidentFormatter: atomIncidentFormatter
   }
 };
 

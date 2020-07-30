@@ -47,6 +47,10 @@ const PROVIDERS = {
   RSS: {
     value: 'rss',
     label: 'RSS Feed'
+  },
+  ATOM: {
+    value: 'atom',
+    label: 'Atom Feed'
   }
 };
 
