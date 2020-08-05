@@ -55,9 +55,9 @@ or
 SELECT timestamp as EventTimeStamp, priority as EventStatus, condition_name as EventName, entity.name FROM AlertViolationsSample LIMIT 50
 ```
 
-### RSS feed
+### RSS & Atom feeds
 
-It is possible to choose RSS feed as a provider for status pages.
+It is possible to choose either a RSS or an Atom feed as a provider for status pages.
 
 ### CORS configuration
 
