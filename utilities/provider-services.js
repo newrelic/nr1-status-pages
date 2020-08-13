@@ -9,7 +9,10 @@ import {
 } from './formatters/status-io';
 import { nrqlFormatter, nrqlIncidentFormatter } from './formatters/nrql';
 import { rssFormatter, rssIncidentFormatter } from './formatters/rss';
-import { statusPalFormatter, statusPalIncidentFormatter } from './formatters/status-pal';
+import {
+  statusPalFormatter,
+  statusPalIncidentFormatter
+} from './formatters/status-pal';
 
 const providers = {
   google: {

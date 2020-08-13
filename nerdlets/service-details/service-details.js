@@ -13,7 +13,6 @@ const NRQL_PROVIDER_NAME = 'nrql';
 const RSS_PROVIDER_NAME = 'rss';
 const STATUSPAL_PROVIDER_NAME = 'statusPal';
 
-
 export default class ServiceDetails extends React.PureComponent {
   static propTypes = {
     hostname: PropTypes.string,
@@ -59,7 +58,11 @@ export default class ServiceDetails extends React.PureComponent {
       this.setState({ expandedTimelineItem: timelineItemIndex });
     }
 
-    if (prevProps.hostname !== hostname || prevProps.subDomain !== subDomain || prevProps.nrqlQuery !== nrqlQuery) {
+    if (
+      prevProps.hostname !== hostname ||
+      prevProps.subDomain !== subDomain ||
+      prevProps.nrqlQuery !== nrqlQuery
+    ) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ currentIncidents: undefined });
       this.setupTimelinePolling(hostname, refreshRate, provider);
@@ -81,7 +84,10 @@ export default class ServiceDetails extends React.PureComponent {
     } else if (provider === RSS_PROVIDER_NAME) {
       this.statusPageNetwork = new RSSHelper(hostname, refreshRate);
     } else if (provider === STATUSPAL_PROVIDER_NAME) {
-      this.statusPageNetwork = new StatuspalHelper(this.props.subDomain, refreshRate);
+      this.statusPageNetwork = new StatuspalHelper(
+        this.props.subDomain,
+        refreshRate
+      );
     } else {
       this.statusPageNetwork = new Network(hostname, refreshRate, provider);
     }

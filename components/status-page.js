@@ -109,7 +109,12 @@ export default class StatusPage extends React.PureComponent {
     this.stopPollingData();
 
     const { refreshRate, accountId } = this.props;
-    const { editedHostProvider, editedHostName, editedNrqlQuery, editedSubDomain } = this.state;
+    const {
+      editedHostProvider,
+      editedHostName,
+      editedNrqlQuery,
+      editedSubDomain
+    } = this.state;
 
     if (editedHostProvider === NRQL_PROVIDER_NAME) {
       this.StatusPageNetwork = new NRQLHelper(
@@ -124,7 +129,10 @@ export default class StatusPage extends React.PureComponent {
 
       this.StatusPageNetwork.pollCurrentIncidents(this.setData);
     } else if (editedHostProvider === STATUSPAL_PROVIDER_NAME) {
-      this.StatusPageNetwork = new StatuspalHelper(editedSubDomain, refreshRate);
+      this.StatusPageNetwork = new StatuspalHelper(
+        editedSubDomain,
+        refreshRate
+      );
 
       this.StatusPageNetwork.pollCurrentIncidents(this.setData);
     } else {

@@ -3,22 +3,18 @@ import { getProvider } from './provider-services';
 const axios = require('axios');
 
 const axiosConfig = {
-  method: "GET",
-  mode: "no-cors",
   headers: {
-    "Access-Control-Allow-Origin": "*",
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS"
+    'Access-Control-Allow-Origin': '*'
   }
 };
 
 const STATUSPAL_API = getProvider('statusPal').apiURL;
 
 export default class StatuspalHelper {
-  constructor(subDomain, refreshRateInSeconds) {
+  constructor(subDomain) {
     this.subDomain = subDomain;
-    this.refreshRateInSeconds = 30; //Set to 30 seconds to be under the request limit of cors-anywhere
-                                    //the StatusPal API may change in the feature
+    this.refreshRateInSeconds = 30; // Set to 30 seconds to be under the request limit of cors-anywhere
+    // the StatusPal API may change in the feature
     this.setIntervalIds = [];
   }
 
@@ -34,16 +30,20 @@ export default class StatuspalHelper {
     let networkResponse;
 
     try {
-      const data = await Promise.all(urls.map(async url => {
-        const res = await axios.get(STATUSPAL_API + url, axiosConfig);
+      const data = await Promise.all(
+        urls.map(async url => {
+          const res = await axios.get(STATUSPAL_API + url, axiosConfig);
 
-        return { data: res.data, url };
-      }));
+          return { data: res.data, url };
+        })
+      );
 
-      networkResponse = { data: Object.fromEntries(data.map(data => [ data.url, data.data ])) };
+      networkResponse = {
+        data: Object.fromEntries(data.map(data => [data.url, data.data]))
+      };
     } catch {
       networkResponse =
-        "There was an error while fetching data. Check your data provider or host URL.";
+        'There was an error while fetching data. Check your data provider or host URL.';
     }
 
     callbackSetterFunction(networkResponse);
@@ -66,7 +66,7 @@ export default class StatuspalHelper {
 
   async pollSummaryData(callbackSetterFunction) {
     // Populate initial data before we start polling
-    const urls = [ `/status_pages/${this.subDomain}/status` ];
+    const urls = [`/status_pages/${this.subDomain}/status`];
 
     await this._fetchAndPopulateData(urls, callbackSetterFunction);
     this._pollData(urls, callbackSetterFunction);

@@ -206,7 +206,10 @@ export default class StatusPagesDashboard extends React.PureComponent {
     } = formInputs;
 
     let formattedHostName;
-    if (providerName.inputValue !== PROVIDERS.NRQL.value && providerName.inputValue !== PROVIDERS.STATUS_PAL.inputValue) {
+    if (
+      providerName.inputValue !== PROVIDERS.NRQL.value &&
+      providerName.inputValue !== PROVIDERS.STATUS_PAL.inputValue
+    ) {
       formattedHostName = hostRequiresProxy
         ? corsProxyAddress.inputValue.replace('{url}', hostName?.inputValue)
         : hostName?.inputValue;
@@ -346,7 +349,9 @@ export default class StatusPagesDashboard extends React.PureComponent {
       if (updatedFormInputs.providerName.inputValue === PROVIDERS.NRQL.value) {
         delete updatedFormInputs.hostName;
         updatedFormInputs.nrqlQuery = { ...emptyInputState };
-      } else if (updatedFormInputs.providerName.inputValue === PROVIDERS.STATUS_PAL.value) {
+      } else if (
+        updatedFormInputs.providerName.inputValue === PROVIDERS.STATUS_PAL.value
+      ) {
         delete updatedFormInputs.hostName;
         updatedFormInputs.subDomain = { ...emptyInputState };
       } else {
@@ -643,26 +648,27 @@ export default class StatusPagesDashboard extends React.PureComponent {
             validationText={serviceName.validationText}
           />
 
-          {providerName.inputValue === PROVIDERS.NRQL.value ? (
-              <TextFieldWrapper
-                label="NRQL"
-                placeholder="Put your NRQL query here"
-                onChange={event => {
-                  this.updateInputValue(event, 'nrqlQuery');
-                }}
-                value={nrqlQuery.inputValue}
-                validationText={nrqlQuery.validationText}
-              />
-          ) : providerName.inputValue === PROVIDERS.STATUS_PAL.value ?  (
-              <TextFieldWrapper
-                label="Subdomain"
-                placeholder="Put your Statuspal subdomain here"
-                onChange={event => {
-                  this.updateInputValue(event, 'subDomain');
-                }}
-                value={subDomain.inputValue}
-                validationText={subDomain.validationText}
-              />
+          {providerName.inputValue === PROVIDERS.NRQL.value && (
+            <TextFieldWrapper
+              label="NRQL"
+              placeholder="Put your NRQL query here"
+              onChange={event => {
+                this.updateInputValue(event, 'nrqlQuery');
+              }}
+              value={nrqlQuery.inputValue}
+              validationText={nrqlQuery.validationText}
+            />
+          )}
+          {providerName.inputValue === PROVIDERS.STATUS_PAL.value ? (
+            <TextFieldWrapper
+              label="Subdomain"
+              placeholder="Put your Statuspal subdomain here"
+              onChange={event => {
+                this.updateInputValue(event, 'subDomain');
+              }}
+              value={subDomain.inputValue}
+              validationText={subDomain.validationText}
+            />
           ) : (
             <TextFieldWrapper
               label="Hostname"
