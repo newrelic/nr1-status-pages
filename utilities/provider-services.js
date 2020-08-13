@@ -9,6 +9,7 @@ import {
 } from './formatters/status-io';
 import { nrqlFormatter, nrqlIncidentFormatter } from './formatters/nrql';
 import { rssFormatter, rssIncidentFormatter } from './formatters/rss';
+import { statusPalFormatter, statusPalIncidentFormatter } from './formatters/status-pal';
 
 const providers = {
   google: {
@@ -68,6 +69,17 @@ const providers = {
     name: 'RSS Feed',
     summaryFormatter: rssFormatter,
     incidentFormatter: rssIncidentFormatter
+  },
+  statusPal: {
+    impactMap: {
+      minor: 'minor',
+      major: 'major',
+      maintence: 'maintence'
+    },
+    apiURL: 'https://cors-anywhere.herokuapp.com/statuspal.io/api/v1',
+    name: 'Statuspal',
+    summaryFormatter: statusPalFormatter,
+    incidentFormatter: statusPalIncidentFormatter
   }
 };
 
@@ -80,6 +92,8 @@ export const getProvider = providerKey => {
     providerKey = 'nrql';
   } else if (providerKey === 'rss') {
     providerKey = 'rss';
+  } else if (providerKey === 'Statuspal') {
+    providerKey = 'statusPal';
   }
   return providers[providerKey];
 };
