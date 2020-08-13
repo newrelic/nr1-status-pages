@@ -2,12 +2,6 @@ import { getProvider } from './provider-services';
 
 const axios = require('axios');
 
-const axiosConfig = {
-  headers: {
-    'Access-Control-Allow-Origin': '*'
-  }
-};
-
 const STATUSPAL_API = getProvider('statusPal').apiURL;
 
 export default class StatuspalHelper {
@@ -32,7 +26,7 @@ export default class StatuspalHelper {
     try {
       const data = await Promise.all(
         urls.map(async url => {
-          const res = await axios.get(STATUSPAL_API + url, axiosConfig);
+          const res = await axios.get(STATUSPAL_API + url);
 
           return { data: res.data, url };
         })
