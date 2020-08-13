@@ -205,13 +205,9 @@ export default class StatusPagesDashboard extends React.PureComponent {
       subDomain
     } = formInputs;
 
-    if (providerName.inputValue === PROVIDERS.STATUS_PAL.value) {
-      hostname = `https://${subDomain}.statuspal.io`;
-    }
-
     let formattedHostName;
     if (providerName.inputValue === PROVIDERS.STATUS_PAL.value) {
-      formattedHostName = encodeURI(`https://${subDomain}.statuspal.io`);
+      formattedHostName = encodeURI(`https://${subDomain.inputValue}.statuspal.io`);
     } else if (providerName.inputValue !== PROVIDERS.NRQL.value) {
       formattedHostName = hostRequiresProxy
         ? corsProxyAddress.inputValue.replace('{url}', hostName?.inputValue)
