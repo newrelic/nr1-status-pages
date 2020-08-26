@@ -39,6 +39,14 @@ Example hostnames:
 - [https://ezidebit.status.io/pages/history/598a973f96a8201305000142](https://ezidebit.status.io/pages/history/598a973f96a8201305000142)
 - [https://status.docker.com/pages/history/533c6539221ae15e3f000031](https://status.docker.com/pages/history/533c6539221ae15e3f000031)
 
+### [Statuspal.io](https://statuspal.io)
+
+Example subdomains:
+
+- [galaxygate](https://status.galaxygate.net/) --> From https://status.galaxygate.net/
+- [smtp](https://smtp.statuspal.io) --> From https://smtp.statuspal.io
+
+
 ### NRQL query
 
 NRQL query requires three fields/aliases to be returned: *EventTimeStamp, EventStatus, EventName*.

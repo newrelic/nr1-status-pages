@@ -7,9 +7,11 @@ import dayjs from 'dayjs';
 import { Icon, Button } from 'nr1';
 import NRQLHelper from '../../utilities/nrql-helper';
 import RSSHelper from '../../utilities/rss-helper';
+import StatuspalHelper from '../../utilities/statuspal-helper';
 
 const NRQL_PROVIDER_NAME = 'nrql';
 const RSS_PROVIDER_NAME = 'rss';
+const STATUSPAL_PROVIDER_NAME = 'statusPal';
 
 export default class ServiceDetails extends React.PureComponent {
   static propTypes = {
@@ -18,6 +20,7 @@ export default class ServiceDetails extends React.PureComponent {
     refreshRate: PropTypes.number,
     timelineItemIndex: PropTypes.number,
     nrqlQuery: PropTypes.string,
+    subDomain: PropTypes.string,
     accountId: PropTypes.number
   };
 
@@ -46,7 +49,8 @@ export default class ServiceDetails extends React.PureComponent {
       hostname,
       refreshRate,
       provider,
-      nrqlQuery
+      nrqlQuery,
+      subDomain
     } = this.props;
 
     if (prevProps.timelineItemIndex !== timelineItemIndex) {
@@ -54,7 +58,11 @@ export default class ServiceDetails extends React.PureComponent {
       this.setState({ expandedTimelineItem: timelineItemIndex });
     }
 
-    if (prevProps.hostname !== hostname || prevProps.nrqlQuery !== nrqlQuery) {
+    if (
+      prevProps.hostname !== hostname ||
+      prevProps.subDomain !== subDomain ||
+      prevProps.nrqlQuery !== nrqlQuery
+    ) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ currentIncidents: undefined });
       this.setupTimelinePolling(hostname, refreshRate, provider);
@@ -75,6 +83,11 @@ export default class ServiceDetails extends React.PureComponent {
       );
     } else if (provider === RSS_PROVIDER_NAME) {
       this.statusPageNetwork = new RSSHelper(hostname, refreshRate);
+    } else if (provider === STATUSPAL_PROVIDER_NAME) {
+      this.statusPageNetwork = new StatuspalHelper(
+        this.props.subDomain,
+        refreshRate
+      );
     } else {
       this.statusPageNetwork = new Network(hostname, refreshRate, provider);
     }

@@ -47,6 +47,10 @@ const PROVIDERS = {
   RSS: {
     value: 'rss',
     label: 'RSS Feed'
+  },
+  STATUS_PAL: {
+    value: 'statusPal',
+    label: 'Statuspal'
   }
 };
 
@@ -119,6 +123,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
     });
 
     delete updatedInputs.nrqlQuery;
+    delete updatedInputs.subDomain;
     updatedInputs.hostName = { ...emptyInputState };
 
     this.setState({ formInputs: updatedInputs, selectedPopularSiteIndex: '' });
@@ -196,11 +201,16 @@ export default class StatusPagesDashboard extends React.PureComponent {
       providerName,
       logoUrl,
       nrqlQuery,
-      corsProxyAddress
+      corsProxyAddress,
+      subDomain
     } = formInputs;
 
     let formattedHostName;
-    if (providerName.inputValue !== PROVIDERS.NRQL.value) {
+    if (providerName.inputValue === PROVIDERS.STATUS_PAL.value) {
+      formattedHostName = encodeURI(
+        `https://${subDomain.inputValue}.statuspal.io`
+      );
+    } else if (providerName.inputValue !== PROVIDERS.NRQL.value) {
       formattedHostName = hostRequiresProxy
         ? corsProxyAddress.inputValue.replace('{url}', hostName?.inputValue)
         : hostName?.inputValue;
@@ -214,7 +224,8 @@ export default class StatusPagesDashboard extends React.PureComponent {
       hostName: formattedHostName,
       provider: providerName.inputValue,
       hostLogo: logoUrl.inputValue,
-      nrqlQuery: nrqlQuery?.inputValue
+      nrqlQuery: nrqlQuery?.inputValue,
+      subDomain: subDomain?.inputValue
     };
 
     await this.addHostName(hostNameObject);
@@ -339,6 +350,11 @@ export default class StatusPagesDashboard extends React.PureComponent {
       if (updatedFormInputs.providerName.inputValue === PROVIDERS.NRQL.value) {
         delete updatedFormInputs.hostName;
         updatedFormInputs.nrqlQuery = { ...emptyInputState };
+      } else if (
+        updatedFormInputs.providerName.inputValue === PROVIDERS.STATUS_PAL.value
+      ) {
+        delete updatedFormInputs.hostName;
+        updatedFormInputs.subDomain = { ...emptyInputState };
       } else {
         delete updatedFormInputs.nrqlQuery;
         updatedFormInputs.hostName = { ...emptyInputState };
@@ -503,7 +519,8 @@ export default class StatusPagesDashboard extends React.PureComponent {
       providerName,
       logoUrl,
       nrqlQuery,
-      corsProxyAddress
+      corsProxyAddress,
+      subDomain
     } = formInputs;
 
     return (
@@ -632,22 +649,27 @@ export default class StatusPagesDashboard extends React.PureComponent {
             validationText={serviceName.validationText}
           />
 
-          {providerName.inputValue === PROVIDERS.NRQL.value ? (
-            <>
-              <TextFieldWrapper
-                label="NRQL"
-                placeholder="Put your NRQL query here"
-                onChange={event => {
-                  this.updateInputValue(event, 'nrqlQuery');
-                }}
-                value={nrqlQuery.inputValue}
-                validationText={nrqlQuery.validationText}
-              />
-              <p>
-                Correct NRQL query must contain following fields/aliases:
-                EventName, EventStatus and EventTimeStamp.
-              </p>
-            </>
+          {providerName.inputValue === PROVIDERS.NRQL.value && (
+            <TextFieldWrapper
+              label="NRQL"
+              placeholder="Put your NRQL query here"
+              onChange={event => {
+                this.updateInputValue(event, 'nrqlQuery');
+              }}
+              value={nrqlQuery.inputValue}
+              validationText={nrqlQuery.validationText}
+            />
+          )}
+          {providerName.inputValue === PROVIDERS.STATUS_PAL.value ? (
+            <TextFieldWrapper
+              label="Subdomain"
+              placeholder="Put your Statuspal subdomain here"
+              onChange={event => {
+                this.updateInputValue(event, 'subDomain');
+              }}
+              value={subDomain.inputValue}
+              validationText={subDomain.validationText}
+            />
           ) : (
             <TextFieldWrapper
               label="Hostname"
