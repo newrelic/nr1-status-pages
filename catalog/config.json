@@ -13,5 +13,5 @@
       "url": "https://discuss.newrelic.com/t/statuspage-io-nerdpack/83284"
     }
   },
-  "whatsNew": "- Feat: support proxied status services for CORS issues\n\n - Feat: support for NRQL-based status cards\n\n - Feat: support RSS status services\n\n - Fix: Resolving support for multiple status page services"
+  "whatsNew": "- Feat: support proxied status services for CORS issues\n\n - Feat: support for NRQL-based status cards\n\n - Feat: support RSS status services\n\n - Feat: support for Statuspal\n\n - Fix: Resolving support for multiple status page services"
 }
