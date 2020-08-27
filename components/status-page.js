@@ -5,6 +5,7 @@ import 'web-animations-js';
 import Network from '../utilities/network';
 import NRQLHelper from '../utilities/nrql-helper';
 import RSSHelper from '../utilities/rss-helper';
+import StatuspalHelper from '../utilities/statuspal-helper';
 import CurrentIncidents from './current-incidents';
 import FormatService from '../utilities/format-service';
 import {
@@ -44,11 +45,16 @@ const PROVIDERS = [
   {
     value: 'rss',
     label: 'RSS Feed'
+  },
+  {
+    value: 'statusPal',
+    label: 'Statuspal'
   }
 ];
 
 const NRQL_PROVIDER_NAME = 'nrql';
 const RSS_PROVIDER_NAME = 'rss';
+const STATUSPAL_PROVIDER_NAME = 'statusPal';
 
 export default class StatusPage extends React.PureComponent {
   static propTypes = {
@@ -75,6 +81,7 @@ export default class StatusPage extends React.PureComponent {
       editedServiceName: this.props.hostname.serviceName,
       editedHostName: this.props.hostname.hostName,
       editedNrqlQuery: this.props.hostname.nrqlQuery,
+      editedSubDomain: this.props.hostname.subDomain,
       editedHostProvider: this.props.hostname.provider,
       editedHostLogo: this.props.hostname.hostLogo,
       editedHostId: this.props.hostname.id
@@ -102,7 +109,12 @@ export default class StatusPage extends React.PureComponent {
     this.stopPollingData();
 
     const { refreshRate, accountId } = this.props;
-    const { editedHostProvider, editedHostName, editedNrqlQuery } = this.state;
+    const {
+      editedHostProvider,
+      editedHostName,
+      editedNrqlQuery,
+      editedSubDomain
+    } = this.state;
 
     if (editedHostProvider === NRQL_PROVIDER_NAME) {
       this.StatusPageNetwork = new NRQLHelper(
@@ -114,6 +126,13 @@ export default class StatusPage extends React.PureComponent {
       this.StatusPageNetwork.pollCurrentIncidents(this.setData);
     } else if (editedHostProvider === RSS_PROVIDER_NAME) {
       this.StatusPageNetwork = new RSSHelper(editedHostName, refreshRate);
+
+      this.StatusPageNetwork.pollCurrentIncidents(this.setData);
+    } else if (editedHostProvider === STATUSPAL_PROVIDER_NAME) {
+      this.StatusPageNetwork = new StatuspalHelper(
+        editedSubDomain,
+        refreshRate
+      );
 
       this.StatusPageNetwork.pollCurrentIncidents(this.setData);
     } else {
@@ -323,6 +342,7 @@ export default class StatusPage extends React.PureComponent {
     hostname,
     provider,
     nrqlQuery,
+    subDomain,
     selectedIndex
   ) {
     if (!event.target.closest('.destructive')) {
@@ -335,6 +355,7 @@ export default class StatusPage extends React.PureComponent {
             hostname: hostname,
             provider: provider,
             nrqlQuery: this.state.editedNrqlQuery,
+            subDomain: this.state.editedSubDomain,
             accountId: this.props.accountId,
             timelineItemIndex: selectedIndex
           }
@@ -350,6 +371,7 @@ export default class StatusPage extends React.PureComponent {
             hostname: hostname,
             provider: provider,
             nrqlQuery: nrqlQuery,
+            subDomain: subDomain,
             accountId: this.props.accountId
           }
         });
@@ -382,6 +404,7 @@ export default class StatusPage extends React.PureComponent {
       provider: this.state.editedHostProvider,
       hostLogo: this.state.editedHostLogo,
       nrqlQuery: this.state.editedNrqlQuery,
+      subDomain: this.state.editedSubDomain,
       id: this.state.editedHostId
     };
 
@@ -496,18 +519,34 @@ export default class StatusPage extends React.PureComponent {
             />
           ) : (
             <>
-              <TextField
-                label="Hostname"
-                placeholder="https://status.myservice.com/"
-                className="status-page-setting"
-                onChange={() =>
-                  this.setState(previousState => ({
-                    ...previousState,
-                    editedHostName: event.target.value
-                  }))
-                }
-                defaultValue={hostname.hostName}
-              />
+              {hostname.provider === STATUSPAL_PROVIDER_NAME ? (
+                <TextField
+                  label="Subdomain"
+                  placeholder="myservice.com"
+                  className="status-page-setting"
+                  onChange={() =>
+                    this.setState(previousState => ({
+                      ...previousState,
+                      editedSubDomain: event.target.value
+                    }))
+                  }
+                  defaultValue={hostname.subDomain}
+                />
+              ) : (
+                <TextField
+                  label="Hostname"
+                  placeholder="https://status.myservice.com/"
+                  className="status-page-setting"
+                  onChange={() =>
+                    this.setState(previousState => ({
+                      ...previousState,
+                      editedHostName: event.target.value
+                    }))
+                  }
+                  defaultValue={hostname.hostName}
+                />
+              )}
+
               <Dropdown
                 title={
                   PROVIDERS.find(
@@ -606,7 +645,8 @@ export default class StatusPage extends React.PureComponent {
             refreshRate,
             this.state.editedHostName,
             this.state.editedHostProvider,
-            this.state.editedNrqlQuery
+            this.state.editedNrqlQuery,
+            this.state.editedSubDomain
           )
         }
       >
@@ -684,6 +724,7 @@ export default class StatusPage extends React.PureComponent {
           provider={hostname.provider}
           accountId={accountId}
           nrqlQuery={hostname.nrqlQuery}
+          subDomain={hostname.subDomain}
           handleTileClick={i => {
             this.handleTileClick(
               statusPageIoSummaryData,
@@ -691,6 +732,7 @@ export default class StatusPage extends React.PureComponent {
               this.state.editedHostName,
               this.state.editedHostProvider,
               this.state.editedNrqlQuery,
+              this.state.editedSubDomain,
               i
             );
           }}

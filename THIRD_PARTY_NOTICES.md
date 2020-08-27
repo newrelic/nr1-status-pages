@@ -65,7 +65,7 @@ THE SOFTWARE.
 
 ### dayjs
 
-This product includes source derived from [dayjs](https://github.com/iamkun/dayjs) ([v1.8.29](https://github.com/iamkun/dayjs/tree/v1.8.29)), distributed under the [MIT License](https://github.com/iamkun/dayjs/blob/v1.8.29/LICENSE):
+This product includes source derived from [dayjs](https://github.com/iamkun/dayjs) ([v1.8.34](https://github.com/iamkun/dayjs/tree/v1.8.34)), distributed under the [MIT License](https://github.com/iamkun/dayjs/blob/v1.8.34/LICENSE):
 
 ```
 MIT License
@@ -123,7 +123,7 @@ SOFTWARE.
 
 ### react-dom
 
-This product includes source derived from [react-dom](https://github.com/facebook/react) ([v16.12.0](https://github.com/facebook/react/tree/v16.12.0)), distributed under the [MIT License](https://github.com/facebook/react/blob/v16.12.0/LICENSE):
+This product includes source derived from [react-dom](https://github.com/facebook/react) ([v16.6.3](https://github.com/facebook/react/tree/v16.6.3)), distributed under the [MIT License](https://github.com/facebook/react/blob/v16.6.3/LICENSE):
 
 ```
 MIT License
@@ -181,7 +181,7 @@ SOFTWARE.
 
 ### react
 
-This product includes source derived from [react](https://github.com/facebook/react) ([v16.12.0](https://github.com/facebook/react/tree/v16.12.0)), distributed under the [MIT License](https://github.com/facebook/react/blob/v16.12.0/LICENSE):
+This product includes source derived from [react](https://github.com/facebook/react) ([v16.6.3](https://github.com/facebook/react/tree/v16.6.3)), distributed under the [MIT License](https://github.com/facebook/react/blob/v16.6.3/LICENSE):
 
 ```
 MIT License
@@ -210,7 +210,7 @@ SOFTWARE.
 
 ### rss-parser
 
-This product includes source derived from [rss-parser](https://github.com/bobby-brennan/rss-parser) ([v3.8.0](https://github.com/bobby-brennan/rss-parser/tree/v3.8.0)), distributed under the [MIT License](https://github.com/bobby-brennan/rss-parser/blob/v3.8.0/LICENSE):
+This product includes source derived from [rss-parser](https://github.com/bobby-brennan/rss-parser) ([v3.9.0](https://github.com/bobby-brennan/rss-parser/tree/v3.9.0)), distributed under the [MIT License](https://github.com/bobby-brennan/rss-parser/blob/v3.9.0/LICENSE):
 
 ```
 MIT License
@@ -404,7 +404,7 @@ limitations under the License.
 
 ### @newrelic/eslint-plugin-newrelic
 
-This product includes source derived from [@newrelic/eslint-plugin-newrelic](https://github.com/NewRelic/eslint-plugin-newrelic) ([v0.3.0](https://github.com/NewRelic/eslint-plugin-newrelic/tree/v0.3.0)), distributed under the [Apache-2.0 License](https://github.com/NewRelic/eslint-plugin-newrelic/blob/v0.3.0/LICENSE):
+This product includes source derived from [@newrelic/eslint-plugin-newrelic](https://github.com/NewRelic/eslint-plugin-newrelic) ([v0.3.1](https://github.com/NewRelic/eslint-plugin-newrelic/tree/v0.3.1)), distributed under the [Apache-2.0 License](https://github.com/NewRelic/eslint-plugin-newrelic/blob/v0.3.1/LICENSE):
 
 ```
                                  Apache License

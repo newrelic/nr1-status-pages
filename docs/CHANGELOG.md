@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/newrelic/nr1-status-pages/compare/v1.0.3...v1.1.0) (2020-08-26)
+
+
+### Features
+
+* add Statuspal to the catalog release ([fe654c3](https://github.com/newrelic/nr1-status-pages/commit/fe654c3b13fd82c2a33ac097906112d29a787755))
+
 ## [1.0.3](https://github.com/newrelic/nr1-status-pages/compare/v1.0.2...v1.0.3) (2020-07-24)
 
 
