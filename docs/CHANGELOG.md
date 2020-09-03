@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/newrelic/nr1-status-pages/compare/v1.1.0...v1.1.1) (2020-09-03)
+
+
+### Bug Fixes
+
+* Trigger release and changelog generation (via GH Actions) ([feed3cd](https://github.com/newrelic/nr1-status-pages/commit/feed3cd3a127217d45fd00020a2018d02de1e7cc))
+
 # [1.1.0](https://github.com/newrelic/nr1-status-pages/compare/v1.0.3...v1.1.0) (2020-08-26)
 
 
