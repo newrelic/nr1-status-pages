@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Wed Aug 26 2020 19:39:19 GMT+0000 (Coordinated Universal Time)",
+  "lastUpdated": "Thu Sep 03 2020 01:34:30 GMT+0000 (Coordinated Universal Time)",
   "projectName": "nr1-status-pages",
   "projectUrl": "https://github.com/newrelic/nr1-status-pages",
   "includeDev": true,
@@ -16,15 +16,15 @@
       "licenseTextSource": "file",
       "publisher": "Matt Zabriskie"
     },
-    "dayjs@1.8.34": {
+    "dayjs@1.8.35": {
       "name": "dayjs",
-      "version": "1.8.34",
-      "range": "^1.8.34",
+      "version": "1.8.35",
+      "range": "^1.8.35",
       "licenses": "MIT",
       "repoUrl": "https://github.com/iamkun/dayjs",
-      "versionedRepoUrl": "https://github.com/iamkun/dayjs/tree/v1.8.34",
+      "versionedRepoUrl": "https://github.com/iamkun/dayjs/tree/v1.8.35",
       "licenseFile": "node_modules/dayjs/LICENSE",
-      "licenseUrl": "https://github.com/iamkun/dayjs/blob/v1.8.34/LICENSE",
+      "licenseUrl": "https://github.com/iamkun/dayjs/blob/v1.8.35/LICENSE",
       "licenseTextSource": "file",
       "publisher": "iamkun"
     },
@@ -39,17 +39,6 @@
       "licenseUrl": "https://github.com/facebook/prop-types/blob/v15.7.2/LICENSE",
       "licenseTextSource": "file"
     },
-    "react-dom@16.6.3": {
-      "name": "react-dom",
-      "version": "16.6.3",
-      "range": "16.6.3",
-      "licenses": "MIT",
-      "repoUrl": "https://github.com/facebook/react",
-      "versionedRepoUrl": "https://github.com/facebook/react/tree/v16.6.3",
-      "licenseFile": "node_modules/react-dom/LICENSE",
-      "licenseUrl": "https://github.com/facebook/react/blob/v16.6.3/LICENSE",
-      "licenseTextSource": "file"
-    },
     "react-markdown@4.3.1": {
       "name": "react-markdown",
       "version": "4.3.1",
@@ -62,17 +51,6 @@
       "licenseTextSource": "file",
       "publisher": "Espen Hovlandsdal",
       "email": "espen@hovlandsdal.com"
-    },
-    "react@16.6.3": {
-      "name": "react",
-      "version": "16.6.3",
-      "range": "16.6.3",
-      "licenses": "MIT",
-      "repoUrl": "https://github.com/facebook/react",
-      "versionedRepoUrl": "https://github.com/facebook/react/tree/v16.6.3",
-      "licenseFile": "node_modules/react/LICENSE",
-      "licenseUrl": "https://github.com/facebook/react/blob/v16.6.3/LICENSE",
-      "licenseTextSource": "file"
     },
     "rss-parser@3.9.0": {
       "name": "rss-parser",
@@ -184,6 +162,28 @@
       "licenseUrl": "https://github.com/prettier/prettier/blob/v1.19.1/LICENSE",
       "licenseTextSource": "file",
       "publisher": "James Long"
+    },
+    "react-dom@16.6.3": {
+      "name": "react-dom",
+      "version": "16.6.3",
+      "range": "16.6.3",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/facebook/react",
+      "versionedRepoUrl": "https://github.com/facebook/react/tree/v16.6.3",
+      "licenseFile": "node_modules/react-dom/LICENSE",
+      "licenseUrl": "https://github.com/facebook/react/blob/v16.6.3/LICENSE",
+      "licenseTextSource": "file"
+    },
+    "react@16.6.3": {
+      "name": "react",
+      "version": "16.6.3",
+      "range": "16.6.3",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/facebook/react",
+      "versionedRepoUrl": "https://github.com/facebook/react/tree/v16.6.3",
+      "licenseFile": "node_modules/react/LICENSE",
+      "licenseUrl": "https://github.com/facebook/react/blob/v16.6.3/LICENSE",
+      "licenseTextSource": "file"
     }
   }
 }
