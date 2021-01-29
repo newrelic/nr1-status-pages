@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/newrelic/nr1-status-pages/compare/v1.1.1...v1.1.2) (2021-01-29)
+
+
+### Bug Fixes
+
+* Update prop deprecations on nr1 Dropdown ([017bf2b](https://github.com/newrelic/nr1-status-pages/commit/017bf2b568b8157f87521a53dc16ed8511140bb1))
+
 ## [1.1.1](https://github.com/newrelic/nr1-status-pages/compare/v1.1.0...v1.1.1) (2020-09-03)
 
 
