@@ -649,7 +649,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
             validationText={serviceName.validationText}
           />
 
-          {providerName.inputValue === PROVIDERS.NRQL.value && (
+          {providerName.inputValue === PROVIDERS.NRQL.value ? (
             <TextFieldWrapper
               label="NRQL"
               placeholder="Put your NRQL query here"
@@ -659,8 +659,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
               value={nrqlQuery.inputValue}
               validationText={nrqlQuery.validationText}
             />
-          )}
-          {providerName.inputValue === PROVIDERS.STATUS_PAL.value ? (
+          ): providerName.inputValue === PROVIDERS.STATUS_PAL.value ? (
             <TextFieldWrapper
               label="Subdomain"
               placeholder="Put your Statuspal subdomain here"
