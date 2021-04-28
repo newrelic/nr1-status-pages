@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/newrelic/nr1-status-pages/compare/v1.1.2...v1.1.3) (2021-04-28)
+
+
+### Bug Fixes
+
+* update readme to include needing nr1 cli ([6dff5dc](https://github.com/newrelic/nr1-status-pages/commit/6dff5dc3d9a0a57d584d067bce3f35d1f829e2cd))
+
 ## [1.1.2](https://github.com/newrelic/nr1-status-pages/compare/v1.1.1...v1.1.2) (2021-01-29)
 
 
