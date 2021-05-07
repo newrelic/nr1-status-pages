@@ -2,7 +2,7 @@
   "private": true,
   "name": "nr1-status-pages",
   "description": "Nerdpack nr1-status-pages",
-  "version": "1.1.2",
+  "version": "1.1.4",
   "bugs": {
     "email": "opensource+nr1-status-pages@newrelic.com"
   },
@@ -14,10 +14,10 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "dayjs": "^1.8.35",
+    "dayjs": "^1.10.4",
     "prop-types": "^15.6.2",
     "react-markdown": "^4.3.1",
-    "rss-parser": "^3.9.0",
+    "rss-parser": "^3.12.0",
     "uuid": "^3.4.0",
     "vertical-timeline-component-for-react": "^1.0.7",
     "web-animations-js": "^2.3.2"
