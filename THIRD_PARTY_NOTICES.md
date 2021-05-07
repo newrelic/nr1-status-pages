@@ -38,7 +38,7 @@ code, the source code can be found at [https://github.com/newrelic/nr1-status-pa
 
 ### axios
 
-This product includes source derived from [axios](https://github.com/axios/axios) ([v0.19.2](https://github.com/axios/axios/tree/v0.19.2)), distributed under the [MIT License](https://github.com/axios/axios/blob/v0.19.2/LICENSE):
+This product includes source derived from [axios](https://github.com/axios/axios) ([v0.21.1](https://github.com/axios/axios/tree/v0.21.1)), distributed under the [MIT License](https://github.com/axios/axios/blob/v0.21.1/LICENSE):
 
 ```
 Copyright (c) 2014-present Matt Zabriskie

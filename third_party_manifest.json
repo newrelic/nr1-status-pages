@@ -1,18 +1,18 @@
 {
-  "lastUpdated": "Fri May 07 2021 17:59:54 GMT+0000 (Coordinated Universal Time)",
+  "lastUpdated": "Fri May 07 2021 18:04:03 GMT+0000 (Coordinated Universal Time)",
   "projectName": "nr1-status-pages",
   "projectUrl": "https://github.com/newrelic/nr1-status-pages",
   "includeDev": true,
   "dependencies": {
-    "axios@0.19.2": {
+    "axios@0.21.1": {
       "name": "axios",
-      "version": "0.19.2",
-      "range": "^0.19.2",
+      "version": "0.21.1",
+      "range": "^0.21.1",
       "licenses": "MIT",
       "repoUrl": "https://github.com/axios/axios",
-      "versionedRepoUrl": "https://github.com/axios/axios/tree/v0.19.2",
+      "versionedRepoUrl": "https://github.com/axios/axios/tree/v0.21.1",
       "licenseFile": "node_modules/axios/LICENSE",
-      "licenseUrl": "https://github.com/axios/axios/blob/v0.19.2/LICENSE",
+      "licenseUrl": "https://github.com/axios/axios/blob/v0.21.1/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Matt Zabriskie"
     },
