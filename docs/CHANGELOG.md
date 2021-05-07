@@ -1,3 +1,11 @@
+## [1.1.4](https://github.com/newrelic/nr1-status-pages/compare/v1.1.3...v1.1.4) (2021-05-07)
+
+
+### Bug Fixes
+
+* eslinting issues ([028373d](https://github.com/newrelic/nr1-status-pages/commit/028373dd1b864c6861b434909d0a1589224156ad))
+* upgrade rss-parser from 3.9.0 to 3.12.0 ([7f0a204](https://github.com/newrelic/nr1-status-pages/commit/7f0a20460c9fdfd8c00502ef9b2e0f4a6653b761))
+
 ## [1.1.3](https://github.com/newrelic/nr1-status-pages/compare/v1.1.2...v1.1.3) (2021-04-28)
 
 
