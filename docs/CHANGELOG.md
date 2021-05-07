@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/newrelic/nr1-status-pages/compare/v1.1.4...v1.1.5) (2021-05-07)
+
+
+### Bug Fixes
+
+* upgrade dayjs from 1.8.35 to 1.10.4 ([cccbeea](https://github.com/newrelic/nr1-status-pages/commit/cccbeea4490658c02f3dd6d2516cccb183197e4d))
+
 ## [1.1.4](https://github.com/newrelic/nr1-status-pages/compare/v1.1.3...v1.1.4) (2021-05-07)
 
 
