@@ -13,7 +13,7 @@
     "eslint-fix": "eslint --fix nerdlets/ components/ utilities/"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "dayjs": "^1.10.4",
     "prop-types": "^15.6.2",
     "react-markdown": "^4.3.1",
