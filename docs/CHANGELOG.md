@@ -1,3 +1,10 @@
+## [1.1.6](https://github.com/newrelic/nr1-status-pages/compare/v1.1.5...v1.1.6) (2021-05-07)
+
+
+### Bug Fixes
+
+* upgrade axios from 0.19.2 to 0.21.1 ([101b5db](https://github.com/newrelic/nr1-status-pages/commit/101b5dbcd6e96e03b78315cbfd11ec2fdd3e15a2))
+
 ## [1.1.5](https://github.com/newrelic/nr1-status-pages/compare/v1.1.4...v1.1.5) (2021-05-07)
 
 
