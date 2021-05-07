@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Thu Sep 03 2020 01:34:30 GMT+0000 (Coordinated Universal Time)",
+  "lastUpdated": "Fri May 07 2021 17:22:02 GMT+0000 (Coordinated Universal Time)",
   "projectName": "nr1-status-pages",
   "projectUrl": "https://github.com/newrelic/nr1-status-pages",
   "includeDev": true,
@@ -52,15 +52,15 @@
       "publisher": "Espen Hovlandsdal",
       "email": "espen@hovlandsdal.com"
     },
-    "rss-parser@3.9.0": {
+    "rss-parser@3.12.0": {
       "name": "rss-parser",
-      "version": "3.9.0",
-      "range": "^3.9.0",
+      "version": "3.12.0",
+      "range": "^3.12.0",
       "licenses": "MIT",
       "repoUrl": "https://github.com/bobby-brennan/rss-parser",
-      "versionedRepoUrl": "https://github.com/bobby-brennan/rss-parser/tree/v3.9.0",
+      "versionedRepoUrl": "https://github.com/bobby-brennan/rss-parser/tree/v3.12.0",
       "licenseFile": "node_modules/rss-parser/LICENSE",
-      "licenseUrl": "https://github.com/bobby-brennan/rss-parser/blob/v3.9.0/LICENSE",
+      "licenseUrl": "https://github.com/bobby-brennan/rss-parser/blob/v3.12.0/LICENSE",
       "licenseTextSource": "file",
       "publisher": "Bobby Brennan"
     },
