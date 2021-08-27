@@ -4,6 +4,7 @@ import 'web-animations-js';
 
 import Network from '../utilities/network';
 import NRQLHelper from '../utilities/nrql-helper';
+import WorkloadHelper from '../utilities/workload-helper';
 import RSSHelper from '../utilities/rss-helper';
 import StatuspalHelper from '../utilities/statuspal-helper';
 import CurrentIncidents from './current-incidents';
@@ -23,6 +24,7 @@ import GitHubLogo from '../assets/logo-github.svg';
 import NewRelicLogo from '../assets/logo-new-relic.png';
 import JiraLogo from '../assets/logo-jira.png';
 import GoogleCloudProviderLogo from '../assets/logo-google-cloud.svg';
+import TextFieldWrapper from "../nerdlets/status-page-dashboard/TextFieldWrapper/TextFieldWrapper";
 
 const createOption = label => ({
   label,
@@ -53,6 +55,7 @@ const PROVIDERS = [
 ];
 
 const NRQL_PROVIDER_NAME = 'nrql';
+const WORKLOAD_PROVIDER_NAME = 'workload';
 const RSS_PROVIDER_NAME = 'rss';
 const STATUSPAL_PROVIDER_NAME = 'statusPal';
 
@@ -81,6 +84,7 @@ export default class StatusPage extends React.PureComponent {
       editedServiceName: this.props.hostname.serviceName,
       editedHostName: this.props.hostname.hostName,
       editedNrqlQuery: this.props.hostname.nrqlQuery,
+      editedWorkloadGuid: this.props.hostname.workloadGuid,
       editedSubDomain: this.props.hostname.subDomain,
       editedHostProvider: this.props.hostname.provider,
       editedHostLogo: this.props.hostname.hostLogo,
@@ -113,12 +117,21 @@ export default class StatusPage extends React.PureComponent {
       editedHostProvider,
       editedHostName,
       editedNrqlQuery,
+      editedWorkloadGuid,
       editedSubDomain
     } = this.state;
 
     if (editedHostProvider === NRQL_PROVIDER_NAME) {
       this.StatusPageNetwork = new NRQLHelper(
         editedNrqlQuery,
+        refreshRate,
+        accountId
+      );
+
+      this.StatusPageNetwork.pollCurrentIncidents(this.setData);
+    } else if (editedHostProvider === WORKLOAD_PROVIDER_NAME) {
+      this.StatusPageNetwork = new WorkloadHelper(
+        editedWorkloadGuid,
         refreshRate,
         accountId
       );
@@ -180,7 +193,10 @@ export default class StatusPage extends React.PureComponent {
   autoSetLogo(hostname) {
     const { serviceName, hostName, hostLogo, provider } = hostname;
 
-    if (provider === NRQL_PROVIDER_NAME) {
+    if (
+      provider === NRQL_PROVIDER_NAME ||
+      provider === WORKLOAD_PROVIDER_NAME
+    ) {
       if (hostLogo) {
         return <img src={hostLogo} className="service-logo" alt="nrql" />;
       } else {
@@ -355,6 +371,7 @@ export default class StatusPage extends React.PureComponent {
             hostname: hostname,
             provider: provider,
             nrqlQuery: this.state.editedNrqlQuery,
+            workloadGuid: this.state.editedWorkloadGuid,
             subDomain: this.state.editedSubDomain,
             accountId: this.props.accountId,
             timelineItemIndex: selectedIndex
@@ -487,6 +504,70 @@ export default class StatusPage extends React.PureComponent {
   renderSettings() {
     const { hostname } = this.props;
 
+    const providerSettings = (() => {
+      if (hostname.provider === NRQL_PROVIDER_NAME) {
+        return (
+          <TextField
+            label="NRQL"
+            placeholder="Put your NRQL query here"
+            className="status-page-setting"
+            onChange={() =>
+              this.setState(previousState => ({
+                ...previousState,
+                editedNrqlQuery: event.target.value
+              }))
+            }
+            defaultValue={hostname.nrqlQuery}
+          />
+        );
+      } else if (hostname.provider === WORKLOAD_PROVIDER_NAME) {
+        return (
+          <TextField
+            label="Workload"
+            placeholder="Put your Workload entity guid here"
+            className="status-page-setting"
+            onChange={() =>
+              this.setState(previousState => ({
+                ...previousState,
+                editedWorkloadguid: event.target.value
+              }))
+            }
+            defaultValue={hostname.workloadGuid}
+          />
+        );
+      } else if (hostname.provider === STATUSPAL_PROVIDER_NAME) {
+        return (
+          <TextField
+            label="Subdomain"
+            placeholder="myservice.com"
+            className="status-page-setting"
+            onChange={() =>
+              this.setState(previousState => ({
+                ...previousState,
+                editedSubDomain: event.target.value
+              }))
+            }
+            defaultValue={hostname.subDomain}
+          />
+        );
+      } else {
+        return (
+          <TextField
+            label="Hostname"
+            placeholder="https://status.myservice.com/"
+            className="status-page-setting"
+            onChange={() =>
+              this.setState(previousState => ({
+                ...previousState,
+                editedHostName: event.target.value
+              }))
+            }
+            defaultValue={hostname.hostName}
+          />
+        );
+      }
+    })();
+
     return (
       <div
         className="status-page-settings-container"
@@ -504,75 +585,7 @@ export default class StatusPage extends React.PureComponent {
             }
             defaultValue={hostname.serviceName}
           />
-          {hostname.provider === NRQL_PROVIDER_NAME ? (
-            <TextField
-              label="NRQL"
-              placeholder="Put your NRQL query here"
-              className="status-page-setting"
-              onChange={() =>
-                this.setState(previousState => ({
-                  ...previousState,
-                  editedNrqlQuery: event.target.value
-                }))
-              }
-              defaultValue={hostname.nrqlQuery}
-            />
-          ) : (
-            <>
-              {hostname.provider === STATUSPAL_PROVIDER_NAME ? (
-                <TextField
-                  label="Subdomain"
-                  placeholder="myservice.com"
-                  className="status-page-setting"
-                  onChange={() =>
-                    this.setState(previousState => ({
-                      ...previousState,
-                      editedSubDomain: event.target.value
-                    }))
-                  }
-                  defaultValue={hostname.subDomain}
-                />
-              ) : (
-                <TextField
-                  label="Hostname"
-                  placeholder="https://status.myservice.com/"
-                  className="status-page-setting"
-                  onChange={() =>
-                    this.setState(previousState => ({
-                      ...previousState,
-                      editedHostName: event.target.value
-                    }))
-                  }
-                  defaultValue={hostname.hostName}
-                />
-              )}
-
-              <Dropdown
-                title={
-                  PROVIDERS.find(
-                    element => element.value === this.state.editedHostProvider
-                  )?.label
-                }
-                label="Provider"
-                className="status-page-setting"
-              >
-                {PROVIDERS.map(({ value, label }) => (
-                  <DropdownItem
-                    key={value}
-                    selected={hostname.provider === value}
-                    onClick={() =>
-                      this.setState(previousState => ({
-                        ...previousState,
-                        editedHostProvider: value
-                      }))
-                    }
-                  >
-                    {label}
-                  </DropdownItem>
-                ))}
-              </Dropdown>
-            </>
-          )}
+          {providerSettings}
           <TextField
             label="Service logo"
             className="status-page-setting"

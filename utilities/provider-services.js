@@ -13,6 +13,7 @@ import {
   statusPalFormatter,
   statusPalIncidentFormatter
 } from './formatters/status-pal';
+import {workloadFormatter, workloadIncidentFormatter} from "./formatters/workload";
 
 const providers = {
   google: {
@@ -63,6 +64,16 @@ const providers = {
     summaryFormatter: nrqlFormatter,
     incidentFormatter: nrqlIncidentFormatter
   },
+  workload: {
+    impactMap: {
+      warning: 'minor',
+      major: 'major',
+      critical: 'critical'
+    },
+    name: 'Workload',
+    summaryFormatter: workloadFormatter,
+    incidentFormatter: workloadIncidentFormatter
+  },
   rss: {
     impactMap: {
       warning: 'minor',
@@ -91,10 +102,6 @@ export const getProvider = providerKey => {
     providerKey = 'statusPageIo';
   } else if (providerKey === 'Status Io') {
     providerKey = 'statusIo';
-  } else if (providerKey === 'nrql') {
-    providerKey = 'nrql';
-  } else if (providerKey === 'rss') {
-    providerKey = 'rss';
   } else if (providerKey === 'Statuspal') {
     providerKey = 'statusPal';
   }

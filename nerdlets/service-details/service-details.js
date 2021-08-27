@@ -8,8 +8,10 @@ import { Icon, Button } from 'nr1';
 import NRQLHelper from '../../utilities/nrql-helper';
 import RSSHelper from '../../utilities/rss-helper';
 import StatuspalHelper from '../../utilities/statuspal-helper';
+import WorkloadHelper from '../../utilities/workload-helper';
 
 const NRQL_PROVIDER_NAME = 'nrql';
+const WORKLOAD_PROVIDER_NAME = 'workload';
 const RSS_PROVIDER_NAME = 'rss';
 const STATUSPAL_PROVIDER_NAME = 'statusPal';
 
@@ -20,6 +22,7 @@ export default class ServiceDetails extends React.PureComponent {
     refreshRate: PropTypes.number,
     timelineItemIndex: PropTypes.number,
     nrqlQuery: PropTypes.string,
+    workloadGuid: PropTypes.string,
     subDomain: PropTypes.string,
     accountId: PropTypes.number
   };
@@ -50,6 +53,7 @@ export default class ServiceDetails extends React.PureComponent {
       refreshRate,
       provider,
       nrqlQuery,
+      workloadGuid,
       subDomain
     } = this.props;
 
@@ -61,7 +65,8 @@ export default class ServiceDetails extends React.PureComponent {
     if (
       prevProps.hostname !== hostname ||
       prevProps.subDomain !== subDomain ||
-      prevProps.nrqlQuery !== nrqlQuery
+      prevProps.nrqlQuery !== nrqlQuery ||
+      prevProps.workloadGuid !== workloadGuid
     ) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ currentIncidents: undefined });
@@ -78,6 +83,13 @@ export default class ServiceDetails extends React.PureComponent {
       const { nrqlQuery, accountId } = this.props;
       this.statusPageNetwork = new NRQLHelper(
         nrqlQuery,
+        refreshRate,
+        accountId
+      );
+    } else if (provider === WORKLOAD_PROVIDER_NAME) {
+      const { workloadGuid, accountId } = this.props;
+      this.statusPageNetwork = new WorkloadHelper(
+        workloadGuid,
         refreshRate,
         accountId
       );
@@ -155,6 +167,14 @@ export default class ServiceDetails extends React.PureComponent {
   buildTimelineItemDetails(incident) {
     const incident_updates = incident.incident_updates.map(
       (incident_update, index) => {
+        let body = <span className="value">{incident_update.body}</span>;
+        if (incident_update.link_url) {
+          body = (
+            <a href={incident_update.link_url} target="_blank" rel="noreferrer">
+              {incident_update.body}
+            </a>
+          );
+        }
         return (
           <li
             key={`${incident_update.created_at}-${index}`}
@@ -163,7 +183,7 @@ export default class ServiceDetails extends React.PureComponent {
             <span className="key">
               {dayjs(incident_update.display_at).format('h:mm a')}:
             </span>
-            <span className="value">{incident_update.body}</span>
+            {body}
           </li>
         );
       }
