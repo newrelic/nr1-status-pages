@@ -9,50 +9,17 @@ import RSSHelper from '../utilities/rss-helper';
 import StatuspalHelper from '../utilities/statuspal-helper';
 import CurrentIncidents from './current-incidents';
 import FormatService from '../utilities/format-service';
-import {
-  Spinner,
-  Button,
-  Icon,
-  TextField,
-  Dropdown,
-  DropdownItem,
-  Link,
-  navigation
-} from 'nr1';
+import { Spinner, Button, Icon, TextField, Link, navigation } from 'nr1';
 
 import GitHubLogo from '../assets/logo-github.svg';
 import NewRelicLogo from '../assets/logo-new-relic.png';
 import JiraLogo from '../assets/logo-jira.png';
 import GoogleCloudProviderLogo from '../assets/logo-google-cloud.svg';
-import TextFieldWrapper from "../nerdlets/status-page-dashboard/TextFieldWrapper/TextFieldWrapper";
 
 const createOption = label => ({
   label,
   value: label
 });
-
-const PROVIDERS = [
-  {
-    value: 'statusPageIo',
-    label: 'Status Page'
-  },
-  {
-    value: 'google',
-    label: 'Google'
-  },
-  {
-    value: 'statusIo',
-    label: 'Status Io'
-  },
-  {
-    value: 'rss',
-    label: 'RSS Feed'
-  },
-  {
-    value: 'statusPal',
-    label: 'Statuspal'
-  }
-];
 
 const NRQL_PROVIDER_NAME = 'nrql';
 const WORKLOAD_PROVIDER_NAME = 'workload';
@@ -198,7 +165,7 @@ export default class StatusPage extends React.PureComponent {
       provider === WORKLOAD_PROVIDER_NAME
     ) {
       if (hostLogo) {
-        return <img src={hostLogo} className="service-logo" alt="nrql" />;
+        return <img src={hostLogo} className="service-logo" alt={provider} />;
       } else {
         return <h2 className="service-name">{serviceName}</h2>;
       }
@@ -358,6 +325,7 @@ export default class StatusPage extends React.PureComponent {
     hostname,
     provider,
     nrqlQuery,
+    workloadGuid,
     subDomain,
     selectedIndex
   ) {
@@ -388,6 +356,7 @@ export default class StatusPage extends React.PureComponent {
             hostname: hostname,
             provider: provider,
             nrqlQuery: nrqlQuery,
+            workloadGuid: workloadGuid,
             subDomain: subDomain,
             accountId: this.props.accountId
           }
@@ -421,6 +390,7 @@ export default class StatusPage extends React.PureComponent {
       provider: this.state.editedHostProvider,
       hostLogo: this.state.editedHostLogo,
       nrqlQuery: this.state.editedNrqlQuery,
+      workloadGuid: this.state.editedWorkloadGuid,
       subDomain: this.state.editedSubDomain,
       id: this.state.editedHostId
     };
@@ -659,6 +629,7 @@ export default class StatusPage extends React.PureComponent {
             this.state.editedHostName,
             this.state.editedHostProvider,
             this.state.editedNrqlQuery,
+            this.state.editedWorkloadGuid,
             this.state.editedSubDomain
           )
         }
@@ -732,12 +703,7 @@ export default class StatusPage extends React.PureComponent {
         </div>
         <CurrentIncidents
           currentIncidents={currentIncidents}
-          refreshRate={refreshRate}
           hostname={hostname.hostName}
-          provider={hostname.provider}
-          accountId={accountId}
-          nrqlQuery={hostname.nrqlQuery}
-          subDomain={hostname.subDomain}
           handleTileClick={i => {
             this.handleTileClick(
               statusPageIoSummaryData,
@@ -745,6 +711,7 @@ export default class StatusPage extends React.PureComponent {
               this.state.editedHostName,
               this.state.editedHostProvider,
               this.state.editedNrqlQuery,
+              this.state.editedWorkloadGuid,
               this.state.editedSubDomain,
               i
             );
