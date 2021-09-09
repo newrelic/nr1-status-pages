@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/newrelic/nr1-status-pages/compare/v1.1.6...v1.2.0) (2021-09-09)
+
+
+### Features
+
+* release ([a6480ab](https://github.com/newrelic/nr1-status-pages/commit/a6480ab522ff4f5c241e026f5d3a128967209db9))
+
 ## [1.1.6](https://github.com/newrelic/nr1-status-pages/compare/v1.1.5...v1.1.6) (2021-05-07)
 
 
