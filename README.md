@@ -46,7 +46,6 @@ Example subdomains:
 - [galaxygate](https://status.galaxygate.net/) --> From https://status.galaxygate.net/
 - [smtp](https://smtp.statuspal.io) --> From https://smtp.statuspal.io
 
-
 ### NRQL query
 
 NRQL query requires three fields/aliases to be returned: *EventTimeStamp, EventStatus, EventName*.
