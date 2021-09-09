@@ -615,7 +615,7 @@ export default class StatusPage extends React.PureComponent {
   };
 
   renderSuccessfulState() {
-    const { refreshRate, hostname, accountId } = this.props;
+    const { refreshRate, hostname } = this.props;
     const { currentIncidents = [], statusPageIoSummaryData = {} } = this.state;
 
     return (
