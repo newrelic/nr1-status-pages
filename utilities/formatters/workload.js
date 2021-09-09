@@ -38,7 +38,7 @@ export const workloadIncidentFormatter = data => {
 
     Object.entries(incident).forEach(([key, value]) => {
       if (key === 'EventStatus') {
-        const encodeURL = `{"nerdletId":"workloads.detail","entityGuid":"${data.workloadGuid}","isOverview":true,"referrers":{"launcherId":"nr1-core.explorer","nerdletId":"nr1-core.listing"},"entitiesViewMode":"HDV"}`
+        const encodeURL = `{"nerdletId":"workloads.detail","entityGuid":"${data.workloadGuid}","isOverview":true,"referrers":{"launcherId":"nr1-core.explorer","nerdletId":"nr1-core.listing"},"entitiesViewMode":"HDV"}`;
         incident_updates.push({
           created_at: incident.EventTimeStamp,
           body: 'Workload Details',

@@ -13,7 +13,10 @@ import {
   statusPalFormatter,
   statusPalIncidentFormatter
 } from './formatters/status-pal';
-import {workloadFormatter, workloadIncidentFormatter} from "./formatters/workload";
+import {
+  workloadFormatter,
+  workloadIncidentFormatter
+} from './formatters/workload';
 
 const providers = {
   google: {
