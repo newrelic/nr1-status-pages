@@ -44,6 +44,10 @@ const PROVIDERS = {
     value: 'nrql',
     label: 'NRQL'
   },
+  WORKLOAD: {
+    value: 'workload',
+    label: 'Workload'
+  },
   RSS: {
     value: 'rss',
     label: 'RSS Feed'
@@ -82,6 +86,8 @@ export default class StatusPagesDashboard extends React.PureComponent {
         serviceName: { ...emptyInputState },
         hostName: { ...emptyInputState },
         providerName: { ...emptyInputState },
+        nrqlQuery: { ...emptyInputState },
+        workloadGuid: { ...emptyInputState },
         logoUrl: { ...emptyInputState }
       },
       searchQuery: '',
@@ -123,6 +129,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
     });
 
     delete updatedInputs.nrqlQuery;
+    delete updatedInputs.workloadGuid;
     delete updatedInputs.subDomain;
     updatedInputs.hostName = { ...emptyInputState };
 
@@ -148,6 +155,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
     const {
       corsProxyAddress,
       nrqlQuery,
+      workloadGuid,
       providerName,
       hostName
     } = updatedFormInputs;
@@ -156,6 +164,13 @@ export default class StatusPagesDashboard extends React.PureComponent {
       if (!corsProxyAddress.inputValue.includes('{url}')) {
         corsProxyAddress.validationText =
           "CORS address must contain '{url}' that will be replaced with hostname";
+      }
+    }
+
+    if (workloadGuid && workloadGuid.inputValue) {
+      if (/[\s,]/g.test(workloadGuid.inputValue)) {
+        isFormValid = false;
+        workloadGuid.validationText = 'Provide a single GUID with no spaces';
       }
     }
 
@@ -201,6 +216,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
       providerName,
       logoUrl,
       nrqlQuery,
+      workloadGuid,
       corsProxyAddress,
       subDomain
     } = formInputs;
@@ -210,7 +226,10 @@ export default class StatusPagesDashboard extends React.PureComponent {
       formattedHostName = encodeURI(
         `https://${subDomain.inputValue}.statuspal.io`
       );
-    } else if (providerName.inputValue !== PROVIDERS.NRQL.value) {
+    } else if (
+      providerName.inputValue !== PROVIDERS.NRQL.value &&
+      providerName.inputValue !== PROVIDERS.WORKLOAD.value
+    ) {
       formattedHostName = hostRequiresProxy
         ? corsProxyAddress.inputValue.replace('{url}', hostName?.inputValue)
         : hostName?.inputValue;
@@ -225,6 +244,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
       provider: providerName.inputValue,
       hostLogo: logoUrl.inputValue,
       nrqlQuery: nrqlQuery?.inputValue,
+      workloadGuid: workloadGuid?.inputValue,
       subDomain: subDomain?.inputValue
     };
 
@@ -284,9 +304,13 @@ export default class StatusPagesDashboard extends React.PureComponent {
     const { formInputs } = this.state;
     const filledInputs = { ...formInputs };
 
-    if (filledInputs.providerName.inputValue === PROVIDERS.NRQL.value) {
+    if (
+      filledInputs.providerName.inputValue === PROVIDERS.NRQL.value ||
+      filledInputs.inputValue === PROVIDERS.WORKLOAD.value
+    ) {
       filledInputs.hostName = { ...emptyInputState };
       delete filledInputs.nrqlQuery;
+      delete filledInputs.workloadGuid;
     }
 
     filledInputs.hostName.inputValue = selectedPopularSite.hostName;
@@ -349,7 +373,14 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
       if (updatedFormInputs.providerName.inputValue === PROVIDERS.NRQL.value) {
         delete updatedFormInputs.hostName;
+        delete updatedFormInputs.workloadGuid;
         updatedFormInputs.nrqlQuery = { ...emptyInputState };
+      } else if (
+        updatedFormInputs.providerName.inputValue === PROVIDERS.WORKLOAD.value
+      ) {
+        delete updatedFormInputs.hostName;
+        delete updatedFormInputs.nrqlQuery;
+        updatedFormInputs.workloadGuid = { ...emptyInputState };
       } else if (
         updatedFormInputs.providerName.inputValue === PROVIDERS.STATUS_PAL.value
       ) {
@@ -357,6 +388,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
         updatedFormInputs.subDomain = { ...emptyInputState };
       } else {
         delete updatedFormInputs.nrqlQuery;
+        delete updatedFormInputs.worloadGuid;
         updatedFormInputs.hostName = { ...emptyInputState };
       }
     }
@@ -519,6 +551,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
       providerName,
       logoUrl,
       nrqlQuery,
+      workloadGuid,
       corsProxyAddress,
       subDomain
     } = formInputs;
@@ -534,6 +567,18 @@ export default class StatusPagesDashboard extends React.PureComponent {
             }}
             value={nrqlQuery.inputValue}
             validationText={nrqlQuery.validationText}
+          />
+        );
+      } else if (providerName.inputValue === PROVIDERS.WORKLOAD.value) {
+        return (
+          <TextFieldWrapper
+            label="Workload Guid"
+            placeholder="Put your Workload Entity guid here"
+            onChange={event => {
+              this.updateInputValue(event, 'workloadGuid');
+            }}
+            value={workloadGuid.inputValue}
+            validationText={workloadGuid.validationText}
           />
         );
       } else if (providerName.inputValue === PROVIDERS.STATUS_PAL.value) {
