@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/newrelic/nr1-status-pages/compare/v1.2.0...v1.3.0) (2021-10-04)
+
+
+### Features
+
+* update semantic release with node ([9e691d2](https://github.com/newrelic/nr1-status-pages/commit/9e691d23c8b9577f5a69166bf603c680694ea223))
+
 # [1.2.0](https://github.com/newrelic/nr1-status-pages/compare/v1.1.6...v1.2.0) (2021-09-09)
 
 
