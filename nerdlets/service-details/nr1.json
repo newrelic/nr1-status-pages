@@ -1,6 +1,6 @@
 {
-    "schemaType": "NERDLET",
-    "id": "service-details",
-    "displayName": "ServiceDetails",
-    "description": ""
+  "schemaType": "NERDLET",
+  "id": "service-details",
+  "displayName": "ServiceDetails",
+  "description": "Review the status timeline of a particular service in detail"
 }
