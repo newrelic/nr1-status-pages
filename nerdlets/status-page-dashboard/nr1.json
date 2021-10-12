@@ -3,6 +3,12 @@
     "id": "status-pages",
     "description": "Describe me",
     "displayName": "Status Pages",
-    "entities": [{ "domain": "APM",  "type": "APPLICATION" }],
-    "actionCategory": "monitor"
+    "context": {
+        "entities": [
+            {
+                "domain": "APM",
+                "type": "APPLICATION"
+            }
+        ]
+    }
 }
