@@ -1,7 +1,7 @@
 {
-    "schemaType": "LAUNCHER",
-    "id": "status-page-launcher",
-    "description": "Review all the relevant status pages in your world as track through the incident reports.",
-    "displayName": "Status Pages",
-    "rootNerdletId": "status-pages"
+  "schemaType": "LAUNCHER",
+  "id": "status-page-launcher",
+  "description": "Launch the Status Pages nerdlet",
+  "displayName": "Status Pages",
+  "rootNerdletId": "status-pages"
 }
