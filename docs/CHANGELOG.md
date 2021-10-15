@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/newrelic/nr1-status-pages/compare/v1.3.0...v1.4.0) (2021-10-15)
+
+
+### Features
+
+* add whats inside screenshots for nerdlets and launcher ([1d06b4a](https://github.com/newrelic/nr1-status-pages/commit/1d06b4aab0780fbae085ff56965ee7effca72b8a))
+
 # [1.3.0](https://github.com/newrelic/nr1-status-pages/compare/v1.2.0...v1.3.0) (2021-10-04)
 
 
