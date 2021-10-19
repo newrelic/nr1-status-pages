@@ -1,7 +1,7 @@
 {
     "schemaType": "NERDLET",
     "id": "status-pages",
-    "description": "Describe me",
+    "description": "Review all the relevant status pages in your world as track through the incident reports.",
     "displayName": "Status Pages",
     "context": {
         "entities": [
@@ -12,3 +12,4 @@
         ]
     }
 }
+
