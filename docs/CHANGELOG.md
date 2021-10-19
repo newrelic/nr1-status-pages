@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/newrelic/nr1-status-pages/compare/v1.4.0...v1.4.1) (2021-10-19)
+
+
+### Bug Fixes
+
+* deprecated platform parameters ([c79872b](https://github.com/newrelic/nr1-status-pages/commit/c79872bdc2855fe071c025dd4168bc6b9b72530b))
+
 # [1.4.0](https://github.com/newrelic/nr1-status-pages/compare/v1.3.0...v1.4.0) (2021-10-15)
 
 
