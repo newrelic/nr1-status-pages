@@ -1,8 +1,15 @@
 {
-  "schemaType": "NERDLET",
-  "id": "status-pages",
-  "description": "Review all the relevant status pages in your world as track through the incident reports.",
-  "displayName": "Status Pages",
-  "entities": [{ "domain": "APM", "type": "APPLICATION" }],
-  "actionCategory": "monitor"
+    "schemaType": "NERDLET",
+    "id": "status-pages",
+    "description": "Review all the relevant status pages in your world as track through the incident reports.",
+    "displayName": "Status Pages",
+    "context": {
+        "entities": [
+            {
+                "domain": "APM",
+                "type": "APPLICATION"
+            }
+        ]
+    }
 }
+
