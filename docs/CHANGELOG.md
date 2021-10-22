@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/newrelic/nr1-status-pages/compare/v1.4.1...v1.4.2) (2021-10-22)
+
+
+### Bug Fixes
+
+* Typo ([225212b](https://github.com/newrelic/nr1-status-pages/commit/225212b0de0bacdac3825e44ee2d0c9ea7b9de0c))
+
 ## [1.4.1](https://github.com/newrelic/nr1-status-pages/compare/v1.4.0...v1.4.1) (2021-10-19)
 
 
