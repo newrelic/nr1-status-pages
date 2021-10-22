@@ -388,7 +388,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
         updatedFormInputs.subDomain = { ...emptyInputState };
       } else {
         delete updatedFormInputs.nrqlQuery;
-        delete updatedFormInputs.worloadGuid;
+        delete updatedFormInputs.workloadGuid;
         updatedFormInputs.hostName = { ...emptyInputState };
       }
     }
@@ -753,7 +753,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
             Cancel
           </Button>
           <Button type={Button.TYPE.PRIMARY} onClick={this.handleAddNewService}>
-            Add new serivce
+            Add new service
           </Button>
         </Modal>
       </div>
