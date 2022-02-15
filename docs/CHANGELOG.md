@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/newrelic/nr1-status-pages/compare/v1.4.2...v1.5.0) (2022-02-15)
+
+
+### Features
+
+* app deprecations ([9375535](https://github.com/newrelic/nr1-status-pages/commit/9375535d3d2c0ed53f302b8515ad04ecc77f46a5))
+
 ## [1.4.2](https://github.com/newrelic/nr1-status-pages/compare/v1.4.1...v1.4.2) (2021-10-22)
 
 
