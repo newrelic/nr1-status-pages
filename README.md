@@ -48,7 +48,7 @@ Example subdomains:
 
 ### NRQL query
 
-NRQL query requires three fields/aliases to be returned: *EventTimeStamp, EventStatus, EventName*.
+NRQL query requires three fields/aliases to be returned: _EventTimeStamp, EventStatus, EventName_.
 
 Example NRQL query:
 
