@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/newrelic/nr1-status-pages/compare/v1.5.0...v1.5.1) (2022-02-16)
+
+
+### Bug Fixes
+
+* triggering new release ([53b5971](https://github.com/newrelic/nr1-status-pages/commit/53b5971ccf50a8f8e3dfce81d6dd7f4ebc5433e8))
+
 # [1.5.0](https://github.com/newrelic/nr1-status-pages/compare/v1.4.2...v1.5.0) (2022-02-15)
 
 
