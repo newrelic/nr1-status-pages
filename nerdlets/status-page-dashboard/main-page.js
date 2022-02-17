@@ -138,6 +138,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
   validateFormAndReturnStatus = () => {
     const { formInputs } = this.state;
+
     const updatedFormInputs = { ...formInputs };
     const inputsList = Object.keys(formInputs).filter(k => k !== 'logoUrl');
     const genericValidationError = 'Please fill this field before saving.';
@@ -300,19 +301,16 @@ export default class StatusPagesDashboard extends React.PureComponent {
       return;
     }
     const selectedPopularSite = popularSites.sites[indexOfPopularSite];
-
     const { formInputs } = this.state;
     const filledInputs = { ...formInputs };
-
     if (
-      filledInputs.providerName.inputValue === PROVIDERS.NRQL.value ||
-      filledInputs.inputValue === PROVIDERS.WORKLOAD.value
+      filledInputs.providerName.inputValue !== PROVIDERS.NRQL.value ||
+      filledInputs.inputValue !== PROVIDERS.WORKLOAD.value
     ) {
       filledInputs.hostName = { ...emptyInputState };
       delete filledInputs.nrqlQuery;
       delete filledInputs.workloadGuid;
     }
-
     filledInputs.hostName.inputValue = selectedPopularSite.hostName;
     filledInputs.serviceName.inputValue = selectedPopularSite.serviceName;
     filledInputs.providerName.inputValue = selectedPopularSite.provider;
@@ -415,7 +413,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
     }
   };
 
-  setSearchQuery = () => {
+  setSearchQuery = event => {
     this.setState({ searchQuery: event.target.value });
   };
 
@@ -497,7 +495,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
           hostname={hostname}
           handleDeleteTileModal={() => this.handleDeleteTileModal}
           editHostName={() => this.editHostName}
-          setSearchQuery={() => this.setSearchQuery}
+          setSearchQuery={this.setSearchQuery}
           accountId={this.state.selectedAccountId}
         />
       </GridItem>
@@ -618,7 +616,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
           hostNames={hostNames}
           hostNameCallBack={this.setHostNames}
           handleCreateTileModal={this.handleCreateTileModal}
-          setSearchQuery={() => this.setSearchQuery}
+          setSearchQuery={this.setSearchQuery}
         />
         <Grid
           className={`status-container ${
