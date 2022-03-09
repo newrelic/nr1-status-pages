@@ -24,8 +24,8 @@ export default class WorkloadHelper {
         pollInterval: this.refreshRateInSeconds
       });
 
-      if (networkResponse.data.raw.metadata.messages[0]) {
-        networkResponse = networkResponse.data.raw.metadata.messages[0];
+      if (networkResponse.data.metadata.messages[0]) {
+        networkResponse = networkResponse.data.metadata.messages[0];
       }
       networkResponse.data.workloadGuid = this.workloadGuid;
     } catch (error) {
