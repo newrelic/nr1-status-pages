@@ -9,8 +9,8 @@ export const workloadFormatter = data => {
   let statusCode = WorkloadSeverityToKnown.None;
   let status = 'All Systems Operational';
 
-  if (data.raw.results[0].events.length > 0) {
-    const incident = data.raw.results[0].events[0];
+  if (data.results[0].events.length > 0) {
+    const incident = data.results[0].events[0];
     statusCode = WorkloadSeverityToKnown[incident.EventStatus];
 
     if (statusCode === undefined) {
@@ -32,7 +32,7 @@ export const workloadFormatter = data => {
 const launcherURL = `https://one.newrelic.com/launcher/nr1-core.explorer/?launcher=eyJ3bEZpbHRlcnMiOiIifQ==`;
 
 export const workloadIncidentFormatter = data => {
-  return data.raw.results[0].events.map(incident => {
+  return data.results[0].events.map(incident => {
     const incident_updates = [];
     let incidentCode = WorkloadSeverityToKnown[incident.EventStatus];
 

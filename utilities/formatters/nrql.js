@@ -8,8 +8,8 @@ export const nrqlFormatter = data => {
   let statusCode = NRQLSeverityToKnown.None;
   let status = 'All Systems Operational';
 
-  if (data.raw.results[0].events.length > 0) {
-    const incident = data.raw.results[0].events[0];
+  if (data.results[0].events.length > 0) {
+    const incident = data.results[0].events[0];
     statusCode = NRQLSeverityToKnown[incident.EventStatus];
 
     if (statusCode === undefined) {
@@ -29,7 +29,7 @@ export const nrqlFormatter = data => {
 };
 
 export const nrqlIncidentFormatter = data => {
-  return data.raw.results[0].events.map(incident => {
+  return data.results[0].events.map(incident => {
     const incident_updates = [];
     let incidentCode = NRQLSeverityToKnown[incident.EventStatus];
 

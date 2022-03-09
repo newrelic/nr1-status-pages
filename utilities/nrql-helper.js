@@ -23,8 +23,8 @@ export default class NRQLHelper {
         pollInterval: this.refreshRateInSeconds
       });
 
-      if (networkResponse.data.raw.metadata.messages[0]) {
-        networkResponse = networkResponse.data.raw.metadata.messages[0];
+      if (networkResponse.data.metadata.messages[0]) {
+        networkResponse = networkResponse.data.metadata.messages[0];
       }
     } catch (error) {
       networkResponse =
