@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/newrelic/nr1-status-pages/compare/v1.5.2...v1.5.3) (2022-03-09)
+
+
+### Bug Fixes
+
+* remove data.raw refs ([570a5ab](https://github.com/newrelic/nr1-status-pages/commit/570a5abd41f3fb64044ba7f24e616bbbe3a0e949))
+
 ## [1.5.2](https://github.com/newrelic/nr1-status-pages/compare/v1.5.1...v1.5.2) (2022-02-18)
 
 
