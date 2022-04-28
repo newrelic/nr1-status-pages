@@ -1,3 +1,10 @@
+## [1.5.4](https://github.com/newrelic/nr1-status-pages/compare/v1.5.3...v1.5.4) (2022-04-28)
+
+
+### Bug Fixes
+
+* use milliseconds for nrql poll interval ([8e05b85](https://github.com/newrelic/nr1-status-pages/commit/8e05b854f1d320d83fe4752e219a5e4934f11692))
+
 ## [1.5.3](https://github.com/newrelic/nr1-status-pages/compare/v1.5.2...v1.5.3) (2022-03-09)
 
 
