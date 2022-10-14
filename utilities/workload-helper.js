@@ -18,7 +18,7 @@ export default class WorkloadHelper {
 
     try {
       networkResponse = await NrqlQuery.query({
-        accountId: this.accountId,
+        accountIds: [this.accountId],
         query: this.query,
         formatType: NrqlQuery.FORMAT_TYPE.RAW,
         pollInterval: this.refreshRateInSeconds * 1000

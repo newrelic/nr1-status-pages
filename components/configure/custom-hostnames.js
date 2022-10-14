@@ -84,7 +84,7 @@ export default class CustomHostNames extends React.PureComponent {
             Delete
           </Button>
           <Button
-            type={Button.TYPE.NORMAL}
+            type={Button.TYPE.TERTIARY}
             sizeType={Button.SIZE_TYPE.SMALL}
             iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EDIT}
             onClick={() => {
@@ -198,7 +198,7 @@ export default class CustomHostNames extends React.PureComponent {
               className="add-button"
               type={Button.TYPE.PRIMARY}
               onClick={this.addHostName}
-              sizeType={Button.SIZE_TYPE.NORMAL}
+              sizeType={Button.SIZE_TYPE.MEDIUM}
               iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
             >
               Add
@@ -215,7 +215,7 @@ export default class CustomHostNames extends React.PureComponent {
                     Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__CLOUD
                   }
                   onClick={this.saveAll}
-                  type={Button.TYPE.NORMAL}
+                  type={Button.TYPE.TERTIARY}
                 >
                   Sync All Accounts
                 </Button>

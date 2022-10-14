@@ -434,7 +434,7 @@ export default class StatusPage extends React.PureComponent {
         <Button
           sizeType={Button.SIZE_TYPE.SMALL}
           className="service-settings-button"
-          type={Button.TYPE.NORMAL}
+          type={Button.TYPE.TERTIARY}
           iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__MORE}
           onClick={this.handleSettingsPopover}
         />
@@ -499,7 +499,7 @@ export default class StatusPage extends React.PureComponent {
             onChange={() =>
               this.setState(previousState => ({
                 ...previousState,
-                editedWorkloadguid: event.target.value
+                editedWorkloadGuid: event.target.value
               }))
             }
             defaultValue={hostname.workloadGuid}

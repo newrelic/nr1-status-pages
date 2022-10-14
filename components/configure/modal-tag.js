@@ -87,7 +87,7 @@ export default class TagsModal extends React.PureComponent {
           >
             <StackItem>
               <Button
-                type={Button.TYPE.NORMAL}
+                type={Button.TYPE.TERTIARY}
                 onClick={() => {
                   onClose(tags);
                 }}
