@@ -1,3 +1,10 @@
+## [1.5.5](https://github.com/newrelic/nr1-status-pages/compare/v1.5.4...v1.5.5) (2022-10-14)
+
+
+### Bug Fixes
+
+* update for account and button deprecations ([3b1f9fb](https://github.com/newrelic/nr1-status-pages/commit/3b1f9fbd7d5ce69d1d61f4b9df8b17e828db2919))
+
 ## [1.5.4](https://github.com/newrelic/nr1-status-pages/compare/v1.5.3...v1.5.4) (2022-04-28)
 
 
