@@ -745,7 +745,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
           />
 
           <Button
-            type={Button.TYPE.Secondary}
+            type={Button.TYPE.TERTIARY}
             onClick={() => this.setState({ createTileModalActive: false })}
           >
             Cancel

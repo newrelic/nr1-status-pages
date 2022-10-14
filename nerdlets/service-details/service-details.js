@@ -241,7 +241,7 @@ export default class ServiceDetails extends React.PureComponent {
               </div>
               <Button
                 className="timeline-item-dropdown-arrow"
-                type={Button.TYPE.PLAIN_NEUTRAL}
+                type={Button.TYPE.PLAIN}
                 iconType={
                   Button.ICON_TYPE
                     .INTERFACE__CHEVRON__CHEVRON_BOTTOM__V_ALTERNATE
