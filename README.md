@@ -128,6 +128,8 @@ Visit [https://one.newrelic.com](https://one.newrelic.com), navigate to the Nerd
 
 The discussions page on this repository is enabled for customers to interact with New Relic employees as well as other customers to get help and share best practices. You can check out the discussions page for this repo [here](../../discussions).
 
+You can also interact with us and other customers to troubleshoot issues and share best practices on [New Relic Explorers Hub](https://discuss.newrelic.com).
+
 ## Issues / Enhancement Requests
 
 Issues and enhancement requests can be submitted in the [Issues tab of this repository](../../issues). Please search for and review the existing open issues before submitting a new issue.
