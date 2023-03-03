@@ -2,7 +2,7 @@ import React from 'react';
 import StatusPagesDashboard from './main-page';
 import { Icon, nerdlet, NerdletStateContext } from 'nr1';
 
-import { HelpModal } from 'nr-labs-components';
+import { HelpModal, Messages } from 'nr-labs-components';
 
 export default class Wrapper extends React.PureComponent {
   state = {
@@ -32,7 +32,8 @@ export default class Wrapper extends React.PureComponent {
     const { helpModalOpen } = this.state;
 
     return (
-      <>
+      <div>
+        <Messages repo="nr1-status-pages" branch="main" />
         <NerdletStateContext.Consumer>
           {nerdletUrlState => {
             const { entityGuid } = nerdletUrlState;
@@ -74,7 +75,7 @@ export default class Wrapper extends React.PureComponent {
             }}
           />
         )}
-      </>
+      </div>
     );
   }
 }
