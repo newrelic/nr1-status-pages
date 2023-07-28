@@ -24,8 +24,8 @@ export default class IncidentTimeline extends React.PureComponent {
           dateInnerStyle={{
             background: this.backgroundColors[incident.impact]
           }}
-          key={`${index}`}
-          dateText={`${date.toDateString()}`}
+          key={index}
+          dateText={date.toDateString()}
         >
           <IndIncident incident={incident} />
         </TimelineItem>
