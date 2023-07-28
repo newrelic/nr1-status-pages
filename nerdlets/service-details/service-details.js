@@ -58,7 +58,6 @@ export default class ServiceDetails extends React.PureComponent {
     } = this.props;
 
     if (prevProps.timelineItemIndex !== timelineItemIndex) {
-      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ expandedTimelineItem: timelineItemIndex });
     }
 
@@ -68,7 +67,6 @@ export default class ServiceDetails extends React.PureComponent {
       prevProps.nrqlQuery !== nrqlQuery ||
       prevProps.workloadGuid !== workloadGuid
     ) {
-      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ currentIncidents: undefined });
       this.setupTimelinePolling(hostname, refreshRate, provider);
     }
