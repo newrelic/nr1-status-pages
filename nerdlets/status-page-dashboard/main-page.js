@@ -20,7 +20,7 @@ import {
 } from '../../utilities/nerdlet-storage';
 import TextFieldWrapper from './TextFieldWrapper/TextFieldWrapper';
 
-const uuid = require('uuid/v4');
+import { v4 as uuidv4 } from 'uuid';
 
 const createOption = label => ({
   label,
@@ -239,7 +239,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
     }
 
     const hostNameObject = {
-      id: uuid(),
+      id: uuidv4(),
       serviceName: serviceName.inputValue,
       hostName: formattedHostName,
       provider: providerName.inputValue,
