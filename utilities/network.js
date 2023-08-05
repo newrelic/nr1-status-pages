@@ -1,6 +1,6 @@
 import { getProvider } from './provider-services';
 
-const axios = require('axios');
+import axios from 'axios';
 
 export default class Network {
   constructor(statusPageUrl, refreshRateInSeconds, provider) {
