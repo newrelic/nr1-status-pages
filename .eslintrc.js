@@ -15,6 +15,7 @@ module.exports = {
   globals: {
     __nr: true,
   },
+  parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -31,5 +32,6 @@ module.exports = {
   rules: {
     'import/no-unresolved': 'off',
     'no-empty-function': ['error', { allow: ['arrowFunctions'] }],
+    "react/no-unescaped-entities": 'off',
   },
 };
