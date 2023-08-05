@@ -10,7 +10,7 @@ export default class Toolbar extends React.PureComponent {
     entityGuid: PropTypes.string,
     onAccountSelected: PropTypes.func,
     setSearchQuery: PropTypes.func,
-    handleCreateTileModal: PropTypes.func
+    handleCreateTileModal: PropTypes.func,
   };
 
   constructor(props) {
@@ -24,8 +24,8 @@ export default class Toolbar extends React.PureComponent {
       id: 'configure-status-pages',
       urlState: {
         accounts: this.props.accounts,
-        accountId: this.props.selectedAccountId
-      }
+        accountId: this.props.selectedAccountId,
+      },
     };
 
     if (this.props.entityGuid) {

@@ -8,7 +8,7 @@ const TextFieldWrapper = ({
   onChange,
   value,
   validationText,
-  placeholder
+  placeholder,
 }) => {
   return (
     <div>
@@ -31,7 +31,7 @@ TextFieldWrapper.propTypes = {
   onChange: PropTypes.func,
   value: PropTypes.string,
   validationText: PropTypes.string,
-  placeholder: PropTypes.string
+  placeholder: PropTypes.string,
 };
 
 export default TextFieldWrapper;

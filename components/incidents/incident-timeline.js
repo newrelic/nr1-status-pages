@@ -5,14 +5,14 @@ import IndIncident from './ind-incident';
 
 export default class IncidentTimeline extends React.PureComponent {
   static propTypes = {
-    incidents: PropTypes.array
+    incidents: PropTypes.array,
   };
 
   backgroundColors = {
     none: '#10a600',
     minor: '#ffda00',
     major: '#ea7c00',
-    critical: '#bd071f'
+    critical: '#bd071f',
   };
 
   getTimeLineItems() {
@@ -22,7 +22,7 @@ export default class IncidentTimeline extends React.PureComponent {
         <TimelineItem
           className={`incident-impact-${incident.impact}`}
           dateInnerStyle={{
-            background: this.backgroundColors[incident.impact]
+            background: this.backgroundColors[incident.impact],
           }}
           key={index}
           dateText={date.toDateString()}

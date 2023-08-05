@@ -16,9 +16,9 @@ import NewRelicLogo from '../assets/logo-new-relic.png';
 import JiraLogo from '../assets/logo-jira.png';
 import GoogleCloudProviderLogo from '../assets/logo-google-cloud.svg';
 
-const createOption = label => ({
+const createOption = (label) => ({
   label,
-  value: label
+  value: label,
 });
 
 const NRQL_PROVIDER_NAME = 'nrql';
@@ -33,7 +33,7 @@ export default class StatusPage extends React.PureComponent {
     handleDeleteTileModal: PropTypes.func,
     editHostName: PropTypes.func,
     setServiceTileRef: PropTypes.object,
-    accountId: PropTypes.number
+    accountId: PropTypes.number,
   };
 
   constructor(props) {
@@ -55,7 +55,7 @@ export default class StatusPage extends React.PureComponent {
       editedSubDomain: this.props.hostname.subDomain,
       editedHostProvider: this.props.hostname.provider,
       editedHostLogo: this.props.hostname.hostLogo,
-      editedHostId: this.props.hostname.id
+      editedHostId: this.props.hostname.id,
     };
 
     this.serviceTilePrimaryContent = React.createRef();
@@ -85,7 +85,7 @@ export default class StatusPage extends React.PureComponent {
       editedHostName,
       editedNrqlQuery,
       editedWorkloadGuid,
-      editedSubDomain
+      editedSubDomain,
     } = this.state;
 
     if (editedHostProvider === NRQL_PROVIDER_NAME) {
@@ -122,7 +122,8 @@ export default class StatusPage extends React.PureComponent {
         editedHostProvider
       );
 
-      const isSameDataSource = this.StatusPageNetwork.checkIfTheSameDataSource();
+      const isSameDataSource =
+        this.StatusPageNetwork.checkIfTheSameDataSource();
 
       if (isSameDataSource) {
         this.StatusPageNetwork.pollCurrentIncidents(this.setData);
@@ -135,15 +136,15 @@ export default class StatusPage extends React.PureComponent {
     this.FormatService = new FormatService(editedHostProvider);
   };
 
-  handleSelectChange = value => {
+  handleSelectChange = (value) => {
     this.setState({ value });
   };
 
-  handleSelectInputChange = inputValue => {
+  handleSelectInputChange = (inputValue) => {
     this.setState({ inputValue });
   };
 
-  handleSelectKeyDown = event => {
+  handleSelectKeyDown = (event) => {
     const { inputValue, value } = this.state;
     if (!inputValue) return;
     switch (event.key) {
@@ -151,7 +152,7 @@ export default class StatusPage extends React.PureComponent {
       case 'Tab':
         this.setState({
           inputValue: '',
-          value: [...value, createOption(inputValue)]
+          value: [...value, createOption(inputValue)],
         });
         event.preventDefault();
     }
@@ -214,26 +215,26 @@ export default class StatusPage extends React.PureComponent {
     }
   }
 
-  setSummaryData = data => {
+  setSummaryData = (data) => {
     if (typeof data === 'string') {
       this.setState({ errorInfo: data });
     } else {
       this.setState({
         errorInfo: undefined,
-        statusPageIoSummaryData: this.FormatService.uniformSummaryData(data)
+        statusPageIoSummaryData: this.FormatService.uniformSummaryData(data),
       });
     }
   };
 
-  setIncidentsData = data => {
+  setIncidentsData = (data) => {
     if (typeof data === 'string') return;
 
     this.setState({
-      currentIncidents: this.FormatService.uniformIncidentData(data)
+      currentIncidents: this.FormatService.uniformIncidentData(data),
     });
   };
 
-  setData = data => {
+  setData = (data) => {
     if (typeof data === 'string') {
       this.setState({ errorInfo: data });
     } else {
@@ -254,13 +255,13 @@ export default class StatusPage extends React.PureComponent {
           opacity: [1, 0],
           transform: [
             'translateX(0) rotateY(0)',
-            'translateX(30px) rotateY(25deg)'
-          ]
+            'translateX(30px) rotateY(25deg)',
+          ],
         },
         {
           duration: 400,
           fill: 'forwards',
-          easing: 'cubic-bezier(.23, 1, .32, 1)'
+          easing: 'cubic-bezier(.23, 1, .32, 1)',
         }
       );
 
@@ -269,14 +270,14 @@ export default class StatusPage extends React.PureComponent {
           opacity: [0, 1],
           transform: [
             'translateX(-30px) rotateY(-15deg)',
-            'translateX(0) rotateY(0deg)'
-          ]
+            'translateX(0) rotateY(0deg)',
+          ],
         },
         {
           duration: 400,
           fill: 'forwards',
           easing: 'cubic-bezier(.25, .46, .45, .94)',
-          delay: 200
+          delay: 200,
         }
       );
       this.setState({ settingsViewActive: false });
@@ -287,14 +288,14 @@ export default class StatusPage extends React.PureComponent {
           opacity: [0, 1],
           transform: [
             'translateX(30px) rotateY(15deg)',
-            'translateX(0) rotateY(0deg)'
-          ]
+            'translateX(0) rotateY(0deg)',
+          ],
         },
         {
           duration: 400,
           fill: 'forwards',
           easing: 'cubic-bezier(.25, .46, .45, .94)',
-          delay: 200
+          delay: 200,
         }
       );
 
@@ -303,13 +304,13 @@ export default class StatusPage extends React.PureComponent {
           opacity: [1, 0],
           transform: [
             'translateX(0) rotateY(0)',
-            'translateX(-30px) rotateY(-25deg)'
-          ]
+            'translateX(-30px) rotateY(-25deg)',
+          ],
         },
         {
           duration: 400,
           fill: 'forwards',
-          easing: 'cubic-bezier(.23, 1, .32, 1)'
+          easing: 'cubic-bezier(.23, 1, .32, 1)',
         }
       );
 
@@ -342,8 +343,8 @@ export default class StatusPage extends React.PureComponent {
             workloadGuid: this.state.editedWorkloadGuid,
             subDomain: this.state.editedSubDomain,
             accountId: this.props.accountId,
-            timelineItemIndex: selectedIndex
-          }
+            timelineItemIndex: selectedIndex,
+          },
         });
 
         event.stopPropagation();
@@ -358,20 +359,20 @@ export default class StatusPage extends React.PureComponent {
             nrqlQuery: nrqlQuery,
             workloadGuid: workloadGuid,
             subDomain: subDomain,
-            accountId: this.props.accountId
-          }
+            accountId: this.props.accountId,
+          },
         });
       }
     }
   }
 
-  handleSettingsPopover = e => {
+  handleSettingsPopover = (e) => {
     const { settingsPopoverActive } = this.state;
     this.setState({ settingsPopoverActive: !settingsPopoverActive });
     if (e) e.stopPropagation();
   };
 
-  handleEditButtonClick = e => {
+  handleEditButtonClick = (e) => {
     e.stopPropagation();
     this.handleTileSettingsAnimation();
     this.handleSettingsPopover();
@@ -392,7 +393,7 @@ export default class StatusPage extends React.PureComponent {
       nrqlQuery: this.state.editedNrqlQuery,
       workloadGuid: this.state.editedWorkloadGuid,
       subDomain: this.state.editedSubDomain,
-      id: this.state.editedHostId
+      id: this.state.editedHostId,
     };
 
     this.props.editHostName()(hostNameObject);
@@ -482,9 +483,9 @@ export default class StatusPage extends React.PureComponent {
             placeholder="Put your NRQL query here"
             className="status-page-setting"
             onChange={() =>
-              this.setState(previousState => ({
+              this.setState((previousState) => ({
                 ...previousState,
-                editedNrqlQuery: event.target.value
+                editedNrqlQuery: event.target.value,
               }))
             }
             defaultValue={hostname.nrqlQuery}
@@ -497,9 +498,9 @@ export default class StatusPage extends React.PureComponent {
             placeholder="Put your Workload entity guid here"
             className="status-page-setting"
             onChange={() =>
-              this.setState(previousState => ({
+              this.setState((previousState) => ({
                 ...previousState,
-                editedWorkloadGuid: event.target.value
+                editedWorkloadGuid: event.target.value,
               }))
             }
             defaultValue={hostname.workloadGuid}
@@ -512,9 +513,9 @@ export default class StatusPage extends React.PureComponent {
             placeholder="myservice.com"
             className="status-page-setting"
             onChange={() =>
-              this.setState(previousState => ({
+              this.setState((previousState) => ({
                 ...previousState,
-                editedSubDomain: event.target.value
+                editedSubDomain: event.target.value,
               }))
             }
             defaultValue={hostname.subDomain}
@@ -527,9 +528,9 @@ export default class StatusPage extends React.PureComponent {
             placeholder="https://status.myservice.com/"
             className="status-page-setting"
             onChange={() =>
-              this.setState(previousState => ({
+              this.setState((previousState) => ({
                 ...previousState,
-                editedHostName: event.target.value
+                editedHostName: event.target.value,
               }))
             }
             defaultValue={hostname.hostName}
@@ -548,9 +549,9 @@ export default class StatusPage extends React.PureComponent {
             label="Service name"
             className="status-page-setting"
             onChange={() =>
-              this.setState(previousState => ({
+              this.setState((previousState) => ({
                 ...previousState,
-                editedServiceName: event.target.value
+                editedServiceName: event.target.value,
               }))
             }
             defaultValue={hostname.serviceName}
@@ -560,9 +561,9 @@ export default class StatusPage extends React.PureComponent {
             label="Service logo"
             className="status-page-setting"
             onChange={() =>
-              this.setState(previousState => ({
+              this.setState((previousState) => ({
                 ...previousState,
-                editedHostLogo: event.target.value
+                editedHostLogo: event.target.value,
               }))
             }
             defaultValue={hostname.hostLogo}
@@ -572,14 +573,14 @@ export default class StatusPage extends React.PureComponent {
         <div className="status-page-settings-cta-container">
           <Button
             type={Button.TYPE.DESTRUCTIVE}
-            onClick={e => this.handleDeleteButtonClick(hostname, e)}
+            onClick={(e) => this.handleDeleteButtonClick(hostname, e)}
             iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
           >
             Delete
           </Button>
           <Button
             type={Button.TYPE.PRIMARY}
-            onClick={e => this.handleSaveButtonClick(e, hostname.hostName)}
+            onClick={(e) => this.handleSaveButtonClick(e, hostname.hostName)}
           >
             Done
           </Button>
@@ -642,7 +643,7 @@ export default class StatusPage extends React.PureComponent {
         <div className="service-current-status">
           {statusPageIoSummaryData.link ? (
             <h5
-              onClick={e => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
               className="service-current-status-heading"
             >
               <Link to={statusPageIoSummaryData.link}>See status page</Link>
@@ -704,7 +705,7 @@ export default class StatusPage extends React.PureComponent {
         <CurrentIncidents
           currentIncidents={currentIncidents}
           hostname={hostname.hostName}
-          handleTileClick={i => {
+          handleTileClick={(i) => {
             this.handleTileClick(
               statusPageIoSummaryData,
               refreshRate,
@@ -739,7 +740,7 @@ export default class StatusPage extends React.PureComponent {
     const {
       statusPageIoSummaryData = {},
       errorInfo,
-      settingsViewActive
+      settingsViewActive,
     } = this.state;
 
     if (!statusPageIoSummaryData && !errorInfo) {

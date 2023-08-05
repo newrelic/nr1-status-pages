@@ -21,7 +21,7 @@ export default class WorkloadHelper {
         accountIds: [this.accountId],
         query: this.query,
         formatType: NrqlQuery.FORMAT_TYPE.RAW,
-        pollInterval: this.refreshRateInSeconds * 1000
+        pollInterval: this.refreshRateInSeconds * 1000,
       });
 
       if (networkResponse.data.metadata.messages[0]) {

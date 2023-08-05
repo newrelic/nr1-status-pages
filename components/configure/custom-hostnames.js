@@ -7,7 +7,7 @@ import {
   Icon,
   TextField,
   Stack,
-  StackItem
+  StackItem,
 } from 'nr1';
 import { v4 as uuidv4 } from 'uuid';
 import { saveHostNamesToNerdStorage } from '../../utilities/nerdlet-storage';
@@ -19,7 +19,7 @@ export default class CustomHostNames extends React.PureComponent {
     accountId: PropTypes.number,
     addHostNameCallback: PropTypes.func,
     deleteHostNameCallback: PropTypes.func,
-    hostNames: PropTypes.array
+    hostNames: PropTypes.array,
   };
 
   constructor(props) {
@@ -30,9 +30,9 @@ export default class CustomHostNames extends React.PureComponent {
       tags: [],
       keyObject: {
         key: props.entityGuid ? props.entityGuid : props.accountId,
-        type: props.entityGuid ? 'entity' : 'account'
+        type: props.entityGuid ? 'entity' : 'account',
       },
-      selectedEditHost: undefined
+      selectedEditHost: undefined,
     };
     this.addHostName = this.addHostName.bind(this);
     this.onTextInputChange = this.onTextInputChange.bind(this);
@@ -58,7 +58,7 @@ export default class CustomHostNames extends React.PureComponent {
       id: uuidv4(),
       hostName: addHostNameText,
       provider: selectedProvider,
-      tags: tags
+      tags: tags,
     };
     this.setState({ tags: [] });
     addHostNameCallback(hostNameObject);
@@ -69,7 +69,7 @@ export default class CustomHostNames extends React.PureComponent {
     const { deleteHostNameCallback, hostNames } = this.props;
 
     if (!hostNames) return <div />;
-    return hostNames.map(hostNameObject => (
+    return hostNames.map((hostNameObject) => (
       <li key={hostNameObject.id} className="modal-list-item">
         <div className="modal-list-item-name"> {hostNameObject.hostName} </div>
         <div className="button-bar">
@@ -108,14 +108,14 @@ export default class CustomHostNames extends React.PureComponent {
     try {
       // const accountsResults = await AccountsQuery.query();
       const accountsResults = await NerdGraphQuery.query({
-        query: '{ actor { accounts { id name } }}'
+        query: '{ actor { accounts { id name } }}',
       });
       if (
         accountsResults.data &&
         accountsResults.data.actor &&
         accountsResults.data.actor.accounts
       ) {
-        accountsResults.data.actor.accounts.forEach(async account =>
+        accountsResults.data.actor.accounts.forEach(async (account) =>
           saveHostNamesToNerdStorage(
             { key: account.id, type: 'account' },
             hostNames
@@ -147,7 +147,7 @@ export default class CustomHostNames extends React.PureComponent {
       tagHidden,
       selectedEditHost,
       showSaved,
-      selectedProvider
+      selectedProvider,
     } = this.state;
     const hostnames = this.generateListHostNames();
     return (

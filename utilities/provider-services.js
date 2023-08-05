@@ -1,21 +1,21 @@
 import { googleIncidentFormatter, googleFormatter } from './formatters/google';
 import {
   statusPageIncidentFormatter,
-  statusPageIoFormatter
+  statusPageIoFormatter,
 } from './formatters/status-page-io';
 import {
   statusIoIncidentFormatter,
-  statusIoFormatter
+  statusIoFormatter,
 } from './formatters/status-io';
 import { nrqlFormatter, nrqlIncidentFormatter } from './formatters/nrql';
 import { rssFormatter, rssIncidentFormatter } from './formatters/rss';
 import {
   statusPalFormatter,
-  statusPalIncidentFormatter
+  statusPalIncidentFormatter,
 } from './formatters/status-pal';
 import {
   workloadFormatter,
-  workloadIncidentFormatter
+  workloadIncidentFormatter,
 } from './formatters/workload';
 
 const providers = {
@@ -25,11 +25,11 @@ const providers = {
     impactMap: {
       low: 'minor',
       medium: 'major',
-      high: 'critical'
+      high: 'critical',
     },
     name: 'Google Cloud',
     incidentFormatter: googleIncidentFormatter,
-    summaryFormatter: googleFormatter
+    summaryFormatter: googleFormatter,
   },
   statusPageIo: {
     summaryUrl: '/api/v2/summary.json',
@@ -37,11 +37,11 @@ const providers = {
     impactMap: {
       minor: 'minor',
       major: 'major',
-      critical: 'critical'
+      critical: 'critical',
     },
     name: 'Status Page',
     summaryFormatter: statusPageIoFormatter,
-    incidentFormatter: statusPageIncidentFormatter
+    incidentFormatter: statusPageIncidentFormatter,
   },
   statusIo: {
     // assumes format entered of https://hostname/pages/history/<identifier>
@@ -51,56 +51,56 @@ const providers = {
     impactMap: {
       minor: 'minor',
       major: 'major',
-      critical: 'critical'
+      critical: 'critical',
     },
     name: 'Status Io',
     summaryFormatter: statusIoFormatter,
-    incidentFormatter: statusIoIncidentFormatter
+    incidentFormatter: statusIoIncidentFormatter,
   },
   nrql: {
     impactMap: {
       warning: 'minor',
       major: 'major',
-      critical: 'critical'
+      critical: 'critical',
     },
     name: 'NRQL',
     summaryFormatter: nrqlFormatter,
-    incidentFormatter: nrqlIncidentFormatter
+    incidentFormatter: nrqlIncidentFormatter,
   },
   workload: {
     impactMap: {
       warning: 'minor',
       major: 'major',
-      critical: 'critical'
+      critical: 'critical',
     },
     name: 'Workload',
     summaryFormatter: workloadFormatter,
-    incidentFormatter: workloadIncidentFormatter
+    incidentFormatter: workloadIncidentFormatter,
   },
   rss: {
     impactMap: {
       warning: 'minor',
       major: 'major',
-      critical: 'critical'
+      critical: 'critical',
     },
     name: 'RSS Feed',
     summaryFormatter: rssFormatter,
-    incidentFormatter: rssIncidentFormatter
+    incidentFormatter: rssIncidentFormatter,
   },
   statusPal: {
     impactMap: {
       minor: 'minor',
       major: 'major',
-      maintence: 'maintence'
+      maintence: 'maintence',
     },
     apiURL: 'https://cors-anywhere.herokuapp.com/statuspal.io/api/v1',
     name: 'Statuspal',
     summaryFormatter: statusPalFormatter,
-    incidentFormatter: statusPalIncidentFormatter
-  }
+    incidentFormatter: statusPalIncidentFormatter,
+  },
 };
 
-export const getProvider = providerKey => {
+export const getProvider = (providerKey) => {
   if (providerKey === 'Status Page') {
     providerKey = 'statusPageIo';
   } else if (providerKey === 'Status Io') {

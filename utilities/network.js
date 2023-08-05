@@ -11,7 +11,7 @@ export default class Network {
   }
 
   clear = () => {
-    this.setIntervalIds.forEach(timeoutId => {
+    this.setIntervalIds.forEach((timeoutId) => {
       clearInterval(timeoutId);
     });
 

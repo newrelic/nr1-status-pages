@@ -6,7 +6,7 @@ export default class Wrapper extends React.PureComponent {
   render() {
     return (
       <NerdletStateContext.Consumer>
-        {nerdletUrlState => (
+        {(nerdletUrlState) => (
           <StatusPageIoMainPage nerdletUrlState={nerdletUrlState} />
         )}
       </NerdletStateContext.Consumer>

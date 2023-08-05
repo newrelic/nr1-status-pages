@@ -6,7 +6,7 @@ import { HelpModal, Messages } from '@newrelic/nr-labs-components';
 
 export default class Wrapper extends React.PureComponent {
   state = {
-    helpModalOpen: false
+    helpModalOpen: false,
   };
 
   componentDidMount() {
@@ -18,13 +18,13 @@ export default class Wrapper extends React.PureComponent {
           hint: 'Quick links to get support',
           type: 'primary',
           iconType: Icon.TYPE.INTERFACE__INFO__HELP,
-          onClick: () => this.setHelpModalOpen(true)
-        }
-      ]
+          onClick: () => this.setHelpModalOpen(true),
+        },
+      ],
     });
   }
 
-  setHelpModalOpen = helpModalOpen => {
+  setHelpModalOpen = (helpModalOpen) => {
     this.setState({ helpModalOpen });
   };
 
@@ -35,7 +35,7 @@ export default class Wrapper extends React.PureComponent {
       <div>
         <Messages repo="nr1-status-pages" branch="main" />
         <NerdletStateContext.Consumer>
-          {nerdletUrlState => {
+          {(nerdletUrlState) => {
             const { entityGuid } = nerdletUrlState;
             const type = entityGuid ? 'entity' : 'account';
             if (type === 'entity') {
@@ -55,22 +55,20 @@ export default class Wrapper extends React.PureComponent {
             createFeature:
               'https://github.com/newrelic/nr1-status-pages/issues/new?assignees=&labels=enhancement%2C+needs-triage&template=enhancement.md&title=',
             createQuestion:
-              'https://github.com/newrelic/nr1-status-pages/discussions/new/choose'
+              'https://github.com/newrelic/nr1-status-pages/discussions/new/choose',
           }}
           ownerBadge={{
             logo: {
-              src:
-                'https://drive.google.com/uc?id=1BdXVy2X34rufvG4_1BYb9czhLRlGlgsT',
-              alt: 'New Relic Labs'
+              src: 'https://drive.google.com/uc?id=1BdXVy2X34rufvG4_1BYb9czhLRlGlgsT',
+              alt: 'New Relic Labs',
             },
             blurb: {
               text: 'This is a New Relic Labs open source app.',
               link: {
                 text: 'Take a look at our other repos',
-                url:
-                  'https://github.com/newrelic?q=nrlabs-viz&type=all&language=&sort='
-              }
-            }
+                url: 'https://github.com/newrelic?q=nrlabs-viz&type=all&language=&sort=',
+              },
+            },
           }}
         />
       </div>

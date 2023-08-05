@@ -4,7 +4,7 @@ import { HeadingText, Spinner, Stack, StackItem } from 'nr1';
 
 export default class Summary extends React.PureComponent {
   static propTypes = {
-    statusPageIoSummaryData: PropTypes.object.isRequired
+    statusPageIoSummaryData: PropTypes.object.isRequired,
   };
 
   constructor(props) {

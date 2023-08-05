@@ -7,7 +7,7 @@ export default class ServiceDetailsWrapper extends React.PureComponent {
     return (
       <div className="service-details-modal-container">
         <NerdletStateContext.Consumer>
-          {nerdletUrlState => {
+          {(nerdletUrlState) => {
             const serviceName = nerdletUrlState.statusPageIoSummaryData.name;
             const {
               provider,
@@ -17,7 +17,7 @@ export default class ServiceDetailsWrapper extends React.PureComponent {
               nrqlQuery,
               workloadGuid,
               subDomain,
-              accountId
+              accountId,
             } = nerdletUrlState;
 
             return (

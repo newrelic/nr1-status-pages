@@ -24,14 +24,14 @@ export default class ServiceDetails extends React.PureComponent {
     nrqlQuery: PropTypes.string,
     workloadGuid: PropTypes.string,
     subDomain: PropTypes.string,
-    accountId: PropTypes.number
+    accountId: PropTypes.number,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       currentIncidents: undefined,
-      expandedTimelineItem: null
+      expandedTimelineItem: null,
     };
   }
 
@@ -54,7 +54,7 @@ export default class ServiceDetails extends React.PureComponent {
       provider,
       nrqlQuery,
       workloadGuid,
-      subDomain
+      subDomain,
     } = this.props;
 
     if (prevProps.timelineItemIndex !== timelineItemIndex) {
@@ -105,9 +105,9 @@ export default class ServiceDetails extends React.PureComponent {
     this.statusPageNetwork.pollCurrentIncidents(this.setIncidentData);
   };
 
-  setIncidentData = data => {
+  setIncidentData = (data) => {
     this.setState({
-      currentIncidents: this.FormatService.uniformIncidentData(data)
+      currentIncidents: this.FormatService.uniformIncidentData(data),
     });
   };
 
@@ -190,14 +190,14 @@ export default class ServiceDetails extends React.PureComponent {
     return incident_updates;
   }
 
-  handleTimelineItemClick = timelineItemId => {
+  handleTimelineItemClick = (timelineItemId) => {
     if (timelineItemId === this.state.expandedTimelineItem) {
       this.setState({
-        expandedTimelineItem: null
+        expandedTimelineItem: null,
       });
     } else {
       this.setState({
-        expandedTimelineItem: timelineItemId
+        expandedTimelineItem: timelineItemId,
       });
     }
   };

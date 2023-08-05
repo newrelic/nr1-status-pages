@@ -2,10 +2,10 @@ const WorkloadSeverityToKnown = {
   0: 'none',
   1: 'minor',
   2: 'minor',
-  3: 'critical'
+  3: 'critical',
 };
 
-export const workloadFormatter = data => {
+export const workloadFormatter = (data) => {
   let statusCode = WorkloadSeverityToKnown.None;
   let status = 'All Systems Operational';
 
@@ -25,14 +25,14 @@ export const workloadFormatter = data => {
   return {
     name: 'Workload',
     description: status,
-    indicator: statusCode
+    indicator: statusCode,
   };
 };
 
 const launcherURL = `https://one.newrelic.com/launcher/nr1-core.explorer/?launcher=eyJ3bEZpbHRlcnMiOiIifQ==`;
 
-export const workloadIncidentFormatter = data => {
-  return data.results[0].events.map(incident => {
+export const workloadIncidentFormatter = (data) => {
+  return data.results[0].events.map((incident) => {
     const incident_updates = [];
     let incidentCode = WorkloadSeverityToKnown[incident.EventStatus];
 
@@ -42,12 +42,12 @@ export const workloadIncidentFormatter = data => {
         incident_updates.push({
           created_at: incident.EventTimeStamp,
           body: 'Workload Details',
-          link_url: `${launcherURL}&pane=${btoa(encodeURL)}`
+          link_url: `${launcherURL}&pane=${btoa(encodeURL)}`,
         });
       } else if (!key.toLowerCase().includes('timestamp')) {
         incident_updates.push({
           created_at: incident.EventTimeStamp,
-          body: `${key}: ${value}`
+          body: `${key}: ${value}`,
         });
       }
     });
@@ -60,7 +60,7 @@ export const workloadIncidentFormatter = data => {
       name: incident.EventName,
       created_at: incident.EventTimeStamp,
       impact: incidentCode,
-      incident_updates
+      incident_updates,
     };
   });
 };

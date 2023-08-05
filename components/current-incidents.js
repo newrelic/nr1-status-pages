@@ -8,7 +8,7 @@ export default class CurrentIncidents extends React.PureComponent {
   static propTypes = {
     hostname: PropTypes.string,
     handleTileClick: PropTypes.func,
-    currentIncidents: PropTypes.array
+    currentIncidents: PropTypes.array,
   };
 
   setTimelineSymbol(incidentImpact) {
@@ -74,7 +74,7 @@ export default class CurrentIncidents extends React.PureComponent {
             iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EXTERNAL_LINK}
             sizeType={Button.SIZE_TYPE.SMALL}
             to={hostname}
-            onClick={e => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
             Go to status page
           </Button>
@@ -88,7 +88,7 @@ export default class CurrentIncidents extends React.PureComponent {
         <div
           className={`timeline-item impact-${incident.impact}`}
           key={`${incident.created_at}-${i}`}
-          onClick={e => {
+          onClick={(e) => {
             handleTileClick(i);
             e.stopPropagation();
           }}

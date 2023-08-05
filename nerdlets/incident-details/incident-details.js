@@ -12,13 +12,13 @@ const REFRESH_RATE = 15;
 
 export default class IncidentDetails extends React.PureComponent {
   static propTypes = {
-    nerdletUrlState: PropTypes.object
+    nerdletUrlState: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      incidents: undefined
+      incidents: undefined,
     };
     this.FormatService = new FormatService(this.props.nerdletUrlState.provider);
   }
