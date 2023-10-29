@@ -627,21 +627,26 @@ export default class StatusPagesDashboard extends React.PureComponent {
           hidden={!deleteTileModalActive}
           onClose={() => this.setState({ deleteTileModalActive: false })}
         >
-          <HeadingText type={HeadingText.TYPE.HEADING_2}>
+          <HeadingText
+            className="modal-heading"
+            type={HeadingText.TYPE.HEADING_2}
+          >
             Are you sure you want to delete this service?
           </HeadingText>
-          <p>
+          <p className="modal-paragraph">
             This cannot be undone. Please confirm whether or not you want to
             delete this service from your status pages.
           </p>
 
           <Button
+            className="modal-button"
             type={Button.TYPE.PRIMARY}
             onClick={() => this.setState({ deleteTileModalActive: false })}
           >
             Cancel
           </Button>
           <Button
+            className="modal-button"
             type={Button.TYPE.DESTRUCTIVE}
             onClick={this.deleteHostName}
             iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
@@ -654,10 +659,13 @@ export default class StatusPagesDashboard extends React.PureComponent {
           hidden={!createTileModalActive}
           onClose={() => this.setState({ createTileModalActive: false })}
         >
-          <HeadingText type={HeadingText.TYPE.HEADING_2}>
+          <HeadingText
+            className="modal-heading"
+            type={HeadingText.TYPE.HEADING_2}
+          >
             Add new service
           </HeadingText>
-          <p>
+          <p className="modal-paragraph">
             Select a common services from the "quick setup" dropdown below, or
             provide the information needed to determine the status of the
             service you'd like to add. You will be able to edit this information
@@ -741,12 +749,17 @@ export default class StatusPagesDashboard extends React.PureComponent {
           />
 
           <Button
+            className="modal-button"
             type={Button.TYPE.TERTIARY}
             onClick={() => this.setState({ createTileModalActive: false })}
           >
             Cancel
           </Button>
-          <Button type={Button.TYPE.PRIMARY} onClick={this.handleAddNewService}>
+          <Button
+            className="modal-button"
+            type={Button.TYPE.PRIMARY}
+            onClick={this.handleAddNewService}
+          >
             Add new service
           </Button>
         </Modal>
