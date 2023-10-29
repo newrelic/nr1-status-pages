@@ -78,7 +78,7 @@ export default class CustomHostNames extends React.PureComponent {
             sizeType={Button.SIZE_TYPE.SMALL}
             iconType={Button.ICON_TYPE.INTERFACE__SIGN__TIMES}
             onClick={() => {
-              deleteHostNameCallback(hostNameObject.hostName);
+              deleteHostNameCallback(hostNameObject.id);
             }}
           >
             Delete
