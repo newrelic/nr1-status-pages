@@ -263,10 +263,10 @@ export default class StatusPagesDashboard extends React.PureComponent {
   };
 
   deleteHostName = async () => {
-    const hostNameText = this.state.tileToBeDeleted;
+    const hostId = this.state.tileToBeDeleted;
     const { hostNames } = this.state;
     hostNames.splice(
-      hostNames.findIndex((val) => val.hostName === hostNameText),
+      hostNames.findIndex((val) => val.id === hostId),
       1
     );
     const { deleteTileModalActive } = this.state;
@@ -502,7 +502,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
     const { deleteTileModalActive } = this.state;
     this.setState({
       deleteTileModalActive: !deleteTileModalActive,
-      tileToBeDeleted: hostname.hostName,
+      tileToBeDeleted: hostname.id,
     });
   };
 
