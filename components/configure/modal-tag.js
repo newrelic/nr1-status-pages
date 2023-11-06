@@ -69,7 +69,7 @@ export default class TagsModal extends React.PureComponent {
         <div className="tag-container">
           <HeadingText
             type={HeadingText.TYPE.HEADING_4}
-            className="add-dependancy-heading"
+            className="add-dependancy-heading modal-heading"
           >
             {' '}
             Add External Dependency Tags
@@ -87,6 +87,7 @@ export default class TagsModal extends React.PureComponent {
           >
             <StackItem>
               <Button
+                className="modal-button"
                 type={Button.TYPE.TERTIARY}
                 onClick={() => {
                   onClose(tags);
@@ -97,6 +98,7 @@ export default class TagsModal extends React.PureComponent {
             </StackItem>
             <StackItem>
               <Button
+                className="modal-button"
                 onClick={this.addTag}
                 type={Button.TYPE.PRIMARY}
                 iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
