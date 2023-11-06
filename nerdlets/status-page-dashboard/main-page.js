@@ -266,7 +266,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
     const hostId = this.state.tileToBeDeleted;
     const { hostNames } = this.state;
     hostNames.splice(
-      hostNames.findIndex((val) => val.hostName === hostId),
+      hostNames.findIndex((val) => val.id === hostId),
       1
     );
     const { deleteTileModalActive } = this.state;
