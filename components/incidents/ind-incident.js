@@ -6,11 +6,11 @@ import { HeadingText } from 'nr1';
 
 export default class IndIncident extends React.PureComponent {
   static propTypes = {
-    incident: PropTypes.object
+    incident: PropTypes.object,
   };
 
   generateIncidentUpdates() {
-    return this.props.incident.incident_updates.map(update => (
+    return this.props.incident.incident_updates.map((update) => (
       <IndUpdates key={update.id} update={update} />
     ));
   }

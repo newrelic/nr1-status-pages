@@ -13,7 +13,7 @@ export default class StatuspalHelper {
   }
 
   clear = () => {
-    this.setIntervalIds.forEach(timeoutId => {
+    this.setIntervalIds.forEach((timeoutId) => {
       clearInterval(timeoutId);
     });
 
@@ -25,7 +25,7 @@ export default class StatuspalHelper {
 
     try {
       const data = await Promise.all(
-        urls.map(async url => {
+        urls.map(async (url) => {
           const res = await axios.get(STATUSPAL_API + url);
 
           return { data: res.data, url };
@@ -33,7 +33,7 @@ export default class StatuspalHelper {
       );
 
       networkResponse = {
-        data: Object.fromEntries(data.map(data => [data.url, data.data]))
+        data: Object.fromEntries(data.map((data) => [data.url, data.data])),
       };
     } catch {
       networkResponse =
@@ -69,7 +69,7 @@ export default class StatuspalHelper {
   async pollCurrentIncidents(callbackSetterFunction, callbackBeforePolling) {
     const urls = [
       `/status_pages/${this.subDomain}/status`,
-      `/status_pages/${this.subDomain}/incidents`
+      `/status_pages/${this.subDomain}/incidents`,
     ];
 
     await this._fetchAndPopulateData(urls, callbackSetterFunction);

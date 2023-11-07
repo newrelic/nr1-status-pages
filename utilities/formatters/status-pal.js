@@ -2,10 +2,10 @@ const StatuspalDescriptionMap = {
   null: 'All Systems Operational',
   minor: 'Minor System Outage',
   major: 'Major System Outage',
-  maintenance: 'Service Under Maintenance'
+  maintenance: 'Service Under Maintenance',
 };
 
-export const statusPalFormatter = data => {
+export const statusPalFormatter = (data) => {
   data = remapData(data).status;
 
   const status = data.status_page.current_incident_type;
@@ -13,19 +13,19 @@ export const statusPalFormatter = data => {
   return {
     name: data.status_page.name,
     description: StatuspalDescriptionMap[status],
-    indicator: status === null ? 'none' : status
+    indicator: status === null ? 'none' : status,
   };
 };
 
-export const statusPalIncidentFormatter = data => {
+export const statusPalIncidentFormatter = (data) => {
   data = remapData(data).incidents;
 
-  return data.incidents.map(incident => {
+  return data.incidents.map((incident) => {
     return {
       name: incident.title,
       created_at: incident.inserted_at,
       impact: incident.type,
-      incident_updates: []
+      incident_updates: [],
     };
   });
 };

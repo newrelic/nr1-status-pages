@@ -1,6 +1,6 @@
 import { getProvider } from './provider-services';
 
-const axios = require('axios');
+import axios from 'axios';
 
 export default class Network {
   constructor(statusPageUrl, refreshRateInSeconds, provider) {
@@ -11,7 +11,7 @@ export default class Network {
   }
 
   clear = () => {
-    this.setIntervalIds.forEach(timeoutId => {
+    this.setIntervalIds.forEach((timeoutId) => {
       clearInterval(timeoutId);
     });
 

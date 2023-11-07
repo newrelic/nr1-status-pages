@@ -1,30 +1,37 @@
 module.exports = {
-  "env": {
-      "browser": true,
-      "es6": true
-  },
-  "extends": [
-      'plugin:@newrelic/eslint-plugin-newrelic/react',
-      'plugin:@newrelic/eslint-plugin-newrelic/jest',
-      'plugin:@newrelic/eslint-plugin-newrelic/prettier'
+  extends: [
+    'eslint:recommended',
+    'plugin:import/recommended',
+    'plugin:promise/recommended',
+    'plugin:eslint-comments/recommended',
+    'plugin:react/recommended',
+    'plugin:prettier/recommended',
   ],
-  "globals": {
-      "Atomics": "readonly",
-      "SharedArrayBuffer": "readonly"
+  env: {
+    browser: true,
+    es6: true,
+    jest: true,
   },
-  "parser": "babel-eslint",
-  "parserOptions": {
-      "ecmaFeatures": {
-          "jsx": true
-      },
-      "ecmaVersion": 2018,
-      "sourceType": "module"
+  globals: {
+    __nr: true,
   },
-  "plugins": [
-      "react",
-      "prettier"
-  ],
-  "rules": {
-      "prettier/prettier": "error"
-  }
+  parser: '@babel/eslint-parser',
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 2020,
+    sourceType: 'module',
+  },
+  plugins: ['import', 'promise', 'eslint-comments', 'react', 'prettier'],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+  rules: {
+    'import/no-unresolved': 'off',
+    'no-empty-function': ['error', { allow: ['arrowFunctions'] }],
+    "react/no-unescaped-entities": 'off',
+  },
 };

@@ -7,7 +7,7 @@ const ReactMarkdown = require('react-markdown');
 
 export default class IndUpdates extends React.PureComponent {
   static propTypes = {
-    update: PropTypes.object
+    update: PropTypes.object,
   };
 
   render() {

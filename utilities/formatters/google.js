@@ -1,15 +1,15 @@
 const GoogleSeverityToKnown = {
   low: 'minor',
   medium: 'major',
-  high: 'critical'
+  high: 'critical',
 };
 
-export const googleFormatter = data => {
+export const googleFormatter = (data) => {
   const formattedData = {};
-  data = data.sort(incident => incident.begin);
+  data = data.sort((incident) => incident.begin);
   formattedData.name = 'Google Cloud';
   const openIncident = data.find(
-    incident => !incident.end || incident.end === ''
+    (incident) => !incident.end || incident.end === ''
   );
   if (openIncident) {
     formattedData.description = 'Ongoing Issues';
@@ -21,18 +21,18 @@ export const googleFormatter = data => {
   return formattedData;
 };
 
-export const googleIncidentFormatter = data => {
-  return data.map(incident => {
+export const googleIncidentFormatter = (data) => {
+  return data.map((incident) => {
     return {
       name: incident.external_desc,
       created_at: incident.created,
       impact: GoogleSeverityToKnown[incident.severity],
-      incident_updates: incident.updates.map(update => {
+      incident_updates: incident.updates.map((update) => {
         return {
           created_at: update.created,
-          body: update.text
+          body: update.text,
         };
-      })
+      }),
     };
   });
 };

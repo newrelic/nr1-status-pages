@@ -6,14 +6,14 @@ export default class TagsModal extends React.PureComponent {
   static propTypes = {
     hostName: PropTypes.string,
     hidden: PropTypes.bool,
-    onClose: PropTypes.func
+    onClose: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       addTagName: '',
-      tags: props.hostName ? props.hostName.tags : []
+      tags: props.hostName ? props.hostName.tags : [],
     };
     this.addTag = this.addTag.bind(this);
     this.deleteTag = this.deleteTag.bind(this);
@@ -31,11 +31,11 @@ export default class TagsModal extends React.PureComponent {
   deleteTag(tagName) {
     const { tags } = this.state;
     this.props.hostName.tags.splice(
-      this.props.hostName.tags.findIndex(tag => tag === tagName),
+      this.props.hostName.tags.findIndex((tag) => tag === tagName),
       1
     );
     tags.splice(
-      tags.findIndex(tag => tag === tagName),
+      tags.findIndex((tag) => tag === tagName),
       1
     );
     this.setState({ tags: tags });
@@ -43,7 +43,7 @@ export default class TagsModal extends React.PureComponent {
 
   generateListHostNames() {
     if (!this.props.hostName || !this.props.hostName.tags) return <div />;
-    return this.props.hostName.tags.map(tag => (
+    return this.props.hostName.tags.map((tag) => (
       <li key={tag} className="modal-list-item">
         <div className="modal-list-item-name"> {tag} </div>
         <Button
@@ -69,7 +69,7 @@ export default class TagsModal extends React.PureComponent {
         <div className="tag-container">
           <HeadingText
             type={HeadingText.TYPE.HEADING_4}
-            className="add-dependancy-heading"
+            className="add-dependancy-heading modal-heading"
           >
             {' '}
             Add External Dependency Tags
@@ -87,6 +87,7 @@ export default class TagsModal extends React.PureComponent {
           >
             <StackItem>
               <Button
+                className="modal-button"
                 type={Button.TYPE.TERTIARY}
                 onClick={() => {
                   onClose(tags);
@@ -97,6 +98,7 @@ export default class TagsModal extends React.PureComponent {
             </StackItem>
             <StackItem>
               <Button
+                className="modal-button"
                 onClick={this.addTag}
                 type={Button.TYPE.PRIMARY}
                 iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}

@@ -10,62 +10,62 @@ import {
   Spinner,
   Modal,
   Button,
-  Checkbox
+  Checkbox,
 } from 'nr1';
 import Toolbar from '../../components/toolbar';
 import AccountPicker from '../../components/account-picker';
 import {
   getHostNamesFromNerdStorage,
-  saveHostNamesToNerdStorage
+  saveHostNamesToNerdStorage,
 } from '../../utilities/nerdlet-storage';
 import TextFieldWrapper from './TextFieldWrapper/TextFieldWrapper';
 
-const uuid = require('uuid/v4');
+import { v4 as uuidv4 } from 'uuid';
 
-const createOption = label => ({
+const createOption = (label) => ({
   label,
-  value: label
+  value: label,
 });
 
 const PROVIDERS = {
   STATUS_PAGE: {
     value: 'statusPageIo',
-    label: 'Status Page'
+    label: 'Status Page',
   },
   GOOGLE: {
     value: 'google',
-    label: 'Google'
+    label: 'Google',
   },
   STATUS_IO: {
     value: 'statusIo',
-    label: 'Status Io'
+    label: 'Status Io',
   },
   NRQL: {
     value: 'nrql',
-    label: 'NRQL'
+    label: 'NRQL',
   },
   WORKLOAD: {
     value: 'workload',
-    label: 'Workload'
+    label: 'Workload',
   },
   RSS: {
     value: 'rss',
-    label: 'RSS Feed'
+    label: 'RSS Feed',
   },
   STATUS_PAL: {
     value: 'statusPal',
-    label: 'Statuspal'
-  }
+    label: 'Statuspal',
+  },
 };
 
 const emptyInputState = {
   inputValue: '',
-  validationText: ''
+  validationText: '',
 };
 
 export default class StatusPagesDashboard extends React.PureComponent {
   static propTypes = {
-    entityGuid: PropTypes.string
+    entityGuid: PropTypes.string,
   };
 
   constructor(props) {
@@ -88,14 +88,14 @@ export default class StatusPagesDashboard extends React.PureComponent {
         providerName: { ...emptyInputState },
         nrqlQuery: { ...emptyInputState },
         workloadGuid: { ...emptyInputState },
-        logoUrl: { ...emptyInputState }
+        logoUrl: { ...emptyInputState },
       },
       searchQuery: '',
       keyObject: {
         key: props.entityGuid,
-        type: props.entityGuid ? 'entity' : 'account'
+        type: props.entityGuid ? 'entity' : 'account',
       },
-      requestForHostnamesMade: false
+      requestForHostnamesMade: false,
     };
 
     this.newHostNameInput = React.createRef();
@@ -106,7 +106,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
     if (entityGuid) {
       const hostNames = await getHostNamesFromNerdStorage({
         key: entityGuid,
-        type: 'entity'
+        type: 'entity',
       });
       this.setHostNames(hostNames);
     }
@@ -124,7 +124,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
   clearFormInputs = () => {
     const { formInputs } = this.state;
     const updatedInputs = { ...formInputs };
-    Object.keys(updatedInputs).forEach(inputName => {
+    Object.keys(updatedInputs).forEach((inputName) => {
       updatedInputs[inputName] = { ...emptyInputState };
     });
 
@@ -140,7 +140,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
     const { formInputs } = this.state;
 
     const updatedFormInputs = { ...formInputs };
-    const inputsList = Object.keys(formInputs).filter(k => k !== 'logoUrl');
+    const inputsList = Object.keys(formInputs).filter((k) => k !== 'logoUrl');
     const genericValidationError = 'Please fill this field before saving.';
     let isFormValid = true;
 
@@ -158,7 +158,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
       nrqlQuery,
       workloadGuid,
       providerName,
-      hostName
+      hostName,
     } = updatedFormInputs;
 
     if (corsProxyAddress && corsProxyAddress.inputValue) {
@@ -219,7 +219,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
       nrqlQuery,
       workloadGuid,
       corsProxyAddress,
-      subDomain
+      subDomain,
     } = formInputs;
 
     let formattedHostName;
@@ -239,21 +239,21 @@ export default class StatusPagesDashboard extends React.PureComponent {
     }
 
     const hostNameObject = {
-      id: uuid(),
+      id: uuidv4(),
       serviceName: serviceName.inputValue,
       hostName: formattedHostName,
       provider: providerName.inputValue,
       hostLogo: logoUrl.inputValue,
       nrqlQuery: nrqlQuery?.inputValue,
       workloadGuid: workloadGuid?.inputValue,
-      subDomain: subDomain?.inputValue
+      subDomain: subDomain?.inputValue,
     };
 
     await this.addHostName(hostNameObject);
     this.clearFormInputs();
   };
 
-  addHostName = async hostNameObject => {
+  addHostName = async (hostNameObject) => {
     const { hostNames } = this.state;
     hostNames.push(hostNameObject);
     this.setState({ hostNames }, async () => {
@@ -263,24 +263,24 @@ export default class StatusPagesDashboard extends React.PureComponent {
   };
 
   deleteHostName = async () => {
-    const hostNameText = this.state.tileToBeDeleted;
+    const hostId = this.state.tileToBeDeleted;
     const { hostNames } = this.state;
     hostNames.splice(
-      hostNames.findIndex(val => val.hostName === hostNameText),
+      hostNames.findIndex((val) => val.id === hostId),
       1
     );
     const { deleteTileModalActive } = this.state;
     this.setState({
       hostNames: hostNames,
-      deleteTileModalActive: !deleteTileModalActive
+      deleteTileModalActive: !deleteTileModalActive,
     });
     await this.save();
   };
 
-  editHostName = async hostnameObject => {
+  editHostName = async (hostnameObject) => {
     const { hostNames } = this.state;
     const { id } = hostnameObject;
-    const indexOfEditedHostname = hostNames.findIndex(val => val.id === id);
+    const indexOfEditedHostname = hostNames.findIndex((val) => val.id === id);
 
     const newHostnameObject = hostnameObject;
     newHostnameObject.id = hostNames[indexOfEditedHostname].id;
@@ -290,7 +290,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
     await this.save();
   };
 
-  setHostNames = hostNames => {
+  setHostNames = (hostNames) => {
     this.setState({ hostNames, requestForHostnamesMade: true });
   };
 
@@ -316,17 +316,17 @@ export default class StatusPagesDashboard extends React.PureComponent {
     filledInputs.providerName.inputValue = selectedPopularSite.provider;
     filledInputs.logoUrl.inputValue = selectedPopularSite.hostLogo;
 
-    Object.keys(filledInputs).forEach(inputName => {
+    Object.keys(filledInputs).forEach((inputName) => {
       filledInputs[inputName].validationText = '';
     });
 
     this.setState({
       formInputs: filledInputs,
-      selectedPopularSiteIndex: indexOfPopularSite
+      selectedPopularSiteIndex: indexOfPopularSite,
     });
   }
 
-  handleSelectKeyDown = event => {
+  handleSelectKeyDown = (event) => {
     const { inputValue, value } = this.state;
     if (!inputValue) return;
     switch (event.key) {
@@ -334,13 +334,13 @@ export default class StatusPagesDashboard extends React.PureComponent {
       case 'Tab':
         this.setState({
           inputValue: '',
-          value: [...value, createOption(inputValue)]
+          value: [...value, createOption(inputValue)],
         });
         event.preventDefault();
     }
   };
 
-  handleCORSChange = event => {
+  handleCORSChange = (event) => {
     const isChecked = event.target.checked;
 
     const { formInputs } = this.state;
@@ -356,11 +356,11 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
     this.setState({
       hostRequiresProxy: isChecked,
-      formInputs: updatedFormInputs
+      formInputs: updatedFormInputs,
     });
   };
 
-  handleProviderChange = event => {
+  handleProviderChange = (event) => {
     event.persist();
     const { formInputs } = this.state;
     const updatedFormInputs = { ...formInputs };
@@ -402,28 +402,24 @@ export default class StatusPagesDashboard extends React.PureComponent {
       this.setState({
         selectedAccountId: accountId,
         accounts,
-        keyObject
+        keyObject,
       });
 
       const hostNames = await getHostNamesFromNerdStorage({
         key: accountId,
-        type: 'account'
+        type: 'account',
       });
       this.setHostNames(hostNames);
     }
   };
 
-  setSearchQuery = event => {
+  setSearchQuery = (event) => {
     this.setState({ searchQuery: event.target.value });
   };
 
   getGridItems() {
-    const {
-      searchQuery,
-      hostNames,
-      requestForHostnamesMade,
-      entityGuid
-    } = this.state;
+    const { searchQuery, hostNames, requestForHostnamesMade, entityGuid } =
+      this.state;
 
     const entityGuidExists = entityGuid !== null && entityGuid !== undefined;
 
@@ -472,7 +468,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
     let currentHostnames = hostNames;
 
     if (searchQuery !== '' && searchQuery !== undefined) {
-      currentHostnames = hostNames.filter(hostname => {
+      currentHostnames = hostNames.filter((hostname) => {
         if (!hostname.serviceName) {
           return hostname.hostName
             .toLowerCase()
@@ -484,7 +480,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
       });
     }
 
-    return currentHostnames.map(hostname => (
+    return currentHostnames.map((hostname) => (
       <GridItem
         className="status-page-grid-item"
         key={hostname.id}
@@ -502,11 +498,11 @@ export default class StatusPagesDashboard extends React.PureComponent {
     ));
   }
 
-  handleDeleteTileModal = hostname => {
+  handleDeleteTileModal = (hostname) => {
     const { deleteTileModalActive } = this.state;
     this.setState({
       deleteTileModalActive: !deleteTileModalActive,
-      tileToBeDeleted: hostname.hostName
+      tileToBeDeleted: hostname.id,
     });
   };
 
@@ -526,7 +522,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
     }
 
     this.setState({
-      formInputs: updatedFormInputs
+      formInputs: updatedFormInputs,
     });
   };
 
@@ -540,7 +536,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
       createTileModalActive,
       formInputs,
       selectedPopularSiteIndex,
-      hostRequiresProxy
+      hostRequiresProxy,
     } = this.state;
 
     const {
@@ -551,7 +547,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
       nrqlQuery,
       workloadGuid,
       corsProxyAddress,
-      subDomain
+      subDomain,
     } = formInputs;
 
     const providerInput = (() => {
@@ -560,7 +556,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
           <TextFieldWrapper
             label="NRQL"
             placeholder="Put your NRQL query here"
-            onChange={event => {
+            onChange={(event) => {
               this.updateInputValue(event, 'nrqlQuery');
             }}
             value={nrqlQuery.inputValue}
@@ -572,7 +568,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
           <TextFieldWrapper
             label="Workload Guid"
             placeholder="Put your Workload Entity guid here"
-            onChange={event => {
+            onChange={(event) => {
               this.updateInputValue(event, 'workloadGuid');
             }}
             value={workloadGuid.inputValue}
@@ -584,7 +580,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
           <TextFieldWrapper
             label="Subdomain"
             placeholder="Put your Statuspal subdomain here"
-            onChange={event => {
+            onChange={(event) => {
               this.updateInputValue(event, 'subDomain');
             }}
             value={subDomain.inputValue}
@@ -596,7 +592,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
           <TextFieldWrapper
             label="Hostname"
             placeholder="https://status.myservice.com/"
-            onChange={event => {
+            onChange={(event) => {
               this.updateInputValue(event, 'hostName');
             }}
             value={hostName.inputValue}
@@ -631,21 +627,26 @@ export default class StatusPagesDashboard extends React.PureComponent {
           hidden={!deleteTileModalActive}
           onClose={() => this.setState({ deleteTileModalActive: false })}
         >
-          <HeadingText type={HeadingText.TYPE.HEADING_2}>
+          <HeadingText
+            className="modal-heading"
+            type={HeadingText.TYPE.HEADING_2}
+          >
             Are you sure you want to delete this service?
           </HeadingText>
-          <p>
+          <p className="modal-paragraph">
             This cannot be undone. Please confirm whether or not you want to
             delete this service from your status pages.
           </p>
 
           <Button
+            className="modal-button"
             type={Button.TYPE.PRIMARY}
             onClick={() => this.setState({ deleteTileModalActive: false })}
           >
             Cancel
           </Button>
           <Button
+            className="modal-button"
             type={Button.TYPE.DESTRUCTIVE}
             onClick={this.deleteHostName}
             iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
@@ -658,10 +659,13 @@ export default class StatusPagesDashboard extends React.PureComponent {
           hidden={!createTileModalActive}
           onClose={() => this.setState({ createTileModalActive: false })}
         >
-          <HeadingText type={HeadingText.TYPE.HEADING_2}>
+          <HeadingText
+            className="modal-heading"
+            type={HeadingText.TYPE.HEADING_2}
+          >
             Add new service
           </HeadingText>
-          <p>
+          <p className="modal-paragraph">
             Select a common services from the "quick setup" dropdown below, or
             provide the information needed to determine the status of the
             service you'd like to add. You will be able to edit this information
@@ -671,7 +675,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
             <label>Quick setup</label>
             <select
               value={selectedPopularSiteIndex}
-              onChange={e => this.handleQuickSetupSelect(e)}
+              onChange={(e) => this.handleQuickSetupSelect(e)}
             >
               <option value="">Choose a service</option>
               <option value="0">Google Cloud</option>
@@ -694,7 +698,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
             <div className="select-container">
               <TextFieldWrapper
                 label="CORS proxy address"
-                onChange={event => {
+                onChange={(event) => {
                   this.updateInputValue(event, 'corsProxyAddress');
                 }}
                 value={corsProxyAddress.inputValue}
@@ -725,7 +729,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
           <TextFieldWrapper
             label="Service name"
-            onChange={event => {
+            onChange={(event) => {
               this.updateInputValue(event, 'serviceName');
             }}
             value={serviceName.inputValue}
@@ -736,7 +740,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
           <TextFieldWrapper
             label="Service logo (url)"
-            onChange={event => {
+            onChange={(event) => {
               this.updateInputValue(event, 'logoUrl');
             }}
             value={logoUrl.inputValue}
@@ -745,12 +749,17 @@ export default class StatusPagesDashboard extends React.PureComponent {
           />
 
           <Button
+            className="modal-button"
             type={Button.TYPE.TERTIARY}
             onClick={() => this.setState({ createTileModalActive: false })}
           >
             Cancel
           </Button>
-          <Button type={Button.TYPE.PRIMARY} onClick={this.handleAddNewService}>
+          <Button
+            className="modal-button"
+            type={Button.TYPE.PRIMARY}
+            onClick={this.handleAddNewService}
+          >
             Add new service
           </Button>
         </Modal>

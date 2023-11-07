@@ -1,10 +1,10 @@
 const NRQLSeverityToKnown = {
   None: 'none',
   Critical: 'critical',
-  Warning: 'minor'
+  Warning: 'minor',
 };
 
-export const nrqlFormatter = data => {
+export const nrqlFormatter = (data) => {
   let statusCode = NRQLSeverityToKnown.None;
   let status = 'All Systems Operational';
 
@@ -24,19 +24,19 @@ export const nrqlFormatter = data => {
   return {
     name: 'NRQL',
     description: status,
-    indicator: statusCode
+    indicator: statusCode,
   };
 };
 
-export const nrqlIncidentFormatter = data => {
-  return data.results[0].events.map(incident => {
+export const nrqlIncidentFormatter = (data) => {
+  return data.results[0].events.map((incident) => {
     const incident_updates = [];
     let incidentCode = NRQLSeverityToKnown[incident.EventStatus];
 
     Object.entries(incident).forEach(([key, value]) => {
       incident_updates.push({
         created_at: incident.EventTimeStamp,
-        body: `${key}: ${value}`
+        body: `${key}: ${value}`,
       });
     });
 
@@ -48,7 +48,7 @@ export const nrqlIncidentFormatter = data => {
       name: incident.EventName,
       created_at: incident.EventTimeStamp,
       impact: incidentCode,
-      incident_updates
+      incident_updates,
     };
   });
 };

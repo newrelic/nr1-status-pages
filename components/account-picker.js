@@ -7,7 +7,7 @@ import {
   DropdownItem,
   UserStorageMutation,
   UserStorageQuery,
-  TextField
+  TextField,
 } from 'nr1';
 
 const USER_ACCOUNT_COLLECTION = 'user_account_collection_v1';
@@ -16,7 +16,7 @@ const USER_SELECTED_ACCOUNT_ID = 'user_account_id';
 export default class AccountPicker extends React.PureComponent {
   static propTypes = {
     accountChangedCallback: PropTypes.func,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
   };
 
   constructor(props) {
@@ -24,7 +24,7 @@ export default class AccountPicker extends React.PureComponent {
     this.state = {
       selectedAccount: { name: '' },
       accounts: [],
-      filter: ''
+      filter: '',
     };
     this.onAccountChange = this.onAccountChange.bind(this);
   }
@@ -56,7 +56,7 @@ export default class AccountPicker extends React.PureComponent {
   async getLastChoseAccountId() {
     const userStorageQuery = {
       collection: USER_ACCOUNT_COLLECTION,
-      documentId: USER_SELECTED_ACCOUNT_ID
+      documentId: USER_SELECTED_ACCOUNT_ID,
     };
     // TODO: Add error handling
     const queryResults = await UserStorageQuery.query(userStorageQuery);
@@ -68,7 +68,7 @@ export default class AccountPicker extends React.PureComponent {
       actionType: UserStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
       collection: USER_ACCOUNT_COLLECTION,
       document: { account: accountId },
-      documentId: USER_SELECTED_ACCOUNT_ID
+      documentId: USER_SELECTED_ACCOUNT_ID,
     };
     UserStorageMutation.mutate(userMutation);
   }
@@ -94,7 +94,7 @@ export default class AccountPicker extends React.PureComponent {
     let filteredAccounts = [...accounts];
     if (filter && filter.length > 0) {
       const re = new RegExp(filter, 'i');
-      filteredAccounts = accounts.filter(a => {
+      filteredAccounts = accounts.filter((a) => {
         return a.name.match(re);
       });
     }
@@ -108,11 +108,11 @@ export default class AccountPicker extends React.PureComponent {
       <Dropdown
         title={selectedAccount.name || 'Account'}
         search={filter}
-        onSearch={event => {
+        onSearch={(event) => {
           this.setState({ filter: event.target.value });
         }}
       >
-        {filteredAccounts.map(a => (
+        {filteredAccounts.map((a) => (
           <DropdownItem key={a.id} onClick={() => this.onAccountChange(a)}>
             {a.name}
           </DropdownItem>

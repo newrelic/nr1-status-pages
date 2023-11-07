@@ -5,7 +5,7 @@ export default class Wrapper extends React.PureComponent {
   render() {
     return (
       <NerdletStateContext.Consumer>
-        {nerdletUrlState => (
+        {(nerdletUrlState) => (
           <div className="container">
             <h1 className="heading">External status page</h1>
             <iframe src={nerdletUrlState.externalLink} />
