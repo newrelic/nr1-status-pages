@@ -1,3 +1,20 @@
+# [1.6.0](https://github.com/newrelic/nr1-status-pages/compare/v1.5.5...v1.6.0) (2023-11-07)
+
+
+### Bug Fixes
+
+* change hostName to id ([57508a3](https://github.com/newrelic/nr1-status-pages/commit/57508a3d2ccb0cf6bce22d6558b364ff14354822))
+* delete status pages service item ([b9a7196](https://github.com/newrelic/nr1-status-pages/commit/b9a719651c924412e239d377fe583f1404596b07))
+* eslint error ([e3b0f3f](https://github.com/newrelic/nr1-status-pages/commit/e3b0f3f48b22bac8ace83c96bbb53a59e4ec3694))
+* eslint errors ([fb26096](https://github.com/newrelic/nr1-status-pages/commit/fb26096b6f1406ed2fedcff0fceb4821944f39d1))
+* keep style intact for external modal components ([a5e880e](https://github.com/newrelic/nr1-status-pages/commit/a5e880ed5c25794bb094b339e14126389538c2c2))
+
+
+### Features
+
+* add HelpModal component ([349b41a](https://github.com/newrelic/nr1-status-pages/commit/349b41a89a58f898808cae38e5df06cdc95a9fda))
+* add nrlabs Messages component ([71c6f37](https://github.com/newrelic/nr1-status-pages/commit/71c6f37c9a6c167f9ebcb9fdf2406ed960c51bc5))
+
 ## [1.5.5](https://github.com/newrelic/nr1-status-pages/compare/v1.5.4...v1.5.5) (2022-10-14)
 
 
