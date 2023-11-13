@@ -925,6 +925,10 @@ button[class*='Dropdown-trigger'],
   }
 }
 
+.mandatory {
+  color: rgb(232, 16, 16);
+}
+
 [class*='InnerModal-content'] {
   button[class*='Dropdown-trigger'] {
     width: 100%;
