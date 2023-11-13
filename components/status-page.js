@@ -404,7 +404,7 @@ export default class StatusPage extends React.PureComponent {
       const urlObject = new URL(url.inputValue);
       if (urlObject.protocol !== 'https:') {
         url.validationText =
-          'Please use Secure Socket Layer (HTTPS) protocol for this URL';
+          'Please try using Secure Socket Layer (HTTPS) protocol for this URL, and see if it works. Use of HTTP protocol is not allowed';
       }
     };
 

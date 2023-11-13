@@ -144,7 +144,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
           ? '. Please also '
           : 'Please ';
         urlField.validationText +=
-          'use Secure Socket Layer (HTTPS) protocol for this URL';
+          'try using Secure Socket Layer (HTTPS) protocol for this URL, and see if it works. Use of HTTP protocol is not allowed';
       }
     };
 
@@ -218,7 +218,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
       }
     }
 
-    [corsProxyAddress, hostName, logoUrl].forEach((urlField, index) => {
+    [corsProxyAddress, hostName, logoUrl].forEach((urlField) => {
       if (urlField?.inputValue) {
         validateUrl(urlField);
         if (urlField.validationText) isFormValid = false;
