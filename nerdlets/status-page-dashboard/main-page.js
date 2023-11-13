@@ -688,23 +688,29 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
           <hr className="or-sep" />
 
-          <div className="select-container">
-            <Checkbox
-              onChange={this.handleCORSChange}
-              label="Host requires CORS proxy"
-            />
-          </div>
-          {hostRequiresProxy && (
-            <div className="select-container">
-              <TextFieldWrapper
-                label="CORS proxy address"
-                onChange={(event) => {
-                  this.updateInputValue(event, 'corsProxyAddress');
-                }}
-                value={corsProxyAddress.inputValue}
-                validationText={corsProxyAddress.validationText}
-              />
-            </div>
+          {['nrql', 'workload', ''].includes(providerName.inputValue) ? (
+            ''
+          ) : (
+            <>
+              <div className="select-container">
+                <Checkbox
+                  onChange={this.handleCORSChange}
+                  label="Host requires CORS proxy"
+                />
+              </div>
+              {hostRequiresProxy && (
+                <div className="select-container">
+                  <TextFieldWrapper
+                    label="CORS proxy address"
+                    onChange={(event) => {
+                      this.updateInputValue(event, 'corsProxyAddress');
+                    }}
+                    value={corsProxyAddress.inputValue}
+                    validationText={corsProxyAddress.validationText}
+                  />
+                </div>
+              )}
+            </>
           )}
 
           <div className="select-container">
