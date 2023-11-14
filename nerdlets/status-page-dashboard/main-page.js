@@ -553,14 +553,10 @@ export default class StatusPagesDashboard extends React.PureComponent {
     const providerInput = (() => {
       if (providerName.inputValue === PROVIDERS.NRQL.value) {
         return (
-          <>
+          <div className="select-container">
             <label>
               NRQL
-              {nrqlQuery.inputValue.length > 2 ? (
-                ''
-              ) : (
-                <span className="mandatory"> * </span>
-              )}
+              <span className="mandatory"> * </span>
             </label>
             <TextFieldWrapper
               placeholder="Put your NRQL query here"
@@ -570,18 +566,14 @@ export default class StatusPagesDashboard extends React.PureComponent {
               value={nrqlQuery.inputValue}
               validationText={nrqlQuery.validationText}
             />
-          </>
+          </div>
         );
       } else if (providerName.inputValue === PROVIDERS.WORKLOAD.value) {
         return (
-          <>
+          <div className="select-container">
             <label>
               Workload Guid
-              {workloadGuid.inputValue.length > 2 ? (
-                ''
-              ) : (
-                <span className="mandatory"> * </span>
-              )}
+              <span className="mandatory"> * </span>
             </label>
             <TextFieldWrapper
               placeholder="Put your Workload Entity guid here"
@@ -591,18 +583,14 @@ export default class StatusPagesDashboard extends React.PureComponent {
               value={workloadGuid.inputValue}
               validationText={workloadGuid.validationText}
             />
-          </>
+          </div>
         );
       } else if (providerName.inputValue === PROVIDERS.STATUS_PAL.value) {
         return (
-          <>
+          <div className="select-container">
             <label>
               Subdomain
-              {subDomain.inputValue.length > 2 ? (
-                ''
-              ) : (
-                <span className="mandatory"> * </span>
-              )}
+              <span className="mandatory"> * </span>
             </label>
             <TextFieldWrapper
               placeholder="Put your Statuspal subdomain here"
@@ -612,18 +600,14 @@ export default class StatusPagesDashboard extends React.PureComponent {
               value={subDomain.inputValue}
               validationText={subDomain.validationText}
             />
-          </>
+          </div>
         );
       } else {
         return (
-          <>
+          <div className="select-container">
             <label>
               Hostname
-              {hostName.inputValue.length > 2 ? (
-                ''
-              ) : (
-                <span className="mandatory"> * </span>
-              )}
+              <span className="mandatory"> * </span>
             </label>
             <TextFieldWrapper
               placeholder="https://status.myservice.com/"
@@ -633,7 +617,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
               value={hostName.inputValue}
               validationText={hostName.validationText}
             />
-          </>
+          </div>
         );
       }
     })();
@@ -746,11 +730,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
           <div className="select-container">
             <label>
               Provider
-              {providerName.inputValue ? (
-                ''
-              ) : (
-                <span className="mandatory"> * </span>
-              )}
+              <span className="mandatory"> * </span>
             </label>
             <select
               onChange={this.handleProviderChange}
