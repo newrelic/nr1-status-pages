@@ -553,51 +553,71 @@ export default class StatusPagesDashboard extends React.PureComponent {
     const providerInput = (() => {
       if (providerName.inputValue === PROVIDERS.NRQL.value) {
         return (
-          <TextFieldWrapper
-            label="NRQL"
-            placeholder="Put your NRQL query here"
-            onChange={(event) => {
-              this.updateInputValue(event, 'nrqlQuery');
-            }}
-            value={nrqlQuery.inputValue}
-            validationText={nrqlQuery.validationText}
-          />
+          <div className="select-container">
+            <label>
+              NRQL
+              <span className="mandatory"> * </span>
+            </label>
+            <TextFieldWrapper
+              placeholder="Put your NRQL query here"
+              onChange={(event) => {
+                this.updateInputValue(event, 'nrqlQuery');
+              }}
+              value={nrqlQuery.inputValue}
+              validationText={nrqlQuery.validationText}
+            />
+          </div>
         );
       } else if (providerName.inputValue === PROVIDERS.WORKLOAD.value) {
         return (
-          <TextFieldWrapper
-            label="Workload Guid"
-            placeholder="Put your Workload Entity guid here"
-            onChange={(event) => {
-              this.updateInputValue(event, 'workloadGuid');
-            }}
-            value={workloadGuid.inputValue}
-            validationText={workloadGuid.validationText}
-          />
+          <div className="select-container">
+            <label>
+              Workload Guid
+              <span className="mandatory"> * </span>
+            </label>
+            <TextFieldWrapper
+              placeholder="Put your Workload Entity guid here"
+              onChange={(event) => {
+                this.updateInputValue(event, 'workloadGuid');
+              }}
+              value={workloadGuid.inputValue}
+              validationText={workloadGuid.validationText}
+            />
+          </div>
         );
       } else if (providerName.inputValue === PROVIDERS.STATUS_PAL.value) {
         return (
-          <TextFieldWrapper
-            label="Subdomain"
-            placeholder="Put your Statuspal subdomain here"
-            onChange={(event) => {
-              this.updateInputValue(event, 'subDomain');
-            }}
-            value={subDomain.inputValue}
-            validationText={subDomain.validationText}
-          />
+          <div className="select-container">
+            <label>
+              Subdomain
+              <span className="mandatory"> * </span>
+            </label>
+            <TextFieldWrapper
+              placeholder="Put your Statuspal subdomain here"
+              onChange={(event) => {
+                this.updateInputValue(event, 'subDomain');
+              }}
+              value={subDomain.inputValue}
+              validationText={subDomain.validationText}
+            />
+          </div>
         );
       } else {
         return (
-          <TextFieldWrapper
-            label="Hostname"
-            placeholder="https://status.myservice.com/"
-            onChange={(event) => {
-              this.updateInputValue(event, 'hostName');
-            }}
-            value={hostName.inputValue}
-            validationText={hostName.validationText}
-          />
+          <div className="select-container">
+            <label>
+              Hostname
+              <span className="mandatory"> * </span>
+            </label>
+            <TextFieldWrapper
+              placeholder="https://status.myservice.com/"
+              onChange={(event) => {
+                this.updateInputValue(event, 'hostName');
+              }}
+              value={hostName.inputValue}
+              validationText={hostName.validationText}
+            />
+          </div>
         );
       }
     })();
@@ -708,7 +728,10 @@ export default class StatusPagesDashboard extends React.PureComponent {
           )}
 
           <div className="select-container">
-            <label>Provider</label>
+            <label>
+              Provider
+              <span className="mandatory"> * </span>
+            </label>
             <select
               onChange={this.handleProviderChange}
               value={providerName.inputValue}
