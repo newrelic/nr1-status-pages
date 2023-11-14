@@ -11,6 +11,7 @@ import CurrentIncidents from './current-incidents';
 import FormatService from '../utilities/format-service';
 import { Spinner, Button, Icon, TextField, Link, navigation } from 'nr1';
 
+import TextFieldWrapper from '../nerdlets/status-page-dashboard/TextFieldWrapper/TextFieldWrapper';
 import GitHubLogo from '../assets/logo-github.svg';
 import NewRelicLogo from '../assets/logo-new-relic.png';
 import JiraLogo from '../assets/logo-jira.png';
@@ -50,11 +51,13 @@ export default class StatusPage extends React.PureComponent {
       settingsPopoverActive: false,
       editedServiceName: this.props.hostname.serviceName,
       editedHostName: this.props.hostname.hostName,
+      editedHostNameValidationText: '',
       editedNrqlQuery: this.props.hostname.nrqlQuery,
       editedWorkloadGuid: this.props.hostname.workloadGuid,
       editedSubDomain: this.props.hostname.subDomain,
       editedHostProvider: this.props.hostname.provider,
       editedHostLogo: this.props.hostname.hostLogo,
+      editedHostLogoValidationText: '',
       editedHostId: this.props.hostname.id,
     };
 
@@ -396,10 +399,41 @@ export default class StatusPage extends React.PureComponent {
       id: this.state.editedHostId,
     };
 
-    this.props.editHostName()(hostNameObject);
-    e.stopPropagation();
-    this.handleTileSettingsAnimation();
-    this.setupDataPolling();
+    const validateUrl = (url) => {
+      const urlObject = new URL(url.inputValue);
+      if (urlObject.protocol !== 'https:') {
+        url.validationText = 'You must use secure URL (HTTPS)';
+      }
+    };
+
+    const hostName = {
+      inputValue: hostNameObject.hostName,
+      validationText: '',
+    };
+    const hostLogo = {
+      inputValue: hostNameObject.hostLogo,
+      validationText: '',
+    };
+
+    if (hostNameObject.hostName) {
+      validateUrl(hostName);
+    }
+
+    if (hostNameObject.hostLogo) {
+      validateUrl(hostLogo);
+    }
+
+    this.setState({
+      editedHostNameValidationText: hostName.validationText,
+      editedHostLogoValidationText: hostLogo.validationText,
+    });
+
+    if (hostName.validationText === '' && hostLogo.validationText === '') {
+      this.props.editHostName()(hostNameObject);
+      e.stopPropagation();
+      this.handleTileSettingsAnimation();
+      this.setupDataPolling();
+    }
   }
 
   handleSettingsButtonMouseLeave = () => {
@@ -474,6 +508,12 @@ export default class StatusPage extends React.PureComponent {
 
   renderSettings() {
     const { hostname } = this.props;
+    const {
+      editedHostName,
+      editedHostNameValidationText,
+      editedHostLogo,
+      editedHostLogoValidationText,
+    } = this.state;
 
     const providerSettings = (() => {
       if (hostname.provider === NRQL_PROVIDER_NAME) {
@@ -523,22 +563,22 @@ export default class StatusPage extends React.PureComponent {
         );
       } else {
         return (
-          <TextField
+          <TextFieldWrapper
             label="Hostname"
             placeholder="https://status.myservice.com/"
             className="status-page-setting"
-            onChange={() =>
+            onChange={(event) =>
               this.setState((previousState) => ({
                 ...previousState,
                 editedHostName: event.target.value,
               }))
             }
-            defaultValue={hostname.hostName}
+            value={editedHostName}
+            validationText={editedHostNameValidationText}
           />
         );
       }
     })();
-
     return (
       <div
         className="status-page-settings-container"
@@ -557,17 +597,18 @@ export default class StatusPage extends React.PureComponent {
             defaultValue={hostname.serviceName}
           />
           {providerSettings}
-          <TextField
+          <TextFieldWrapper
             label="Service logo"
+            placeholder="https://website.com/logo.png"
             className="status-page-setting"
-            onChange={() =>
+            onChange={(event) =>
               this.setState((previousState) => ({
                 ...previousState,
                 editedHostLogo: event.target.value,
               }))
             }
-            defaultValue={hostname.hostLogo}
-            placeholder="https://website.com/logo.png"
+            value={editedHostLogo}
+            validationText={editedHostLogoValidationText}
           />
         </div>
         <div className="status-page-settings-cta-container">

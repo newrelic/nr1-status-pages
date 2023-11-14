@@ -137,15 +137,28 @@ export default class StatusPagesDashboard extends React.PureComponent {
   };
 
   validateFormAndReturnStatus = () => {
+    const validateUrl = (urlField) => {
+      const urlObject = new URL(urlField.inputValue);
+      if (urlObject.protocol !== 'https:') {
+        urlField.validationText += urlField.validationText
+          ? '. You must also '
+          : 'You must ';
+        urlField.validationText += 'use secure URL (HTTPS)';
+      }
+    };
+
     const { formInputs } = this.state;
 
     const updatedFormInputs = { ...formInputs };
-    const inputsList = Object.keys(formInputs).filter((k) => k !== 'logoUrl');
+    const inputsList = Object.keys(formInputs);
     const genericValidationError = 'Please fill this field before saving.';
     let isFormValid = true;
 
     for (const inputName of inputsList) {
-      if (formInputs[inputName].inputValue.length < 2) {
+      if (
+        formInputs[inputName]?.inputValue &&
+        formInputs[inputName]?.inputValue.length < 2
+      ) {
         updatedFormInputs[inputName].validationText = genericValidationError;
         isFormValid = false;
       } else {
@@ -159,6 +172,7 @@ export default class StatusPagesDashboard extends React.PureComponent {
       workloadGuid,
       providerName,
       hostName,
+      logoUrl,
     } = updatedFormInputs;
 
     if (corsProxyAddress && corsProxyAddress.inputValue) {
@@ -202,6 +216,13 @@ export default class StatusPagesDashboard extends React.PureComponent {
           'Please provide a valid StatusIO URL according to the documentation';
       }
     }
+
+    [corsProxyAddress, hostName, logoUrl].forEach((urlField) => {
+      if (urlField?.inputValue) {
+        validateUrl(urlField);
+        if (urlField.validationText) isFormValid = false;
+      }
+    });
 
     this.setState({ formInputs: updatedFormInputs });
     return isFormValid;
