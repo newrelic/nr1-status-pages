@@ -141,10 +141,9 @@ export default class StatusPagesDashboard extends React.PureComponent {
       const urlObject = new URL(urlField.inputValue);
       if (urlObject.protocol !== 'https:') {
         urlField.validationText += urlField.validationText
-          ? '. Please also '
-          : 'Please ';
-        urlField.validationText +=
-          'try using Secure Socket Layer (HTTPS) protocol for this URL, and see if it works. Use of HTTP protocol is not allowed';
+          ? '. You must also '
+          : 'You must ';
+        urlField.validationText += 'use secure URL (HTTPS)';
       }
     };
 

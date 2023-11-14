@@ -402,8 +402,7 @@ export default class StatusPage extends React.PureComponent {
     const validateUrl = (url) => {
       const urlObject = new URL(url.inputValue);
       if (urlObject.protocol !== 'https:') {
-        url.validationText =
-          'Please try using Secure Socket Layer (HTTPS) protocol for this URL, and see if it works. Use of HTTP protocol is not allowed';
+        url.validationText = 'You must use secure URL (HTTPS)';
       }
     };
 
