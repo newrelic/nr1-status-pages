@@ -362,20 +362,25 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
   handleProviderChange = (event) => {
     event.persist();
-    const { formInputs } = this.state;
+    const { formInputs, hostRequiresProxy } = this.state;
     const updatedFormInputs = { ...formInputs };
     updatedFormInputs.providerName.inputValue = event.target.value;
+    let proxyChecked = hostRequiresProxy;
 
     if (updatedFormInputs.providerName.inputValue) {
       updatedFormInputs.providerName.validationText = '';
 
       if (updatedFormInputs.providerName.inputValue === PROVIDERS.NRQL.value) {
+        proxyChecked = false;
+        updatedFormInputs.corsProxyAddress = { ...emptyInputState };
         delete updatedFormInputs.hostName;
         delete updatedFormInputs.workloadGuid;
         updatedFormInputs.nrqlQuery = { ...emptyInputState };
       } else if (
         updatedFormInputs.providerName.inputValue === PROVIDERS.WORKLOAD.value
       ) {
+        proxyChecked = false;
+        updatedFormInputs.corsProxyAddress = { ...emptyInputState };
         delete updatedFormInputs.hostName;
         delete updatedFormInputs.nrqlQuery;
         updatedFormInputs.workloadGuid = { ...emptyInputState };
@@ -391,7 +396,10 @@ export default class StatusPagesDashboard extends React.PureComponent {
       }
     }
 
-    this.setState({ formInputs: updatedFormInputs });
+    this.setState({
+      formInputs: updatedFormInputs,
+      hostRequiresProxy: proxyChecked,
+    });
   };
 
   onAccountSelected = async (accountId, accounts) => {
@@ -688,31 +696,6 @@ export default class StatusPagesDashboard extends React.PureComponent {
 
           <hr className="or-sep" />
 
-          {['nrql', 'workload', ''].includes(providerName.inputValue) ? (
-            ''
-          ) : (
-            <>
-              <div className="select-container">
-                <Checkbox
-                  onChange={this.handleCORSChange}
-                  label="Host requires CORS proxy"
-                />
-              </div>
-              {hostRequiresProxy && (
-                <div className="select-container">
-                  <TextFieldWrapper
-                    label="CORS proxy address"
-                    onChange={(event) => {
-                      this.updateInputValue(event, 'corsProxyAddress');
-                    }}
-                    value={corsProxyAddress.inputValue}
-                    validationText={corsProxyAddress.validationText}
-                  />
-                </div>
-              )}
-            </>
-          )}
-
           <div className="select-container">
             <label>Provider</label>
             <select
@@ -753,6 +736,36 @@ export default class StatusPagesDashboard extends React.PureComponent {
             validationText={logoUrl.validationText}
             placeholder="https://myservice.com/logo.png"
           />
+
+          <div className="proxy-info">
+            <hr className="hr-sep" />
+            {['nrql', 'workload', ''].includes(providerName.inputValue) ? (
+              ''
+            ) : (
+              <>
+                <div className="select-container">
+                  <Checkbox
+                    className="cors-checkbox"
+                    onChange={this.handleCORSChange}
+                    label="Host requires CORS proxy"
+                    defaultChecked={hostRequiresProxy}
+                  />
+                </div>
+                {hostRequiresProxy && (
+                  <div className="select-container">
+                    <TextFieldWrapper
+                      label="CORS proxy address"
+                      onChange={(event) => {
+                        this.updateInputValue(event, 'corsProxyAddress');
+                      }}
+                      value={corsProxyAddress.inputValue}
+                      validationText={corsProxyAddress.validationText}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+          </div>
 
           <Button
             className="modal-button"
