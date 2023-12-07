@@ -1030,26 +1030,8 @@ button[class*='Dropdown-trigger'],
   }
 }
 
-.hr-sep {
-  height: 1px;
-  border: none;
-  background-color: #b9bdbd;
-  margin-top: 10px;
-
-  &:before {
-    width: 30px;
-    color: #8e9494;
-    bottom: 8px;
-  }
-}
-
-.proxy-info {
-  height: 140px;
-  margin: 5px 0;
-
-  .cors-checkbox {
-    margin-top: 10px;
-  }
+.cors-checkbox {
+  margin: 10px 0 16px;
 }
 
 .rss-icon-container {

@@ -737,36 +737,33 @@ export default class StatusPagesDashboard extends React.PureComponent {
             placeholder="https://myservice.com/logo.png"
           />
 
-          <div className="proxy-info">
-            <hr className="hr-sep" />
-            {['nrql', 'workload', ''].includes(providerName.inputValue) ? (
-              ''
-            ) : (
-              <>
-                <div className="select-container">
-                  <Checkbox
-                    className="cors-checkbox"
-                    onChange={this.handleCORSChange}
-                    label="Host requires CORS proxy"
-                    defaultChecked={hostRequiresProxy}
+          {['nrql', 'workload'].includes(providerName.inputValue) ? (
+            ''
+          ) : (
+            <div className="select-container">
+              <Checkbox
+                className="cors-checkbox"
+                onChange={this.handleCORSChange}
+                label="Host requires CORS proxy"
+                defaultChecked={hostRequiresProxy}
+              />
+              {hostRequiresProxy && (
+                <>
+                  <label>
+                    CORS proxy address
+                    <span className="mandatory"> * </span>
+                  </label>
+                  <TextFieldWrapper
+                    onChange={(event) => {
+                      this.updateInputValue(event, 'corsProxyAddress');
+                    }}
+                    value={corsProxyAddress.inputValue}
+                    validationText={corsProxyAddress.validationText}
                   />
-                </div>
-                {hostRequiresProxy && (
-                  <div className="select-container">
-                    <TextFieldWrapper
-                      label="CORS proxy address"
-                      onChange={(event) => {
-                        this.updateInputValue(event, 'corsProxyAddress');
-                      }}
-                      value={corsProxyAddress.inputValue}
-                      validationText={corsProxyAddress.validationText}
-                    />
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-
+                </>
+              )}
+            </div>
+          )}
           <Button
             className="modal-button"
             type={Button.TYPE.TERTIARY}
