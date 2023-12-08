@@ -956,6 +956,15 @@ button[class*='Dropdown-trigger'],
   margin-top: 16px;
 }
 
+.no-incident-external {
+  cursor: default;
+  color: #8e9494;
+
+  &.header {
+    margin-bottom: 16px;
+  }
+}
+
 .no-status-pages {
   display: flex;
   flex-direction: column;

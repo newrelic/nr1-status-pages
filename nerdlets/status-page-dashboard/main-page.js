@@ -56,6 +56,10 @@ const PROVIDERS = {
     value: 'statusPal',
     label: 'Statuspal',
   },
+  EXTERNAL_LINK: {
+    value: 'external',
+    label: 'External Link',
+  },
 };
 
 const emptyInputState = {
@@ -670,6 +674,13 @@ export default class StatusPagesDashboard extends React.PureComponent {
             provide the information needed to determine the status of the
             service you'd like to add. You will be able to edit this information
             in the future.
+          </p>
+          <p className="modal-paragraph">
+            Select a common services from the "quick setup" dropdown below, or
+            provide the information needed to determine the status of the
+            service you'd like to add. Choose any of the providers available.
+            Use "Eternal Link" provider for non-standard pages or pages with
+            unknown format. You will be able to edit this information later.
           </p>
           <div className="select-container">
             <label>Quick setup</label>

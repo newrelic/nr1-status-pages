@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
-import { Icon, Button } from 'nr1';
+import { Icon, Button, HeadingText } from 'nr1';
 
 export default class CurrentIncidents extends React.PureComponent {
   static propTypes = {
     hostname: PropTypes.string,
     handleTileClick: PropTypes.func,
     currentIncidents: PropTypes.array,
+    provider: PropTypes.string,
   };
 
   setTimelineSymbol(incidentImpact) {
@@ -63,12 +64,30 @@ export default class CurrentIncidents extends React.PureComponent {
   }
 
   render() {
-    const { handleTileClick, hostname, currentIncidents } = this.props;
+    const { handleTileClick, hostname, currentIncidents, provider } =
+      this.props;
 
     if (!currentIncidents || currentIncidents.length === 0) {
       return (
         <div className="no-incident-history-container">
-          <h4 className="no-incident-history-header">No incident history</h4>
+          {provider === 'external' ? (
+            <>
+              <HeadingText
+                className="no-incident-external header"
+                type={HeadingText.TYPE.HEADING_5}
+              >
+                <center>External Status Page</center>
+              </HeadingText>
+              <HeadingText
+                className="no-incident-external"
+                type={HeadingText.TYPE.HEADING_6}
+              >
+                <center>Click the button below to view the status page</center>
+              </HeadingText>
+            </>
+          ) : (
+            <h4 className="no-incident-history-header">No incident history</h4>
+          )}
           <Button
             className="no-incident-history-cta"
             iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EXTERNAL_LINK}
