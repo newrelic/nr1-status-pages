@@ -348,7 +348,7 @@ export default class StatusPage extends React.PureComponent {
         });
 
         event.stopPropagation();
-      } else {
+      } else if (provider !== 'external') {
         navigation.openStackedNerdlet({
           id: 'service-details',
           urlState: {
@@ -646,7 +646,14 @@ export default class StatusPage extends React.PureComponent {
               onClick={(e) => e.stopPropagation()}
               className="service-current-status-heading"
             >
-              <Link to={statusPageIoSummaryData.link}>See status page</Link>
+              <Link to={statusPageIoSummaryData.link}>View Status Page</Link>
+            </h5>
+          ) : hostname.provider === 'external' ? (
+            <h5
+              onClick={(e) => e.stopPropagation()}
+              className="service-current-status-heading"
+            >
+              <Link to={hostname.hostName}>View Status Page</Link>
             </h5>
           ) : (
             <h5 className="service-current-status-heading">
@@ -705,6 +712,7 @@ export default class StatusPage extends React.PureComponent {
         <CurrentIncidents
           currentIncidents={currentIncidents}
           hostname={hostname.hostName}
+          provider={this.state.editedHostProvider}
           handleTileClick={(i) => {
             this.handleTileClick(
               statusPageIoSummaryData,
