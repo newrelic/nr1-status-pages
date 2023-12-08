@@ -32,16 +32,11 @@ export default class AccountPicker extends React.PureComponent {
   async componentDidMount() {
     const accountsResults = await AccountsQuery.query({});
 
-    if (accountsResults.data && accountsResults.data) {
+    let account = await this.getLastChoseAccountId();
+    if (accountsResults.data) {
       const accounts = accountsResults.data;
 
-      let account = await this.getLastChoseAccountId();
-
-      if (account === null) {
-        account = accountsResults.data;
-      }
-
-      if (!account.id) {
+      if (!account?.id) {
         account = accounts[0];
       }
 
@@ -60,14 +55,14 @@ export default class AccountPicker extends React.PureComponent {
     };
     // TODO: Add error handling
     const queryResults = await UserStorageQuery.query(userStorageQuery);
-    return queryResults.data;
+    return queryResults.data.account;
   }
 
-  async saveOffLastChosenAccountId(accountId) {
+  async saveOffLastChosenAccountId(account) {
     const userMutation = {
       actionType: UserStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
       collection: USER_ACCOUNT_COLLECTION,
-      document: { account: accountId },
+      document: { account: account },
       documentId: USER_SELECTED_ACCOUNT_ID,
     };
     UserStorageMutation.mutate(userMutation);
@@ -76,7 +71,7 @@ export default class AccountPicker extends React.PureComponent {
   async _accountChanged(account, accounts) {
     const accountId = account.id;
     const { accountChangedCallback } = this.props;
-    this.saveOffLastChosenAccountId(accountId);
+    this.saveOffLastChosenAccountId(account);
     if (accountChangedCallback) {
       await accountChangedCallback(accountId, this.state.accounts);
     }
