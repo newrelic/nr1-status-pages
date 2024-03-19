@@ -13,7 +13,7 @@ export const workloadFormatter = (data) => {
     const incident = data.results[0].events[0];
     statusCode = WorkloadSeverityToKnown[incident.EventStatus];
 
-    if (statusCode === undefined) {
+    if (statusCode === undefined || statusCode === 'none') {
       statusCode = 'none';
     } else if (statusCode === 'minor') {
       status = 'Degraded';
