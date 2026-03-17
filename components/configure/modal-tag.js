@@ -20,7 +20,7 @@ export default class TagsModal extends React.PureComponent {
     this.onTextInputChange = this.onTextInputChange.bind(this);
   }
 
-  addTag() {
+  addTag() {nexus-awakening
     const { addTagName, tags } = this.state;
     tags.push(addTagName.toLowerCase());
     if (!this.props.hostName.tags) this.props.hostName.tags = [];
