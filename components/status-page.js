@@ -750,7 +750,7 @@ export default class StatusPage extends React.PureComponent {
     return (
       <div
         className={`status-page-container status-${
-          statusPageIoSummaryData.indicator
+          (statusPageIoSummaryData.indicator ?? 'unknown').toLowerCase()
         } ${
           settingsViewActive ? 'settings-view-active' : 'settings-view-inactive'
         }`}

@@ -6,14 +6,14 @@ const WorkloadSeverityToKnown = {
 };
 
 export const workloadFormatter = (data) => {
-  let statusCode = WorkloadSeverityToKnown.None;
+  let statusCode = 'none';
   let status = 'All Systems Operational';
 
   if (data.results[0].events.length > 0) {
     const incident = data.results[0].events[0];
     statusCode = WorkloadSeverityToKnown[incident.EventStatus];
 
-    if (statusCode === undefined) {
+    if (statusCode === undefined || statusCode === 'none') {
       statusCode = 'none';
     } else if (statusCode === 'minor') {
       status = 'Degraded';
