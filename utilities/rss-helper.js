@@ -19,9 +19,9 @@ export default class RSSHelper {
     const getText = (el, selector) =>
       el.querySelector(selector)?.textContent?.trim() || '';
     const stripTags = (html) => {
-       const parsed = new DOMParser().parseFromString(html || '', 'text/html');
-       return parsed.body?.textContent?.trim() || '';
-     };
+      const parsed = new DOMParser().parseFromString(html || '', 'text/html');
+      return parsed.body?.textContent?.trim() || '';
+    };
 
     const feedTitle = getText(doc, isAtom ? 'feed > title' : 'channel > title');
     const feedLink = isAtom
