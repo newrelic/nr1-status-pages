@@ -1,3 +1,11 @@
+## [1.6.1](https://github.com/newrelic/nr1-status-pages/compare/v1.6.0...v1.6.1) (2026-07-23)
+
+
+### Bug Fixes
+
+* rss strip tags safe parsing ([711e4bc](https://github.com/newrelic/nr1-status-pages/commit/711e4bc3394f278929a1831755c1c707854b8603))
+* workload status;update deprecated packages/css ([5af4274](https://github.com/newrelic/nr1-status-pages/commit/5af4274fb6fb346137e60740304eee3bfcb9e77f))
+
 # [1.6.0](https://github.com/newrelic/nr1-status-pages/compare/v1.5.5...v1.6.0) (2023-11-07)
 
 
