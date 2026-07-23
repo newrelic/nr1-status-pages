@@ -1,3 +1,5 @@
+# NOTE: This file should always be named `repolinter.yml` to allow
+# workflow_dispatch to work properly
 name: Repolinter Action
 
 # NOTE: This workflow will ONLY check the default branch!
@@ -5,6 +7,10 @@ name: Repolinter Action
 # branch in the event filtering, so branches are instead
 # filtered in the "Test Default Branch" step.
 on: [push, workflow_dispatch]
+
+permissions:
+  contents: read
+  issues: write
 
 jobs:
   repolint:

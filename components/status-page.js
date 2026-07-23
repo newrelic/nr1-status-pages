@@ -749,9 +749,9 @@ export default class StatusPage extends React.PureComponent {
 
     return (
       <div
-        className={`status-page-container status-${
-          statusPageIoSummaryData.indicator
-        } ${
+        className={`status-page-container status-${(
+          statusPageIoSummaryData.indicator ?? 'unknown'
+        ).toLowerCase()} ${
           settingsViewActive ? 'settings-view-active' : 'settings-view-inactive'
         }`}
         ref={this.props.setServiceTileRef}

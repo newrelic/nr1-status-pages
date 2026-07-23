@@ -1,10 +1,8 @@
 export const rssFormatter = (data) => {
-  const statusCode = 'UnKnown';
-
   return {
     name: data.title,
-    description: status,
-    indicator: statusCode,
+    description: 'Unknown',
+    indicator: 'unknown',
     link: data.link,
   };
 };

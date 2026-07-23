@@ -20,7 +20,6 @@
     "react": "16.6.3",
     "react-dom": "16.6.3",
     "react-markdown": "^8.0.7",
-    "rss-parser": "^3.13.0",
     "uuid": "^9.0.0",
     "vertical-timeline-component-for-react": "^1.0.7",
     "web-animations-js": "^2.3.2"
