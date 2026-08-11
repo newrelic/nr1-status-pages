@@ -9,8 +9,8 @@
   "scripts": {
     "start": "nr1 nerdpack:serve",
     "test": "exit 0",
-    "eslint-check": "eslint .",
-    "eslint-fix": "eslint --fix .",
+    "eslint-check": "ESLINT_USE_FLAT_CONFIG=false eslint .",
+    "eslint-fix": "ESLINT_USE_FLAT_CONFIG=false eslint --fix .",
     "doctor": "npx react-doctor@latest"
   },
   "dependencies": {
