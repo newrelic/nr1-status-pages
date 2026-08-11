@@ -1,5 +1,11 @@
 import { getProvider } from './provider-services';
-import { joinUrl, viaProxy, isProxyableUrl } from './proxy';
+import {
+  joinUrl,
+  viaProxy,
+  isProxyableUrl,
+  PROXY_BASE,
+  PROXY_HEADERS,
+} from './proxy';
 
 export default class Network {
   constructor(statusPageUrl, refreshRateInSeconds, provider) {
@@ -23,7 +29,10 @@ export default class Network {
     let networkResponse;
 
     try {
-      const res = await fetch(url, { signal: this.abortController.signal });
+      const res = await fetch(url, {
+        signal: this.abortController.signal,
+        ...(url.startsWith(PROXY_BASE) ? { headers: PROXY_HEADERS } : {}),
+      });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       networkResponse = { data: await res.json() };
     } catch (err) {

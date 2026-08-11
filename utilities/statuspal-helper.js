@@ -1,4 +1,5 @@
 import { getProvider } from './provider-services';
+import { PROXY_HEADERS } from './proxy';
 
 export default class StatuspalHelper {
   constructor(subDomain, refreshRateInSeconds) {
@@ -31,7 +32,10 @@ export default class StatuspalHelper {
           `/status_pages/${encodedSubDomain}/status`,
           `/status_pages/${encodedSubDomain}/incidents`,
         ].map(async (url) => {
-          const res = await fetch(this.apiURL + url, { signal });
+          const res = await fetch(this.apiURL + url, {
+            signal,
+            headers: PROXY_HEADERS,
+          });
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
           return res.json();
         })

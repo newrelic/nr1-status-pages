@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { v4 as uuidv4 } from 'uuid';
 
 import { HeadingText, Modal, Button } from 'nr1';
 
@@ -185,7 +184,7 @@ const CreateServiceModal = ({ hidden, onClose, onAdd }) => {
     }
 
     const hostNameObject = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       serviceName: serviceName.inputValue,
       hostName: formattedHostName,
       provider: providerName.inputValue,

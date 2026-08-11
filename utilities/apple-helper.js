@@ -1,4 +1,4 @@
-import { viaProxy } from './proxy';
+import { viaProxy, PROXY_HEADERS } from './proxy';
 
 const ALLOWED_HOSTNAME = 'www.apple.com';
 const ALLOWED_PATH_PREFIX = '/support/systemstatus/data/';
@@ -20,7 +20,7 @@ const proxyFetch = async (url, signal) => {
   if (!isAllowedAppleUrl(url)) {
     throw new Error('Disallowed Apple status URL');
   }
-  const res = await fetch(viaProxy(url), { signal });
+  const res = await fetch(viaProxy(url), { signal, headers: PROXY_HEADERS });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const text = await res.text();
   // Apple returns JSONP: jsonCallback({...}) — strip the wrapper

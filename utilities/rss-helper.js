@@ -1,4 +1,4 @@
-import { PROXY_BASE, viaProxy, isProxyableUrl } from './proxy';
+import { PROXY_BASE, viaProxy, isProxyableUrl, PROXY_HEADERS } from './proxy';
 
 // Reused across every parse call — DOMParser carries no state between calls,
 // so a single instance avoids allocating a fresh parser per feed item.
@@ -94,6 +94,7 @@ export default class RSSHelper {
         : viaProxy(this.rssUrl);
       const res = await fetch(fetchUrl, {
         signal: this.abortController.signal,
+        headers: PROXY_HEADERS,
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       networkResponse.data = parseRSSFeed(await res.text());
