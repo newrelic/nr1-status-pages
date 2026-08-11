@@ -9,7 +9,7 @@ import useProviderPolling from '../../hooks/use-provider-polling';
 const PROVIDERS_WITHOUT_HISTORY = ['awsHealth', 'azure'];
 
 const setTimelineSymbol = (incidentImpact) => {
-  switch (incidentImpact.toLowerCase()) {
+  switch ((incidentImpact || '').toLowerCase()) {
     case 'unknown':
       return (
         <Icon
@@ -22,8 +22,10 @@ const setTimelineSymbol = (incidentImpact) => {
       return (
         <Icon
           className="timeline-item-symbol-icon"
-          color="#464e4e"
-          type={Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_OK}
+          color="#9C5400"
+          type={
+            Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_WARNING
+          }
         />
       );
     case 'minor':
@@ -62,11 +64,20 @@ const setTimelineSymbol = (incidentImpact) => {
           type={Icon.TYPE.DATE_AND_TIME__DATE_AND_TIME__TIME__A_REMOVE}
         />
       );
+    case 'maintenance':
+      return (
+        <Icon
+          className="timeline-item-symbol-icon"
+          color="#aaba30"
+          // TODO(icon): confirm Icon.TYPE for maintenance
+          type={Icon.TYPE.INTERFACE__INFO__ANNOUNCEMENT}
+        />
+      );
   }
 };
 
 const buildTimelineItemDetails = (incident) =>
-  incident.incident_updates.map((incident_update, index) => {
+  (incident.incident_updates || []).map((incident_update) => {
     let body = (
       <span className="value">
         {incident_update.body
@@ -81,14 +92,17 @@ const buildTimelineItemDetails = (incident) =>
         </a>
       );
     }
+    const displayTime = dayjs(
+      incident_update.display_at || incident_update.created_at
+    ).format('h:mm a');
+    const updateText =
+      incident_update.body || incident_update.description || '';
     return (
       <li
-        key={`${incident_update.created_at}-${index}`}
+        key={`${incident_update.created_at}-${updateText}`}
         className="timeline-item-contents-item"
       >
-        <span className="key">
-          {dayjs(incident_update.display_at).format('h:mm a')}:
-        </span>
+        <span className="key">{displayTime}:</span>
         {body}
       </li>
     );
@@ -112,6 +126,7 @@ const ServiceDetails = ({
     workloadGuid,
     subDomain,
     accountId,
+    needsSummary: false,
   });
 
   const [thirtyDaysAgo] = useState(() => Date.now() - 30 * 24 * 60 * 60 * 1000);
@@ -143,11 +158,18 @@ const ServiceDetails = ({
     <div className="service-details-modal-container">
       {recentIncidents.map((incident, incidentId) => (
         <div
+          role="button"
+          tabIndex={0}
           onClick={() => handleTimelineItemClick(incidentId)}
+          onKeyDown={(e) => {
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            e.preventDefault();
+            handleTimelineItemClick(incidentId);
+          }}
           className={`timeline-item impact-${incident.impact} ${
             expandedTimelineItem === incidentId ? 'timeline-item-expanded' : ''
           }`}
-          key={`${incident.created_at}-${incidentId}`}
+          key={`${incident.created_at}-${incident.name}`}
         >
           <div className="timeline-item-timestamp">
             <span className="timeline-timestamp-date">

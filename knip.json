@@ -1,0 +1,7 @@
+{
+  "entry": [
+    "nerdlets/status-page-dashboard/index.js",
+    "nerdlets/service-details/index.js",
+    "nerdlets/external-page/index.js"
+  ]
+}

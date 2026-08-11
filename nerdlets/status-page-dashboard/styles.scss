@@ -6,6 +6,18 @@ $desktop-breakpoint: 1024px;
   height: 100%;
 }
 
+.dashboard-page-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-content {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
 // ==============================================================
 // NRDS text field and dropdown overrides
 // ==============================================================
@@ -163,6 +175,7 @@ button[class*='Dropdown-trigger'],
 
 .toolbar-container {
   height: 70px;
+  flex-shrink: 0;
   box-sizing: border-box;
   border-top: 1px solid #d5d7d7;
   border-bottom: 1px solid #e3e4e4;
@@ -192,6 +205,7 @@ button[class*='Dropdown-trigger'],
 
 .status-page-grid-item {
   max-width: 100%;
+  min-width: 0;
 }
 
 .status-page-container {
@@ -226,7 +240,9 @@ button[class*='Dropdown-trigger'],
 }
 
 .status-container {
-  margin: 16px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 16px;
   grid-gap: 16px;
   position: relative;
   grid-auto-rows: 330px;
@@ -244,6 +260,20 @@ button[class*='Dropdown-trigger'],
   height: 110px;
   text-align: center;
   padding: 0 10px;
+}
+
+.service-logo-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
 }
 
 .service-logo {
@@ -280,6 +310,19 @@ button[class*='Dropdown-trigger'],
   border-bottom: 1px solid #edeeee;
   text-align: center;
   padding: 16px;
+}
+
+.service-current-status-button {
+  display: block;
+  width: 100%;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
 }
 
 .status-minor .service-current-status svg {
@@ -851,29 +894,38 @@ button[class*='Dropdown-trigger'],
 }
 
 .service-settings-dropdown-item {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  color: #000d0d;
   height: 32px;
-  padding: 0 8px;
   border-bottom: 1px solid #e3e4e4;
 
   &:last-child {
     border: none;
   }
 
+  &.destructive .service-settings-dropdown-item-button {
+    color: #bf0016;
+  }
+}
+
+.service-settings-dropdown-item-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  padding: 0 8px;
+  border: none;
+  background: none;
+  color: #000d0d;
+  font: inherit;
+  text-align: left;
+
   &:hover {
     cursor: pointer;
-    background-color: #fafbfb;
+    // background-color: #fafbfb;
   }
 
   .ic-Icon {
     margin-right: 8px;
-  }
-
-  &.destructive {
-    color: #bf0016;
   }
 }
 
@@ -942,6 +994,7 @@ button[class*='Dropdown-trigger'],
   height: 151px;
   justify-content: center;
   align-items: center;
+  cursor: default;
 }
 
 .no-incident-history-header {
@@ -1003,7 +1056,7 @@ button[class*='Dropdown-trigger'],
 }
 
 .no-status-pages-found {
-  height: calc(100% - 102px);
+  height: 100%;
   align-content: center;
 }
 
@@ -1032,6 +1085,20 @@ button[class*='Dropdown-trigger'],
 
 .rss-icon-container {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 88px;
+  left: 6px;
+}
+
+.drag-handle {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  cursor: grab;
+  color: #8e9eb4;
+  z-index: 20;
+  line-height: 0;
+
+  &:active {
+    cursor: grabbing;
+  }
 }

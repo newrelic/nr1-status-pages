@@ -1,17 +1,11 @@
 import { getProvider } from './provider-services';
 
-export default class FormatService {
-  constructor(provider) {
-    this.provider = getProvider(provider);
-  }
+export const uniformSummaryData = (providerKey, data) => {
+  const provider = getProvider(providerKey);
+  return provider.summaryFormatter(data?.data);
+};
 
-  uniformSummaryData(data) {
-    const responseData = data.data;
-    return this.provider.summaryFormatter(responseData);
-  }
-
-  uniformIncidentData(data) {
-    const responseData = data.data;
-    return this.provider.incidentFormatter(responseData);
-  }
-}
+export const uniformIncidentData = (providerKey, data) => {
+  const provider = getProvider(providerKey);
+  return provider.incidentFormatter(data?.data);
+};
