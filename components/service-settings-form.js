@@ -62,7 +62,7 @@ const ServiceSettingsForm = ({ hostname, contentRef, onSave, onDelete }) => {
       return (
         <TextField
           label="NRQL"
-          placeholder="Put your NRQL query here"
+          placeholder="NRQL query"
           className="status-page-setting"
           onChange={(e) => setField('nrqlQuery', e.target.value)}
           defaultValue={hostname.nrqlQuery}
@@ -72,7 +72,7 @@ const ServiceSettingsForm = ({ hostname, contentRef, onSave, onDelete }) => {
       return (
         <TextField
           label="Workload"
-          placeholder="Put your Workload entity guid here"
+          placeholder="Workload entity guid"
           className="status-page-setting"
           onChange={(e) => setField('workloadGuid', e.target.value)}
           defaultValue={hostname.workloadGuid}

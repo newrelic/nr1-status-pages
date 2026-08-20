@@ -61,7 +61,7 @@ Some status-page providers do not send permissive CORS headers, so the nerdpack 
 
 The "Host requires CORS proxy" checkbox in the Add Service modal defaults to that Worker. Advanced users can substitute their own proxy — the address must contain a `{url}` placeholder that will be replaced with the target hostname.
 
-Example (default): `https://nr1-status-page-proxy.kpeet.workers.dev/{url}`
+Example (default): `https://nr1-status-page-proxy.nr-labs.workers.dev/{url}`
 
 ## Dependencies
 

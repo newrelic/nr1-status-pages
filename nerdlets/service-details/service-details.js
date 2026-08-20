@@ -60,7 +60,7 @@ const setTimelineSymbol = (incidentImpact) => {
       return (
         <Icon
           className="timeline-item-symbol-icon"
-          color="#3ca653"
+          color="#9C5400"
           type={Icon.TYPE.DATE_AND_TIME__DATE_AND_TIME__TIME__A_REMOVE}
         />
       );
@@ -68,8 +68,7 @@ const setTimelineSymbol = (incidentImpact) => {
       return (
         <Icon
           className="timeline-item-symbol-icon"
-          color="#aaba30"
-          // TODO(icon): confirm Icon.TYPE for maintenance
+          color="#9C5400"
           type={Icon.TYPE.INTERFACE__INFO__ANNOUNCEMENT}
         />
       );

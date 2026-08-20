@@ -1,6 +1,14 @@
 import React from 'react';
-import { NerdletStateContext } from 'nr1';
+import { Link, NerdletStateContext, navigation } from 'nr1';
 import ServiceDetails from './service-details';
+import { PROVIDERS } from '../status-page-dashboard/providers';
+
+const MICROSOFT_365_FEED_HOST = 'status.cloud.microsoft';
+
+const AZURE_STATUS_URL = 'https://azure.status.microsoft/en-us/status';
+const MICROSOFT_365_STATUS_URL = 'https://status.cloud.microsoft/';
+const OKTA_STATUS_URL = 'https://status.okta.com/';
+const APPLE_STATUS_URL = 'https://developer.apple.com/system-status/';
 
 const ServiceDetailsWrapper = () => (
   <div className="service-details-modal-container">
@@ -18,11 +26,48 @@ const ServiceDetailsWrapper = () => (
           accountId,
         } = nerdletUrlState;
 
+        const handleHeaderClick = () => {
+          if (provider === PROVIDERS.NRQL.value) {
+            navigation.openStackedNerdlet({
+              id: 'data-exploration.query-builder',
+              urlState: {
+                initialActiveInterface: 'nrqlEditor',
+                initialAccountId: accountId,
+                initialNrqlValue: nrqlQuery,
+                initialWidget: { visualization: { id: 'viz.table' } },
+                isViewingQuery: true,
+              },
+            });
+          } else if (provider === PROVIDERS.WORKLOAD.value) {
+            window
+              .open(
+                `https://one.newrelic.com/redirect/entity/${workloadGuid}`,
+                '_blank'
+              )
+              .focus();
+          } else if (hostname && hostname.includes(MICROSOFT_365_FEED_HOST)) {
+            window.open(MICROSOFT_365_STATUS_URL, '_blank').focus();
+          } else if (provider === PROVIDERS.AZURE.value) {
+            window.open(AZURE_STATUS_URL, '_blank').focus();
+          } else if (provider === PROVIDERS.OKTA.value) {
+            window.open(OKTA_STATUS_URL, '_blank').focus();
+          } else if (provider === PROVIDERS.APPLE.value) {
+            window.open(APPLE_STATUS_URL, '_blank').focus();
+          } else if (hostname) {
+            window.open(hostname, '_blank').focus();
+          }
+        };
+
         return (
           <>
-            <h1 className="service-details-modal-heading">
-              {serviceName} Recent Incidents
-            </h1>
+            <h2
+              className="service-details-modal-heading"
+              onClick={handleHeaderClick}
+            >
+              <Link>
+                {serviceName} Recent Incidents
+              </Link>
+            </h2>
             <ServiceDetails
               hostname={hostname}
               provider={provider}

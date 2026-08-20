@@ -8,18 +8,6 @@ import ServiceSettingsMenu from './service-settings-menu';
 import ServiceSettingsForm from './service-settings-form';
 import ServiceTileContent from './service-tile-content';
 
-const NRQL_PROVIDER_NAME = 'nrql';
-const WORKLOAD_PROVIDER_NAME = 'workload';
-const AZURE_PROVIDER_NAME = 'azure';
-const OKTA_PROVIDER_NAME = 'okta';
-const APPLE_PROVIDER_NAME = 'apple';
-const MICROSOFT_365_SERVICE_NAME = 'Microsoft 365';
-
-const AZURE_STATUS_URL = 'https://azure.status.microsoft/en-us/status';
-const MICROSOFT_365_STATUS_URL = 'https://status.cloud.microsoft/';
-const OKTA_STATUS_URL = 'https://status.okta.com/';
-const APPLE_STATUS_URL = 'https://developer.apple.com/system-status/';
-
 const DragHandleIcon = () => (
   <svg
     width="12"
@@ -167,43 +155,6 @@ const StatusPage = ({
     [accountId, refreshRate, hostname]
   );
 
-  const handleHeaderClick = useCallback(
-    (e) => {
-      if (e.target.closest('.service-settings-button-container')) return;
-      e.stopPropagation();
-      if (hostname.provider === NRQL_PROVIDER_NAME) {
-        navigation.openStackedNerdlet({
-          id: 'data-exploration.query-builder',
-          urlState: {
-            initialActiveInterface: 'nrqlEditor',
-            initialAccountId: accountId,
-            initialNrqlValue: hostname.nrqlQuery,
-            initialWidget: { visualization: { id: 'viz.table' } },
-            isViewingQuery: true,
-          },
-        });
-      } else if (hostname.provider === WORKLOAD_PROVIDER_NAME) {
-        window
-          .open(
-            `https://one.newrelic.com/redirect/entity/${hostname.workloadGuid}`,
-            '_blank'
-          )
-          .focus();
-      } else if (hostname.serviceName === MICROSOFT_365_SERVICE_NAME) {
-        window.open(MICROSOFT_365_STATUS_URL, '_blank').focus();
-      } else if (hostname.provider === AZURE_PROVIDER_NAME) {
-        window.open(AZURE_STATUS_URL, '_blank').focus();
-      } else if (hostname.provider === OKTA_PROVIDER_NAME) {
-        window.open(OKTA_STATUS_URL, '_blank').focus();
-      } else if (hostname.provider === APPLE_PROVIDER_NAME) {
-        window.open(APPLE_STATUS_URL, '_blank').focus();
-      } else if (hostname.hostName) {
-        window.open(hostname.hostName, '_blank').focus();
-      }
-    },
-    [hostname, accountId]
-  );
-
   const handleDelete = useCallback(
     () => handleDeleteTileModal(hostname),
     [handleDeleteTileModal, hostname]
@@ -302,7 +253,7 @@ const StatusPage = ({
             />
           }
           onTileClick={handleTileClick}
-          onHeaderClick={handleHeaderClick}
+          onHeaderClick={(e) => handleTileClick(e, statusData)}
         />
       )}
       <ServiceSettingsForm

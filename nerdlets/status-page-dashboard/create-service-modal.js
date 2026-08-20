@@ -1,26 +1,16 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { HeadingText, Modal, Button } from 'nr1';
+import { HeadingText, Modal, Button, Steps, StepsItem } from 'nr1';
 
 import CreateServiceFields from './create-service-fields';
+import CreateServiceReview from './create-service-review';
+import { PROVIDERS } from './providers';
 import { popularSites } from '../../popular-status-pages';
 import { isAllowedAppleUrl } from '../../utilities/apple-helper';
 import { PROXY_BASE } from '../../utilities/proxy';
 
-const PROVIDERS = {
-  STATUS_PAGE: { value: 'statusPageIo', label: 'Status Page' },
-  GOOGLE: { value: 'google', label: 'Google' },
-  STATUS_IO: { value: 'statusIo', label: 'Status Io' },
-  NRQL: { value: 'nrql', label: 'NRQL' },
-  WORKLOAD: { value: 'workload', label: 'Workload' },
-  RSS: { value: 'rss', label: 'RSS Feed' },
-  STATUS_PAL: { value: 'statusPal', label: 'Statuspal' },
-  APPLE: { value: 'apple', label: 'Apple System Status' },
-  AWS_HEALTH: { value: 'awsHealth', label: 'AWS Health' },
-  AZURE: { value: 'azure', label: 'Azure' },
-  OCI: { value: 'oci', label: 'Oracle Cloud Infrastructure' },
-};
+const STEPS = { QUICK_SETUP: 1, DETAILS: 2, REVIEW: 3 };
 
 const emptyInputState = { inputValue: '', validationText: '' };
 
@@ -33,9 +23,22 @@ const initialFormInputs = () => ({
   logoUrl: { ...emptyInputState },
 });
 
+const resetDynamicFields = (prev) => {
+  const next = {};
+  Object.keys(prev).forEach((k) => {
+    next[k] = { ...emptyInputState };
+  });
+  delete next.nrqlQuery;
+  delete next.workloadGuid;
+  delete next.subDomain;
+  delete next.corsProxyAddress;
+  next.hostName = { ...emptyInputState };
+  return next;
+};
+
 const validateServiceForm = (formInputs) => {
   let isFormValid = true;
-  const genericValidationError = 'Please fill this field before saving.';
+  const genericValidationError = 'Please fill this field before proceeding.';
 
   const updated = { ...formInputs };
   const inputsList = Object.keys(updated).filter((k) => k !== 'logoUrl');
@@ -133,29 +136,36 @@ const validateServiceForm = (formInputs) => {
 };
 
 const CreateServiceModal = ({ hidden, onClose, onAdd }) => {
+  const [activeStep, setActiveStep] = useState(STEPS.QUICK_SETUP);
+  const [setupMode, setSetupMode] = useState(null);
+  const [maxReachedStep, setMaxReachedStep] = useState(STEPS.QUICK_SETUP);
   const [selectedPopularSiteIndex, setSelectedPopularSiteIndex] = useState('');
   const [hostRequiresProxy, setHostRequiresProxy] = useState(false);
   const [formInputs, setFormInputs] = useState(initialFormInputs);
 
   const clearFormInputs = useCallback(() => {
-    setFormInputs((prev) => {
-      const next = {};
-      Object.keys(prev).forEach((k) => {
-        next[k] = { ...emptyInputState };
-      });
-      delete next.nrqlQuery;
-      delete next.workloadGuid;
-      delete next.subDomain;
-      next.hostName = { ...emptyInputState };
-      return next;
-    });
+    setFormInputs((prev) => resetDynamicFields(prev));
+    setHostRequiresProxy(false);
     setSelectedPopularSiteIndex('');
+    setSetupMode(null);
+    setActiveStep(STEPS.QUICK_SETUP);
+    setMaxReachedStep(STEPS.QUICK_SETUP);
   }, []);
 
+  const handleClose = useCallback(() => {
+    clearFormInputs();
+    onClose();
+  }, [clearFormInputs, onClose]);
+
   const handleAddNewService = useCallback(async () => {
+    if (activeStep !== STEPS.REVIEW) return;
+
     const { isFormValid, updated } = validateServiceForm(formInputs);
     setFormInputs(updated);
-    if (!isFormValid) return;
+    if (!isFormValid) {
+      setActiveStep(STEPS.DETAILS);
+      return;
+    }
 
     const {
       serviceName,
@@ -196,37 +206,23 @@ const CreateServiceModal = ({ hidden, onClose, onAdd }) => {
 
     await onAdd(hostNameObject);
     clearFormInputs();
-  }, [formInputs, hostRequiresProxy, onAdd, clearFormInputs]);
+  }, [activeStep, formInputs, hostRequiresProxy, onAdd, clearFormInputs]);
 
   const handleQuickSetupSelect = useCallback((e) => {
     const indexOfPopularSite = e.target.value;
     if (indexOfPopularSite === '') {
-      setFormInputs((prev) => {
-        const next = { ...prev };
-        Object.keys(next).forEach((k) => {
-          next[k] = { ...emptyInputState };
-        });
-        delete next.nrqlQuery;
-        delete next.workloadGuid;
-        delete next.subDomain;
-        next.hostName = { ...emptyInputState };
-        return next;
-      });
+      setFormInputs((prev) => resetDynamicFields(prev));
+      setHostRequiresProxy(false);
       setSelectedPopularSiteIndex('');
+      setSetupMode(null);
+      setActiveStep(STEPS.QUICK_SETUP);
+      setMaxReachedStep(STEPS.QUICK_SETUP);
       return;
     }
 
     const selectedPopularSite = popularSites.sites[indexOfPopularSite];
     setFormInputs((prev) => {
-      const next = { ...prev };
-      if (
-        next.providerName.inputValue !== PROVIDERS.NRQL.value &&
-        next.providerName.inputValue !== PROVIDERS.WORKLOAD.value
-      ) {
-        next.hostName = { ...emptyInputState };
-        delete next.nrqlQuery;
-        delete next.workloadGuid;
-      }
+      const next = resetDynamicFields(prev);
       next.hostName = {
         ...emptyInputState,
         inputValue: selectedPopularSite.hostName,
@@ -243,13 +239,41 @@ const CreateServiceModal = ({ hidden, onClose, onAdd }) => {
         ...emptyInputState,
         inputValue: selectedPopularSite.hostLogo,
       };
-      Object.keys(next).forEach((k) => {
-        next[k] = { ...next[k], validationText: '' };
-      });
       return next;
     });
+    setHostRequiresProxy(false);
     setSelectedPopularSiteIndex(indexOfPopularSite);
+    setSetupMode('popular');
+    setActiveStep(STEPS.REVIEW);
+    setMaxReachedStep(STEPS.REVIEW);
   }, []);
+
+  const handleManualSetupClick = useCallback(() => {
+    if (setupMode !== 'manual') {
+      setFormInputs((prev) => resetDynamicFields(prev));
+      setHostRequiresProxy(false);
+      setSelectedPopularSiteIndex('');
+    }
+    setSetupMode('manual');
+    setActiveStep(STEPS.DETAILS);
+    setMaxReachedStep(STEPS.DETAILS);
+  }, [setupMode]);
+
+  const handleNextFromDetails = useCallback(() => {
+    const { isFormValid, updated } = validateServiceForm(formInputs);
+    setFormInputs(updated);
+    if (!isFormValid) return;
+    setActiveStep(STEPS.REVIEW);
+    setMaxReachedStep((prev) => Math.max(prev, STEPS.REVIEW));
+  }, [formInputs]);
+
+  const handleStepChange = useCallback(
+    (value) => {
+      if (setupMode !== 'popular' && value > maxReachedStep) return;
+      setActiveStep(value);
+    },
+    [setupMode, maxReachedStep]
+  );
 
   const handleCORSChange = useCallback((e) => {
     const isChecked = e.target.checked;
@@ -310,38 +334,128 @@ const CreateServiceModal = ({ hidden, onClose, onAdd }) => {
     }));
   }, []);
 
+  const stepTwoHasError = useMemo(
+    () =>
+      Object.values(formInputs).some((field) => field && field.validationText),
+    [formInputs]
+  );
+
   return (
-    <Modal hidden={hidden} onClose={onClose}>
+    <Modal hidden={hidden} onClose={handleClose}>
       <HeadingText className="modal-heading" type={HeadingText.TYPE.HEADING_2}>
         Add new service
       </HeadingText>
       <p className="modal-paragraph">
         Select a common service from the &quot;quick setup&quot; dropdown below,
-        or provide the information needed to determine the status of the service
-        you&apos;d like to add. You will be able to edit this information in the
-        future.
+        or choose manual setup to provide the information required to determine
+        the status of the service you&apos;d like to add.
       </p>
 
-      <CreateServiceFields
-        formInputs={formInputs}
-        hostRequiresProxy={hostRequiresProxy}
-        selectedPopularSiteIndex={selectedPopularSiteIndex}
-        onQuickSetupSelect={handleQuickSetupSelect}
-        onCORSChange={handleCORSChange}
-        onProviderChange={handleProviderChange}
-        onUpdateInputValue={updateInputValue}
-      />
+      <Steps
+        value={activeStep}
+        onChange={(e, value) => handleStepChange(value)}
+        className="modal-steps"
+      >
+        <StepsItem
+          style={{ fontSize: '16px' }}
+          label="Choose a service"
+          value={STEPS.QUICK_SETUP}
+          checked={maxReachedStep >= STEPS.DETAILS}
+          expanded={activeStep === STEPS.QUICK_SETUP}
+        >
+          {activeStep === STEPS.QUICK_SETUP && (
+            <>
+              <div className="select-container">
+                <label htmlFor="quick-setup-select">Quick setup</label>
+                <select
+                  id="quick-setup-select"
+                  value={selectedPopularSiteIndex}
+                  onChange={handleQuickSetupSelect}
+                >
+                  <option value="">Choose a service</option>
+                  <option value="0">Google Cloud</option>
+                  <option value="1">GitHub</option>
+                  <option value="2">Jira</option>
+                  <option value="3">New Relic</option>
+                  <option value="4">Ezidebit</option>
+                  <option value="5">Apple Developer</option>
+                  <option value="6">AWS</option>
+                  <option value="7">Azure</option>
+                  <option value="8">Microsoft 365</option>
+                  <option value="9">Okta</option>
+                  <option value="10">Oracle Cloud Infrastructure</option>
+                </select>
+              </div>
+
+              <hr className="or-sep" />
+
+              <Button
+                className="modal-button"
+                type={Button.TYPE.PRIMARY}
+                onClick={handleManualSetupClick}
+              >
+                Manual setup
+              </Button>
+            </>
+          )}
+        </StepsItem>
+
+        <StepsItem
+          label="Service details"
+          value={STEPS.DETAILS}
+          checked={maxReachedStep >= STEPS.REVIEW}
+          error={stepTwoHasError}
+          expanded={activeStep === STEPS.DETAILS}
+        >
+          {activeStep === STEPS.DETAILS && (
+            <>
+              <CreateServiceFields
+                formInputs={formInputs}
+                hostRequiresProxy={hostRequiresProxy}
+                isManualSetup={setupMode === 'manual'}
+                disabled={setupMode === 'popular'}
+                onCORSChange={handleCORSChange}
+                onProviderChange={handleProviderChange}
+                onUpdateInputValue={updateInputValue}
+              />
+              {setupMode !== 'popular' && (
+                <Button
+                  className="wizard-next-button"
+                  type={Button.TYPE.PRIMARY}
+                  onClick={handleNextFromDetails}
+                >
+                  Next
+                </Button>
+              )}
+            </>
+          )}
+        </StepsItem>
+
+        <StepsItem
+          label="Review"
+          value={STEPS.REVIEW}
+          expanded={activeStep === STEPS.REVIEW}
+        >
+          {activeStep === STEPS.REVIEW && (
+            <CreateServiceReview
+              formInputs={formInputs}
+              hostRequiresProxy={hostRequiresProxy}
+            />
+          )}
+        </StepsItem>
+      </Steps>
 
       <Button
         className="modal-button"
         type={Button.TYPE.TERTIARY}
-        onClick={onClose}
+        onClick={handleClose}
       >
         Cancel
       </Button>
       <Button
         className="modal-button"
         type={Button.TYPE.PRIMARY}
+        disabled={activeStep !== STEPS.REVIEW}
         onClick={handleAddNewService}
       >
         Add new service

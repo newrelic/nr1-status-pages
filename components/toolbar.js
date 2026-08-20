@@ -23,23 +23,23 @@ const Toolbar = ({
         {!entityGuidExists && (
           <>
             <AccountPicker
+              className="toolbar-component"
               disabled={entityGuidExists}
               onChange={onAccountSelected}
               value={selectedAccountId}
             />
-            <hr />
           </>
         )}
 
         <div>
           <TextField
-            label="Search"
             className="toolbar-search"
+            type="search"
+            name="search"
+            placeholder="Search by service name"
             onChange={setSearchQuery}
           />
         </div>
-
-        <hr />
       </StackItem>
       <StackItem>
         <Stack

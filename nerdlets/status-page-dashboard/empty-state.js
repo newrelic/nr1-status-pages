@@ -18,10 +18,9 @@ const EmptyState = ({
       </HeadingText>
 
       <p className="no-status-pages-description">
-        {!entityGuidExists && 'Select an account below to get started. Then,'}
+        {!entityGuidExists && 'Select an account below and '}
         {entityGuidExists && 'To get started,'} click the &quot;Add a new
-        service&quot; button below to add it to the list of services who&apos;s
-        statuses you can view and track on this page.
+        service&quot; button to get started.
       </p>
 
       {!entityGuidExists && (

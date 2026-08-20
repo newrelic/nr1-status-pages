@@ -136,6 +136,7 @@ const StatusPagesDashboard = ({ entityGuid }) => {
 
   return (
     <div className="dashboard-page-container">
+      {hostNames.length > 0 && (
       <Toolbar
         entityGuid={entityGuid}
         onAccountSelected={onAccountSelected}
@@ -143,6 +144,7 @@ const StatusPagesDashboard = ({ entityGuid }) => {
         handleCreateTileModal={handleCreateTileModal}
         setSearchQuery={setSearchQueryFromEvent}
       />
+      )}
       <div className="dashboard-content">{renderContent()}</div>
 
       <DeleteConfirmModal

@@ -9,6 +9,7 @@ const TextFieldWrapper = ({
   value,
   validationText,
   placeholder,
+  disabled,
 }) => {
   return (
     <div>
@@ -18,6 +19,7 @@ const TextFieldWrapper = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        disabled={disabled}
       />
       {validationText && (
         <span className="text-field__validation">{validationText}</span>
@@ -32,6 +34,7 @@ TextFieldWrapper.propTypes = {
   value: PropTypes.string,
   validationText: PropTypes.string,
   placeholder: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 export default TextFieldWrapper;

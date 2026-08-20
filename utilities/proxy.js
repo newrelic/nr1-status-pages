@@ -1,4 +1,4 @@
-export const PROXY_BASE = 'https://nr1-status-page-proxy.kpeet.workers.dev/';
+export const PROXY_BASE = 'https://nr1-status-page-proxy.nr-labs.workers.dev/';
 
 export const viaProxy = (url) => `${PROXY_BASE}${url}`;
 
