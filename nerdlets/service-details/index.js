@@ -26,6 +26,16 @@ const ServiceDetailsWrapper = () => (
           accountId,
         } = nerdletUrlState;
 
+        const fetchTitle = () => {
+          if (provider === PROVIDERS.NRQL.value) {
+            return 'View NRQL Results';
+          } else if (provider === PROVIDERS.WORKLOAD.value) {
+            return 'View Workload';
+          }
+
+          return 'View Status Page';
+        };
+
         const handleHeaderClick = () => {
           if (provider === PROVIDERS.NRQL.value) {
             navigation.openStackedNerdlet({
@@ -60,12 +70,12 @@ const ServiceDetailsWrapper = () => (
 
         return (
           <>
-            <h2
-              className="service-details-modal-heading"
-              onClick={handleHeaderClick}
-            >
-              <Link>{serviceName} Recent Incidents</Link>
+            <h2 className="service-details-modal-heading">
+              {serviceName} Recent Incidents
             </h2>
+            <div className="service-details-modal-link">
+              <Link onClick={handleHeaderClick}>{fetchTitle()}</Link>
+            </div>
             <ServiceDetails
               hostname={hostname}
               provider={provider}

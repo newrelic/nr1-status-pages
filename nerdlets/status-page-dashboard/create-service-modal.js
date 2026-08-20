@@ -297,16 +297,17 @@ const CreateServiceModal = ({ hidden, onClose, onAdd }) => {
     setFormInputs((prev) => {
       const next = { ...prev, providerName: { ...prev.providerName } };
       next.providerName.inputValue = value;
-      if (!value) return next;
-
       next.providerName.validationText = '';
+
       if (value === PROVIDERS.NRQL.value) {
         delete next.hostName;
         delete next.workloadGuid;
+        delete next.subDomain;
         next.nrqlQuery = { ...emptyInputState };
       } else if (value === PROVIDERS.WORKLOAD.value) {
         delete next.hostName;
         delete next.nrqlQuery;
+        delete next.subDomain;
         next.workloadGuid = { ...emptyInputState };
       } else if (value === PROVIDERS.STATUS_PAL.value) {
         delete next.hostName;
@@ -316,6 +317,7 @@ const CreateServiceModal = ({ hidden, onClose, onAdd }) => {
       } else {
         delete next.nrqlQuery;
         delete next.workloadGuid;
+        delete next.subDomain;
         next.hostName = { ...emptyInputState };
       }
       return next;
