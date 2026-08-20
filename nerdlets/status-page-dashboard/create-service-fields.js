@@ -40,7 +40,7 @@ const CreateServiceFields = ({
 
   const tooltipLink = {
     label: 'Learn more',
-    to: "https://github.com/newrelic/nr1-status-pages/blob/main/README.md#cors-configuration",
+    to: 'https://github.com/newrelic/nr1-status-pages/blob/main/README.md#cors-configuration',
   };
 
   return (
@@ -53,8 +53,12 @@ const CreateServiceFields = ({
               label="Host requires CORS proxy"
               disabled={disabled}
             />
-            <Tooltip text="Optional proxy to route status page requests through" additionalInfoLink={tooltipLink} placementType={Tooltip.PLACEMENT_TYPE.TOP}>
-              <Icon className="cors-tooltip" type="INTERFACE__INFO__HELP"/>
+            <Tooltip
+              text="Optional proxy to route status page requests through"
+              additionalInfoLink={tooltipLink}
+              placementType={Tooltip.PLACEMENT_TYPE.TOP}
+            >
+              <Icon className="cors-tooltip" type="INTERFACE__INFO__HELP" />
             </Tooltip>
           </div>
           {hostRequiresProxy && (

@@ -137,13 +137,13 @@ const StatusPagesDashboard = ({ entityGuid }) => {
   return (
     <div className="dashboard-page-container">
       {hostNames.length > 0 && (
-      <Toolbar
-        entityGuid={entityGuid}
-        onAccountSelected={onAccountSelected}
-        selectedAccountId={selectedAccountId}
-        handleCreateTileModal={handleCreateTileModal}
-        setSearchQuery={setSearchQueryFromEvent}
-      />
+        <Toolbar
+          entityGuid={entityGuid}
+          onAccountSelected={onAccountSelected}
+          selectedAccountId={selectedAccountId}
+          handleCreateTileModal={handleCreateTileModal}
+          setSearchQuery={setSearchQueryFromEvent}
+        />
       )}
       <div className="dashboard-content">{renderContent()}</div>
 

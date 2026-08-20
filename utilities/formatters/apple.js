@@ -8,7 +8,9 @@ const STATUS_TYPE_TO_IMPACT = {
 
 const isActive = (event) => {
   const status = (event.eventStatus || '').toLowerCase();
-  return status !== 'resolved' && status !== 'upcoming' && status !== 'completed';
+  return (
+    status !== 'resolved' && status !== 'upcoming' && status !== 'completed'
+  );
 };
 
 const mapImpact = (statusType) =>

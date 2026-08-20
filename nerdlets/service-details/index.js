@@ -64,9 +64,7 @@ const ServiceDetailsWrapper = () => (
               className="service-details-modal-heading"
               onClick={handleHeaderClick}
             >
-              <Link>
-                {serviceName} Recent Incidents
-              </Link>
+              <Link>{serviceName} Recent Incidents</Link>
             </h2>
             <ServiceDetails
               hostname={hostname}
