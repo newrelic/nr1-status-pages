@@ -36,8 +36,7 @@ const ServiceDetailsWrapper = () => (
           return 'View Status Page';
         };
 
-        const handleHeaderClick = () => {
-          if (provider === PROVIDERS.NRQL.value) {
+        const openNrqlView = () => {
             navigation.openStackedNerdlet({
               id: 'data-exploration.query-builder',
               urlState: {
@@ -48,23 +47,21 @@ const ServiceDetailsWrapper = () => (
                 isViewingQuery: true,
               },
             });
-          } else if (provider === PROVIDERS.WORKLOAD.value) {
-            window
-              .open(
-                `https://one.newrelic.com/redirect/entity/${workloadGuid}`,
-                '_blank'
-              )
-              .focus();
+        };
+
+        const fetchDrilldownLocation = () => {
+           if (provider === PROVIDERS.WORKLOAD.value) {
+            return `https://one.newrelic.com/redirect/entity/${workloadGuid}`;
           } else if (hostname && hostname.includes(MICROSOFT_365_FEED_HOST)) {
-            window.open(MICROSOFT_365_STATUS_URL, '_blank').focus();
+            return MICROSOFT_365_STATUS_URL;
           } else if (provider === PROVIDERS.AZURE.value) {
-            window.open(AZURE_STATUS_URL, '_blank').focus();
+            return AZURE_STATUS_URL;
           } else if (provider === PROVIDERS.OKTA.value) {
-            window.open(OKTA_STATUS_URL, '_blank').focus();
+            return OKTA_STATUS_URL;
           } else if (provider === PROVIDERS.APPLE.value) {
-            window.open(APPLE_STATUS_URL, '_blank').focus();
+            return APPLE_STATUS_URL;
           } else if (hostname) {
-            window.open(hostname, '_blank').focus();
+            return hostname;
           }
         };
 
@@ -74,7 +71,12 @@ const ServiceDetailsWrapper = () => (
               {serviceName} Recent Incidents
             </h2>
             <div className="service-details-modal-link">
-              <Link onClick={handleHeaderClick}>{fetchTitle()}</Link>
+              {
+                provider === PROVIDERS.NRQL.value ?
+                <Link onClick={openNrqlView}>{fetchTitle()}</Link>
+                :
+                <Link to={fetchDrilldownLocation()}>{fetchTitle()}</Link>
+              }
             </div>
             <ServiceDetails
               hostname={hostname}

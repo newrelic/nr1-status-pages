@@ -52,8 +52,6 @@ export default class AppleHelper {
         this.url,
         this.abortController.signal
       );
-
-      console.log('[Apple] fetched data', networkResponse.data);
     } catch (err) {
       if (err.name === 'AbortError') return;
       console.error('[Apple] fetch error', err);
