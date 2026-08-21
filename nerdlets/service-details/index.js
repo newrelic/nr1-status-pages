@@ -37,20 +37,20 @@ const ServiceDetailsWrapper = () => (
         };
 
         const openNrqlView = () => {
-            navigation.openStackedNerdlet({
-              id: 'data-exploration.query-builder',
-              urlState: {
-                initialActiveInterface: 'nrqlEditor',
-                initialAccountId: accountId,
-                initialNrqlValue: nrqlQuery,
-                initialWidget: { visualization: { id: 'viz.table' } },
-                isViewingQuery: true,
-              },
-            });
+          navigation.openStackedNerdlet({
+            id: 'data-exploration.query-builder',
+            urlState: {
+              initialActiveInterface: 'nrqlEditor',
+              initialAccountId: accountId,
+              initialNrqlValue: nrqlQuery,
+              initialWidget: { visualization: { id: 'viz.table' } },
+              isViewingQuery: true,
+            },
+          });
         };
 
         const fetchDrilldownLocation = () => {
-           if (provider === PROVIDERS.WORKLOAD.value) {
+          if (provider === PROVIDERS.WORKLOAD.value) {
             return `https://one.newrelic.com/redirect/entity/${workloadGuid}`;
           } else if (hostname && hostname.includes(MICROSOFT_365_FEED_HOST)) {
             return MICROSOFT_365_STATUS_URL;
@@ -71,12 +71,11 @@ const ServiceDetailsWrapper = () => (
               {serviceName} Recent Incidents
             </h2>
             <div className="service-details-modal-link">
-              {
-                provider === PROVIDERS.NRQL.value ?
+              {provider === PROVIDERS.NRQL.value ? (
                 <Link onClick={openNrqlView}>{fetchTitle()}</Link>
-                :
+              ) : (
                 <Link to={fetchDrilldownLocation()}>{fetchTitle()}</Link>
-              }
+              )}
             </div>
             <ServiceDetails
               hostname={hostname}
