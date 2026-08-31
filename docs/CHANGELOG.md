@@ -1,3 +1,18 @@
+# [1.7.0](https://github.com/newrelic/nr1-status-pages/compare/v1.6.1...v1.7.0) (2026-08-31)
+
+
+### Bug Fixes
+
+* drilldown link formatting/logic ([6561494](https://github.com/newrelic/nr1-status-pages/commit/6561494dbd374e715b6cd36e32d23c92edde463e))
+* proxy updates;package refresh ([74df576](https://github.com/newrelic/nr1-status-pages/commit/74df576e4bcf77c0acfa9a2f33163cf37bc90986))
+* subtext on drilldown header;remove early provider exit ([3a2a970](https://github.com/newrelic/nr1-status-pages/commit/3a2a970792d04e0cc35f1d9d9c6a7d8457ecc5f8))
+* various improvements ([2ad9153](https://github.com/newrelic/nr1-status-pages/commit/2ad915327d9542f303025c29b884275aedea1c8e))
+
+
+### Features
+
+* 2026 refresh ([9678d1a](https://github.com/newrelic/nr1-status-pages/commit/9678d1a173bfceeaf67e5d2877f06afa2cc37c02))
+
 ## [1.6.1](https://github.com/newrelic/nr1-status-pages/compare/v1.6.0...v1.6.1) (2026-07-23)
 
 
