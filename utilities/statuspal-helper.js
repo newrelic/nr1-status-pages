@@ -1,15 +1,14 @@
 import { getProvider } from './provider-services';
-
-const axios = require('axios');
-
-const STATUSPAL_API = getProvider('statusPal').apiURL;
+import { PROXY_HEADERS } from './proxy';
 
 export default class StatuspalHelper {
-  constructor(subDomain) {
+  constructor(subDomain, refreshRateInSeconds) {
     this.subDomain = subDomain;
-    this.refreshRateInSeconds = 30; // Set to 30 seconds to be under the request limit of cors-anywhere
-    // the StatusPal API may change in the feature
+    this.refreshRateInSeconds = refreshRateInSeconds;
+    this.apiURL = getProvider('statusPal').apiURL;
     this.setIntervalIds = [];
+    this.isPolling = false;
+    this.abortController = new AbortController();
   }
 
   clear = () => {
@@ -18,24 +17,50 @@ export default class StatuspalHelper {
     });
 
     this.setIntervalIds = [];
+    this.isPolling = false;
+    this.abortController.abort();
   };
 
-  async _fetchAndPopulateData(urls, callbackSetterFunction) {
+  async _fetchAndPopulateData(callbackSetterFunction) {
     let networkResponse;
 
     try {
-      const data = await Promise.all(
-        urls.map(async (url) => {
-          const res = await axios.get(STATUSPAL_API + url);
-
-          return { data: res.data, url };
+      const { signal } = this.abortController;
+      const encodedSubDomain = encodeURIComponent(this.subDomain);
+      const [statusResult, incidentsResult] = await Promise.allSettled(
+        [
+          `/status_pages/${encodedSubDomain}/status`,
+          `/status_pages/${encodedSubDomain}/incidents`,
+        ].map(async (url) => {
+          const res = await fetch(this.apiURL + url, {
+            signal,
+            headers: PROXY_HEADERS,
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
         })
       );
 
+      if (statusResult.status === 'rejected') {
+        throw statusResult.reason;
+      }
+
+      const statusRes = statusResult.value;
+      const incidentsRes =
+        incidentsResult.status === 'fulfilled' ? incidentsResult.value : {};
+
       networkResponse = {
-        data: Object.fromEntries(data.map((data) => [data.url, data.data])),
+        data: {
+          status_page: {
+            ...statusRes.status_page,
+            ...incidentsRes.status_page,
+          },
+          incidents: incidentsRes.incidents || statusRes.incidents || [],
+        },
       };
-    } catch {
+    } catch (err) {
+      if (err.name === 'AbortError') return undefined;
+      console.error(err);
       networkResponse =
         'There was an error while fetching data. Check your data provider or host URL.';
     }
@@ -44,35 +69,20 @@ export default class StatuspalHelper {
     return networkResponse;
   }
 
-  _pollData(url, callbackSetterFunction, callbackBeforePolling) {
+  _pollData(callbackSetterFunction, callbackBeforePolling) {
+    if (this.isPolling) return;
+    this.isPolling = true;
+
     const setIntervalId = setInterval(async () => {
       callbackBeforePolling && callbackBeforePolling();
-
-      try {
-        this._fetchAndPopulateData(url, callbackSetterFunction);
-      } catch (err) {
-        console.error(err); // eslint-disable-line no-console
-      }
+      await this._fetchAndPopulateData(callbackSetterFunction);
     }, this.refreshRateInSeconds * 1000);
 
     this.setIntervalIds.push(setIntervalId);
   }
 
-  async pollSummaryData(callbackSetterFunction) {
-    // Populate initial data before we start polling
-    const urls = [`/status_pages/${this.subDomain}/status`];
-
-    await this._fetchAndPopulateData(urls, callbackSetterFunction);
-    this._pollData(urls, callbackSetterFunction);
-  }
-
   async pollCurrentIncidents(callbackSetterFunction, callbackBeforePolling) {
-    const urls = [
-      `/status_pages/${this.subDomain}/status`,
-      `/status_pages/${this.subDomain}/incidents`,
-    ];
-
-    await this._fetchAndPopulateData(urls, callbackSetterFunction);
-    this._pollData(urls, callbackSetterFunction, callbackBeforePolling);
+    await this._fetchAndPopulateData(callbackSetterFunction);
+    this._pollData(callbackSetterFunction, callbackBeforePolling);
   }
 }

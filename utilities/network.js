@@ -1,6 +1,11 @@
 import { getProvider } from './provider-services';
-
-import axios from 'axios';
+import {
+  joinUrl,
+  viaProxy,
+  isProxyableUrl,
+  PROXY_BASE,
+  PROXY_HEADERS,
+} from './proxy';
 
 export default class Network {
   constructor(statusPageUrl, refreshRateInSeconds, provider) {
@@ -8,6 +13,7 @@ export default class Network {
     this.refreshRateInSeconds = refreshRateInSeconds;
     this.provider = provider;
     this.setIntervalIds = [];
+    this.abortController = new AbortController();
   }
 
   clear = () => {
@@ -16,14 +22,22 @@ export default class Network {
     });
 
     this.setIntervalIds = [];
+    this.abortController.abort();
   };
 
   async _fetchAndPopulateData(url, callbackSetterFunction) {
     let networkResponse;
 
     try {
-      networkResponse = await axios.get(url);
-    } catch {
+      const res = await fetch(url, {
+        signal: this.abortController.signal,
+        ...(url.startsWith(PROXY_BASE) ? { headers: PROXY_HEADERS } : {}),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      networkResponse = { data: await res.json() };
+    } catch (err) {
+      if (err.name === 'AbortError') return undefined;
+      console.error(err);
       networkResponse =
         'There was an error while fetching data. Check your data provider or host URL.';
     }
@@ -34,12 +48,7 @@ export default class Network {
   _pollData(url, callbackSetterFunction, callbackBeforePolling) {
     const setIntervalId = setInterval(async () => {
       callbackBeforePolling && callbackBeforePolling();
-
-      try {
-        this._fetchAndPopulateData(url, callbackSetterFunction);
-      } catch (err) {
-        console.error(err); // eslint-disable-line no-console
-      }
+      await this._fetchAndPopulateData(url, callbackSetterFunction);
     }, this.refreshRateInSeconds * 1000);
 
     this.setIntervalIds.push(setIntervalId);
@@ -62,14 +71,17 @@ export default class Network {
 
   checkIfTheSameDataSource() {
     const provider = getProvider(this.provider);
-    return provider.summaryUrl === provider.incidentUrl;
+    return (
+      Boolean(provider.summaryUrl) &&
+      provider.summaryUrl === provider.incidentUrl
+    );
   }
 
   // helper function to get correct url
   // pass either 'summaryUrl' or 'incidentUrl'
   _getUrl(providerUrlProperty) {
     const provider = getProvider(this.provider);
-    let url = '';
+    let url;
 
     switch (provider.name) {
       case 'Status Io':
@@ -79,12 +91,21 @@ export default class Network {
           provider[providerUrlProperty]
         )}`;
         break;
+      case 'AWS Health': {
+        const target = joinUrl(
+          this.statusPageUrl,
+          provider[providerUrlProperty]
+        );
+        if (!isProxyableUrl(target)) {
+          throw new Error('Disallowed AWS Health status URL');
+        }
+        url = viaProxy(target);
+        break;
+      }
       default:
-        url = `${this.statusPageUrl}${provider[providerUrlProperty]}`;
+        url = joinUrl(this.statusPageUrl, provider[providerUrlProperty]);
         break;
     }
-
-    // console.debug(url);
 
     return url;
   }

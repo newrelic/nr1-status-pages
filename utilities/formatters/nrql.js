@@ -1,3 +1,5 @@
+import { buildColumnIncidentUpdates } from './incident-utils';
+
 const NRQLSeverityToKnown = {
   None: 'none',
   Critical: 'critical',
@@ -8,8 +10,9 @@ export const nrqlFormatter = (data) => {
   let statusCode = NRQLSeverityToKnown.None;
   let status = 'All Systems Operational';
 
-  if (data.results[0].events.length > 0) {
-    const incident = data.results[0].events[0];
+  const events = data?.results?.[0]?.events || [];
+  if (events.length > 0) {
+    const incident = events[0];
     statusCode = NRQLSeverityToKnown[incident.EventStatus];
 
     if (statusCode === undefined) {
@@ -29,16 +32,9 @@ export const nrqlFormatter = (data) => {
 };
 
 export const nrqlIncidentFormatter = (data) => {
-  return data.results[0].events.map((incident) => {
-    const incident_updates = [];
+  return (data?.results?.[0]?.events || []).map((incident) => {
+    const incident_updates = buildColumnIncidentUpdates(incident);
     let incidentCode = NRQLSeverityToKnown[incident.EventStatus];
-
-    Object.entries(incident).forEach(([key, value]) => {
-      incident_updates.push({
-        created_at: incident.EventTimeStamp,
-        body: `${key}: ${value}`,
-      });
-    });
 
     if (incidentCode === undefined) {
       incidentCode = NRQLSeverityToKnown.None;

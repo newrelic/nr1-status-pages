@@ -1,99 +1,72 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, navigation, Stack, StackItem, TextField } from 'nr1';
-import AccountPicker from './account-picker';
+import { AccountPicker, Button, Stack, StackItem, TextField } from 'nr1';
 
-export default class Toolbar extends React.PureComponent {
-  static propTypes = {
-    accounts: PropTypes.array,
-    selectedAccountId: PropTypes.number,
-    entityGuid: PropTypes.string,
-    onAccountSelected: PropTypes.func,
-    setSearchQuery: PropTypes.func,
-    handleCreateTileModal: PropTypes.func,
-  };
+const Toolbar = ({
+  entityGuid,
+  onAccountSelected,
+  selectedAccountId,
+  setSearchQuery,
+  handleCreateTileModal,
+}) => {
+  const entityGuidExists = entityGuid !== null && entityGuid !== undefined;
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-    this.onEditStatusPageClick = this.onEditStatusPageClick.bind(this);
-  }
-
-  async onEditStatusPageClick() {
-    const nerdletWithState = {
-      id: 'configure-status-pages',
-      urlState: {
-        accounts: this.props.accounts,
-        accountId: this.props.selectedAccountId,
-      },
-    };
-
-    if (this.props.entityGuid) {
-      nerdletWithState.urlState.entityGuid = this.props.entityGuid;
-    }
-    navigation.openStackedNerdlet(nerdletWithState);
-  }
-
-  /*
-  onModalClose() {
-    this.setState({ hidden: true });
-  }
-
-  onModalHideEnd() {
-    this.setState({ mounted: false });
-  }
-  */
-
-  render() {
-    const { entityGuid, onAccountSelected } = this.props;
-    const entityGuidExists = entityGuid !== null && entityGuid !== undefined;
-
-    return (
-      <Stack
-        className="toolbar-container"
-        fullWidth
-        horizontalType={Stack.HORIZONTAL_TYPE.FILL}
-        verticalType={Stack.VERTICAL_TYPE.CENTER}
-        gapType={Stack.GAP_TYPE.NONE}
-      >
-        <StackItem className="toolbar-left-side">
-          {!entityGuidExists && (
-            <>
-              <AccountPicker
-                disabled={entityGuid !== null && entityGuid !== undefined}
-                accountChangedCallback={onAccountSelected}
-              />
-              <hr />
-            </>
-          )}
-
-          <div>
-            <TextField
-              label="Search"
-              className="toolbar-search"
-              onChange={this.props.setSearchQuery(event)}
+  return (
+    <Stack
+      className="toolbar-container"
+      fullWidth
+      horizontalType={Stack.HORIZONTAL_TYPE.FILL}
+      verticalType={Stack.VERTICAL_TYPE.CENTER}
+      gapType={Stack.GAP_TYPE.NONE}
+    >
+      <StackItem className="toolbar-left-side">
+        {!entityGuidExists && (
+          <>
+            <AccountPicker
+              className="toolbar-component"
+              disabled={entityGuidExists}
+              onChange={onAccountSelected}
+              value={selectedAccountId}
             />
-          </div>
+          </>
+        )}
 
-          <hr />
-        </StackItem>
-        <StackItem>
-          <Stack
-            className="toolbar-right-side"
-            fullWidth
-            horizontalType={Stack.HORIZONTAL_TYPE.RIGHT}
+        <div>
+          <TextField
+            className="toolbar-search"
+            type="search"
+            name="search"
+            placeholder="Search by service name"
+            onChange={setSearchQuery}
+          />
+        </div>
+      </StackItem>
+      <StackItem>
+        <Stack
+          className="toolbar-right-side"
+          fullWidth
+          horizontalType={Stack.HORIZONTAL_TYPE.RIGHT}
+        >
+          <Button
+            type={Button.TYPE.PRIMARY}
+            iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+            sizeType={Button.SIZE_TYPE.MEDIUM}
+            onClick={handleCreateTileModal}
           >
-            <Button
-              type={Button.TYPE.PRIMARY}
-              iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-              sizeType={Button.SIZE_TYPE.MEDIUM}
-              onClick={this.props.handleCreateTileModal}
-            >
-              Add new service
-            </Button>
-          </Stack>
-        </StackItem>
-      </Stack>
-    );
-  }
-}
+            Add new service
+          </Button>
+        </Stack>
+      </StackItem>
+    </Stack>
+  );
+};
+
+Toolbar.propTypes = {
+  entityGuid: PropTypes.string,
+  onAccountSelected: PropTypes.func,
+  selectedAccountId: PropTypes.number,
+  setSearchQuery: PropTypes.func,
+  handleCreateTileModal: PropTypes.func,
+};
+
+export default Toolbar;

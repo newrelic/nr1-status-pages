@@ -17,8 +17,8 @@ const StatusIoSeverityToKnown = {
 
 // Example JSON here: https://ezidebit.status.io/1.0/status/598a973f96a8201305000142
 export const statusIoFormatter = (data) => {
-  const statusCode = data.result.status_overall.status_code;
-  const status = data.result.status_overall.status;
+  const statusCode = data?.result?.status_overall?.status_code;
+  const status = data?.result?.status_overall?.status;
 
   return {
     name: 'Status Io',
@@ -28,14 +28,16 @@ export const statusIoFormatter = (data) => {
 };
 
 export const statusIoIncidentFormatter = (data) => {
-  return data.result.incidents.map((incident) => {
-    const firstMessage = incident.messages[0];
+  return (data?.result?.incidents || []).map((incident) => {
+    const firstMessage = (incident.messages || [])[0];
 
     return {
       name: incident.name,
       created_at: incident.datetime_open,
-      impact: StatusIoSeverityToKnown[firstMessage.status],
-      incident_updates: incident.messages.map((message) => {
+      impact: firstMessage
+        ? StatusIoSeverityToKnown[firstMessage.status]
+        : undefined,
+      incident_updates: (incident.messages || []).map((message) => {
         return {
           created_at: message.datetime,
           body: message.details,

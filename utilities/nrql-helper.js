@@ -4,12 +4,15 @@ export default class NRQLHelper {
   constructor(query, refreshRateInSeconds, accountId) {
     this.refreshRateInSeconds = refreshRateInSeconds;
     this.query = query;
-    this.setTimeoutId = undefined;
     this.accountId = accountId;
+    this.setIntervalIds = [];
+    this.isPolling = false;
   }
 
   clear = () => {
-    clearTimeout(this.setTimeoutId);
+    this.setIntervalIds.forEach((id) => clearInterval(id));
+    this.setIntervalIds = [];
+    this.isPolling = false;
   };
 
   async _fetchAndPopulateData(callbackSetterFunction) {
@@ -20,13 +23,13 @@ export default class NRQLHelper {
         accountIds: [this.accountId],
         query: this.query,
         formatType: NrqlQuery.FORMAT_TYPE.RAW,
-        pollInterval: this.refreshRateInSeconds * 1000,
       });
 
-      if (networkResponse.data.metadata.messages[0]) {
+      if (networkResponse.data?.metadata?.messages?.[0]) {
         networkResponse = networkResponse.data.metadata.messages[0];
       }
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
       networkResponse =
         'There was an error while fetching data. Check your data provider or host URL.';
     }
@@ -35,22 +38,15 @@ export default class NRQLHelper {
   }
 
   _pollData(callbackSetterFunction, callbackBeforePolling) {
-    this.setTimeoutId = setTimeout(async () => {
+    if (this.isPolling) return;
+    this.isPolling = true;
+
+    const setIntervalId = setInterval(async () => {
       callbackBeforePolling && callbackBeforePolling();
-
-      try {
-        this._fetchAndPopulateData(callbackSetterFunction);
-      } catch (err) {
-        console.error(err); // eslint-disable-line no-console
-      } finally {
-        this._pollData(callbackSetterFunction);
-      }
+      await this._fetchAndPopulateData(callbackSetterFunction);
     }, this.refreshRateInSeconds * 1000);
-  }
 
-  async pollSummaryData(callbackSetterFunction) {
-    await this._fetchAndPopulateData(callbackSetterFunction);
-    this._pollData(callbackSetterFunction);
+    this.setIntervalIds.push(setIntervalId);
   }
 
   async pollCurrentIncidents(callbackSetterFunction, callbackBeforePolling) {

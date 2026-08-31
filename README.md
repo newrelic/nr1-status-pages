@@ -8,43 +8,24 @@
 
 Status Page is a [Statuspage.io](https://www.statuspage.io)-inspired application that allows you to easily configure the most important key dependencies to your business in one color-coded view.
 
-Status Page also displays an event stream of previous incidents and outages, along with updates for easy follow-along.
-
-Choose an existing supported service like Jira, or add a new service.
-
 ![Screenshot #1](/catalog/screenshots/nr1-status-pages-1.png)
 
-### [Statuspage.io](https://www.statuspage.io)
+Status Page also displays an event stream of active/previous incidents and outages, along with updates for easy follow-along. The following table lists details for each provider or popular status page.
 
-Example hostnames:
-
-- [https://www.githubstatus.com/](https://www.githubstatus.com/)
-- [https://jira-software.status.atlassian.com/](https://jira-software.status.atlassian.com/)
-- [https://status.digitalocean.com/](https://status.digitalocean.com/)
-- [https://status.hashicorp.com/](https://status.hashicorp.com/)
-
-### [Google style](https://www.google.com)
-
-Example hostnames:
-
-- [https://status.cloud.google.com](https://status.cloud.google.com)
-
-### [Status.io](https://status.io/)
-
-Url Format:
-`{baseUrl}/pages/history/{`[numeric statuspage_id](https://statusio.docs.apiary.io/#reference/incidents/list-incidents-by-id)`}`
-
-Example hostnames:
-
-- [https://ezidebit.status.io/pages/history/598a973f96a8201305000142](https://ezidebit.status.io/pages/history/598a973f96a8201305000142)
-- [https://status.docker.com/pages/history/533c6539221ae15e3f000031](https://status.docker.com/pages/history/533c6539221ae15e3f000031)
-
-### [Statuspal.io](https://statuspal.io)
-
-Example subdomains:
-
-- [galaxygate](https://status.galaxygate.net/) --> From https://status.galaxygate.net/
-- [smtp](https://smtp.statuspal.io) --> From https://smtp.statuspal.io
+| Provider | Description | Incidents Fetched | URL(s)/Mechanism Polled | Examples |
+|---|---|---|---|---|
+| Statuspage.io | Atlassian Statuspage-hosted pages | Active/Past | `{host}/api/v2/summary.json`, `{host}/api/v2/incidents.json` | githubstatus.com, status.digitalocean.com |
+| Google | GCP-style status dashboard | Active/Past | `{host}/incidents.json` | status.cloud.google.com |
+| Status.io | status.io-hosted pages | Active only | `{host}/1.0/status/{id}` | ezidebit.status.io/pages/history/598a973f... |
+| Statuspal.io | Statuspal-hosted pages | Active/Past | `{proxy}/status_pages/{subdomain}/status`, `/incidents` | galaxygate, smtp |
+| NRQL query | User-defined NRQL against own account | Depends on query | NerdGraph NRQL query (user-supplied) | `FROM NrAiIncident SELECT timestamp as EventTimeStamp, priority as EventStatus, conditionName as EventName, entity.name LIMIT 50` |
+| Workload | NR Workload entity status | Active/Past (2-wk history) | NRQL on `WorkloadStatus`, `SINCE 2 WEEKS AGO` | — |
+| RSS feed | User-provided RSS/Atom feed | Past only | Direct fetch of user RSS URL via proxy, parsed w/ `DOMParser` | user-supplied |
+| Apple | Apple Developer System Status (built-in) | Active only | Hostname JSONP feed (`apple.com/support/systemstatus/data/*`), via proxy | apple.com/.../developer/system_status_en_US.js |
+| AWS Health | AWS Service Health Dashboard (built-in) | Active only | `{host}/public/currentevents`, via proxy | health.aws.amazon.com |
+| Azure | Azure status feed (built-in) | Active only | Hostname RSS/Atom feed, via proxy | azure.status.microsoft/en-us/status/feed/ |
+| Okta | Okta status RSS (built-in) | Active only | Hostname RSS feed, via proxy | feeds.feedburner.com/OktaStatusRSS |
+| Oracle Cloud Infra. | OCI status page (built-in) | Active/Past | `{host}/api/v2/status.json` + `/api/v2/incident-summary.rss`, direct (no proxy) | ocistatus.oraclecloud.com |
 
 ### NRQL query
 
@@ -62,15 +43,25 @@ or
 SELECT timestamp as EventTimeStamp, priority as EventStatus, condition_name as EventName, entity.name FROM AlertViolationsSample LIMIT 50
 ```
 
-### RSS feed
+### Status Pal
 
-It is possible to choose RSS feed as a provider for status pages.
+Status Pal requires the sub domain of the status page (not the full status URL).
+
+- [galaxygate](https://status.galaxygate.net/) --> From https://status.galaxygate.net/
+- [smtp](https://smtp.statuspal.io) --> From https://smtp.statuspal.io
+
+
+### Workload
+
+Workloads require the entity guid of the workload (i.e: `MTYwNjg2MnxOUjF8V09SS0xPQUR8M3fimMTM4`).
 
 ### CORS configuration
 
-It is possible to configure CORS proxy when creating new service. CORS proxy address must contain `{url}` placeholder that will be replaced with provided hostname.
+Some status-page providers do not send permissive CORS headers, so the nerdpack routes those requests through a small Cloudflare Worker operated by the maintainers.
 
-Example: `https://cors-anywhere.herokuapp.com/{url}`
+The "Host requires CORS proxy" checkbox in the Add Service modal defaults to that Worker. Advanced users can substitute their own proxy — the address must contain a `{url}` placeholder that will be replaced with the target hostname.
+
+Example (default): `https://nr1-status-page-proxy.nr-labs.workers.dev/{url}`
 
 ## Dependencies
 

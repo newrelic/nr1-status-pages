@@ -6,84 +6,43 @@ $desktop-breakpoint: 1024px;
   height: 100%;
 }
 
+.dashboard-page-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-content {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.toolbar-component {
+  border-inline-end: 1px solid #d5d7d7;
+  padding-inline-end: 8px;
+  margin-right: 8px;
+}
+
 // ==============================================================
 // NRDS text field and dropdown overrides
 // ==============================================================
 
-[class*='Dropdown-label'],
-[class*='TextField-label'] {
-  padding-bottom: 4px;
-  padding-top: 0;
-  font-size: 14px;
-  color: #000e0e;
-  text-align: left;
-  line-height: 19px;
-  text-transform: none;
-  font-weight: 600;
-  letter-spacing: 0px;
-}
-
 button[class*='Dropdown-trigger'],
 #root [class*='TextField-input'] {
-  min-width: 100px;
-  min-height: 32px;
-  justify-content: space-between;
+  width: 250px;
+  max-width: 250px;
   box-sizing: border-box;
-  padding: 6.5px 8px 6.5px 8px; // visual centering, rather than being mathematically accurate
   font-size: 14px;
   position: relative;
-  line-height: 19px;
   border: none;
   box-shadow: inset 0 0 0 1px #d5d7d7;
-  background-position: right 8px top 56%;
   border-radius: 2px;
-  background-color: #ffffff;
+  background-color: #fff;
   transition: 0.075s all ease-in-out;
 
-  &:hover {
-    background-color: #fff;
-    box-shadow: inset 0 0 0 1px #8e9494, 0 1px 0 0 #edeeee;
-    border: none;
-  }
-
-  &:active {
-    background-color: #fff;
-    border: none;
-    box-shadow: inset 0 0 0 1px #8e9494, 0 1px 0 0 #f4f5f5;
-  }
-
   &:focus {
-    background-color: #fff;
-    box-shadow: inset 0 0 0 1px #d5d7d7, 0 1px 0 0 #f4f5f5;
-    border-radius: 2px 2px 0 0;
-    border: none;
-
-    &:after {
-      content: '';
-      width: 100%;
-      height: 2px;
-      position: absolute;
-      z-index: 100000;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #70ccd3;
-    }
-  }
-
-  &:disabled {
-    border: 1px solid #d5d7d7;
-    background-color: #f4f5f5;
-
-    [class*='Dropdown-label'],
-    [class*='TextField-label'] {
-      color: #8e9494;
-    }
-
-    &:hover {
-      border: 1px solid #d5d7d7;
-      background-color: #f4f5f5;
-    }
+    box-shadow: inset 0 0 0 1px #65b1ff;
   }
 }
 
@@ -104,6 +63,11 @@ button[class*='Dropdown-trigger'],
   }
 }
 
+.cors-tooltip {
+  display: inline-flex !important;
+  vertical-align: unset !important;
+}
+
 [class*='Dropdown-popover'] {
   max-height: 256px;
   margin-top: -1px;
@@ -121,11 +85,6 @@ button[class*='Dropdown-trigger'],
 [class*='DropdownItem']:not([class*='DropdownItem-search']):hover {
   background-color: #c9f3f5;
   box-shadow: none;
-}
-
-#root [class*='TextField-input']:focus {
-  border-radius: 2px;
-  box-shadow: inset 0 -2px 0 #70ccd3, inset 0 0 0 1px #8e9494, 0 1px 0 0 #edeeee;
 }
 
 #root [class*='DropdownItem-search'] {
@@ -163,25 +122,17 @@ button[class*='Dropdown-trigger'],
 
 .toolbar-container {
   height: 70px;
+  flex-shrink: 0;
   box-sizing: border-box;
   border-top: 1px solid #d5d7d7;
   border-bottom: 1px solid #e3e4e4;
   box-shadow: inset 0px 2px 0px rgba(0, 0, 0, 0.02);
-  background: #edeeee;
   padding: 0 16px;
 }
 
 .toolbar-left-side {
   display: flex;
   align-items: center;
-}
-
-.toolbar-left-side hr {
-  width: 1px;
-  height: 70px;
-  background-color: #e3e4e4;
-  margin: 0 16px;
-  border: none;
 }
 
 .toolbar-right-side {
@@ -192,6 +143,7 @@ button[class*='Dropdown-trigger'],
 
 .status-page-grid-item {
   max-width: 100%;
+  min-width: 0;
 }
 
 .status-page-container {
@@ -226,7 +178,9 @@ button[class*='Dropdown-trigger'],
 }
 
 .status-container {
-  margin: 16px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 16px;
   grid-gap: 16px;
   position: relative;
   grid-auto-rows: 330px;
@@ -244,6 +198,20 @@ button[class*='Dropdown-trigger'],
   height: 110px;
   text-align: center;
   padding: 0 10px;
+}
+
+.service-logo-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
 }
 
 .service-logo {
@@ -280,6 +248,19 @@ button[class*='Dropdown-trigger'],
   border-bottom: 1px solid #edeeee;
   text-align: center;
   padding: 16px;
+}
+
+.service-current-status-button {
+  display: block;
+  width: 100%;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
 }
 
 .status-minor .service-current-status svg {
@@ -851,29 +832,38 @@ button[class*='Dropdown-trigger'],
 }
 
 .service-settings-dropdown-item {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  color: #000d0d;
   height: 32px;
-  padding: 0 8px;
   border-bottom: 1px solid #e3e4e4;
 
   &:last-child {
     border: none;
   }
 
+  &.destructive .service-settings-dropdown-item-button {
+    color: #bf0016;
+  }
+}
+
+.service-settings-dropdown-item-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  padding: 0 8px;
+  border: none;
+  background: none;
+  color: #000d0d;
+  font: inherit;
+  text-align: left;
+
   &:hover {
     cursor: pointer;
-    background-color: #fafbfb;
+    // background-color: #fafbfb;
   }
 
   .ic-Icon {
     margin-right: 8px;
-  }
-
-  &.destructive {
-    color: #bf0016;
   }
 }
 
@@ -887,6 +877,40 @@ button[class*='Dropdown-trigger'],
 
 .modal-button {
   margin-right: 8px;
+}
+
+.modal-steps {
+  .wnd-Step-header {
+  .wnd-Step-label {
+    font-size: 16px !important;
+    line-height: normal;
+  }
+}
+}
+
+.wizard-next-button {
+  margin: 16px 0;
+}
+
+.wizard-review {
+  margin-bottom: 16px;
+}
+
+.wizard-review-row {
+  display: flex;
+  padding: 8px 0;
+  border-bottom: 1px solid #e3e4e4;
+}
+
+.wizard-review-label {
+  min-width: 160px;
+  font-weight: 600;
+  color: #464e4e;
+}
+
+.wizard-review-value {
+  color: #464e4e;
+  word-break: break-all;
 }
 
 [class*='InnerModal'] {
@@ -906,7 +930,7 @@ button[class*='Dropdown-trigger'],
   height: 1px;
   border: none;
   background-color: #b9bdbd;
-  margin: 24px 0 32px;
+  margin: 22px 0 18px;
   overflow: visible;
 
   &:before {
@@ -942,6 +966,7 @@ button[class*='Dropdown-trigger'],
   height: 151px;
   justify-content: center;
   align-items: center;
+  cursor: default;
 }
 
 .no-incident-history-header {
@@ -1003,7 +1028,7 @@ button[class*='Dropdown-trigger'],
 }
 
 .no-status-pages-found {
-  height: calc(100% - 102px);
+  height: 100%;
   align-content: center;
 }
 
@@ -1032,6 +1057,20 @@ button[class*='Dropdown-trigger'],
 
 .rss-icon-container {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 88px;
+  left: 6px;
+}
+
+.drag-handle {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  cursor: grab;
+  color: #8e9eb4;
+  z-index: 20;
+  line-height: 0;
+
+  &:active {
+    cursor: grabbing;
+  }
 }
