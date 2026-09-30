@@ -4,6 +4,8 @@ import dayjs from 'dayjs';
 
 import { Icon, Button } from 'nr1';
 
+import { isIncidentActive } from '../utilities/incident-status';
+
 const AZURE_PROVIDER_NAME = 'azure';
 const OKTA_PROVIDER_NAME = 'okta';
 const APPLE_PROVIDER_NAME = 'apple';
@@ -137,7 +139,11 @@ const CurrentIncidents = ({
     <div className="timeline-container mini-timeline">
       {first3Incidents.map((incident, i) => (
         <div
-          className={`timeline-item impact-${incident.impact}`}
+          className={`timeline-item impact-${incident.impact} ${
+            isIncidentActive(incident, provider)
+              ? 'timeline-item-active-incident'
+              : ''
+          }`}
           key={`${incident.created_at}-${incident.name}`}
           role="button"
           tabIndex={0}

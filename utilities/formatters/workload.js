@@ -14,7 +14,7 @@ export const workloadFormatter = (data) => {
   const events = data?.results?.[0]?.events || [];
   if (events.length > 0) {
     const incident = events[0];
-    statusCode = WorkloadSeverityToKnown[incident.EventStatus];
+    statusCode = WorkloadSeverityToKnown[Number(incident.EventStatus)];
 
     if (statusCode === undefined || statusCode === 'none') {
       statusCode = 'none';
@@ -57,8 +57,12 @@ const buildWorkloadDetailsPaneBlob = (workloadGuid) => {
 
 export const workloadIncidentFormatter = (data) => {
   const paneBlob = buildWorkloadDetailsPaneBlob(data?.workloadGuid);
+  const unhealthyEvents =
+    data?.results?.[0]?.events.filter(
+      (event) => Number(event.EventStatus) > 0
+    ) || [];
 
-  return (data?.results?.[0]?.events || []).map((incident) => {
+  return (unhealthyEvents || []).map((incident) => {
     const incident_updates = buildColumnIncidentUpdates(incident, {
       EventStatus: () =>
         paneBlob && {
@@ -67,7 +71,7 @@ export const workloadIncidentFormatter = (data) => {
           link_url: `${launcherURL}&pane=${paneBlob}`,
         },
     });
-    let incidentCode = WorkloadSeverityToKnown[incident.EventStatus];
+    let incidentCode = WorkloadSeverityToKnown[Number(incident.EventStatus)];
 
     if (incidentCode === undefined) {
       incidentCode = 'none';

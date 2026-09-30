@@ -135,6 +135,9 @@ jobs:
 
       - name: Validate Open Source Files
         uses: newrelic/validate-nerdpack-action@v1
+        with:
+          files: "package.json, LICENSE, README.md, nr1.json, .releaserc, cla.md, third_party_manifest.json, THIRD_PARTY_NOTICES.md, .gitignore, .github/workflows/pr.yml, .github/workflows/release.yml"
+          override: true
 
       - name: Install NR1 CLI
         run: |

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Icon } from 'nr1';
 
-const ServiceSettingsMenu = ({ onEdit, onDelete }) => {
+const ServiceSettingsMenu = ({ onEdit, onAddToDashboard, onDelete }) => {
   const [settingsPopoverActive, setSettingsPopoverActive] = useState(false);
   const popupHoverTimer = useRef(null);
 
@@ -22,6 +22,15 @@ const ServiceSettingsMenu = ({ onEdit, onDelete }) => {
       setSettingsPopoverActive(false);
     },
     [onEdit]
+  );
+
+  const handleAddDashboardClick = useCallback(
+    (e) => {
+      e.stopPropagation();
+      onAddToDashboard();
+      setSettingsPopoverActive(false);
+    },
+    [onAddToDashboard]
   );
 
   const handleDeleteClick = useCallback(
@@ -82,6 +91,16 @@ const ServiceSettingsMenu = ({ onEdit, onDelete }) => {
             Edit
           </button>
         </li>
+        <li className="service-settings-dropdown-item">
+          <button
+            type="button"
+            className="service-settings-dropdown-item-button"
+            onClick={handleAddDashboardClick}
+          >
+            <Icon type={Icon.TYPE.DATAVIZ__DATAVIZ__DASHBOARD__A_ADD} />
+            Add to Dashboard
+          </button>
+        </li>
         <li className="service-settings-dropdown-item destructive">
           <button
             type="button"
@@ -102,6 +121,7 @@ const ServiceSettingsMenu = ({ onEdit, onDelete }) => {
 
 ServiceSettingsMenu.propTypes = {
   onEdit: PropTypes.func.isRequired,
+  onAddToDashboard: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 };
 

@@ -155,6 +155,35 @@ const StatusPage = ({
     [accountId, refreshRate, hostname]
   );
 
+  const handleAddToDashboard = useCallback(() => {
+    const statusInput =
+      hostname.provider === 'nrql'
+        ? hostname.nrqlQuery
+        : hostname.provider === 'workload'
+        ? hostname.workloadGuid
+        : hostname.provider === 'statusPal'
+        ? hostname.subDomain
+        : hostname.rawHostName || hostname.hostName;
+    const vizNerdlet = {
+      id: 'visualization-explorer.builder',
+      urlState: {
+        visualizationId: '090369b0-4f5d-464d-a6b2-48d42a8ae2f4.nr-status-page',
+        visualizationProps: {
+          accountId: accountId || null,
+          corsProxy: hostname.corsProxyAddress || null,
+          pollInterval: null,
+          provider: hostname.provider || null,
+          serviceTitle: hostname.serviceName || null,
+          showDocs: null,
+          statusInput,
+          statusPalPageLink: null,
+        },
+      },
+    };
+
+    navigation.openStackedNerdlet(vizNerdlet);
+  }, [hostname, accountId]);
+
   const handleDelete = useCallback(
     () => handleDeleteTileModal(hostname),
     [handleDeleteTileModal, hostname]
@@ -185,6 +214,7 @@ const StatusPage = ({
       )}
       <ServiceSettingsMenu
         onEdit={handleTileSettingsAnimation}
+        onAddToDashboard={handleAddToDashboard}
         onDelete={handleDelete}
       />
       <Spinner fillContainer />
@@ -205,6 +235,7 @@ const StatusPage = ({
       <div className="logo-container">
         <ServiceSettingsMenu
           onEdit={handleTileSettingsAnimation}
+          onAddToDashboard={handleAddToDashboard}
           onDelete={handleDelete}
         />
       </div>
@@ -249,6 +280,7 @@ const StatusPage = ({
           settingsButton={
             <ServiceSettingsMenu
               onEdit={handleTileSettingsAnimation}
+              onAddToDashboard={handleAddToDashboard}
               onDelete={handleDelete}
             />
           }

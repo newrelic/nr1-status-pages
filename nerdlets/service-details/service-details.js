@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import { Icon, Button } from 'nr1';
 
 import useProviderPolling from '../../hooks/use-provider-polling';
+import { isIncidentActive } from '../../utilities/incident-status';
 
 const PROVIDERS_WITHOUT_HISTORY = ['awsHealth', 'azure'];
 
@@ -167,6 +168,10 @@ const ServiceDetails = ({
           }}
           className={`timeline-item impact-${incident.impact} ${
             expandedTimelineItem === incidentId ? 'timeline-item-expanded' : ''
+          } ${
+            isIncidentActive(incident, provider)
+              ? 'timeline-item-active-incident'
+              : ''
           }`}
           key={`${incident.created_at}-${incident.name}`}
         >
