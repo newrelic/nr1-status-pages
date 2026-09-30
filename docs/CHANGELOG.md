@@ -1,3 +1,11 @@
+## [1.7.1](https://github.com/newrelic/nr1-status-pages/compare/v1.7.0...v1.7.1) (2026-09-30)
+
+
+### Bug Fixes
+
+* highlight active incidents;add new providers ([d75cb46](https://github.com/newrelic/nr1-status-pages/commit/d75cb468086dcb113df66e47d92869a31e78f746))
+* validate-nerdpack workflow ([6bfa3ca](https://github.com/newrelic/nr1-status-pages/commit/6bfa3caddcf87721f8aaa5887fb0fd8f8f504bcc))
+
 # [1.7.0](https://github.com/newrelic/nr1-status-pages/compare/v1.6.1...v1.7.0) (2026-08-31)
 
 
