@@ -9,11 +9,13 @@ const STATUSPAL_PROVIDER_NAME = 'statusPal';
 const formInit = (hostname) => ({
   serviceName: hostname.serviceName,
   hostName: hostname.hostName,
+  rawHostName: hostname.rawHostName,
   nrqlQuery: hostname.nrqlQuery,
   workloadGuid: hostname.workloadGuid,
   subDomain: hostname.subDomain,
   provider: hostname.provider,
   hostLogo: hostname.hostLogo,
+  corsProxyAddress: hostname.corsProxyAddress,
   id: hostname.id,
 });
 
@@ -46,11 +48,13 @@ const ServiceSettingsForm = ({ hostname, contentRef, onSave, onDelete }) => {
       onSave({
         serviceName: form.serviceName,
         hostName: form.hostName,
+        rawHostName: form.rawHostName,
         provider: form.provider,
         hostLogo: form.hostLogo,
         nrqlQuery: form.nrqlQuery,
         workloadGuid: form.workloadGuid,
         subDomain: form.subDomain,
+        corsProxyAddress: form.corsProxyAddress,
         id: form.id,
       });
     },
@@ -94,7 +98,10 @@ const ServiceSettingsForm = ({ hostname, contentRef, onSave, onDelete }) => {
         label="Hostname"
         placeholder="https://status.myservice.com/"
         className="status-page-setting"
-        onChange={(e) => setField('hostName', e.target.value)}
+        onChange={(e) => {
+          setField('hostName', e.target.value);
+          setField('rawHostName', e.target.value);
+        }}
         defaultValue={hostname.hostName}
       />
     );

@@ -179,6 +179,7 @@ const CreateServiceModal = ({ hidden, onClose, onAdd }) => {
     } = formInputs;
 
     let formattedHostName;
+    let rawHostName;
     if (providerName.inputValue === PROVIDERS.STATUS_PAL.value) {
       formattedHostName = encodeURI(
         `https://${subDomain.inputValue}.statuspal.io`
@@ -187,6 +188,7 @@ const CreateServiceModal = ({ hidden, onClose, onAdd }) => {
       providerName.inputValue !== PROVIDERS.NRQL.value &&
       providerName.inputValue !== PROVIDERS.WORKLOAD.value
     ) {
+      rawHostName = encodeURI(hostName?.inputValue);
       formattedHostName = hostRequiresProxy
         ? corsProxyAddress.inputValue.replace('{url}', hostName?.inputValue)
         : hostName?.inputValue;
@@ -197,11 +199,15 @@ const CreateServiceModal = ({ hidden, onClose, onAdd }) => {
       id: crypto.randomUUID(),
       serviceName: serviceName.inputValue,
       hostName: formattedHostName,
+      rawHostName,
       provider: providerName.inputValue,
       hostLogo: logoUrl.inputValue,
       nrqlQuery: nrqlQuery?.inputValue,
       workloadGuid: workloadGuid?.inputValue,
       subDomain: subDomain?.inputValue,
+      corsProxyAddress: hostRequiresProxy
+        ? corsProxyAddress.inputValue
+        : undefined,
     };
 
     await onAdd(hostNameObject);
@@ -294,6 +300,15 @@ const CreateServiceModal = ({ hidden, onClose, onAdd }) => {
 
   const handleProviderChange = useCallback((e) => {
     const value = e.target.value;
+    const isHostBased =
+      value !== PROVIDERS.NRQL.value &&
+      value !== PROVIDERS.WORKLOAD.value &&
+      value !== PROVIDERS.STATUS_PAL.value;
+
+    if (!isHostBased) {
+      setHostRequiresProxy(false);
+    }
+
     setFormInputs((prev) => {
       const next = { ...prev, providerName: { ...prev.providerName } };
       next.providerName.inputValue = value;
@@ -303,16 +318,19 @@ const CreateServiceModal = ({ hidden, onClose, onAdd }) => {
         delete next.hostName;
         delete next.workloadGuid;
         delete next.subDomain;
+        delete next.corsProxyAddress;
         next.nrqlQuery = { ...emptyInputState };
       } else if (value === PROVIDERS.WORKLOAD.value) {
         delete next.hostName;
         delete next.nrqlQuery;
         delete next.subDomain;
+        delete next.corsProxyAddress;
         next.workloadGuid = { ...emptyInputState };
       } else if (value === PROVIDERS.STATUS_PAL.value) {
         delete next.hostName;
         delete next.nrqlQuery;
         delete next.workloadGuid;
+        delete next.corsProxyAddress;
         next.subDomain = { ...emptyInputState };
       } else {
         delete next.nrqlQuery;

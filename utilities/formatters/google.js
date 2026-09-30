@@ -24,6 +24,7 @@ export const googleIncidentFormatter = (data) => {
       name: incident.external_desc,
       created_at: incident.created,
       impact: GoogleSeverityToKnown[incident.severity],
+      active: !incident.end || incident.end === '',
       incident_updates: (incident.updates || []).map((update) => {
         return {
           created_at: update.created,

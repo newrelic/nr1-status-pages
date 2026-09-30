@@ -524,6 +524,16 @@ button[class*='Dropdown-trigger'],
   }
 }
 
+
+.timeline-item-active-incident .timeline-item-body {
+  border-color: #d3293d80;
+
+  &:hover {
+    border-color: #d3293d;
+  }
+
+}
+
 .timeline-item-body-header {
   display: flex;
   min-height: 38px;

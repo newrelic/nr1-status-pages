@@ -10,7 +10,7 @@ export default class WorkloadHelper {
       throw new Error('Invalid workload GUID');
     }
     this.refreshRateInSeconds = refreshRateInSeconds;
-    this.query = `SELECT EventTimeStamp, EventName, EventStatus, Workload FROM (SELECT earliest(timestamp) AS EventTimeStamp, latest(timestamp) AS EventTimeStamp, latest(statusValue) AS EventName, latest(entity.name) AS Workload FROM WorkloadStatus WHERE workloadGuid = '${workloadGuid}' FACET statusValueCode AS EventStatus, dateOf(timestamp) LIMIT 100) ORDER BY EventTimeStamp DESC SINCE 2 WEEKS AGO LIMIT 100`;
+    this.query = `SELECT EventTimeStamp, EventName, EventStatus, Workload FROM (SELECT earliest(timestamp) AS EventTimeStamp, latest(timestamp) AS EventTimeStamp, latest(statusValue) AS EventName, latest(entity.name) AS Workload FROM WorkloadStatus WHERE workloadGuid = '${workloadGuid}' FACET statusValueCode AS EventStatus, dateOf(timestamp) LIMIT 100) ORDER BY EventTimeStamp DESC SINCE 4 WEEKS AGO LIMIT 100`;
     this.accountId = accountId;
     this.workloadGuid = workloadGuid;
     this.setIntervalIds = [];
