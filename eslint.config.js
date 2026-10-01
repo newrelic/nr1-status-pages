@@ -57,7 +57,12 @@ module.exports = [
     },
   },
   {
-    files: ['eslint.config.js', '.prettierrc.js', 'babel.config.js'],
+    files: [
+      'eslint.config.js',
+      '.eslintrc.js',
+      '.prettierrc.js',
+      'babel.config.js',
+    ],
     languageOptions: {
       sourceType: 'script',
       globals: globals.node,
