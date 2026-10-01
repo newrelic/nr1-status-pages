@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/newrelic/nr1-status-pages/compare/v1.7.1...v1.7.2) (2026-10-01)
+
+
+### Bug Fixes
+
+* add skeleton eslintrc.js per catalog reqs ([74870ee](https://github.com/newrelic/nr1-status-pages/commit/74870eec5ee99b37062d88abaaa66e0c4c0d3633))
+
 ## [1.7.1](https://github.com/newrelic/nr1-status-pages/compare/v1.7.0...v1.7.1) (2026-09-30)
 
 
